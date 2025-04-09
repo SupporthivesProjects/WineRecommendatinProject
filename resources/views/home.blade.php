@@ -7,7 +7,7 @@
                 <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
                 <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
                     Our intelligent recommendation system helps you find the perfect wine for any occasion, based on
-                    your taste preferences and food pairings.
+                    your taste preferences and food pairings...
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <a href="#explore"
