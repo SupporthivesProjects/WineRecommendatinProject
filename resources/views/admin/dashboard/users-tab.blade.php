@@ -3,9 +3,9 @@
     <div class="p-6">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-semibold">Users</h3>
-            <button type="button" class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700 transition" onclick="openAddUserModal()">
+            {{-- <button type="button" class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700 transition" onclick="openAddUserModal()">
                 Add User
-            </button>
+            </button> --}}
         </div>
         
         <div class="overflow-x-auto">
@@ -39,6 +39,11 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        
+        <!-- Pagination Links -->
+        <div class="mt-4">
+            {{ $users->links() }}
         </div>
     </div>
 </div>

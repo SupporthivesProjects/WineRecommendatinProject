@@ -3,7 +3,7 @@
         /* Sidebar styles */
         .dashboard-container {
             display: flex;
-            min-height: calc(100vh - 65px);
+            min-height: calc(100vh - 128px); /* Adjusted for both main nav and header */
         }
         
         .sidebar {
@@ -11,8 +11,10 @@
             background-color: white;
             border-right: 1px solid #e5e7eb;
             position: fixed;
-            height: calc(100vh - 65px);
+            top: 128px; /* Position below both headers (64px + 64px) */
+            height: calc(100vh - 128px);
             z-index: 10;
+            overflow-y: auto;
         }
         
         .sidebar-link {
@@ -43,16 +45,19 @@
             flex: 1;
             margin-left: 250px;
             padding: 1.5rem;
+            margin-top: 60px; /* Adjusted for both headers (64px + 64px) */
         }
         
         @media (max-width: 768px) {
             .sidebar {
                 width: 0;
                 overflow: hidden;
+                top: 128px; /* Keep consistent with desktop */
             }
             
             .main-content {
                 margin-left: 0;
+                margin-top: 60px; /* Keep consistent with desktop */
             }
             
             .sidebar.open {

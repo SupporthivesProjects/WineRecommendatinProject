@@ -160,13 +160,14 @@ class DashboardController extends Controller
         }
         
         // Get stores for the table
-        $stores = Store::latest()->take(10)->get();
+        $stores = Store::orderBy('id', 'asc')->paginate(10);
+        
         
         // Get users for the table
-        $users = User::latest()->take(10)->get();
+        $users = User::orderBy('id', 'asc')->paginate(10);
         
         // Get products for the table
-        $products = Product::latest()->take(10)->get();
+        $products = Product::orderBy('id', 'asc')->paginate(10);
 
         return view('admin.dashboard', compact(
             'productTypeLabels', 'productTypeData',
