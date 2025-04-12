@@ -50,5 +50,12 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- Pagination Links -->
+        <div class="mt-4">
+            @if(isset($products) && $products->hasPages())
+                {{ $products->links() }}
+            @endif
+        </div>
     </div>
 </div>

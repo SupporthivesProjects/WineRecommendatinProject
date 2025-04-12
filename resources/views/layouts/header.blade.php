@@ -1,4 +1,4 @@
-<nav class="bg-black/30 backdrop-blur-sm border-b border-white/10">
+<nav class="bg-black/30 backdrop-blur-sm border-b border-white/10 sticky top-16 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
@@ -8,7 +8,11 @@
                 @if (Route::has('login'))
                     <div class="space-x-4">
                         @auth
-                            <a href="{{ route('dashboard') }}" class="text-white hover:text-gray-300 transition">Dashboard</a>
+                            @if(auth()->user()->isAdmin())
+                                <a href="{{ route('admin.dashboard') }}" class="text-white hover:text-gray-300 transition">Admin Dashboard</a>
+                            @else
+                                <a href="{{ route('dashboard') }}" class="text-white hover:text-gray-300 transition">Dashboard</a>
+                            @endif
                         @else
                             <a href="{{ route('login') }}" class="text-white hover:text-gray-300 transition">Log in</a>
                             @if (Route::has('register'))

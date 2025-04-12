@@ -44,5 +44,10 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- Pagination Links -->
+        <div class="mt-4">
+            {{ $stores->links() }}
+        </div>
     </div>
 </div>
