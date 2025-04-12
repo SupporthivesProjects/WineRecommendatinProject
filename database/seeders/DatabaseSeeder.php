@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             FeaturedProductsTableSeeder::class,
             SelectedProductsTableSeeder::class,
             QuestionnaireTableSeeder::class,
+            QuestionnaireTemplateSeeder::class,
         ]);
     }
 }

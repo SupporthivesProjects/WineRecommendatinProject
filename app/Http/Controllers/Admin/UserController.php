@@ -7,8 +7,9 @@ use App\Models\User;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+// use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -18,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('store')->get();
-        return view('admin.users.index', compact('users'));
+        return redirect()->route('admin.dashboard')->with('activeTab', 'users');
     }
 
     /**
@@ -130,5 +131,17 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Toggle the user's status.
+     */
+    public function toggleStatus(User $user)
+    {
+        $user->status = $user->status === 'active' ? 'inactive' : 'active';
+        $user->save();
+        
+        return redirect()->route('admin.users.show', $user)
+            ->with('success', 'User status updated successfully.');
     }
 }

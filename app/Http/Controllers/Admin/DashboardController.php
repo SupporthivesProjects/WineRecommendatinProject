@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Store;
-use Illuminate\Support\Facades\DB;
+use App\Models\QuestionnaireTemplate;
+use App\Models\QuestionnaireLog;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
@@ -16,7 +17,8 @@ class DashboardController extends Controller
     public function index()
     {
         // Products data for pie chart - categorized by wine type
-        $productTypes = Product::select('type', DB::raw('count(*) as count'))
+        $productTypes = Product::select('type')
+            ->selectRaw('count(*) as count')
             ->groupBy('type')
             ->get()
             ->pluck('count', 'type')
@@ -32,7 +34,8 @@ class DashboardController extends Controller
         }
         
         // Product data by grape variety
-        $productsByGrape = Product::select('grape_variety', DB::raw('count(*) as count'))
+        $productsByGrape = Product::select('grape_variety')
+            ->selectRaw('count(*) as count')
             ->whereNotNull('grape_variety')
             ->groupBy('grape_variety')
             ->orderBy('count', 'desc')
@@ -53,7 +56,8 @@ class DashboardController extends Controller
         }
         
         // Product data by country
-        $productsByCountry = Product::select('country', DB::raw('count(*) as count'))
+        $productsByCountry = Product::select('country')
+            ->selectRaw('count(*) as count')
             ->whereNotNull('country')
             ->groupBy('country')
             ->orderBy('count', 'desc')
@@ -93,7 +97,8 @@ class DashboardController extends Controller
         }
         
         // Users data for pie chart - categorized by role
-        $userRoles = User::select('role', DB::raw('count(*) as count'))
+        $userRoles = User::select('role')
+            ->selectRaw('count(*) as count')
             ->groupBy('role')
             ->get()
             ->pluck('count', 'role')
@@ -109,7 +114,8 @@ class DashboardController extends Controller
         }
         
         // Stores data for pie chart - active vs inactive
-        $storeStatus = Store::select('status', DB::raw('count(*) as count'))
+        $storeStatus = Store::select('status')
+            ->selectRaw('count(*) as count')
             ->groupBy('status')
             ->get()
             ->pluck('count', 'status')
@@ -137,18 +143,16 @@ class DashboardController extends Controller
             
             // Check if questionnaire_logs table exists
             if (Schema::hasTable('questionnaire_logs')) {
-                $adminData[] = DB::table('questionnaire_logs')
-                    ->where('admin_id', 1)
+                // Using model instead of DB facade
+                $adminData[] = QuestionnaireLog::where('admin_id', 1)
                     ->whereDate('created_at', $date->format('Y-m-d'))
                     ->count();
                     
-                $admin1Data[] = DB::table('questionnaire_logs')
-                    ->where('admin_id', 2)
+                $admin1Data[] = QuestionnaireLog::where('admin_id', 2)
                     ->whereDate('created_at', $date->format('Y-m-d'))
                     ->count();
                     
-                $admin2Data[] = DB::table('questionnaire_logs')
-                    ->where('admin_id', 3)
+                $admin2Data[] = QuestionnaireLog::where('admin_id', 3)
                     ->whereDate('created_at', $date->format('Y-m-d'))
                     ->count();
             } else {
@@ -162,12 +166,20 @@ class DashboardController extends Controller
         // Get stores for the table
         $stores = Store::orderBy('id', 'asc')->paginate(10);
         
-        
         // Get users for the table
         $users = User::orderBy('id', 'asc')->paginate(10);
         
         // Get products for the table
         $products = Product::orderBy('id', 'asc')->paginate(10);
+        
+        // Get questionnaires for the table
+        $templates = QuestionnaireTemplate::orderBy('id', 'asc')->paginate(10);
+      
+        // If no questionnaire data found, provide default labels
+        if (empty($q1Labels)) {
+            $q1Labels = ['Red', 'White', 'Sparkling'];
+            $q1Values = [0, 0, 0];
+        }
 
         return view('admin.dashboard', compact(
             'productTypeLabels', 'productTypeData',
@@ -177,7 +189,91 @@ class DashboardController extends Controller
             'userLabels', 'userData',
             'storeLabels', 'storeData',
             'dates', 'adminData', 'admin1Data', 'admin2Data',
-            'stores', 'users', 'products'
+            'stores', 'users', 'products', 'templates',
+            'q1Labels', 'q1Values'
         ));
+    }
+    
+    /**
+     * Display questionnaires.
+     */
+    public function questionnaires()
+    {
+        $questionnaires = QuestionnaireTemplate::orderBy('id', 'asc')->paginate(15);
+        return view('admin.questionnaires.index', compact('questionnaires'));
+    }
+    
+    /**
+     * Show the form for creating a new questionnaire.
+     */
+    public function createQuestionnaire()
+    {
+        $products = Product::where('status', 'active')->get();
+        return view('admin.questionnaires.create', compact('products'));
+    }
+    
+    /**
+     * Store a newly created questionnaire in storage.
+     */
+    public function storeQuestionnaire(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'level' => 'required|in:first_sip,savy_sipper,pro',
+            'description' => 'nullable|string',
+            'questions' => 'required|array|min:1',
+            'is_active' => 'boolean',
+        ]);
+
+        QuestionnaireTemplate::create($validated);
+
+        return redirect()->route('admin.questionnaires.index')
+            ->with('success', 'Questionnaire created successfully.');
+    }
+    
+    /**
+     * Display the specified questionnaire.
+     */
+    public function showQuestionnaire(QuestionnaireTemplate $questionnaire)
+    {
+        return view('admin.questionnaires.show', compact('questionnaire'));
+    }
+    
+    /**
+     * Show the form for editing the specified questionnaire.
+     */
+    public function editQuestionnaire(QuestionnaireTemplate $questionnaire)
+    {
+        return view('admin.questionnaires.edit', compact('questionnaire'));
+    }
+    
+    /**
+     * Update the specified questionnaire in storage.
+     */
+    public function updateQuestionnaire(Request $request, QuestionnaireTemplate $questionnaire)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'level' => 'required|in:first_sip,savy_sipper,pro',
+            'description' => 'nullable|string',
+            'questions' => 'required|array|min:1',
+            'is_active' => 'boolean',
+        ]);
+
+        $questionnaire->update($validated);
+
+        return redirect()->route('admin.questionnaires.index')
+            ->with('success', 'Questionnaire updated successfully.');
+    }
+    
+    /**
+     * Remove the specified questionnaire from storage.
+     */
+    public function destroyQuestionnaire(QuestionnaireTemplate $questionnaire)
+    {
+        $questionnaire->delete();
+
+        return redirect()->route('admin.questionnaires.index')
+            ->with('success', 'Questionnaire deleted successfully.');
     }
 }

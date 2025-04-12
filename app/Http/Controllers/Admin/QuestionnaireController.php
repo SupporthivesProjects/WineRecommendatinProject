@@ -1,0 +1,273 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\QuestionnaireTemplate;
+use App\Models\UserQuestionnaireResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+
+class QuestionnaireController extends Controller
+{
+    /**
+     * Display a listing of the questionnaire templates.
+     */
+    public function index()
+    {
+        $templates = QuestionnaireTemplate::orderBy('level')->get();
+        return view('admin.questionnaires.index', compact('templates'));
+    }
+
+    /**
+     * Show the form for creating a new questionnaire template.
+     */
+    public function create()
+    {
+        $levels = [
+            'first_sip' => 'First Sip (Basic)',
+            'savy_sipper' => 'Savy Sipper (Intermediate)',
+            'pro' => 'Pro (Advanced)'
+        ];
+        
+        return view('admin.questionnaires.create', compact('levels'));
+    }
+
+    /**
+     * Store a newly created questionnaire template in storage.
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'level' => 'required|in:first_sip,savy_sipper,pro',
+            'description' => 'nullable|string',
+            'questions' => 'required|array|min:1',
+            'questions.*.text' => 'required|string',
+            'questions.*.type' => 'required|in:single,multiple,slider',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Process questions data
+        $questions = [];
+        foreach ($request->input('questions') as $question) {
+            $questionData = [
+                'text' => $question['text'],
+                'type' => $question['type'],
+            ];
+            
+            if ($question['type'] === 'slider') {
+                $questionData['min'] = $question['min'] ?? 0;
+                $questionData['max'] = $question['max'] ?? 100;
+                $questionData['step'] = $question['step'] ?? 1;
+                $questionData['default'] = $question['default'] ?? 50;
+            } else {
+                $questionData['options'] = $question['options'] ?? [];
+            }
+            
+            $questions[] = $questionData;
+        }
+
+        QuestionnaireTemplate::create([
+            'name' => $request->input('name'),
+            'level' => $request->input('level'),
+            'description' => $request->input('description'),
+            'questions' => $questions,
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('admin.questionnaires.index')
+            ->with('success', 'Questionnaire template created successfully.');
+    }
+
+    /**
+     * Display the specified questionnaire template.
+     */
+    public function show(QuestionnaireTemplate $questionnaire)
+    {
+        $responses = UserQuestionnaireResponse::where('questionnaire_template_id', $questionnaire->id)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+            
+        return view('admin.questionnaires.show', compact('questionnaire', 'responses'));
+    }
+
+    /**
+     * Show the form for editing the specified questionnaire template.
+     */
+    public function edit(QuestionnaireTemplate $questionnaire)
+    {
+        $levels = [
+            'first_sip' => 'First Sip (Basic)',
+            'savy_sipper' => 'Savy Sipper (Intermediate)',
+            'pro' => 'Pro (Advanced)'
+        ];
+        
+        return view('admin.questionnaires.edit', compact('questionnaire', 'levels'));
+    }
+
+    /**
+     * Update the specified questionnaire template in storage.
+     */
+    public function update(Request $request, QuestionnaireTemplate $questionnaire)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'level' => 'required|in:first_sip,savy_sipper,pro',
+            'description' => 'nullable|string',
+            'questions' => 'required|array|min:1',
+            'questions.*.text' => 'required|string',
+            'questions.*.type' => 'required|in:single,multiple,slider',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Process questions data
+        $questions = [];
+        foreach ($request->input('questions') as $question) {
+            $questionData = [
+                'text' => $question['text'],
+                'type' => $question['type'],
+            ];
+            
+            if ($question['type'] === 'slider') {
+                $questionData['min'] = $question['min'] ?? 0;
+                $questionData['max'] = $question['max'] ?? 100;
+                $questionData['step'] = $question['step'] ?? 1;
+                $questionData['default'] = $question['default'] ?? 50;
+            } else {
+                $questionData['options'] = $question['options'] ?? [];
+            }
+            
+            $questions[] = $questionData;
+        }
+
+        $questionnaire->update([
+            'name' => $request->input('name'),
+            'level' => $request->input('level'),
+            'description' => $request->input('description'),
+            'name' => $request->input('name'),
+            'level' => $request->input('level'),
+            'description' => $request->input('description'),
+            'questions' => $questions,
+            'is_active' => $request->has('is_active'),
+        ]);
+
+        return redirect()->route('admin.questionnaires.index')
+            ->with('success', 'Questionnaire template updated successfully.');
+    }
+
+    /**
+     * Remove the specified questionnaire template from storage.
+     */
+    public function destroy(QuestionnaireTemplate $questionnaire)
+    {
+        $questionnaire->delete();
+
+        return redirect()->route('admin.questionnaires.index')
+            ->with('success', 'Questionnaire template deleted successfully.');
+    }
+
+    /**
+     * Toggle the active status of the questionnaire template.
+     */
+    public function toggleStatus(QuestionnaireTemplate $questionnaire)
+    {
+        $questionnaire->update([
+            'is_active' => !$questionnaire->is_active
+        ]);
+
+        return redirect()->route('admin.questionnaires.show', $questionnaire)
+            ->with('success', 'Questionnaire template status updated successfully.');
+    }
+
+    /**
+     * Display analytics for questionnaire usage.
+     */
+    public function analytics()
+    {
+        // Get questionnaire templates
+        $templates = QuestionnaireTemplate::all();
+        
+        // Get usage data for the last 30 days
+        $startDate = Carbon::now()->subDays(30);
+        $endDate = Carbon::now();
+        
+        $usageData = UserQuestionnaireResponse::where('created_at', '>=', $startDate)
+            ->where('created_at', '<=', $endDate)
+            ->selectRaw('DATE(created_at) as date, questionnaire_template_id, COUNT(*) as count')
+            ->groupBy('date', 'questionnaire_template_id')
+            ->get();
+        
+        // Format data for charts
+        $dates = [];
+        $datasets = [];
+        
+        // Initialize datasets for each template
+        foreach ($templates as $template) {
+            $datasets[$template->id] = [
+                'label' => $template->name,
+                'data' => [],
+                'backgroundColor' => $this->getRandomColor(),
+                'borderColor' => $this->getRandomColor(),
+            ];
+        }
+        
+        // Generate date range
+        for ($i = 0; $i < 30; $i++) {
+            $date = Carbon::now()->subDays(29 - $i)->format('Y-m-d');
+            $dates[] = $date;
+            
+            // Initialize count for each template on this date
+            foreach ($templates as $template) {
+                $datasets[$template->id]['data'][$date] = 0;
+            }
+        }
+        
+        // Fill in actual counts
+        foreach ($usageData as $data) {
+            $date = $data->date;
+            $templateId = $data->questionnaire_template_id;
+            $count = $data->count;
+            
+            if (isset($datasets[$templateId]['data'][$date])) {
+                $datasets[$templateId]['data'][$date] = $count;
+            }
+        }
+        
+        // Convert datasets to sequential arrays for Chart.js
+        foreach ($datasets as $templateId => $dataset) {
+            $datasets[$templateId]['data'] = array_values($dataset['data']);
+        }
+        
+        return view('admin.questionnaires.analytics', [
+            'templates' => $templates,
+            'dates' => $dates,
+            'datasets' => array_values($datasets),
+        ]);
+    }
+    
+    /**
+     * Generate a random color for chart visualization.
+     */
+    private function getRandomColor()
+    {
+        $r = rand(0, 255);
+        $g = rand(0, 255);
+        $b = rand(0, 255);
+        
+        return "rgb($r, $g, $b)";
+    }
+}
+
