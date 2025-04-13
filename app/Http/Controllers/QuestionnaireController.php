@@ -2,309 +2,312 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\QuestionnaireTemplate;
-use App\Models\UserQuestionnaireResponse;
-use App\Models\Product;
-use App\Models\Store;
 use Illuminate\Http\Request;
+use App\Models\QuestionnaireTemplate;
+use App\Models\QuestionnaireResponse;
+use App\Models\Product;
+use App\Models\User;
+use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionnaireController extends Controller
 {
     /**
-     * Display the questionnaire selection page.
+     * Display a listing of the questionnaires.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $templates = QuestionnaireTemplate::where('is_active', true)
-            ->orderBy('level')
+        $questionnaires = QuestionnaireTemplate::where('is_active', true)
+            ->orderBy('id', 'asc')
             ->get();
             
-        return view('questionnaires.index', compact('templates'));
+        return view('user.questionnaires', compact('questionnaires'));
     }
     
     /**
-     * Display the questionnaire form.
+     * Display the expertise assessment questionnaire.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function expertise()
+    {
+        return view('user.expertise-questionnaire');
+    }
+    
+    /**
+     * Process the expertise assessment submission.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function submitExpertise(Request $request)
+    {
+        $request->validate([
+            'wine_consumption' => 'required|string',
+            'wine_knowledge' => 'required|string',
+            'wine_tasting' => 'required|string',
+            'wine_pairing' => 'required|string',
+        ]);
+        
+        // Calculate expertise level based on answers
+        $score = 0;
+        
+        if ($request->wine_consumption == 'weekly' || $request->wine_consumption == 'daily') {
+            $score += 2;
+        } elseif ($request->wine_consumption == 'monthly') {
+            $score += 1;
+        }
+        
+        if ($request->wine_knowledge == 'intermediate') {
+            $score += 2;
+        } elseif ($request->wine_knowledge == 'advanced') {
+            $score += 4;
+        }
+        
+        if ($request->wine_tasting == 'yes_sometimes') {
+            $score += 1;
+        } elseif ($request->wine_tasting == 'yes_regularly') {
+            $score += 2;
+        }
+        
+        if ($request->wine_pairing == 'yes_sometimes') {
+            $score += 1;
+        } elseif ($request->wine_pairing == 'yes_confidently') {
+            $score += 2;
+        }
+        
+        // Determine expertise level based on score
+        $expertiseLevel = 'first_sip'; // Default level
+        
+        if ($score >= 7) {
+            $expertiseLevel = 'pro';
+        } elseif ($score >= 4) {
+            $expertiseLevel = 'savy_sipper';
+        }
+        
+        // Update user's expertise level
+        $user = Auth::user();
+        $user->expertise_level = $expertiseLevel;
+        $user->save();
+        
+        // Store the questionnaire response
+        UserQuestionnaireResponse::create([
+            'user_id' => $user->id,
+            'questionnaire_id' => null, // This is an expertise assessment, not a regular questionnaire
+            'responses' => json_encode($request->except('_token')),
+            'expertise_assessment' => true,
+        ]);
+        
+        return redirect()->route('user.dashboard')
+            ->with('success', 'Your wine expertise level has been updated to ' . ucfirst(str_replace('_', ' ', $expertiseLevel)) . '. Now you can get personalized recommendations!');
+    }
+
+    /**
+     * Display the specified questionnaire.
+     *
+     * @param  \App\Models\QuestionnaireTemplate  $questionnaire
+     * @return \Illuminate\Http\Response
      */
     public function show(QuestionnaireTemplate $questionnaire)
     {
+        // Check if questionnaire is active
         if (!$questionnaire->is_active) {
-            return redirect()->route('questionnaires.index')
+            return redirect()->route('user.dashboard')
                 ->with('error', 'This questionnaire is not currently available.');
         }
         
-        return view('questionnaires.show', compact('questionnaire'));
+        // Check if user's expertise level is appropriate for this questionnaire
+        $user = Auth::user();
+        
+        if (!$user->expertise_level) {
+            return redirect()->route('questionnaires.expertise')
+                ->with('info', 'Please complete the expertise assessment first.');
+        }
+        
+        // Allow access if:
+        // 1. Questionnaire level matches user level, OR
+        // 2. Questionnaire is 'first_sip' (available to all), OR
+        // 3. User is 'pro' (can access all), OR
+        // 4. User is 'savy_sipper' and questionnaire is not 'pro'
+        if ($questionnaire->level == $user->expertise_level || 
+            $questionnaire->level == 'first_sip' || 
+            $user->expertise_level == 'pro' ||
+            ($user->expertise_level == 'savy_sipper' && $questionnaire->level != 'pro')) {
+            
+            return view('user.questionnaire-show', compact('questionnaire'));
+        }
+        
+        return redirect()->route('user.dashboard')
+            ->with('error', 'This questionnaire is designed for a different expertise level.');
     }
-    
+
     /**
-     * Process the questionnaire submission and show recommendations.
+     * Process the questionnaire submission.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\QuestionnaireTemplate  $questionnaire
+     * @return \Illuminate\Http\Response
      */
     public function submit(Request $request, QuestionnaireTemplate $questionnaire)
     {
         $request->validate([
-            'responses' => 'required|array',
+            'answers' => 'required|array',
         ]);
         
-        // Process the user's responses
-        $responses = $request->input('responses');
+        $user = Auth::user();
+        $answers = $request->answers;
         
-        // Generate wine recommendations based on responses
-        $recommendedProducts = $this->generateRecommendations($responses, $questionnaire);
+        // Process answers to extract preferences
+        $preferences = $this->processAnswers($questionnaire, $answers);
         
-        // Save the user's responses and recommendations
-        if (Auth::check()) {
-            UserQuestionnaireResponse::create([
-                'user_id' => Auth::id(),
-                'questionnaire_template_id' => $questionnaire->id,
-                'responses' => $responses,
-                'recommended_products' => $recommendedProducts->pluck('id')->toArray()
-            ]);
-        }
+        // Store the questionnaire response
+        UserQuestionnaireResponse::create([
+            'user_id' => $user->id,
+            'questionnaire_id' => $questionnaire->id,
+            'responses' => json_encode([
+                'answers' => $answers,
+                'preferences' => $preferences
+            ]),
+        ]);
         
-        // Get stores where these products are available
-        $storeIds = [];
-        foreach ($recommendedProducts as $product) {
-            if (isset($product->store_ids)) {
-                $storeIds = array_merge($storeIds, $product->store_ids);
-            }
-        }
-        $storeIds = array_unique($storeIds);
-        $stores = Store::whereIn('id', $storeIds)->where('status', 'active')->get();
+        // Get recommended products based on preferences
+        $recommendedProducts = $this->getRecommendedProducts($preferences);
         
-        return view('questionnaires.results', compact('recommendedProducts', 'stores', 'questionnaire', 'responses'));
+        return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
     }
     
     /**
-     * Generate wine recommendations based on user responses.
+     * Process questionnaire answers to extract wine preferences.
+     *
+     * @param  \App\Models\QuestionnaireTemplate  $questionnaire
+     * @param  array  $answers
+     * @return array
      */
-    private function generateRecommendations($responses, $questionnaire)
+    private function processAnswers(QuestionnaireTemplate $questionnaire, array $answers)
     {
-        // Start with all products
+        $questions = json_decode($questionnaire->questions, true);
+        $preferences = [];
+        
+        foreach ($questions as $index => $question) {
+            if (!isset($answers[$index])) {
+                continue;
+            }
+            
+            $answer = $answers[$index];
+            
+            // Extract preferences based on question type and answer
+            if (isset($question['preference_key']) && $question['preference_key']) {
+                $key = $question['preference_key'];
+                
+                if ($question['type'] == 'multiple_choice') {
+                    // For multiple choice, map the answer to a preference value
+                    if (isset($question['preference_mapping'][$answer])) {
+                        $preferences[$key] = $question['preference_mapping'][$answer];
+                    } else {
+                        // Default mapping: use the option text
+                        $preferences[$key] = $question['options'][$answer] ?? $answer;
+                    }
+                } elseif ($question['type'] == 'checkbox') {
+                    // For checkboxes, create an array of selected values
+                    $preferences[$key] = [];
+                    foreach ($answer as $selected) {
+                        if (isset($question['preference_mapping'][$selected])) {
+                            $preferences[$key][] = $question['preference_mapping'][$selected];
+                        } else {
+                            $preferences[$key][] = $question['options'][$selected] ?? $selected;
+                        }
+                    }
+                } elseif ($question['type'] == 'slider') {
+                    // For sliders, map the numeric value to a preference
+                    if (isset($question['preference_mapping'])) {
+                        // Find the closest mapping
+                        $closest = null;
+                        $closestDiff = PHP_INT_MAX;
+                        
+                        foreach ($question['preference_mapping'] as $value => $mapping) {
+                            $diff = abs($value - $answer);
+                            if ($diff < $closestDiff) {
+                                $closest = $mapping;
+                                $closestDiff = $diff;
+                            }
+                        }
+                        
+                        if ($closest !== null) {
+                            $preferences[$key] = $closest;
+                        } else {
+                            $preferences[$key] = $answer;
+                        }
+                    } else {
+                        $preferences[$key] = $answer;
+                    }
+                } else {
+                    // For text or other types, use the answer directly
+                    $preferences[$key] = $answer;
+                }
+            }
+        }
+        
+        return $preferences;
+    }
+    
+    /**
+     * Get recommended products based on preferences.
+     *
+     * @param  array  $preferences
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getRecommendedProducts(array $preferences)
+    {
         $query = Product::where('status', 'active');
         
-        // Apply filters based on questionnaire level and responses
-        if ($questionnaire->level === 'first_sip') {
-            // Process First Sip (Basic) level responses
-            foreach ($responses as $questionId => $answer) {
-                $question = $questionnaire->questions[$questionId] ?? null;
-                
-                if (!$question) continue;
-                
-                switch ($question['text']) {
-                    case 'What type of wine are you in the mood for?':
-                        if ($answer === 'Red') {
-                            $query->where('type', 'red');
-                        } elseif ($answer === 'White') {
-                            $query->where('type', 'white');
-                        } elseif ($answer === 'Rosé') {
-                            $query->where('type', 'rose');
-                        } elseif ($answer === 'Sparkling') {
-                            $query->where('type', 'sparkling');
-                        }
-                        break;
-                        
-                    case 'What is your price range?':
-                        if ($answer === 'Under $20') {
-                            $query->where('retail_price', '<', 20);
-                        } elseif ($answer === '$20-$50') {
-                            $query->where('retail_price', '>=', 20)
-                                  ->where('retail_price', '<=', 50);
-                        } elseif ($answer === '$50-$100') {
-                            $query->where('retail_price', '>=', 50)
-                                  ->where('retail_price', '<=', 100);
-                        } elseif ($answer === 'Over $100') {
-                            $query->where('retail_price', '>', 100);
-                        }
-                        break;
-                        
-                    case 'Do you prefer sweet or dry wines?':
-                        if ($answer === 'Sweet') {
-                            $query->where(function($q) {
-                                $q->where('sweetness_level', 'like', '%sweet%')
-                                  ->orWhere('nature', 'like', '%sweet%');
-                            });
-                        } elseif ($answer === 'Dry') {
-                            $query->where(function($q) {
-                                $q->where('sweetness_level', 'like', '%dry%')
-                                  ->orWhere('nature', 'like', '%dry%');
-                            });
-                        }
-                        break;
-                }
-            }
-        } elseif ($questionnaire->level === 'savy_sipper') {
-            // Process Savy Sipper (Intermediate) level responses
-            foreach ($responses as $questionId => $answer) {
-                $question = $questionnaire->questions[$questionId] ?? null;
-                
-                if (!$question) continue;
-                
-                switch ($question['text']) {
-                    case 'What type of wine are you in the mood for?':
-                        if ($answer === 'Red') {
-                            $query->where('type', 'red');
-                        } elseif ($answer === 'White') {
-                            $query->where('type', 'white');
-                        } elseif ($answer === 'Rosé') {
-                            $query->where('type', 'rose');
-                        } elseif ($answer === 'Sparkling') {
-                            $query->where('type', 'sparkling');
-                        }
-                        break;
-                        
-                    case 'What is your price range?':
-                        if ($answer === 'Under $20') {
-                            $query->where('retail_price', '<', 20);
-                        } elseif ($answer === '$20-$50') {
-                            $query->where('retail_price', '>=', 20)
-                                  ->where('retail_price', '<=', 50);
-                        } elseif ($answer === '$50-$100') {
-                            $query->where('retail_price', '>=', 50)
-                                  ->where('retail_price', '<=', 100);
-                        } elseif ($answer === 'Over $100') {
-                            $query->where('retail_price', '>', 100);
-                        }
-                        break;
-                        
-                    case 'Which grape variety do you prefer?':
-                        if (is_array($answer)) {
-                            $query->where(function($q) use ($answer) {
-                                foreach ($answer as $grape) {
-                                    $q->orWhere('grape_variety', 'like', "%$grape%");
-                                }
-                            });
-                        } else {
-                            $query->where('grape_variety', 'like', "%$answer%");
-                        }
-                        break;
-                        
-                    case 'What food will you be pairing with?':
-                        // This would require a more complex matching algorithm
-                        // For now, we'll just use keywords
-                        if ($answer === 'Red Meat') {
-                            $query->where(function($q) {
-                                $q->where('type', 'red')
-                                  ->where(function($q2) {
-                                      $q2->where('body', 'like', '%full%')
-                                         ->orWhere('tannin_level', 'like', '%high%');
-                                  });
-                            });
-                        } elseif ($answer === 'Seafood') {
-                            $query->where(function($q) {
-                                $q->where('type', 'white')
-                                  ->orWhere('type', 'sparkling');
-                            });
-                        } elseif ($answer === 'Poultry') {
-                            $query->where(function($q) {
-                                $q->where('type', 'white')
-                                  ->orWhere('type', 'red')
-                                  ->where('body', 'like', '%medium%');
-                            });
-                        } elseif ($answer === 'Dessert') {
-                            $query->where(function($q) {
-                                $q->where('sweetness_level', 'like', '%sweet%')
-                                  ->orWhere('nature', 'like', '%sweet%');
-                            });
-                        }
-                        break;
-                }
-            }
-        } elseif ($questionnaire->level === 'pro') {
-            // Process Pro (Advanced) level responses
-            foreach ($responses as $questionId => $answer) {
-                $question = $questionnaire->questions[$questionId] ?? null;
-                
-                if (!$question) continue;
-                
-                switch ($question['text']) {
-                    case 'What type of wine are you in the mood for?':
-                        if ($answer === 'Red') {
-                            $query->where('type', 'red');
-                        } elseif ($answer === 'White') {
-                            $query->where('type', 'white');
-                        } elseif ($answer === 'Rosé') {
-                            $query->where('type', 'rose');
-                        } elseif ($answer === 'Sparkling') {
-                            $query->where('type', 'sparkling');
-                        }
-                        break;
-                        
-                    case 'What is your price range?':
-                        if ($answer === 'Under $20') {
-                            $query->where('retail_price', '<', 20);
-                        } elseif ($answer === '$20-$50') {
-                            $query->where('retail_price', '>=', 20)
-                                  ->where('retail_price', '<=', 50);
-                        } elseif ($answer === '$50-$100') {
-                            $query->where('retail_price', '>=', 50)
-                                  ->where('retail_price', '<=', 100);
-                        } elseif ($answer === 'Over $100') {
-                            $query->where('retail_price', '>', 100);
-                        }
-                        break;
-                        
-                    case 'Which region do you prefer?':
-                        if (is_array($answer)) {
-                            $query->where(function($q) use ($answer) {
-                                foreach ($answer as $region) {
-                                    $q->orWhere('country', 'like', "%$region%")
-                                      ->orWhere('wine_sub_region', 'like', "%$region%");
-                                }
-                            });
-                        } else {
-                            $query->where(function($q) use ($answer) {
-                                $q->where('country', 'like', "%$answer%")
-                                  ->orWhere('wine_sub_region', 'like', "%$answer%");
-                            });
-                        }
-                        break;
-                        
-                    case 'What body weight do you prefer?':
-                        $query->where('body', 'like', "%$answer%");
-                        break;
-                        
-                    case 'What tannin level do you prefer?':
-                        $query->where('tannin_level', 'like', "%$answer%");
-                        break;
-                        
-                    case 'What acidity level do you prefer?':
-                        $query->where('acidity', 'like', "%$answer%");
-                        break;
-                }
+        // Apply filters based on preferences
+        if (!empty($preferences['wine_type'])) {
+            $query->where('type', $preferences['wine_type']);
+        }
+        
+        if (!empty($preferences['price_range'])) {
+            // Parse price range and apply filter
+            $priceRange = explode('-', $preferences['price_range']);
+            if (count($priceRange) == 2) {
+                $query->whereBetween('retail_price', [$priceRange[0], $priceRange[1]]);
             }
         }
         
-        // Get the recommendations
-        $recommendations = $query->limit(6)->get();
-        
-        // If we don't have enough recommendations, relax some constraints
-        if ($recommendations->count() < 3) {
-            // Start with a more relaxed query
-            $query = Product::where('status', 'active');
-            
-            // Apply only the most important filters
-            foreach ($responses as $questionId => $answer) {
-                $question = $questionnaire->questions[$questionId] ?? null;
-                
-                if (!$question) continue;
-                
-                if ($question['text'] === 'What type of wine are you in the mood for?') {
-                    if ($answer === 'Red') {
-                        $query->where('type', 'red');
-                    } elseif ($answer === 'White') {
-                        $query->where('type', 'white');
-                    } elseif ($answer === 'Rosé') {
-                        $query->where('type', 'rose');
-                    } elseif ($answer === 'Sparkling') {
-                        $query->where('type', 'sparkling');
+        if (!empty($preferences['grape_variety'])) {
+            if (is_array($preferences['grape_variety'])) {
+                $query->where(function($q) use ($preferences) {
+                    foreach ($preferences['grape_variety'] as $grape) {
+                        $q->orWhere('grape_variety', 'like', '%' . $grape . '%');
                     }
-                    break; // Only apply the wine type filter
-                }
+                });
+            } else {
+                $query->where('grape_variety', 'like', '%' . $preferences['grape_variety'] . '%');
             }
-            
-            $recommendations = $query->limit(6)->get();
         }
         
-        return $recommendations;
+        if (!empty($preferences['country'])) {
+            if (is_array($preferences['country'])) {
+                $query->whereIn('country', $preferences['country']);
+            } else {
+                $query->where('country', $preferences['country']);
+            }
+        }
+        
+        if (!empty($preferences['sweetness'])) {
+            // Assuming we have a sweetness field or we're using a tag-based approach
+            $query->where('sweetness', $preferences['sweetness'])
+                  ->orWhere('description', 'like', '%' . $preferences['sweetness'] . '%');
+        }
+        
+        if (!empty($preferences['body'])) {
+            // Assuming we have a body field or we're using a tag-based approach
+            $query->where('body', $preferences['body'])
+                  ->orWhere('description', 'like', '%' . $preferences['body'] . '%');
+        }
+        
+        // Limit to a reasonable number of recommendations
+        return $query->inRandomOrder()->limit(6)->get();
     }
 }

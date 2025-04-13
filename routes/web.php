@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\UserController as UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,10 +28,17 @@ Route::get('/welcome', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    if (auth()->user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('user.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/user/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
+    Route::put('/user/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -66,12 +74,28 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 // User Questionnaire Routes
-Route::get('questionnaires', [App\Http\Controllers\QuestionnaireController::class, 'index'])->name('questionnaires.index');
-Route::get('questionnaires/{questionnaire}', [App\Http\Controllers\QuestionnaireController::class, 'show'])->name('questionnaires.show');
-Route::post('questionnaires/{questionnaire}/submit', [App\Http\Controllers\QuestionnaireController::class, 'submit'])->name('questionnaires.submit');
+Route::middleware(['auth'])->group(function () {
+    Route::get('questionnaires', [App\Http\Controllers\QuestionnaireController::class, 'index'])->name('questionnaires.index');
+    Route::get('questionnaires/{questionnaire}', [App\Http\Controllers\QuestionnaireController::class, 'show'])->name('questionnaires.show');
+    Route::post('questionnaires/{questionnaire}/submit', [App\Http\Controllers\QuestionnaireController::class, 'submit'])->name('questionnaires.submit');
+    Route::get('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'expertise'])->name('questionnaires.expertise');
+    Route::post('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'submitExpertise'])->name('questionnaires.submit-expertise');
+});
 
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
+});
+
+// Add these routes for user product viewing
+Route::middleware(['auth'])->group(function () {
+    // Product routes for regular users
+    Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
+    Route::get('/products/type/{type}', [App\Http\Controllers\ProductController::class, 'byType'])->name('products.type');
+    
+    // Store routes for regular users
+    Route::get('/stores', [App\Http\Controllers\StoreController::class, 'index'])->name('stores.index');
+    Route::get('/stores/{store}', [App\Http\Controllers\StoreController::class, 'show'])->name('stores.show');
 });
 
 require __DIR__.'/auth.php';

@@ -39,4 +39,12 @@ class QuestionnaireTemplate extends Model
     {
         return $this->hasMany(UserQuestionnaireResponse::class);
     }
+
+    public function getQuestionsArrayAttribute()
+    {
+        if (is_array($this->questions)) {
+            return $this->questions;
+        }
+        return json_decode($this->questions, true) ?? [];
+    }
 }
