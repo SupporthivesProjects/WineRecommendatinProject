@@ -16,9 +16,9 @@ class UserQuestionnaireResponse extends Model
      */
     protected $fillable = [
         'user_id',
-        'questionnaire_template_id',
+        'questionnaire_id',
         'responses',
-        'recommended_products',
+        'expertise_assessment',
     ];
 
     /**
@@ -42,9 +42,9 @@ class UserQuestionnaireResponse extends Model
     /**
      * Get the questionnaire template that owns the response.
      */
-    public function questionnaireTemplate()
+    public function questionnaire()
     {
-        return $this->belongsTo(QuestionnaireTemplate::class);
+        return $this->belongsTo(QuestionnaireTemplate::class, 'questionnaire_id');
     }
 
     /**
