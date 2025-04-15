@@ -84,11 +84,11 @@
         <!-- Sidebar -->
         <x-sidebar />
 
-
         <!-- Main Content -->
         <div class="main-content">
             <div id="storedashboard" class="tab-content">
                 @include('store-manager.storeDashboard.storedashboard-tab')
+                 
             </div>
             <div id="storeproducts" class="tab-content hidden">
                 @include('store-manager.storeDashboard.storeproducts-tab')

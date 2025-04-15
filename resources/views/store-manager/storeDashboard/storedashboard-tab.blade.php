@@ -47,7 +47,7 @@
     <div class="bg-white p-4 rounded shadow">
         <h4 class="text-center mb-2">Stores</h4>
         <div class="chart-container" style="height: 200px;">
-            <canvas id="storestoresChart"></canvas>
+            <canvas id="storetoresChart"></canvas>
         </div>
     </div>
 </div>
@@ -56,12 +56,12 @@
 <div class="bg-white p-4 rounded shadow mb-6">
     <h4 class="text-center mb-2">Questionnaire Usage in Last Week</h4>
     <div class="chart-container" style="height: 300px;">
-        <canvas id="storesquestionnaireChart"></canvas>
+        <canvas id="storequestionnaireChart"></canvas>
     </div>
 </div>
 
 <!-- Recent Products Table -->
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+<!-- <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
     <div class="p-6">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-semibold">Recent Products</h3>
@@ -107,4 +107,4 @@
             </table>
         </div>
     </div>
-</div>
+</div> -->
