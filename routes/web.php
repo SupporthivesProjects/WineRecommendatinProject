@@ -88,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
+    
 });
 
 // Add these routes for user product viewing
