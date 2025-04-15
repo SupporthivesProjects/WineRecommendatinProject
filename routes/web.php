@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\UserController as UserDashboardController;
+use App\Http\Controllers\StoreManager\StoreDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,7 +89,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
-    Route::get('/dashboard', [StoreManagerDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [StoreDashboardController::class, 'index'])->name('dashboard');
 });
 
 // Add these routes for user product viewing
