@@ -31,6 +31,10 @@ Route::get('/dashboard', function () {
     if (auth()->user()->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
+    elseif(auth()->user()->role === 'store_manager')
+    {
+        return redirect()->route('storemanager.dashboard');
+    }
     return redirect()->route('user.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
