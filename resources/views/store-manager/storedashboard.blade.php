@@ -1,12 +1,5 @@
 <x-app-layout>
     <style>
-        footer {
-        margin-left: 250px; /* same as your sidebar width */
-        width: calc(100% - 250px); /* to prevent horizontal scroll */
-        }
-
-
-
         /* Sidebar styles */
         .dashboard-container {
             display: flex;
