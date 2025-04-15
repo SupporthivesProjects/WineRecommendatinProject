@@ -88,7 +88,6 @@
         <div class="main-content">
             <div id="storedashboard" class="tab-content">
                 @include('store-manager.storeDashboard.storedashboard-tab')
-                 
             </div>
             <div id="storeproducts" class="tab-content hidden">
                 @include('store-manager.storeDashboard.storeproducts-tab')
@@ -154,6 +153,23 @@
             
             // Initialize Charts
             initializeCharts();
+           
+            // Get saved tab or fallback
+            const savedTab = localStorage.getItem('activeTab');
+            const fallbackTabs = ['storedashboard', 'dashboard']; // add more if needed
+
+            if (savedTab && document.getElementById(savedTab)) {
+                activateTab(savedTab);
+            } else {
+                // Loop through fallback options and activate the first available one
+                const fallback = fallbackTabs.find(tabId => document.getElementById(tabId));
+                if (fallback) {
+                    activateTab(fallback);
+                } else {
+                    console.warn("No valid tab found to activate.");
+                }
+            }
+
         });
         
         // Function to activate a tab
