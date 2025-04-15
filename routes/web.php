@@ -33,7 +33,7 @@ Route::get('/dashboard', function () {
     }
     elseif(auth()->user()->role === 'store_manager')
     {
-        return redirect()->route('storemanager.dashboard');
+        return redirect()->route('store-manager.dashboard');
     }
     return redirect()->route('user.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -88,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
-    
+    Route::get('/dashboard', [StoreManagerDashboardController::class, 'index'])->name('dashboard');
 });
 
 // Add these routes for user product viewing
