@@ -17,6 +17,11 @@
 
     <!-- Custom Styles -->
     <style>
+        footer {
+        margin-left: 250px; /* same as your sidebar width */
+        width: calc(100% - 250px); /* to prevent horizontal scroll */
+        }
+
         .wine-bg {
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
