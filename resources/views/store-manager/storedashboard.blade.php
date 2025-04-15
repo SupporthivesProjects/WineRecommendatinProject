@@ -87,19 +87,15 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Tab content containers -->
             <div id="storedashboard" class="tab-content">
                 @include('store-manager.storeDashboard.storedashboard-tab')
             </div>
-            
             <div id="storeproducts" class="tab-content hidden">
                 @include('store-manager.storeDashboard.storeproducts-tab')
             </div>
-            
             <div id="storefeaturedproducts" class="tab-content hidden">
                 @include('store-manager.storeDashboard.storefeaturedproducts-tab')
             </div>
-          
         </div>
     </div>
     
@@ -213,7 +209,7 @@
         // Initialize Charts
         function initializeCharts() {
             // Products by Type Pie Chart
-            const productsTypeCtx = document.getElementById('productsChart');
+            const productsTypeCtx = document.getElementById('storeproductsChart');
             if (productsTypeCtx) {
                 const productsTypeChart = new Chart(productsTypeCtx.getContext('2d'), {
                     type: 'pie',
@@ -244,7 +240,7 @@
             }
             
             // Add a new chart for grape varieties
-            const grapesCtx = document.getElementById('grapesChart');
+            const grapesCtx = document.getElementById('storegrapesChart');
             if (grapesCtx) {
                 const grapesChart = new Chart(grapesCtx.getContext('2d'), {
                     type: 'bar',
@@ -276,7 +272,7 @@
             }
             
             // Add a new chart for countries
-            const countriesCtx = document.getElementById('countriesChart');
+            const countriesCtx = document.getElementById('storecountriesChart');
             if (countriesCtx) {
                 const countriesChart = new Chart(countriesCtx.getContext('2d'), {
                     type: 'doughnut',
@@ -308,7 +304,7 @@
             }
             
             // Add a new chart for price ranges
-            const pricesCtx = document.getElementById('pricesChart');
+            const pricesCtx = document.getElementById('storepricesChart');
             if (pricesCtx) {
                 const pricesChart = new Chart(pricesCtx.getContext('2d'), {
                     type: 'bar',
@@ -340,7 +336,7 @@
             }
             
             // Users Pie Chart
-            const usersCtx = document.getElementById('usersChart');
+            const usersCtx = document.getElementById('storeusersChart');
             if (usersCtx) {
                 const usersChart = new Chart(usersCtx.getContext('2d'), {
                     type: 'pie',
@@ -364,7 +360,7 @@
             }
             
             // Stores Pie Chart
-            const storesCtx = document.getElementById('storesChart');
+            const storesCtx = document.getElementById('storestoresChart');
             if (storesCtx) {
                 const storesChart = new Chart(storesCtx.getContext('2d'), {
                     type: 'pie',
@@ -387,7 +383,7 @@
             }
             
             // Questionnaire Usage Bar Chart
-            const questionnaireCtx = document.getElementById('questionnaireChart');
+            const questionnaireCtx = document.getElementById('storequestionnaireChart');
             if (questionnaireCtx) {
                 const questionnaireChart = new Chart(questionnaireCtx.getContext('2d'), {
                     type: 'bar',
