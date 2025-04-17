@@ -1,13 +1,11 @@
 <x-admin-layout>
-    
-
     <div class="py-20">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="mb-6">
-                        <a href="{{ route('store-manager.dashboard') }}" class="text-indigo-600 hover:text-indigo-900">
-                            ← Back to Products
+                        <a href="#" class="text-indigo-600 hover:text-indigo-900">
+                            ← Select Products for the Store
                         </a>
                     </div>
 
