@@ -3,9 +3,7 @@
     <div class="p-6">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-semibold">Questionnaires</h3>
-            <a href="{{ route('admin.questionnaires.create') }}" class="bg-indigo-600 text-white py-1 px-4 rounded hover:bg-indigo-700 transition">
-                Create Questionnaire
-            </a>
+            <!-- Removed the Create Questionnaire button -->
         </div>
         
         <div class="overflow-x-auto">

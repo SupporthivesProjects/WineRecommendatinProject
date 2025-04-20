@@ -4,13 +4,10 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Questionnaire Template Details') }}
             </h2>
-            <a href="{{ route('admin.questionnaires.edit', $questionnaire) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition">
-                Edit Template
-            </a>
         </div>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-20">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
@@ -92,29 +89,6 @@
                             @else
                                 <p class="text-gray-500 italic">No questions defined for this template.</p>
                             @endif
-                        </div>
-                        
-                        <!-- Actions Footer -->
-                        <div class="bg-gray-50 px-6 py-4 flex justify-end">
-                            <form action="{{ route('admin.questionnaires.toggle-status', $questionnaire) }}" method="POST" class="inline mr-2">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="bg-{{ $questionnaire->is_active ? 'red' : 'green' }}-600 hover:bg-{{ $questionnaire->is_active ? 'red' : 'green' }}-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                    {{ $questionnaire->is_active ? 'Deactivate' : 'Activate' }}
-                                </button>
-                            </form>
-                            
-                            <form action="{{ route('admin.questionnaires.destroy', $questionnaire) }}" method="POST" class="inline mr-2" onsubmit="return confirm('Are you sure you want to delete this questionnaire template?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                    Delete
-                                </button>
-                            </form>
-                            
-                            <a href="{{ route('admin.questionnaires.edit', $questionnaire) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Edit
-                            </a>
                         </div>
                     </div>
                     

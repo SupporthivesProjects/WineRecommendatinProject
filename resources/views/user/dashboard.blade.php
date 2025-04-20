@@ -215,11 +215,11 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Find Stores</h3>
+                            {{-- <h3 class="text-lg font-medium text-gray-900 mb-2">Find Stores</h3>
                             <p class="text-gray-600 mb-4 flex-grow">Locate stores near you that carry our recommended wines.</p>
                             <a href="{{ route('stores.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 Find Stores
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>

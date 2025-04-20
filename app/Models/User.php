@@ -22,10 +22,19 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile',
-        'store_id',
         'role',
         'status',
+        'store_id',
     ];
+
+    const ROLE_ADMIN = 'admin';
+    const ROLE_STORE_MANAGER = 'store_manager';
+    const ROLE_CUSTOMER = 'customer';
+
+    public static function isValidRole($role)
+    {
+        return in_array($role, [self::ROLE_ADMIN, self::ROLE_STORE_MANAGER, self::ROLE_CUSTOMER]);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
