@@ -4,12 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Services\ProductImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    protected $productImageService;
+    
+    public function __construct(ProductImageService $productImageService)
+    {
+        $this->productImageService = $productImageService;
+    }
+    
     /**
      * Display a listing of the products.
      */
@@ -65,10 +74,8 @@ class ProductController extends Controller
             'ageing_potential' => 'nullable|string|max:255',
             'cheese_pairing' => 'nullable|string|max:255',
             'importer_info' => 'nullable|string|max:255',
-            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'primary_image' => 'nullable|numeric',
             'wine_story' => 'nullable|string',
             'country' => 'nullable|string|max:255',
             'tasting_notes' => 'nullable|string',
@@ -81,19 +88,19 @@ class ProductController extends Controller
                 ->withInput();
         }
 
-        $productData = $request->except(['image1', 'image2', 'image3', 'image4']);
+        $productData = $request->except(['product_images', 'primary_image']);
+
+        // Create the product
+        $product = Product::create($productData);
 
         // Handle image uploads
-        foreach (['image1', 'image2', 'image3', 'image4'] as $imageField) {
-            if ($request->hasFile($imageField)) {
-                $file = $request->file($imageField);
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('public/products', $filename);
-                $productData[$imageField] = $filename;
-            }
+        if ($request->hasFile('product_images')) {
+            $this->productImageService->uploadProductImages(
+                $product, 
+                $request->file('product_images'),
+                $request->input('primary_image')
+            );
         }
-
-        Product::create($productData);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully.');
@@ -120,6 +127,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        // Separate validation for basic product data
         $validator = Validator::make($request->all(), [
             'wine_name' => 'required|string|max:255',
             'type' => 'nullable|string|max:255',
@@ -153,10 +161,10 @@ class ProductController extends Controller
             'ageing_potential' => 'nullable|string|max:255',
             'cheese_pairing' => 'nullable|string|max:255',
             'importer_info' => 'nullable|string|max:255',
-            'image1' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image2' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image3' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image4' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20408',
+            'primary_image' => 'nullable|numeric',
+            'images_to_delete' => 'nullable|array',
+            'images_to_delete.*' => 'nullable|numeric',
             'wine_story' => 'nullable|string',
             'country' => 'nullable|string|max:255',
             'tasting_notes' => 'nullable|string',
@@ -164,46 +172,119 @@ class ProductController extends Controller
         ]);
 
         if ($validator->fails()) {
+            // Get all the validation errors
+            $errors = $validator->errors();
+            
+            // Print the exact errors
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
+        
+        // Update basic product data
+        $productData = $request->except(['product_images', 'primary_image', 'images_to_delete']);
+        $product->update($productData);
+       
+        // Handle image operations if files were uploaded
+        if ($request->hasFile('product_images')) {
+            // Validate images with more detailed error reporting
+            $imageValidator = Validator::make($request->all(), [
+                'product_images.*' => 'file|max:10240', // Allow any file type up to 10MB
+            ]);
 
-        $productData = $request->except(['image1', 'image2', 'image3', 'image4']);
-
-        // Handle image uploads
-        foreach (['image1', 'image2', 'image3', 'image4'] as $imageField) {
-            if ($request->hasFile($imageField)) {
-                // Delete old image if exists
-                if ($product->$imageField) {
-                    Storage::delete('public/products/' . $product->$imageField);
+            if ($imageValidator->fails()) {
+                // Get detailed error information
+                $errors = $imageValidator->errors()->toArray();
+                
+                // Log the detailed errors
+                Log::error('Image validation errors:', $errors);
+                
+                // Get more information about the files
+                foreach ($request->file('product_images') as $index => $file) {
+                    Log::info("File {$index} details:", [
+                        'name' => $file->getClientOriginalName(),
+                        'size' => $file->getSize(),
+                        'mime' => $file->getMimeType(),
+                        'extension' => $file->getClientOriginalExtension(),
+                        'valid' => $file->isValid(),
+                        'error' => $file->getError(),
+                        'errorMessage' => $file->getErrorMessage()
+                    ]);
                 }
                 
-                $file = $request->file($imageField);
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('public/products', $filename);
-                $productData[$imageField] = $filename;
+                // Print detailed error information and file details
+                dd([
+                    'validation_errors' => $errors,
+                    'file_details' => collect($request->file('product_images'))->map(function($file, $index) {
+                        return [
+                            'index' => $index,
+                            'name' => $file->getClientOriginalName(),
+                            'size' => $file->getSize(),
+                            'mime' => $file->getMimeType(),
+                            'extension' => $file->getClientOriginalExtension(),
+                            'valid' => $file->isValid(),
+                            'error' => $file->getError(),
+                            'errorMessage' => $file->getErrorMessage()
+                        ];
+                    })->toArray()
+                ]);
+                
+                return redirect()->back()
+                    ->withErrors($imageValidator)
+                    ->withInput();
+            }
+            try {
+                $imageService = app(ProductImageService::class);
+
+                // Get images to delete
+                $imagesToDelete = $request->input('images_to_delete', []);
+
+                // Get primary image
+                $primaryImage = $request->input('primary_image');
+
+                // Get new images
+                $newImages = $request->file('product_images');
+
+                // Update images
+                $imageService->updateProductImages($product, $newImages, $imagesToDelete, $primaryImage);
+                
+            } catch (\Exception $e) {
+                // Log the error for debugging
+                Log::error('Product image upload error: ' . $e->getMessage());
+                
+                return redirect()->back()
+                    ->with('error', 'Error processing images: ' . $e->getMessage())
+                    ->withInput();
+            }
+        } else {
+            // Handle only deletion and primary image changes if no new uploads
+            if ($request->has('images_to_delete') || $request->has('primary_image')) {
+                try {
+                    $imageService = app(ProductImageService::class);
+                    $imagesToDelete = $request->input('images_to_delete', []);
+                    $primaryImage = $request->input('primary_image');
+                    
+                    $imageService->updateProductImages($product, [], $imagesToDelete, $primaryImage);
+                } catch (\Exception $e) {
+                    return redirect()->back()
+                        ->with('error', 'Error processing image changes: ' . $e->getMessage())
+                        ->withInput();
+                }
             }
         }
 
-        $product->update($productData);
-
-        return redirect()->route('admin.products.index')
+        return redirect()->route('admin.products.show', $product)
             ->with('success', 'Product updated successfully.');
     }
-
     /**
      * Remove the specified product from storage.
      */
     public function destroy(Product $product)
     {
         // Delete product images
-        foreach (['image1', 'image2', 'image3', 'image4'] as $imageField) {
-            if ($product->$imageField) {
-                Storage::delete('public/products/' . $product->$imageField);
-            }
-        }
+        $this->productImageService->deleteProductImages($product);
 
+        // Delete the product
         $product->delete();
 
         return redirect()->route('admin.products.index')

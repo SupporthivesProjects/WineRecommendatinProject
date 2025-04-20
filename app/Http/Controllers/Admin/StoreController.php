@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Store;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
@@ -100,5 +101,50 @@ class StoreController extends Controller
 
         return redirect()->route('admin.stores.index')
             ->with('success', 'Store deleted successfully.');
+    }
+    /**
+     * Get available store managers that can be assigned to this store.
+     */
+    public function getAvailableManagers(Store $store)
+    {
+        // Get users with role 'store_manager' who are not assigned to any store or assigned to this store
+        $availableManagers = User::where('role', 'store_manager')
+            ->where(function ($query) use ($store) {
+                $query->whereNull('store_id')
+                    ->orWhere('store_id', $store->id);
+            })
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get();
+
+        return response()->json($availableManagers);
+    }
+
+    /**
+     * Assign a user to this store.
+     */
+    public function assignUser(Request $request, Store $store)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $user = User::findOrFail($validated['user_id']);
+
+        // Check if the user is a store manager
+        if ($user->role !== 'store_manager') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only store managers can be assigned to stores',
+            ], 422);
+        }
+
+        // Assign the user to the store
+        $user->store_id = $store->id;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User assigned to store successfully',
+        ]);
     }
 }
