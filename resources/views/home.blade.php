@@ -1,10 +1,20 @@
 <x-app-layout :header_type="'transparent'">
+
+    <style>
+         footer 
+        {
+            margin-left: 0px; /* same as your sidebar width */
+            width: 100%;    
+        }
+    </style>
+
+
     <!-- Hero Section -->
     <div class="wine-bg min-h-screen flex flex-col">
         <!-- Hero Content -->
         <div class="flex-grow flex items-center justify-center">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Winessss</h1>
                 <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
                     Our intelligent recommendation system helps you find the perfect wine for any occasion, based on
                     your taste preferences and food pairings...
@@ -19,91 +29,6 @@
                         How It Works
                     </a>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Featured Wines Section -->
-    <div id="explore" class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Featured Wines</h2>
-            <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                Explore our curated selection of exceptional wines from around the world, each with its own unique
-                character and story.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Wine Card 1 -->
-                <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="https://images.unsplash.com/photo-1586370434639-0fe43b2d32e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-                        alt="Red Wine" class="w-full h-60 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900">Château Margaux 2015</h3>
-                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Red</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">A magnificent Bordeaux with notes of black currant, violets, and
-                            cedar. Elegant and powerful.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-900 font-bold">$189.99</span>
-                            <button
-                                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                View Details
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Wine Card 2 -->
-                <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="https://images.unsplash.com/photo-1566754436893-98224ee84a07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-                        alt="White Wine" class="w-full h-60 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900">Cloudy Bay Sauvignon Blanc</h3>
-                            <span
-                                class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">White</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">Vibrant and crisp with intense flavors of passion fruit, lime, and
-                            fresh herbs from New Zealand.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-900 font-bold">$34.99</span>
-                            <button
-                                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                View Details
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Wine Card 3 -->
-                <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600320515808-2ebc04ad2509?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-                        alt="Sparkling Wine" class="w-full h-60 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-gray-900">Dom Pérignon Vintage</h3>
-                            <span
-                                class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Sparkling</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">Luxurious champagne with complex notes of almond, powdered cocoa,
-                            white fruit, and dried flowers.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-900 font-bold">$219.99</span>
-                            <button
-                                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                View Details
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="#"
-                    class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
-                    View All Wines
-                </a>
             </div>
         </div>
     </div>
@@ -165,6 +90,93 @@
             </div>
         </div>
     </div>
+
+
+      <!-- Featured Wines Section -->
+      <div id="explore" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Featured Wines</h2>
+            <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
+                Explore our curated selection of exceptional wines from around the world, each with its own unique
+                character and story.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Wine Card 1 -->
+                <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <img src="https://images.unsplash.com/photo-1586370434639-0fe43b2d32e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                        alt="Red Wine" class="w-full h-60 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900">Château Margaux 2015</h3>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Red</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">A magnificent Bordeaux with notes of black currant, violets, and
+                            cedar. Elegant and powerful.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-900 font-bold">$189.99</span>
+                            <button
+                                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wine Card 2 -->
+                <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <img src="https://images.unsplash.com/photo-1724949629465-fa0d083ad09c?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="White Wine" class="w-full h-60 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900">Cloudy Bay Sauvignon Blanc</h3>
+                            <span
+                                class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">White</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Vibrant and crisp with intense flavors of passion fruit, lime, and
+                            fresh herbs from New Zealand.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-900 font-bold">$34.99</span>
+                            <button
+                                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wine Card 3 -->
+                <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <img src="https://images.unsplash.com/photo-1700893417209-18dc88c989a0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Sparkling Wine" class="w-full h-60 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900">Dom Pérignon Vintage</h3>
+                            <span
+                                class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Sparkling</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Luxurious champagne with complex notes of almond, powdered cocoa,
+                            white fruit, and dried flowers.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-900 font-bold">$219.99</span>
+                            <button
+                                class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#"
+                    class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
+                    View All Wines
+                </a>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Food Pairing Section -->
     <div class="py-16 bg-gray-50">
@@ -322,6 +334,29 @@
     </div>
 </div>
 
+<!-- Owl Carousel Code -->
+<!-- Carousel Section -->
+<section class="py-12 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8 text-center">Wine Moments</h2>
+
+        <div class="owl-carousel owl-theme">
+            @foreach ([
+                'https://media.istockphoto.com/id/1182488944/photo/just-one-more-chapter.webp?a=1&b=1&s=612x612&w=0&k=20&c=Bda3jU5w-qMIuGX9ZFpymDsaDj9kRMhVSrZMB7Nf1mg=',
+                'https://media.istockphoto.com/id/526246287/photo/meat-wine-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=65c7kZ0paj831ILgFNjnIDMCvRwQszn3qzVjpaYAORo=',
+                'https://media.istockphoto.com/id/626154424/photo/pouring-red-wine.webp?a=1&b=1&s=612x612&w=0&k=20&c=4QA15zbQxUHbGKMT67hl_VZcIrfpIZ4t5RaYE77Jja8=',
+                'https://media.istockphoto.com/id/626154424/photo/pouring-red-wine.webp?a=1&b=1&s=612x612&w=0&k=20&c=4QA15zbQxUHbGKMT67hl_VZcIrfpIZ4t5RaYE77Jja8=',
+                'https://media.istockphoto.com/id/476976729/photo/wine-tasting-at-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=jpLOBX57Z9r91cb2yFOUkl27pa3kn4d6K9yvPctrLug='
+            ] as $image)
+                <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                    <img src="{{ $image }}" alt="Wine image" class="w-full h-64 object-cover">
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+
 <!-- Newsletter Section -->
 <div class="py-16 bg-red-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -353,4 +388,6 @@
         </div>
     </div>
 </div>
+
+
 </x-app-layout>
