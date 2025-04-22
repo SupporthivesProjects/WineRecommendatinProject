@@ -102,14 +102,13 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-medium text-gray-900">Store Users</h3>
-                        <a href="{{ route('admin.users.create', ['store_id' => $store->id]) }}" class="inline-flex items-center px-4 py-2 bg-red-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-800 focus:bg-red-800 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        <button onclick="openAssignUserModal()" class="inline-flex items-center px-4 py-2 bg-red-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-800 focus:bg-red-800 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
                             Add User
-                        </a>
+                        </button>
                     </div>
-
                     <!-- Users Table -->
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -254,3 +253,153 @@
         </div>
     </div>
 </x-admin-layout>
+
+<!-- Assign User Modal -->
+<div id="assignUserModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 text-center">Assign User to Store</h3>
+            <div class="mt-2 px-7 py-3">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 text-left" for="user_search">Search Users</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                           id="user_search" type="text" placeholder="Search by name or email">
+                </div>
+                
+                <div class="mb-4 max-h-60 overflow-y-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 text-xs leading-normal">
+                                <th class="py-2 px-3 text-left">Name</th>
+                                <th class="py-2 px-3 text-left">Email</th>
+                                <th class="py-2 px-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users_table_body" class="text-gray-600 text-xs">
+                            <!-- Users will be loaded here via JavaScript -->
+                            <tr>
+                                <td colspan="3" class="py-3 px-3 text-center">Loading users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="flex items-center justify-between mt-4">
+                    <button class="bg-gray-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-gray-600" 
+                            type="button" onclick="closeAssignUserModal()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Store ID for use in JavaScript
+    const storeId = {{ $store->id }};
+    
+    // Function to open the assign user modal
+    function openAssignUserModal() {
+        document.getElementById('assignUserModal').classList.remove('hidden');
+        loadAvailableUsers();
+    }
+    
+    // Function to close the assign user modal
+    function closeAssignUserModal() {
+        document.getElementById('assignUserModal').classList.add('hidden');
+    }
+    
+    // Function to load available store managers
+    function loadAvailableUsers() {
+        fetch(`/admin/stores/${storeId}/available-managers`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('users_table_body');
+                
+                if (data.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="3" class="py-3 px-3 text-center">No available store managers found</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                data.forEach(user => {
+                    html += `
+                        <tr class="border-b border-gray-200 hover:bg-gray-50 user-row">
+                            <td class="py-2 px-3 text-left">${user.first_name} ${user.last_name}</td>
+                            <td class="py-2 px-3 text-left">${user.email}</td>
+                            <td class="py-2 px-3 text-center">
+                                <button onclick="assignUserToStore(${user.id})" 
+                                        class="bg-indigo-600 text-white py-1 px-2 rounded text-xs hover:bg-indigo-700">
+                                    Assign
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableBody.innerHTML = html;
+                
+                // Add search functionality
+                document.getElementById('user_search').addEventListener('input', filterUsers);
+            })
+            .catch(error => {
+                console.error('Error loading users:', error);
+                document.getElementById('users_table_body').innerHTML = `
+                    <tr>
+                        <td colspan="3" class="py-3 px-3 text-center text-red-500">Error loading users</td>
+                    </tr>
+                `;
+            });
+    }
+    
+    // Function to filter users based on search input
+    function filterUsers() {
+        const searchTerm = document.getElementById('user_search').value.toLowerCase();
+        const rows = document.querySelectorAll('#users_table_body .user-row');
+        
+        rows.forEach(row => {
+            const name = row.cells[0].textContent.toLowerCase();
+            const email = row.cells[1].textContent.toLowerCase();
+            
+            if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+    
+    // Function to assign a user to the store
+    function assignUserToStore(userId) {
+        // Send a POST request to assign the user
+        fetch(`/admin/stores/${storeId}/assign-user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ user_id: userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close the modal
+                closeAssignUserModal();
+                
+                // Refresh the page to show the updated user list
+                window.location.reload();
+            } else {
+                alert(data.message || 'Failed to assign user to store');
+            }
+        })
+        .catch(error => {
+            console.error('Error assigning user:', error);
+            alert('An error occurred while assigning the user');
+        });
+    }
+</script>

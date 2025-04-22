@@ -23,6 +23,7 @@
     <!-- Custom Styles -->
     <style>
          footer {
+        footer {
         margin-left: 250px; /* same as your sidebar width */
         width: calc(100% - 250px); /* to prevent horizontal scroll */
         }

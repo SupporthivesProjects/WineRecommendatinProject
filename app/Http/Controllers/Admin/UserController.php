@@ -36,25 +36,44 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'mobile' => 'nullable|string|max:20',
-            'store_id' => 'required|exists:stores,id',
-            'role' => 'required|in:admin,store_manager',
-            'status' => 'required|in:active,inactive',
+        $validator = Validator::make($request->all(), [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
+            'mobile' => ['required', 'string', 'max:20'],
+            'role' => ['required', 'in:admin,store_manager,customer'],
+            'status' => ['required', 'in:active,inactive'],
+            'store_id' => ['nullable', 'exists:stores,id'],
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Validate that store managers must have a store assigned
+        if ($request->input('role') === 'store_manager' && empty($request->input('store_id'))) {
+            return redirect()->back()
+                ->withErrors(['store_id' => 'A store manager must be assigned to a store.'])
+                ->withInput();
+        }
+
+        // Create the user
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'mobile' => $request->mobile,
+            'role' => $request->role,
+            'status' => $request->status,
+            'store_id' => $request->role === 'store_manager' ? $request->store_id : null,
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-
-        User::create($validated);
-
-        return redirect()->route('admin.users.index')
+        return redirect()->route('admin.dashboard', ['tab' => 'users'])
             ->with('success', 'User created successfully.');
     }
-
     /**
      * Display the specified user.
      */

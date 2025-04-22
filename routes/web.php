@@ -63,8 +63,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     
     // Products management
     Route::resource('products', ProductController::class);
+    
+    // Routes for assigning users to stores
+    Route::get('/stores/{store}/available-managers', [StoreController::class, 'getAvailableManagers']);
+    Route::post('/stores/{store}/assign-user', [StoreController::class, 'assignUser']);
 });
-
 // Admin Questionnaire Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('questionnaires', [App\Http\Controllers\Admin\QuestionnaireController::class, 'index'])->name('questionnaires.index');

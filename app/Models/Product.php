@@ -66,4 +66,14 @@ class Product extends Model
                     ->withPivot('status')
                     ->withTimestamps();
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('display_order');
+    }
+
+    public function primaryImage()
+    {
+        return $this->hasOne(ProductImage::class)->where('is_primary', true);
+    }
 }
