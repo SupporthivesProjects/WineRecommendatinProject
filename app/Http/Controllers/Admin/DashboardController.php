@@ -11,6 +11,7 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireLog;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -243,7 +244,38 @@ class DashboardController extends Controller
             $q1Values = [0, 0, 0];
         }
 
-        return view('admin.dashboard', compact(
+        // Get the data from the database
+        $usageData = DB::table('questionnaire_usage')
+        ->select(DB::raw('DATE(created_on) as date'), DB::raw('count(*) as count'))
+        ->where('created_on', '>=', now()->subDays(7)) 
+        ->groupBy(DB::raw('DATE(created_on)'))
+        ->orderBy('date', 'asc')
+        ->get();
+
+        // Convert the collection to arrays of dates and counts
+        $dates = $usageData->pluck('date')->toArray();
+        $counts = $usageData->pluck('count')->toArray();
+
+        // Generate an array of all dates in the past 7 days
+        $allDates = collect(range(0, 6))->map(function ($i) {
+        return now()->subDays(6 - $i)->toDateString();  
+        });
+
+        // Map over the generated dates and assign counts
+        $counts = $allDates->map(function ($date) use ($usageData) {
+        // Use Carbon to parse the date correctly
+        $record = $usageData->firstWhere('date', Carbon::parse($date)->toDateString());
+
+        // Return the count if it exists, otherwise 0
+        return $record ? $record->count : 0;
+        });
+
+        // Ensure that $dates has the same format and the missing dates are added with count = 0
+        $dates = $allDates->toArray();  
+
+        
+
+        return view('admin.bootadmindashboard', compact(
             'activeTab',
             'productTypeLabels',
             'productTypeData',
@@ -267,7 +299,9 @@ class DashboardController extends Controller
             'products',
             'templates',
             'q1Labels',
-            'q1Values'
+            'q1Values',
+            'dates',
+            'counts',
         ));
     }
 
@@ -354,4 +388,9 @@ class DashboardController extends Controller
         return redirect()->route('admin.questionnaires.index')
             ->with('success', 'Questionnaire deleted successfully.');
     }
+
+    
+
+
+
 }

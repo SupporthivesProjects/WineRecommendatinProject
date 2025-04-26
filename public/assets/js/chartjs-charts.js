@@ -31,56 +31,56 @@
     );
 
     /* bar chart */
-    const labels1 = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-    ];
-    const data1 = {
-        labels: labels1,
-        datasets: [{
-            label: 'My First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            backgroundColor: [
-                'rgba(98, 89, 202, 0.2)',
-                'rgba(1, 184, 255, 0.2)',
-                'rgba(255, 155, 33, 0.2)',
-                'rgba(0, 204, 204, 0.2)',
-                'rgba(253, 96, 116, 0.2)',
-                'rgba(25, 177, 89, 0.2)',
-                'rgba(35, 35, 35, 0.2)'
-            ],
-            borderColor: [
-                'rgb(98, 89, 202)',
-                'rgb(1, 184, 255)',
-                'rgb(255, 155, 33)',
-                'rgb(0, 204, 204)',
-                'rgb(253, 96, 116)',
-                'rgb(25, 177, 89)',
-                'rgb(35, 35, 35)'
-            ],
-            borderWidth: 1
-        }]
-    };
-    const config1 = {
-        type: 'bar',
-        data: data1,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        },
-    };
-    const myChart1 = new Chart(
-        document.getElementById('chartjs-bar'),
-        config1
-    );
+    // const labels1 = [
+    //     'January',
+    //     'February',
+    //     'March',
+    //     'April',
+    //     'May',
+    //     'June',
+    //     'July',
+    // ];
+    // const data1 = {
+    //     labels: labels1,
+    //     datasets: [{
+    //         label: 'My First Dataset',
+    //         data: [65, 59, 80, 81, 56, 55, 40],
+    //         backgroundColor: [
+    //             'rgba(98, 89, 202, 0.2)',
+    //             'rgba(1, 184, 255, 0.2)',
+    //             'rgba(255, 155, 33, 0.2)',
+    //             'rgba(0, 204, 204, 0.2)',
+    //             'rgba(253, 96, 116, 0.2)',
+    //             'rgba(25, 177, 89, 0.2)',
+    //             'rgba(35, 35, 35, 0.2)'
+    //         ],
+    //         borderColor: [
+    //             'rgb(98, 89, 202)',
+    //             'rgb(1, 184, 255)',
+    //             'rgb(255, 155, 33)',
+    //             'rgb(0, 204, 204)',
+    //             'rgb(253, 96, 116)',
+    //             'rgb(25, 177, 89)',
+    //             'rgb(35, 35, 35)'
+    //         ],
+    //         borderWidth: 1
+    //     }]
+    // };
+    // const config1 = {
+    //     type: 'bar',
+    //     data: data1,
+    //     options: {
+    //         scales: {
+    //             y: {
+    //                 beginAtZero: true
+    //             }
+    //         }
+    //     },
+    // };
+    // const myChart1 = new Chart(
+    //     document.getElementById('chartjs-bar'),
+    //     config1
+    // );
 
     /* pie chart */
     const data2 = {

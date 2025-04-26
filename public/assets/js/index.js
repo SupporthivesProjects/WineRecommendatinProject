@@ -1,89 +1,89 @@
 /* project budget Chart */
-var options = {
-	series: [{
-		name: "Total Budget",
-		data: [20, 38, 38, 72, 55, 63, 43, 76, 55, 80, 40, 80]
-	}, {
-		name: "Amount Used",
-		data: [85, 65, 75, 38, 85, 35, 62, 40, 40, 64, 50, 89]
-	}],
-	chart: {
-		height: 320,
-		type: 'line',
-		zoom: {
-			enabled: false
-		},
-		dropShadow: {
-			enabled: true,
-			enabledOnSeries: undefined,
-			top: 5,
-			left: 0,
-			blur: 3,
-			color: '#000',
-			opacity: 0.1
-		},
-	},
-	dataLabels: {
-		enabled: false
-	},
-	legend: {
-		position: "top",
-		horizontalAlign: "center",
-		offsetX: -15,
-		fontWeight: "bold",
-	},
-	stroke: {
-		curve: 'smooth',
-		width: '3',
-		dashArray: [0, 5],
-	},
-	grid: {
-		borderColor: '#f2f6f7',
-	},
-	colors: ["rgb(98, 89, 202)", "rgba(98, 89, 202, 0.3)"],
-	yaxis: {
-		title: {
-			text: '',
-			style: {
-				color: '#adb5be',
-				fontSize: '14px',
-				fontFamily: 'poppins, sans-serif',
-				fontWeight: 600,
-				cssClass: 'apexcharts-yaxis-label',
-			},
-		}
-	},
-	xaxis: {
-		type: 'month',
-		categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		axisBorder: {
-			show: false,
-			color: 'rgba(119, 119, 142, 0.05)',
-			offsetX: 0,
-			offsetY: 0,
-		},
-		axisTicks: {
-			show: true,
-			borderType: 'solid',
-			color: 'rgba(119, 119, 142, 0.05)',
-			width: 6,
-			offsetX: 0,
-			offsetY: 0
-		},
-		labels: {
-			rotate: -90
-		}
-	}
-};
-document.getElementById('project').innerHTML = ''
-var chart2 = new ApexCharts(document.querySelector("#project"), options);
-chart2.render();
+// var options = {
+// 	series: [{
+// 		name: "Total Budget",
+// 		data: [20, 38, 38, 72, 55, 63, 43, 76, 55, 80, 40, 80]
+// 	}, {
+// 		name: "Amount Used",
+// 		data: [85, 65, 75, 38, 85, 35, 62, 40, 40, 64, 50, 89]
+// 	}],
+// 	chart: {
+// 		height: 320,
+// 		type: 'line',
+// 		zoom: {
+// 			enabled: false
+// 		},
+// 		dropShadow: {
+// 			enabled: true,
+// 			enabledOnSeries: undefined,
+// 			top: 5,
+// 			left: 0,
+// 			blur: 3,
+// 			color: '#000',
+// 			opacity: 0.1
+// 		},
+// 	},
+// 	dataLabels: {
+// 		enabled: false
+// 	},
+// 	legend: {
+// 		position: "top",
+// 		horizontalAlign: "center",
+// 		offsetX: -15,
+// 		fontWeight: "bold",
+// 	},
+// 	stroke: {
+// 		curve: 'smooth',
+// 		width: '3',
+// 		dashArray: [0, 5],
+// 	},
+// 	grid: {
+// 		borderColor: '#f2f6f7',
+// 	},
+// 	colors: ["rgb(98, 89, 202)", "rgba(98, 89, 202, 0.3)"],
+// 	yaxis: {
+// 		title: {
+// 			text: '',
+// 			style: {
+// 				color: '#adb5be',
+// 				fontSize: '14px',
+// 				fontFamily: 'poppins, sans-serif',
+// 				fontWeight: 600,
+// 				cssClass: 'apexcharts-yaxis-label',
+// 			},
+// 		}
+// 	},
+// 	xaxis: {
+// 		type: 'month',
+// 		categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+// 		axisBorder: {
+// 			show: false,
+// 			color: 'rgba(119, 119, 142, 0.05)',
+// 			offsetX: 0,
+// 			offsetY: 0,
+// 		},
+// 		axisTicks: {
+// 			show: true,
+// 			borderType: 'solid',
+// 			color: 'rgba(119, 119, 142, 0.05)',
+// 			width: 6,
+// 			offsetX: 0,
+// 			offsetY: 0
+// 		},
+// 		labels: {
+// 			rotate: -90
+// 		}
+// 	}
+// };
+// document.getElementById('project').innerHTML = ''
+// var chart2 = new ApexCharts(document.querySelector("#project"), options);
+// chart2.render();
 
-function project() {
-	chart2.updateOptions({
-		colors: ["rgb(" + myVarVal + ")", "rgba(" + myVarVal + ", 0.3)"],
-	})
-}
+// function project() {
+// 	chart2.updateOptions({
+// 		colors: ["rgb(" + myVarVal + ")", "rgba(" + myVarVal + ", 0.3)"],
+// 	})
+// }
 /* project budget Chart */
 
 /* web design chart */
@@ -159,15 +159,15 @@ var options = {
 //         colors: ["#e9e9e9","rgb(" + myVarVal + ")"],
 //     })
 // }
-document.getElementById('websitedesign').innerHTML = ''
-var chart1 = new ApexCharts(document.querySelector("#websitedesign"), options);
-chart1.render();
+// document.getElementById('websitedesign').innerHTML = ''
+// var chart1 = new ApexCharts(document.querySelector("#websitedesign"), options);
+// chart1.render();
 
-function websitedesign() {
-	chart1.updateOptions({
-		colors: ["rgb(" + myVarVal + ")", "rgba(" + myVarVal + ", 0.3)"],
-	})
-}
+// function websitedesign() {
+// 	chart1.updateOptions({
+// 		colors: ["rgb(" + myVarVal + ")", "rgba(" + myVarVal + ", 0.3)"],
+// 	})
+// }
 /* web design chart */
 
 
@@ -234,15 +234,16 @@ var options = {
 	},
 	colors: ["rgb(98, 89, 202)", "rgba(98, 89, 202, 0.2)"],
 };
-document.querySelector('#ongoingprojects').innerHTML = ''
-var chart = new ApexCharts(document.querySelector("#ongoingprojects"), options);
-chart.render();
 
-function ongoingprojects() {
-	chart.updateOptions({
-		colors: ["rgb(" + myVarVal + "),", "rgba(" + myVarVal + ", 0.3)"],
-	})
-}
+// document.querySelector('#ongoingprojects').innerHTML = ''
+// var chart = new ApexCharts(document.querySelector("#ongoingprojects"), options);
+// chart.render();
+
+// function ongoingprojects() {
+// 	chart.updateOptions({
+// 		colors: ["rgb(" + myVarVal + "),", "rgba(" + myVarVal + ", 0.3)"],
+// 	})
+// }
 
 
 ////////////
@@ -309,15 +310,15 @@ var options = {
 	colors: ["rgb(98, 89, 202)", "rgba(98, 89, 202, 0.2)"],
 };
 
-document.querySelector('#ongoingprojects2').innerHTML = ''
-var chart4 = new ApexCharts(document.querySelector("#ongoingprojects2"), options);
-chart4.render();
+// document.querySelector('#ongoingprojects2').innerHTML = ''
+// var chart4 = new ApexCharts(document.querySelector("#ongoingprojects2"), options);
+// chart4.render();
 
-function ongoingprojects2() {
-	chart4.updateOptions({
-		colors: ["rgb(" + myVarVal + ")", "rgba(" + myVarVal + ", 0.3)"],
-	})
-}
+// function ongoingprojects2() {
+// 	chart4.updateOptions({
+// 		colors: ["rgb(" + myVarVal + ")", "rgba(" + myVarVal + ", 0.3)"],
+// 	})
+// }
 /* on going Chart */
 
 
@@ -393,13 +394,13 @@ var options = {
 // var chart = new ApexCharts(document.querySelector("#today-task"), options);
 // chart.render();
 
-document.querySelector('#todaytask').innerHTML = ''
-var chart3 = new ApexCharts(document.querySelector("#todaytask"), options);
-chart3.render();
+// document.querySelector('#todaytask').innerHTML = ''
+// var chart3 = new ApexCharts(document.querySelector("#todaytask"), options);
+// chart3.render();
 
-function todaytask() {
-	chart3.updateOptions({
-		colors: ["rgb(" + myVarVal + ")"],
-	})
-}
+// function todaytask() {
+// 	chart3.updateOptions({
+// 		colors: ["rgb(" + myVarVal + ")"],
+// 	})
+// }
 /* today task chart */
