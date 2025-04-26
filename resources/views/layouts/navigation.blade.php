@@ -18,7 +18,7 @@
                         </x-nav-link>
                     @elseif(auth()->check())
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
+                            {{ __('Dashboards') }}
                         </x-nav-link>
                     @else
                         <x-nav-link :href="route('login')" :active="request()->routeIs('login')">

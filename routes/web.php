@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('layouts.boothome');
 })->name('home');
 
 Route::get('/welcome', function () {
@@ -93,6 +93,8 @@ Route::middleware(['auth'])->group(function () {
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
     Route::get('/dashboard', [StoreDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/test', [StoreDashboardController::class, 'test'])->name('test');
+    
 });
 
 // Add these routes for user product viewing

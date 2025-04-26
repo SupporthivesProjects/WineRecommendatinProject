@@ -196,4 +196,12 @@ class StoreDashboardController extends Controller
 
 
     }
+
+    public function test()
+    {
+        return view('test.dashboard');
+    }
+
+   
+
 }
