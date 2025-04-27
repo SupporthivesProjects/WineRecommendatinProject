@@ -18,7 +18,7 @@
             <ul class="main-menu">
                  <!-- Start::slide -->
                 <li class="slide">
-                    <a href="#" class="side-menu__item">
+                    <a href="{{ route('admin.dashboard') }}" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-home side-menu__icon"></i>
@@ -28,7 +28,7 @@
                 <!-- End::slide -->
                  <!-- Start::slide -->
                 <li class="slide">
-                    <a href="index.html" class="side-menu__item">
+                    <a href="" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-package side-menu__icon"></i>
@@ -38,7 +38,7 @@
                 <!-- End::slide -->
                  <!-- Start::slide -->
                 <li class="slide">
-                    <a href="index.html" class="side-menu__item">
+                    <a href="{{ route('admin.stores.index') }}" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-shopping-cart side-menu__icon"></i>
@@ -48,7 +48,7 @@
                 <!-- End::slide -->
                  <!-- Start::slide -->
                 <li class="slide">
-                    <a href="index.html" class="side-menu__item">
+                    <a href="" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-user side-menu__icon"></i>
@@ -58,7 +58,7 @@
                 <!-- End::slide -->
                  <!-- Start::slide -->
                 <li class="slide">
-                    <a href="index.html" class="side-menu__item">
+                    <a href="" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-write side-menu__icon"></i>
@@ -69,7 +69,7 @@
 
                 <!-- Start::slide -->
                 <li class="slide">
-                    <a href="index.html" class="side-menu__item">
+                    <a href="" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-settings side-menu__icon"></i>

@@ -12,6 +12,8 @@ class StoreController extends Controller
      */
     public function index(Request $request)
     {
+        Log::info('Inside StoreController@index');
+
         $query = Store::where('status', 'active');
         
         // Apply location filter if provided
@@ -25,7 +27,7 @@ class StoreController extends Controller
         
         $stores = $query->paginate(10);
         
-        return view('stores.index', compact('stores'));
+        return view('admin.stores.index', compact('stores'));
     }
     
     /**

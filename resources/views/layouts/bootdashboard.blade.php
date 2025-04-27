@@ -69,7 +69,6 @@
     <script>
         const productTypeLabels = @json($productTypeLabels); 
         const productTypeData = @json($productTypeData); 
-
         const winetype = {
             labels: productTypeLabels,
             datasets: [{
@@ -93,7 +92,7 @@
 
         // Make sure the canvas element with id 'chartjs-pie' exists in your HTML
         const mywineChart = new Chart(
-            document.getElementById('chartjs-pie'),
+            document.getElementById('winetypes'),
             winetypeconfig
         );
     </script>
@@ -154,100 +153,96 @@
         );
     </script>
 
-
-
-
     <!-- Questionnaire Usage -->
     <script>
-    var usageDates = @json($dates); 
-    var usageCount = @json($counts);
+        var usageDates = @json($dates); 
+        var usageCount = @json($counts);
 
-    var options = {
-        series: [{
-            name: "Questionnaire Usage",
-            data: usageCount // Use the dynamic usage count data
-        }],
-        chart: {
-            height: 320,
-            type: 'line',
-            zoom: {
-                enabled: false
-            },
-            dropShadow: {
-                enabled: true,
-                top: 5,
-                left: 0,
-                blur: 3,
-                color: '#000',
-                opacity: 0.1
-            },
-        },
-        dataLabels: {
-            enabled: false
-        },
-        legend: {
-            position: "top",
-            horizontalAlign: "center",
-            offsetX: -15,
-            fontWeight: "bold",
-        },
-        stroke: {
-            curve: 'smooth',
-            width: '3',
-            dashArray: [0],
-        },
-        grid: {
-            borderColor: '#f2f6f7',
-        },
-        colors: ["rgb(98, 89, 202)"],
-        yaxis: {
-            title: {
-                text: '',
-                style: {
-                    color: '#adb5be',
-                    fontSize: '14px',
-                    fontFamily: 'poppins, sans-serif',
-                    fontWeight: 600,
-                    cssClass: 'apexcharts-yaxis-label',
+        var options = {
+            series: [{
+                name: "Questionnaire Usage",
+                data: usageCount // Use the dynamic usage count data
+            }],
+            chart: {
+                height: 320,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 5,
+                    left: 0,
+                    blur: 3,
+                    color: '#000',
+                    opacity: 0.1
                 },
             },
-            min: 0,  // Start the y-axis from 0
-            tickAmount: Math.max(...usageCount), // Dynamically set the max ticks based on the data
-            labels: {
-                formatter: function (value) {
-                    return Math.round(value); // Ensure values are rounded and integers
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                position: "top",
+                horizontalAlign: "center",
+                offsetX: -15,
+                fontWeight: "bold",
+            },
+            stroke: {
+                curve: 'smooth',
+                width: '3',
+                dashArray: [0],
+            },
+            grid: {
+                borderColor: '#f2f6f7',
+            },
+            colors: ["rgb(98, 89, 202)"],
+            yaxis: {
+                title: {
+                    text: '',
+                    style: {
+                        color: '#adb5be',
+                        fontSize: '14px',
+                        fontFamily: 'poppins, sans-serif',
+                        fontWeight: 600,
+                        cssClass: 'apexcharts-yaxis-label',
+                    },
+                },
+                min: 0,  // Start the y-axis from 0
+                tickAmount: Math.max(...usageCount), // Dynamically set the max ticks based on the data
+                labels: {
+                    formatter: function (value) {
+                        return Math.round(value); // Ensure values are rounded and integers
+                    }
+                }
+            },
+            xaxis: {
+                type: 'category',  // This is for categorical data like days
+                categories: usageDates,  // Use the dates fetched from the database
+                axisBorder: {
+                    show: false,
+                    color: 'rgba(119, 119, 142, 0.05)',
+                    offsetX: 0,
+                    offsetY: 0,
+                },
+                axisTicks: {
+                    show: true,
+                    borderType: 'solid',
+                    color: 'rgba(119, 119, 142, 0.05)',
+                    width: 6,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+                labels: {
+                    rotate: -45  // Rotate labels if they are too long
                 }
             }
-        },
-        xaxis: {
-            type: 'category',  // This is for categorical data like days
-            categories: usageDates,  // Use the dates fetched from the database
-            axisBorder: {
-                show: false,
-                color: 'rgba(119, 119, 142, 0.05)',
-                offsetX: 0,
-                offsetY: 0,
-            },
-            axisTicks: {
-                show: true,
-                borderType: 'solid',
-                color: 'rgba(119, 119, 142, 0.05)',
-                width: 6,
-                offsetX: 0,
-                offsetY: 0
-            },
-            labels: {
-                rotate: -45  // Rotate labels if they are too long
-            }
-        }
-    };
+        };
 
-    document.getElementById('project').innerHTML = '';
-    var chart23 = new ApexCharts(document.querySelector("#project"), options);
-    chart23.render();
-</script>
-
-
+        document.getElementById('project').innerHTML = '';
+        var chart23 = new ApexCharts(document.querySelector("#project"), options);
+        chart23.render();
+    </script>
+    
 
 
     @include("partials/custom_switcherjs")

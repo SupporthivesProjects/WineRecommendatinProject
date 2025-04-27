@@ -39,6 +39,7 @@ class DashboardController extends Controller
         }
 
         // Get products for the table with pagination
+        $productsCount = $productsQuery->count();
         $products = $productsQuery->orderBy('id', 'desc')->paginate(10);
 
         // Stores data with search functionality
@@ -61,6 +62,7 @@ class DashboardController extends Controller
         }
 
         // Get stores for the table with pagination
+        $storesCount = $storesQuery->count();
         $stores = $storesQuery->orderBy('id', 'desc')->paginate(10);
 
         // Get unique states for the filter dropdown
@@ -86,7 +88,9 @@ class DashboardController extends Controller
         }
 
         // Get users for the table with pagination
+        $usersCount = $usersQuery->count();
         $users = $usersQuery->orderBy('id', 'desc')->paginate(10);
+        
 
         // Products data for pie chart - categorized by wine type
         $productTypes = Product::select('type')
@@ -273,8 +277,6 @@ class DashboardController extends Controller
         // Ensure that $dates has the same format and the missing dates are added with count = 0
         $dates = $allDates->toArray();  
 
-        
-
         return view('admin.bootadmindashboard', compact(
             'activeTab',
             'productTypeLabels',
@@ -302,6 +304,9 @@ class DashboardController extends Controller
             'q1Values',
             'dates',
             'counts',
+            'usersCount',
+            'storesCount',
+            'productsCount',
         ));
     }
 

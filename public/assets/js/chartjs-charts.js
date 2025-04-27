@@ -83,31 +83,31 @@
     // );
 
     /* pie chart */
-    const data2 = {
-        labels: [
-            'purple',
-            'PInk',
-            'Teal'
-        ],
-        datasets: [{
-            label: 'My First Dataset',
-            data: [300, 50, 100],
-            backgroundColor: [
-                'rgb(98, 89, 202)',
-                'rgb(241, 56, 139)',
-                'rgb(0, 204, 204)'
-            ],
-            hoverOffset: 4
-        }]
-    };
-    const config3 = {
-        type: 'pie',
-        data: data2,
-    };
-    const myChart2 = new Chart(
-        document.getElementById('chartjs-pie'),
-        config3
-    );
+    // const data2 = {
+    //     labels: [
+    //         'purple',
+    //         'PInk',
+    //         'Teal'
+    //     ],
+    //     datasets: [{
+    //         label: 'My First Dataset',
+    //         data: [300, 50, 100],
+    //         backgroundColor: [
+    //             'rgb(98, 89, 202)',
+    //             'rgb(241, 56, 139)',
+    //             'rgb(0, 204, 204)'
+    //         ],
+    //         hoverOffset: 4
+    //     }]
+    // };
+    // const config3 = {
+    //     type: 'pie',
+    //     data: data2,
+    // };
+    // const myChart2 = new Chart(
+    //     document.getElementById('chartjs-pie'),
+    //     config3
+    // );
 
     /* doughnut chart */
     const data3 = {
