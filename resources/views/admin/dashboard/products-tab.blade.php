@@ -76,13 +76,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            <!-- Pagination Links -->
-                            <div class="mt-4">
-                                @if (isset($products) && $products->hasPages())
-                                    {{ $products->appends(request()->except('page'))->links() }}
-                                @endif
-                            </div>
                         </div>
                     </div>
                 </div>
