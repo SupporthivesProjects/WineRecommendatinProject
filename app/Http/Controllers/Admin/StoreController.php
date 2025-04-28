@@ -14,8 +14,8 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::orderBy('id', 'asc')->paginate(10);
-        return redirect()->route('admin.dashboard')->with('activeTab', 'stores');
+        $stores = Store::orderBy('id', 'asc')->get();
+        return view('admin.dashboard.stores-tab', compact('stores'));
     }
 
     /**

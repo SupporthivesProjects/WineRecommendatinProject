@@ -12,8 +12,6 @@ class StoreController extends Controller
      */
     public function index(Request $request)
     {
-        Log::info('Inside StoreController@index');
-
         $query = Store::where('status', 'active');
         
         // Apply location filter if provided

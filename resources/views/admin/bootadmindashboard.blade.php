@@ -14,12 +14,6 @@
                 </div>
                 <div class="d-flex">
                     <div class="justify-content-center">
-                        <button type="button" class="btn btn-white btn-icon-text my-2 me-2 d-inline-flex align-items-center">
-                            <i class="fe fe-download me-2 fs-14"></i> Import
-                        </button>
-                        <button type="button" class="btn btn-white btn-icon-text my-2 me-2 d-inline-flex align-items-center">
-                            <i class="fe fe-filter me-2 fs-14"></i> Filter
-                        </button>
                         <button type="button" class="btn btn-primary my-2 btn-icon-text d-inline-flex align-items-center">
                             <i class="fe fe-download-cloud me-2 fs-14"></i> Download Report
                         </button>
@@ -290,3 +284,184 @@
 <!-- End::app-content -->
 
 @endsection
+@push('scripts')
+   
+    <!-- Pie chart for wine types -->
+    <script>
+        const productTypeLabels = @json($productTypeLabels); 
+        const productTypeData = @json($productTypeData); 
+        const winetype = {
+            labels: productTypeLabels,
+            datasets: [{
+                label: 'Wine Type Distribution',
+                data: productTypeData,
+                backgroundColor: [
+                    'rgb(98, 89, 202)', // Color for Red Wine
+                    'rgb(241, 56, 139)', // Color for White Wine
+                    'rgb(0, 204, 204)', // Color for Rosé
+                    'rgb(255, 159, 64)', // Color for Sparkling
+                    // You can add more colors if needed based on data
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        const winetypeconfig = {
+            type: 'pie',
+            data: winetype,
+        };
+
+        // Make sure the canvas element with id 'chartjs-pie' exists in your HTML
+        const mywineChart = new Chart(
+            document.getElementById('winetypes'),
+            winetypeconfig
+        );
+    </script>
+
+    <!-- Bar chart for country wise   -->
+    <script>
+        /* Bar Chart */
+        const countryCount = @json(count($countryLabels));  
+
+        // Predefined color palette (same as your original template)
+        const colorPaletteBackground = [
+            'rgba(98, 89, 202, 0.2)', 'rgba(1, 184, 255, 0.2)', 'rgba(255, 155, 33, 0.2)',
+            'rgba(0, 204, 204, 0.2)', 'rgba(253, 96, 116, 0.2)', 'rgba(25, 177, 89, 0.2)',
+            'rgba(35, 35, 35, 0.2)'
+        ];
+
+        const colorPaletteBorder = [
+            'rgb(98, 89, 202)', 'rgb(1, 184, 255)', 'rgb(255, 155, 33)',
+            'rgb(0, 204, 204)', 'rgb(253, 96, 116)', 'rgb(25, 177, 89)',
+            'rgb(35, 35, 35)'
+        ];
+
+        // Function to generate unique colors for each segment based on the template color palette
+        function getColorForCountry(index) {
+            return {
+                backgroundColor: colorPaletteBackground[index % colorPaletteBackground.length],
+                borderColor: colorPaletteBorder[index % colorPaletteBorder.length]
+            };
+        }
+
+        const data33 = {
+            labels: @json($countryLabels),  // Dynamically pass the country labels
+            datasets: [{
+                label: 'Wine Distribution by Country',
+                data: @json($countryData),  // Dynamically pass the country counts
+                backgroundColor: Array.from({ length: countryCount }, (v, i) => getColorForCountry(i).backgroundColor),
+                borderColor: Array.from({ length: countryCount }, (v, i) => getColorForCountry(i).borderColor),
+                borderWidth: 1,
+                hoverOffset: 4
+            }]
+        };
+
+        const config44 = {
+            type: 'bar',
+            data: data33,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+
+        const mycountryChart = new Chart(
+            document.getElementById('chartjs-bar'),
+            config44
+        );
+    </script>
+
+    <!-- Questionnaire Usage -->
+    <script>
+        var usageDates = @json($dates); 
+        var usageCount = @json($counts);
+
+        var options = {
+            series: [{
+                name: "Questionnaire Usage",
+                data: usageCount // Use the dynamic usage count data
+            }],
+            chart: {
+                height: 320,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 5,
+                    left: 0,
+                    blur: 3,
+                    color: '#000',
+                    opacity: 0.1
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                position: "top",
+                horizontalAlign: "center",
+                offsetX: -15,
+                fontWeight: "bold",
+            },
+            stroke: {
+                curve: 'smooth',
+                width: '3',
+                dashArray: [0],
+            },
+            grid: {
+                borderColor: '#f2f6f7',
+            },
+            colors: ["rgb(98, 89, 202)"],
+            yaxis: {
+                title: {
+                    text: '',
+                    style: {
+                        color: '#adb5be',
+                        fontSize: '14px',
+                        fontFamily: 'poppins, sans-serif',
+                        fontWeight: 600,
+                        cssClass: 'apexcharts-yaxis-label',
+                    },
+                },
+                min: 0,  // Start the y-axis from 0
+                tickAmount: Math.max(...usageCount), // Dynamically set the max ticks based on the data
+                labels: {
+                    formatter: function (value) {
+                        return Math.round(value); // Ensure values are rounded and integers
+                    }
+                }
+            },
+            xaxis: {
+                type: 'category',  // This is for categorical data like days
+                categories: usageDates,  // Use the dates fetched from the database
+                axisBorder: {
+                    show: false,
+                    color: 'rgba(119, 119, 142, 0.05)',
+                    offsetX: 0,
+                    offsetY: 0,
+                },
+                axisTicks: {
+                    show: true,
+                    borderType: 'solid',
+                    color: 'rgba(119, 119, 142, 0.05)',
+                    width: 6,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+                labels: {
+                    rotate: -45  // Rotate labels if they are too long
+                }
+            }
+        };
+
+        document.getElementById('project').innerHTML = '';
+        var chart23 = new ApexCharts(document.querySelector("#project"), options);
+        chart23.render();
+    </script>
+    
+@endpush
