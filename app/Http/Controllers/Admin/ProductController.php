@@ -25,7 +25,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::orderBy('id', 'asc')->paginate(10);
-        return redirect()->route('admin.dashboard')->with('activeTab', 'products');
+        return view('admin.dashboard.products-tab', compact('products'));
     }
 
     /**

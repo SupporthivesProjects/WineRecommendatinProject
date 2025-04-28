@@ -28,7 +28,7 @@
                 <!-- End::slide -->
                  <!-- Start::slide -->
                 <li class="slide">
-                    <a href="" class="side-menu__item">
+                    <a href="{{ route('admin.products.index') }}" class="side-menu__item">
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-package side-menu__icon"></i>
@@ -42,7 +42,7 @@
                         <span class="shape1"></span>
                         <span class="shape2"></span>
                         <i class="ti-shopping-cart side-menu__icon"></i>
-                        <span class="side-menu__label">Storess</span>
+                        <span class="side-menu__label">Stores</span>
                     </a>
                 </li>
                 <!-- End::slide -->

@@ -86,8 +86,6 @@
                     </div>
                 </div>
             <!-- End::row -->    
-
-            <!-- Add Store Modal -->
             <!-- Add Store Modal -->
             <div class="modal fade" id="addStoreModal" data-bs-effect="effect-fall" tabindex="-1" aria-labelledby="addStoreModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
