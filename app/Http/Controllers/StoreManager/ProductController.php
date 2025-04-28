@@ -18,7 +18,7 @@ class ProductController extends Controller
         $store = Auth::user()->store;
         $storeProducts = $store->products->pluck('id')->toArray();
         
-        return view('store-manager.products.index', compact('allProducts', 'storeProducts'));
+        return view('store-manager.storedashboard.storeproducts-tab', compact('allProducts', 'storeProducts'));
     }
     
     /**

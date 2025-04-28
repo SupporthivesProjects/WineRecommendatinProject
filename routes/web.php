@@ -4,9 +4,12 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
+use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductController;
+use App\Http\Controllers\StoreManager\FeaturedProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +66,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     
     // Products management
     Route::resource('products', ProductController::class);
+
+    //Settings
+    Route::resource('settings', SettingsController::class);
     
     // Routes for assigning users to stores
     Route::get('/stores/{store}/available-managers', [StoreController::class, 'getAvailableManagers']);
@@ -94,6 +100,8 @@ Route::middleware(['auth'])->group(function () {
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
     Route::get('/dashboard', [StoreDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/products', [StoreManagerProductController::class, 'index'])->name('products');
+    Route::get('/featuredproducts', [FeaturedProductController::class, 'index'])->name('featuredproducts');
     Route::get('/test', [StoreDashboardController::class, 'test'])->name('test');
     
 });

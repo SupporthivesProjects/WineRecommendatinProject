@@ -1,142 +1,168 @@
-<x-admin-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Questionnaire Template Details') }}
-            </h2>
+@extends('layouts.bootdashboard')
+
+@section('admindashboardcontent')
+@push('styles')
+<style>
+    .dataTables_filter input[type="search"] {
+        width: 300px !important; 
+        margin-bottom: 20px;
+    }
+</style>
+@endpush
+
+<!-- Questionnaire Template Details Section -->
+<div class="main-content app-content">
+    <div class="container-fluid">
+        <!-- Start::page-header -->
+        <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
+            <div>
+                <h2 class="main-content-title fs-24 mb-1">Questionnaire Template Details</h2>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Questionnaire Templates</li>
+                </ol>
+            </div>
+            <div class="d-flex">
+                <a href="{{ route('admin.questionnaires.index') }}" class="btn btn-wave btn-secondary my-2 btn-icon-text">
+                    <i class="fe fe-arrow-left me-2"></i> Back to Templates
+                </a>
+            </div>
         </div>
-    </x-slot>
+        <!-- End::page-header -->
 
-    <div class="py-20">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="mb-6">
-                        <a href="{{ route('admin.questionnaires.index') }}" class="text-indigo-600 hover:text-indigo-900">
-                            ← Back to Questionnaire Templates
-                        </a>
-                    </div>
+        <!-- Start::row -->
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card custom-card">
+                    <div class="card-body">
 
-                    <!-- Template Details Card -->
-                    <div class="bg-white rounded-lg shadow overflow-hidden">
-                        <!-- Header with Status -->
-                        <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                            <h3 class="text-lg font-medium text-gray-900">
-                                {{ $questionnaire->name }}
-                            </h3>
-                            <span class="bg-{{ $questionnaire->is_active ? 'green' : 'red' }}-200 text-{{ $questionnaire->is_active ? 'green' : 'red' }}-800 py-1 px-3 rounded-full text-xs">
+                        <!-- Template Overview -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="mb-0">{{ $questionnaire->name }}</h3>
+                            <span class="badge rounded-pill bg-{{ $questionnaire->is_active ? 'success' : 'danger' }}">
                                 {{ $questionnaire->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </div>
 
-                        <!-- Template Details -->
-                        <div class="px-6 py-4">
-                            <div class="mb-4">
-                                <p class="text-sm text-gray-600 mb-1">Level</p>
-                                <p class="font-medium text-gray-900">
-                                    <span class="bg-{{ $questionnaire->level === 'first_sip' ? 'green' : ($questionnaire->level === 'savy_sipper' ? 'blue' : 'purple') }}-200 text-{{ $questionnaire->level === 'first_sip' ? 'green' : ($questionnaire->level === 'savy_sipper' ? 'blue' : 'purple') }}-800 py-1 px-3 rounded-full text-xs">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <p class="mb-1 text-muted">Level</p>
+                                <p>
+                                    <span class="badge rounded-pill bg-{{ $questionnaire->level === 'first_sip' ? 'success' : ($questionnaire->level === 'savy_sipper' ? 'primary' : 'purple') }}">
                                         {{ $questionnaire->level === 'first_sip' ? 'First Sip (Basic)' : ($questionnaire->level === 'savy_sipper' ? 'Savy Sipper (Intermediate)' : 'Pro (Advanced)') }}
                                     </span>
                                 </p>
                             </div>
-                            
-                            <div class="mb-4">
-                                <p class="text-sm text-gray-600 mb-1">Description</p>
-                                <p class="font-medium text-gray-900">{{ $questionnaire->description ?? 'No description provided' }}</p>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <p class="text-sm text-gray-600 mb-1">Created</p>
-                                <p class="font-medium text-gray-900">{{ $questionnaire->created_at->format('M d, Y') }}</p>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <p class="text-sm text-gray-600 mb-1">Last Updated</p>
-                                <p class="font-medium text-gray-900">{{ $questionnaire->updated_at->format('M d, Y') }}</p>
+                            <div class="col-md-6">
+                                <p class="mb-1 text-muted">Description</p>
+                                <p>{{ $questionnaire->description ?? 'No description provided' }}</p>
                             </div>
                         </div>
-                        
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <p class="mb-1 text-muted">Created At</p>
+                                <p>{{ $questionnaire->created_at->format('M d, Y') }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1 text-muted">Last Updated</p>
+                                <p>{{ $questionnaire->updated_at->format('M d, Y') }}</p>
+                            </div>
+                        </div>
+
                         <!-- Questions Section -->
-                        <div class="border-t border-gray-200 px-6 py-4">
-                            <h4 class="text-md font-medium mb-4">Questions ({{ count($questionnaire->questions) }})</h4>
-                            
+                        <div class="border-top pt-4">
+                            <h4 class="mb-4">Questions ({{ count($questionnaire->questions) }})</h4>
+
                             @if(count($questionnaire->questions) > 0)
-                                <div class="space-y-4">
+                                <div class="accordion" id="questionsAccordion">
                                     @foreach($questionnaire->questions as $index => $question)
-                                        <div class="border rounded p-4">
-                                            <h5 class="font-bold mb-2">Question {{ $index + 1 }}: {{ $question['text'] }}</h5>
-                                            <p class="text-sm text-gray-600 mb-2">Type: {{ ucfirst($question['type']) }}</p>
-                                            
-                                            @if($question['type'] === 'slider')
-                                                <div class="bg-gray-100 p-3 rounded">
-                                                    <p class="text-sm">Range: {{ $question['min'] ?? 0 }} to {{ $question['max'] ?? 100 }}</p>
-                                                    <p class="text-sm">Step: {{ $question['step'] ?? 1 }}</p>
-                                                    <p class="text-sm">Default: {{ $question['default'] ?? 50 }}</p>
+                                        <div class="accordion-item mb-3">
+                                            <h2 class="accordion-header" id="heading{{ $index }}">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="false" aria-controls="collapse{{ $index }}">
+                                                    Question {{ $index + 1 }}: {{ $question['text'] }}
+                                                </button>
+                                            </h2>
+                                            <div id="collapse{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}" data-bs-parent="#questionsAccordion">
+                                                <div class="accordion-body">
+                                                    <p class="text-muted mb-2">Type: {{ ucfirst($question['type']) }}</p>
+                                                    @if($question['type'] === 'slider')
+                                                        <div class="bg-light p-3 rounded">
+                                                            <p>Range: {{ $question['min'] ?? 0 }} to {{ $question['max'] ?? 100 }}</p>
+                                                            <p>Step: {{ $question['step'] ?? 1 }}</p>
+                                                            <p>Default: {{ $question['default'] ?? 50 }}</p>
+                                                        </div>
+                                                    @else
+                                                        <div class="bg-light p-3 rounded">
+                                                            <p class="fw-bold mb-2">Options:</p>
+                                                            <ul class="list-unstyled">
+                                                                @foreach($question['options'] as $option)
+                                                                    <li>• {{ $option }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            @else
-                                                <div class="bg-gray-100 p-3 rounded">
-                                                    <p class="text-sm font-medium mb-1">Options:</p>
-                                                    <ul class="list-disc pl-5">
-                                                        @foreach($question['options'] as $option)
-                                                            <li class="text-sm">{{ $option }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            @endif
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-gray-500 italic">No questions defined for this template.</p>
+                                <p class="text-muted fst-italic">No questions defined for this template.</p>
                             @endif
                         </div>
-                    </div>
-                    
-                    <!-- User Responses Section -->
-                    <div class="mt-8">
-                        <h4 class="text-lg font-medium mb-4">Recent User Responses</h4>
-                        
-                        @if(count($responses) > 0)
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full bg-white">
-                                    <thead>
-                                        <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
-                                            <th class="py-3 px-6 text-left">User</th>
-                                            <th class="py-3 px-6 text-left">Date</th>
-                                            <th class="py-3 px-6 text-left">Recommended Products</th>
-                                            <th class="py-3 px-6 text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-gray-600 text-sm">
-                                        @foreach($responses as $response)
-                                            <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                                <td class="py-3 px-6 text-left">
-                                                    {{ $response->user->first_name }} {{ $response->user->last_name }}
-                                                </td>
-                                                <td class="py-3 px-6 text-left">
-                                                    {{ $response->created_at->format('M d, Y H:i') }}
-                                                </td>
-                                                <td class="py-3 px-6 text-left">
-                                                    {{ count($response->recommended_products ?? []) }}
-                                                </td>
-                                                <td class="py-3 px-6 text-center">
-                                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">View Details</a>
-                                                </td>
+
+                        <!-- User Responses Section -->
+                        <div class="border-top pt-4 mt-5">
+                            <h4 class="mb-4">Recent User Responses</h4>
+
+                            @if(count($responses) > 0)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>User</th>
+                                                <th>Date</th>
+                                                <th>Recommended Products</th>
+                                                <th class="text-center">Actions</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            
-                            <div class="mt-4">
-                                {{ $responses->links() }}
-                            </div>
-                        @else
-                            <p class="text-gray-500 italic">No user responses for this questionnaire template yet.</p>
-                        @endif
+                                        </thead>
+                                        <tbody>
+                                            @foreach($responses as $response)
+                                                <tr>
+                                                    <td>{{ $response->user->first_name }} {{ $response->user->last_name }}</td>
+                                                    <td>{{ $response->created_at->format('M d, Y H:i') }}</td>
+                                                    <td>{{ count($response->recommended_products ?? []) }}</td>
+                                                    <td class="text-center">
+                                                        <a href="#" class="text-primary">View Details</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mt-4">
+                                    {{ $responses->links() }}
+                                </div>
+                            @else
+                                <p class="text-muted fst-italic">No user responses for this questionnaire template yet.</p>
+                            @endif
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+        <!-- End::row -->
     </div>
-</x-admin-layout>
+</div>
+<!-- End::Questionnaire Template Details Section -->
+
+@push('scripts')
+<script>
+    // You can add any specific JS related to this page here
+</script>
+@endpush
+
+@endsection

@@ -19,6 +19,7 @@ class QuestionnaireController extends Controller
      */
     public function index()
     {
+        
         $questionnaires = QuestionnaireTemplate::where('is_active', true)
             ->orderBy('id', 'asc')
             ->get();

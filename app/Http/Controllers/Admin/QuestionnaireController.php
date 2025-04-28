@@ -17,7 +17,7 @@ class QuestionnaireController extends Controller
     public function index()
     {
         $templates = QuestionnaireTemplate::orderBy('level')->get();
-        return view('admin.questionnaires.index', compact('templates'));
+        return view('admin.dashboard.questionnaires-tab', compact('templates'));
     }
 
     /**
