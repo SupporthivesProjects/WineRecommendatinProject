@@ -138,6 +138,51 @@
             </div>
             <!-- End::header-element -->
 
+
+            <!-- Start::header-element -->
+            <div class="header-element">
+                 <!-- Start::header-link|dropdown-toggle -->
+                 <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                     <div class="d-flex align-items-center">
+                         <div class="header-link-icon">
+                             <img src="{{ asset('images/wineAvatar.png') }}" alt="img" width="32" height="32" class="rounded-circle">
+                         </div>
+                         <div class="d-none">
+                             <p class="fw-semibold mb-0">{{ Auth::check() ? Auth::user()->first_name : 'Guest' }}</p>
+                             <span class="op-7 fw-normal d-block fs-11">Super Admin</span>
+                         </div>
+                     </div>
+                 </a>
+                 <!-- End::header-link|dropdown-toggle -->
+                 <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
+                     <Li>
+                         <div class="header-navheading border-bottom">
+                             <h6 class="main-notification-title">{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h6>
+                             <p class="main-notification-text mb-0">Super Admin</p>
+                         </div>
+                     </Li>
+                     <li><a class="dropdown-item d-flex border-bottom" href="route('profile.edit')"><i class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                            @csrf
+                            <a class="dropdown-item d-flex" href="{{ route('logout') }}" 
+                            class="dropdown-item d-flex" 
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
+                            </a>
+                        </form>
+                    </li>
+
+
+
+
+                 </ul>
+             </div>  
+             <!-- End::header-element -->   
+
+
+
+
             <!-- Start::header-element -->
             <div class="header-element">
                 <!-- Start::header-link|switcher-icon -->
