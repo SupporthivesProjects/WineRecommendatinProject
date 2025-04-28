@@ -28,6 +28,10 @@
     <!-- Choices Css -->
     <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}">
 
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
+
     <!-- OLD LINKS START -->
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -242,10 +246,21 @@
                     <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
-                                <a href="#" class="header-logo">
+                            
+
+                            <lottie-player 
+                                src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
+                                background="transparent" 
+                                speed="1"  
+                                style="width: 40px; height: 40px;" 
+                                loop 
+                                autoplay>
+                            </lottie-player>
+
+                                <!-- <a href="#" class="header-logo">
                                     <img src="{{ asset('images/winelogo.png') }}" alt="logo" class="desktop-logo">
                                     <img src="{{ asset('images/winelogo.png') }}" alt="logo" class="desktop-white">
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                         <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path> </svg></div>
