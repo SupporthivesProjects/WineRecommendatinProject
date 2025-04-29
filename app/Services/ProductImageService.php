@@ -21,6 +21,7 @@ class ProductImageService
      */
     public function uploadProductImages(Product $product, array $images, ?int $primaryImageIndex = null)
     {
+        
         // Log the start of the image upload process
         Log::info("Starting image upload for product ID: {$product->id}");
     
