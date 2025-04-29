@@ -39,11 +39,11 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-body">
-                        <form method="POST" enctype="multipart/form-data" id="product-form" name="product-form" action="{{ route('admin.products.store') }}">
+                        <form method="POST" enctype="multipart/form-data" id="product-form" action="{{ route('admin.products.store') }}">
                             @csrf
                             <div class="container-fluid">
                                 <div class="row g-3">
-                                    <!-- Existing Fields -->
+                                   
                                     <div class="col-md-6">
                                         <label for="wine_name" class="form-label">Wine Name</label>
                                         <input type="text" class="form-control" name="wine_name" id="wine_name" required>
@@ -204,7 +204,7 @@
                                 <!-- Image Upload Section (Max 5) -->
                                 <div class="mt-4">
                                     <label class="form-label">Product Images (Max 5)</label>
-                                    <input type="file" name="product_images[]" id="product_images" class="form-control" multiple accept="image/*" onchange="previewImages(this)">
+                                    <input type="file" name="product_images[]"  class="form-control" multiple accept="image/*" onchange="previewImages(this)">
                                     <small class="text-muted">Allowed formats: jpeg, jpg, png, gif | Max size: 2MB</small>
                                     <div id="image-preview-container" class="row mt-2"></div>
 
@@ -232,7 +232,7 @@
 
 @push('scripts')
     <!-- JS Function to preview images -->
-    <script>
+    <!-- <script>
         let selectedFiles = [];
 
         function previewImages(input) {
@@ -308,56 +308,59 @@
             });
         }
 
-        // // Handle form submission
-        // function submitForm(event) {
-        //     event.preventDefault(); // Prevent the default form submission
+        // Handle form submission
+        function submitForm(event) {
+            event.preventDefault(); // Prevent the default form submission
 
-        //     const formData = new FormData();
-        //     selectedFiles.forEach(file => {
-        //         formData.append('product_images[]', file);
-        //     });
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('product_images[]', file);
+            });
 
-        //     // Add other form fields if necessary, e.g. the primary image selection
-        //     const primaryImage = document.getElementById('primary_image').value;
-        //     formData.append('primary_image', primaryImage);
+            // Add other form fields if necessary, e.g. the primary image selection
+            const primaryImage = document.getElementById('primary_image').value;
+            formData.append('primary_image', primaryImage);
 
-        //     // Send the form data via AJAX
-        //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        //     fetch('{{ route("admin.products.store") }}', {
-        //         method: 'POST',
-        //         body: formData,
-        //         headers: {
-        //             'X-CSRF-TOKEN': csrfToken,  // Use dynamic CSRF token
-        //         }
-        //     })
-        //     .then(response => {
-        //         // Check if the response status is OK (2xx)
-        //         if (!response.ok) {
-        //             return response.json().then(errorData => {
-        //                 throw new Error(errorData.message || 'Something went wrong with the response');
-        //             });
-        //         }
-        //         return response.json();  // If response is OK, parse it
-        //     })
-        //     .then(data => {
-        //         // Handle the response
-        //         console.log(data);
-        //     })
-        //     .catch(error => {
-        //         // Log detailed error information
-        //         if (error instanceof Error) {
-        //             console.error('Error:', error.message);
-        //         } else if (error.response) {
-        //             console.error('Response Error:', error.response);
-        //         } else {
-        //             console.error('Unknown Error:', error);
-        //         }
-        //     });
-        //}
+            // Send the form data via AJAX
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch('{{ route("admin.products.store") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,  // Use dynamic CSRF token
+                }
+            })
+            .then(response => {
+                // Check if the response status is OK (2xx)
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Something went wrong with the response');
+                    });
+                }
+                return response.json();  // If response is OK, parse it
+            })
+            .then(data => {
+                // Handle the response
+                console.log(data);
+            })
+            .catch(error => {
+                // Log detailed error information
+                if (error instanceof Error) {
+                    console.error('Error:', error.message);
+                } else if (error.response) {
+                    console.error('Response Error:', error.response);
+                } else {
+                    console.error('Unknown Error:', error);
+                }
+            });
+
+
+
+        }
 
         // Attach the submitForm function to the form
-       // document.getElementById('product-form').addEventListener('submit', submitForm);
-    </script>
+        document.getElementById('product-form').addEventListener('submit', submitForm);
+    </script> -->
 
 
 

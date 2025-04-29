@@ -42,6 +42,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+
         // Native PHP superglobal, useful for debugging
 
         Log::debug('Store method called', ['request_data' => $request->all()]);
