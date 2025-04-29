@@ -41,6 +41,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'wine_name' => 'required|string|max:255',
             'type' => 'nullable|string|max:255',
@@ -81,6 +82,13 @@ class ProductController extends Controller
             'tasting_notes' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
+
+        if ($request->hasFile('product_images') && count($request->file('product_images')) > 5) {
+            return redirect()->back()
+                ->withErrors(['product_images' => 'You can upload a maximum of 5 images.'])
+                ->withInput();
+        }
+        
 
         if ($validator->fails()) {
             return redirect()->back()

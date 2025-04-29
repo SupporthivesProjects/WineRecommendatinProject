@@ -65,7 +65,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('users', UserController::class);
     
     // Products management
-    Route::resource('products', ProductController::class);
+    Route::resource('products', AdminProductController::class);
 
     //Settings
     Route::resource('settings', SettingsController::class);
