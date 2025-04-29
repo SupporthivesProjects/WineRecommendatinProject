@@ -42,7 +42,7 @@
                         <form method="POST" enctype="multipart/form-data" id="product-form" action="{{ route('admin.products.store') }}">
                             @csrf
                             <div class="container-fluid">
-                                <div class="row g-3">
+                                <!-- <div class="row g-3">
                                    
                                     <div class="col-md-6">
                                         <label for="wine_name" class="form-label">Wine Name</label>
@@ -199,12 +199,12 @@
                                             <option value="inactive">Inactive</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Image Upload Section (Max 5) -->
                                 <div class="mt-4">
                                     <label class="form-label">Product Images (Max 5)</label>
-                                    <input type="file" name="product_images[]"  class="form-control" multiple accept="image/*" onchange="previewImages(this)">
+                                    <input type="file" name="product_images[]" id="product_images" class="form-control" multiple accept="image/*" onchange="previewImages(this)">
                                     <small class="text-muted">Allowed formats: jpeg, jpg, png, gif | Max size: 2MB</small>
                                     <div id="image-preview-container" class="row mt-2"></div>
 
