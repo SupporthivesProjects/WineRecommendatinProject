@@ -33,7 +33,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        return view('admin.products.add');
     }
 
     /**
@@ -41,7 +41,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        
+        dd($request);
+
+        Log::debug('Store method called', ['request_data' => $request->all()]);
         $validator = Validator::make($request->all(), [
             'wine_name' => 'required|string|max:255',
             'type' => 'nullable|string|max:255',
@@ -84,6 +86,7 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('product_images') && count($request->file('product_images')) > 5) {
+            Log::debug('Validation error: Too many images', ['file_count' => count($request->file('product_images'))]);
             return redirect()->back()
                 ->withErrors(['product_images' => 'You can upload a maximum of 5 images.'])
                 ->withInput();
@@ -91,18 +94,22 @@ class ProductController extends Controller
         
 
         if ($validator->fails()) {
+            Log::debug('Validation failed', ['errors' => $validator->errors()]);
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
         $productData = $request->except(['product_images', 'primary_image']);
+        Log::debug('Product data to be saved', ['product_data' => $productData]);
 
         // Create the product
         $product = Product::create($productData);
+        Log::debug('Product created successfully', ['product_id' => $product->id]);
 
         // Handle image uploads
         if ($request->hasFile('product_images')) {
+            Log::debug('Handling product image uploads');
             $this->productImageService->uploadProductImages(
                 $product, 
                 $request->file('product_images'),
@@ -110,6 +117,7 @@ class ProductController extends Controller
             );
         }
 
+        Log::debug('Redirecting to product list after successful creation');
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully.');
     }
@@ -135,6 +143,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        
         // Separate validation for basic product data
         $validator = Validator::make($request->all(), [
             'wine_name' => 'required|string|max:255',

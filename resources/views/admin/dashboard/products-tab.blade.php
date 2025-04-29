@@ -23,9 +23,9 @@
                     </ol>
                 </div>
                 <div class="d-flex">
-                    <button type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <a  href="{{ route('admin.products.create') }}" type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text">
                         <i class="fe fe-plus me-2"></i> Add Product
-                    </button>
+                    </a>
                 </div>
             </div>
             <!-- End::page-header -->
