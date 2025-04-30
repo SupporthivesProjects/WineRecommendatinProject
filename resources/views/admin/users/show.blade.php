@@ -1,5 +1,4 @@
 @extends('layouts.bootdashboard')
-
 @section('admindashboardcontent')
 <div class="main-content app-content">
     <div class="container-fluid">
@@ -73,7 +72,7 @@
                             <label for="status" class="form-label">Status</label>
                             <div class="d-flex align-items-center">
                                 <span class="me-3">{{ ucfirst($user->status) }}</span>
-                                <form action="" method="POST" class="d-inline">
+                                <form action="{{ route('admin.users.toggleStatus', $user) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-sm btn-{{ $user->status === 'active' ? 'danger' : 'success' }}">

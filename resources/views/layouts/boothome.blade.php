@@ -57,6 +57,10 @@
                     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
                     background-size: cover;
                     background-position: center;
+                    transition: background-image 1s ease-in-out, opacity 1s ease-in-out;
+                    position: relative;
+                    z-index: 1;
+                    opacity: 1;
                 }
 
                 .wine-card {
@@ -331,7 +335,7 @@
         <!-- Start::app-content -->
     <div class="main-content landing-main" id="home">
             <!-- Start:: Section-1 Hero Section STARTS -->
-                <div class="wine-bg min-h-screen flex flex-col">
+                <div class="wine-bg min-h-screen flex flex-col" id="landing-bg">
                     <!-- Hero Content -->
                     <div class="flex-grow flex items-center justify-center">
                         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -341,7 +345,7 @@
                                 your taste preferences and food pairings...
                             </p>
                             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                                <a href="#explore"
+                                <a href="#featuredwines"
                                     class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
                                     Explore Wines
                                 </a>
@@ -808,6 +812,36 @@
             });
         });
     </script>
+
+    <!-- change Landing background image -->
+    <script>
+    const images = [
+        'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+        'https://plus.unsplash.com/premium_photo-1682097091093-dd18b37764a5?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        'https://images.unsplash.com/photo-1700893417238-ce7c7f427996?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    ];
+
+    let index = 0;
+    const bg = document.getElementById('landing-bg');
+
+    function changeBackground() {
+        bg.style.opacity = 0;
+
+        setTimeout(() => {
+            const nextImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('${images[index]}')`;
+            bg.style.backgroundImage = nextImage;
+            bg.style.opacity = 1;
+            index = (index + 1) % images.length;
+        }, 1000); // match this delay to your CSS transition time
+    }
+
+    // Set initial image
+    bg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('${images[0]}')`;
+
+    setInterval(changeBackground, 5000);
+</script>
+
+
 
 
 </body>

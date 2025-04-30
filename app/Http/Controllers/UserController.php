@@ -122,4 +122,13 @@ class UserController extends Controller
         
         return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
     }
+
+    public function featuredproducts()
+    {
+        $product = Product::all(); 
+        return view('user.products', compact('product'));    
+        
+    }
+
+
 }

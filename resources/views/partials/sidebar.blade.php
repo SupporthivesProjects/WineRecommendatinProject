@@ -77,6 +77,32 @@
                             <span class="side-menu__label">Featured Products</span>
                         </a>
                     </li>
+                @elseif(Auth::user()->role === 'user')
+                    <li class="slide">
+                        <a href="{{ route('user.dashboard') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-home"></i>
+                            <span class="side-menu__label">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('user.questionnaire') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-box"></i>
+                            <span class="side-menu__label">Questionnaires</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('user.products') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-star"></i>
+                            <span class="side-menu__label">Browse Wines</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('user.featuredproducts') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-star"></i>
+                            <span class="side-menu__label">Featured Products</span>
+                        </a>
+                    </li>
+
                 @endif
             </ul>
             <!-- End::ul.main-menu -->

@@ -2718,8 +2718,10 @@ Width
 /* btn-primary ends */
 /* btn-secondary starts */
 .btn-secondary {
-  background-color: rgb(var(--secondary-rgb)) !important;
-  border-color: rgb(var(--secondary-rgb)) !important;
+  /* background-color: rgb(var(--secondary-rgb)) !important;
+  border-color: rgb(var(--secondary-rgb)) !important; */
+  background-color: rgba(185, 28, 27)!important;
+  border-color: rgb(185, 28, 27)!important;
   color: #fff !important;
 }
 .btn-secondary:hover {

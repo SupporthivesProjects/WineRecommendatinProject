@@ -44,6 +44,13 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/user/questionnaires', [UserDashboardController::class, 'dashboard'])->name('user.questionnaire');
+    Route::get('/user/products', [UserDashboardController::class, 'dashboard'])->name('user.products');
+    Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
+    
+
+
+
     Route::get('/user/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
     Route::put('/user/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
     
@@ -63,6 +70,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     
     // Users management
     Route::resource('users', UserController::class);
+    Route::put('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
+
     
     // Products management
     Route::resource('products', AdminProductController::class);
