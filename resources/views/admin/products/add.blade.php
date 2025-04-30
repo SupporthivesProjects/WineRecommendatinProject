@@ -42,7 +42,7 @@
                         <form method="POST" enctype="multipart/form-data" id="product-form" action="{{ route('admin.products.store') }}">
                             @csrf
                             <div class="container-fluid">
-                                <!-- <div class="row g-3">
+                                <div class="row g-3">
                                    
                                     <div class="col-md-6">
                                         <label for="wine_name" class="form-label">Wine Name</label>
@@ -199,7 +199,7 @@
                                             <option value="inactive">Inactive</option>
                                         </select>
                                     </div>
-                                </div> -->
+                                </div>
 
                                 <!-- Image Upload Section (Max 5) -->
                                 <div class="mt-4">
