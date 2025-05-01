@@ -259,6 +259,93 @@
 @endsection
 @push('scripts')
 
+<script>
+let questions = [];
+let currentStep = 0;
+
+document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+    button.addEventListener('click', function () {
+        const questionnaireId = this.getAttribute('data-questionnaire-id');
+
+        fetch(`/get-questions/${questionnaireId}`)
+            .then(response => {
+                console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
+                    throw new Error('Failed to fetch questions.');
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                console.log('Raw question data received:', data);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    console.warn('No questions returned or data format is incorrect:', data);
+                    alert('No questions available for this questionnaire.');
+                    return;
+                }
+
+                // Store and use the data
+                questions = data;
+                currentStep = 0;
+                console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+
+                renderQuestion();
+                new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+            })
+            .catch(error => {
+                console.error('An error occurred while loading questions:', error);
+                alert('Something went wrong while loading the questionnaire. Please try again.');
+            });
+
+    });
+});
+
+function renderQuestion() {
+    if (questions.length === 0 || currentStep >= questions.length) return;
+
+    const q = questions[currentStep];
+    const container = document.getElementById('question-container');
+
+    let optionsHtml = '';
+    q.options.forEach((opt, idx) => {
+        optionsHtml += `
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
+                <label class="form-check-label" for="option${idx}">${opt}</label>
+            </div>`;
+    });
+
+    container.innerHTML = `
+        <h5>${q.question}</h5>
+        ${optionsHtml}
+    `;
+
+    document.getElementById('backBtn').disabled = currentStep === 0;
+}
+
+// Navigation buttons
+document.getElementById('nextBtn').addEventListener('click', function () {
+    if (currentStep < questions.length - 1) {
+        currentStep++;
+        renderQuestion();
+    } else {
+        // Final submit or thank you logic
+        alert('You’ve completed the questionnaire!');
+    }
+});
+
+document.getElementById('backBtn').addEventListener('click', function () {
+    if (currentStep > 0) {
+        currentStep--;
+        renderQuestion();
+    }
+});
+</script>
+
 
 
 @endpush

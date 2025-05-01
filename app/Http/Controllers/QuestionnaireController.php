@@ -7,6 +7,7 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireResponse;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Question;
 use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -311,4 +312,41 @@ class QuestionnaireController extends Controller
         // Limit to a reasonable number of recommendations
         return $query->inRandomOrder()->limit(6)->get();
     }
+
+
+public function getQuestions($id)
+{
+    try {
+        $questions = Question::where('template_id', $id)->get()->map(function ($q) {
+            $options = [];
+
+            for ($i = 1; $i <= 15; $i++) {
+                $key = "option_$i";
+                if (!is_null($q->$key)) {
+                    $options[] = $q->$key;
+                }
+            }
+
+            return [
+                'question' => $q->question,
+                'type' => $q->type,
+                'options' => $options,
+                'min_value' => $q->min_value,
+                'max_value' => $q->max_value,
+                'step' => $q->step,
+                'default' => $q->default,
+            ];
+        });
+
+        return response()->json($questions);
+
+    } catch (\Exception $e) {
+        Log::error('Error in getQuestions: ' . $e->getMessage());
+        return response()->json(['error' => 'Something went wrong.'], 500);
+    }
+}
+
+
+
+
 }

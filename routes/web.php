@@ -103,6 +103,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('questionnaires/{questionnaire}/submit', [App\Http\Controllers\QuestionnaireController::class, 'submit'])->name('questionnaires.submit');
     Route::get('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'expertise'])->name('questionnaires.expertise');
     Route::post('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'submitExpertise'])->name('questionnaires.submit-expertise');
+    Route::get('/get-questions/{id}', [App\Http\Controllers\QuestionnaireController::class, 'getQuestions']);
+
+
 
 });
 
