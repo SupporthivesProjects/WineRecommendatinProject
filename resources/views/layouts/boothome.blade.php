@@ -250,8 +250,6 @@
                     <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
-                            
-
                             <lottie-player 
                                 src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
                                 background="transparent" 

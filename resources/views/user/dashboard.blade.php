@@ -3,19 +3,61 @@
 @section('admindashboardcontent')
 
 @push('styles')
-<style>
-.move-arrow {
-    animation: arrowBounce 1s infinite ease-in-out;
-    margin-left: 5px;
-}
 
-@keyframes arrowBounce {
-    0% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
-    100% { transform: translateX(0); }
-}
+    <style>
 
-</style>
+        #question-container h5 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        #question-container .form-check-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #6c757d; /* Bootstrap's secondary color or use your own */
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    
+        #question-container .form-check {
+            margin-bottom: 1rem; 
+        }
+
+        #question-container .form-check-label {
+            font-size: 1.1rem;
+        }
+
+        .move-arrow {
+            animation: arrowBounce 1s infinite ease-in-out;
+            margin-left: 5px;
+        }
+
+        @keyframes arrowBounce {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            background: #007bff;
+            border: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-container {
+            position: relative;
+            padding: 10px 0;
+        }
+
+
+
+    </style>
 
 @endpush
 <!-- Start::app-content -->
@@ -178,11 +220,11 @@
                                         world of wine.
                                     </p>
                                     <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="1">
-    I want to try Now !!
-    <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-    </svg>
-</button>
+                                        I want to try Now !!
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                        </svg>
+                                    </button>
                             
                                 </div>
                             </div>
@@ -196,11 +238,12 @@
                                         and notes. This questionnaire refines your palate and helps you explore the wines that suit your 
                                         evolving taste.
                                     </p>
-                                        <a href="{{ route('user.featuredproducts') }}" class="btn  btn-primary mt-2">I want to try Now !!
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                            </svg>
-                                        </a>
+                                    <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="2">
+                                        I want to try Now !!
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                        </svg>
+                                    </button>
                 
                                 </div>
                                 <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-bottom" alt="...">
@@ -215,11 +258,12 @@
                                         delves into nuanced wine traits, helping you pinpoint exactly what excites 
                                         your refined wine-loving senses.
                                     </p>
-                                    <a href="{{ route('user.featuredproducts') }}" class="btn  btn-primary mt-2">I want to try Now !!
+                                    <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="3">
+                                        I want to try Now !!
                                         <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                         </svg>
-                                    </a>
+                                    </button>
                                 </div>
                                 <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img rounded-0" alt="...">
                                 
@@ -233,119 +277,180 @@
 
 <!-- modal code -->
 <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body d-flex p-0" style="height: 500px;">
-        <!-- Left Image Side -->
-        <div class="w-50 bg-cover" style="background-image: url('{{ asset('images/quiz-side.jpg') }}'); background-size: cover;"></div>
-
-        <!-- Right Question Side -->
-        <div class="w-50 p-4 d-flex flex-column justify-content-between">
-          <div id="question-container">
-            <!-- Question and options will load here -->
-          </div>
-          <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-secondary" id="backBtn">Back</button>
-            <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary" id="nextBtn">Next</button>
-          </div>
-        </div>
-      </div>
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body d-flex p-0" style="height: 500px;">
+                    <!-- Left Image Side -->
+                    <div class="w-50 bg-cover" style="background-image: url('{{ asset('images/template1.jpg') }}'); background-size: cover;"></div>
+                        <!-- Right Question Side -->
+                        <div class="w-50 p-4 d-flex flex-column justify-content-between">
+                            <div id="question-container">
+                                <!-- Question and options will load here -->
+                            </div>
+                            <div class="d-flex justify-content-between mt-4 gap-2">
+                                <button class="btn btn-secondary btn-lg flex-fill" id="backBtn">Back</button>
+                                <button class="btn btn-danger  btn-lg flex-fill" data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-primary  btn-lg flex-fill" id="nextBtn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+            </div>
     </div>
-  </div>
 </div>
 
 
 @endsection
 @push('scripts')
 
-<script>
-let questions = [];
-let currentStep = 0;
+    <script>
+        let questions = [];
+        let currentStep = 0;
 
-document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
-    button.addEventListener('click', function () {
-        const questionnaireId = this.getAttribute('data-questionnaire-id');
+        document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+            button.addEventListener('click', function () {
+                const questionnaireId = this.getAttribute('data-questionnaire-id');
 
-        fetch(`/get-questions/${questionnaireId}`)
-            .then(response => {
-                console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
-                console.log('Response status:', response.status);
+                fetch(`/get-questions/${questionnaireId}`)
+                    .then(response => {
+                        console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
+                        console.log('Response status:', response.status);
 
-                if (!response.ok) {
-                    console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
-                    throw new Error('Failed to fetch questions.');
-                }
+                        if (!response.ok) {
+                            console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
+                            throw new Error('Failed to fetch questions.');
+                        }
 
-                return response.json();
-            })
-            .then(data => {
-                console.log('Raw question data received:', data);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Raw question data received:', data);
 
-                if (!Array.isArray(data) || data.length === 0) {
-                    console.warn('No questions returned or data format is incorrect:', data);
-                    alert('No questions available for this questionnaire.');
-                    return;
-                }
+                        if (!Array.isArray(data) || data.length === 0) {
+                            console.warn('No questions returned or data format is incorrect:', data);
+                            alert('No questions available for this questionnaire.');
+                            return;
+                        }
 
-                // Store and use the data
-                questions = data;
-                currentStep = 0;
-                console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+                        // Store and use the data
+                        questions = data;
+                        currentStep = 0;
+                        console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
 
-                renderQuestion();
-                new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
-            })
-            .catch(error => {
-                console.error('An error occurred while loading questions:', error);
-                alert('Something went wrong while loading the questionnaire. Please try again.');
+                        renderQuestion();
+                        new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+                    })
+                    .catch(error => {
+                        console.error('An error occurred while loading questions:', error);
+                        alert('Something went wrong while loading the questionnaire. Please try again.');
+                    });
+
             });
+        });
 
-    });
-});
+        function renderQuestion() 
+        {
+            if (questions.length === 0 || currentStep >= questions.length) return;
 
-function renderQuestion() {
-    if (questions.length === 0 || currentStep >= questions.length) return;
+            const q = questions[currentStep];
+            const container = document.getElementById('question-container');
 
-    const q = questions[currentStep];
-    const container = document.getElementById('question-container');
+            console.log("Rendering question: ", q);
 
-    let optionsHtml = '';
-    q.options.forEach((opt, idx) => {
-        optionsHtml += `
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
-                <label class="form-check-label" for="option${idx}">${opt}</label>
-            </div>`;
-    });
+            let optionsHtml = '';
 
-    container.innerHTML = `
-        <h5>${q.question}</h5>
-        ${optionsHtml}
-    `;
+            if (q.type === 'slider') {
+                const min = q.min_value ?? 0;
+                const max = q.max_value ?? 10000;
+                const step = q.step ?? 100;
+                const defaultValue = q.default ?? min;
 
-    document.getElementById('backBtn').disabled = currentStep === 0;
-}
+                // Create tick marks
+                let tickMarks = '';
+                for (let i = min; i <= max; i += step) {
+                    tickMarks += `<option value="${i}"></option>`;
+                }
 
-// Navigation buttons
-document.getElementById('nextBtn').addEventListener('click', function () {
-    if (currentStep < questions.length - 1) {
-        currentStep++;
-        renderQuestion();
-    } else {
-        // Final submit or thank you logic
-        alert('You’ve completed the questionnaire!');
-    }
-});
+                optionsHtml = `
+                    <div class="mb-4">
+                        <input 
+                            type="range" 
+                            class="form-range" 
+                            id="budgetSlider" 
+                            min="${min}" 
+                            max="${max}" 
+                            step="${step}" 
+                            value="${defaultValue}" 
+                            list="tickmarks"
+                        >
+                        <datalist id="tickmarks">
+                            ${tickMarks}
+                        </datalist>
+                        <div class="d-flex justify-content-between text-muted mt-2">
+                            <small>₹${min}</small>
+                            <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
+                            <small>₹${max}</small>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (q.type === 'single' && Array.isArray(q.options)) {
+                q.options.forEach((opt, idx) => {
+                    optionsHtml += `
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
+                            <label class="form-check-label" for="option${idx}">${opt}</label>
+                        </div>`;
+                });
+            } 
+            else if (q.type === 'multiple' && Array.isArray(q.options)) {
+                q.options.forEach((opt, idx) => {
+                    optionsHtml += `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="answer" id="option${idx}" value="${opt}">
+                            <label class="form-check-label" for="option${idx}">${opt}</label>
+                        </div>`;
+                });
+            }
 
-document.getElementById('backBtn').addEventListener('click', function () {
-    if (currentStep > 0) {
-        currentStep--;
-        renderQuestion();
-    }
-});
-</script>
+            // ✅ Now render the final HTML after all conditions are processed
+            container.innerHTML = `
+                <h5>${q.question}</h5>
+                ${optionsHtml}
+            `;
 
+            // ✅ Attach the slider event listener AFTER rendering
+            if (q.type === 'slider') {
+                const slider = document.getElementById('budgetSlider');
+                const output = document.getElementById('sliderValue');
+                if (slider && output) {
+                    slider.addEventListener('input', (e) => {
+                        output.textContent = e.target.value;
+                    });
+                }
+            }
 
+            document.getElementById('backBtn').disabled = currentStep === 0;
+        }
 
+        // Navigation buttons
+        document.getElementById('nextBtn').addEventListener('click', function () {
+            if (currentStep < questions.length - 1) {
+                currentStep++;
+                renderQuestion();
+            } else {
+                // Final submit or thank you logic
+                nextBtn.textContent = 'Finish';
+                alert('You’ve completed the questionnaire!');
+            }
+        });
+
+        document.getElementById('backBtn').addEventListener('click', function () {
+            if (currentStep > 0) {
+                currentStep--;
+                renderQuestion();
+            }
+        });
+    </script>
+
+   
 @endpush

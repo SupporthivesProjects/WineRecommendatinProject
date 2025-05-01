@@ -45,6 +45,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/user/products', [UserDashboardController::class, 'products'])->name('user.products');
+    Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
     Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
     
 
