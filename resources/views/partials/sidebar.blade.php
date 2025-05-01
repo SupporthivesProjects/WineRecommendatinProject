@@ -85,7 +85,7 @@
                         </a>
                     </li>
                     <li class="slide">
-                        <a href="{{ route('user.questionnaire') }}" class="side-menu__item">
+                        <a href="" class="side-menu__item">
                             <i class="side-menu__icon fe fe-box"></i>
                             <span class="side-menu__label">Questionnaires</span>
                         </a>

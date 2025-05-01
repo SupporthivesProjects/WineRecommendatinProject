@@ -125,10 +125,18 @@ class UserController extends Controller
 
     public function featuredproducts()
     {
+        return view('user.featuredproducts');    
+        
+    }
+   
+    public function products()
+    {
         $product = Product::all(); 
         return view('user.products', compact('product'));    
         
     }
+    
+
 
 
 }
