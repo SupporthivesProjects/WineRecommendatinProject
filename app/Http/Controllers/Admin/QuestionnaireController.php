@@ -82,6 +82,37 @@ class QuestionnaireController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
+
+        // After saving the questionnaire template, store the questions in the 'questions' table
+        foreach ($questions as $question) {
+            \DB::table('questions')->insert([
+                'template_id' => $questionnaireTemplate->id,
+                'question' => $question['text'],
+                'type' => $question['type'],
+                'option_1' => $question['option_1'] ?? null,
+                'option_2' => $question['option_2'] ?? null,
+                'option_3' => $question['option_3'] ?? null,
+                'option_4' => $question['option_4'] ?? null,
+                'option_5' => $question['option_5'] ?? null,
+                'option_6' => $question['option_6'] ?? null,
+                'option_7' => $question['option_7'] ?? null,
+                'option_8' => $question['option_8'] ?? null,
+                'option_9' => $question['option_9'] ?? null,
+                'option_10' => $question['option_10'] ?? null,
+                'option_11' => $question['option_11'] ?? null,
+                'option_12' => $question['option_12'] ?? null,
+                'option_13' => $question['option_13'] ?? null,
+                'option_14' => $question['option_14'] ?? null,
+                'option_15' => $question['option_15'] ?? null,
+                'min_value' => $question['min_value'] ?? null,
+                'max_value' => $question['max_value'] ?? null,
+                'step' => $question['step'] ?? null,
+                'default' => $question['default'] ?? null,
+            ]);
+        }
+
+
+
         return redirect()->route('admin.questionnaires.index')
             ->with('success', 'Questionnaire template created successfully.');
     }

@@ -40,7 +40,7 @@ class DashboardController extends Controller
 
         // Get products for the table with pagination
         $productsCount = $productsQuery->count();
-        $products = $productsQuery->orderBy('id', 'desc')->paginate(10);
+        $products = $productsQuery->orderBy('id', 'desc')->paginate(5);
 
         // Stores data with search functionality
         $storesQuery = Store::query();
