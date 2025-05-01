@@ -177,11 +177,12 @@
                                         fun questions that guide you to wines you’ll love. No pressure—just your first step into the 
                                         world of wine.
                                     </p>
-                                        <a href="{{ route('user.featuredproducts') }}" class="btn  btn-primary mt-2">I want to try Now !!
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                            </svg>
-                                        </a>
+                                    <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="1">
+    I want to try Now !!
+    <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+    </svg>
+</button>
                             
                                 </div>
                             </div>
@@ -228,7 +229,36 @@
              <!-- Second row ends -->
         </div>
     </div>
+
+
+<!-- modal code -->
+<div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body d-flex p-0" style="height: 500px;">
+        <!-- Left Image Side -->
+        <div class="w-50 bg-cover" style="background-image: url('{{ asset('images/quiz-side.jpg') }}'); background-size: cover;"></div>
+
+        <!-- Right Question Side -->
+        <div class="w-50 p-4 d-flex flex-column justify-content-between">
+          <div id="question-container">
+            <!-- Question and options will load here -->
+          </div>
+          <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-secondary" id="backBtn">Back</button>
+            <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" id="nextBtn">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @endsection
 @push('scripts')
+
+
 
 @endpush
