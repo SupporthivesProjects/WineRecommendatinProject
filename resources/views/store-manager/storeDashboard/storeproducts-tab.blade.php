@@ -25,41 +25,128 @@
         <!-- End::Page Header -->
 
         <!-- Start::Content -->
-        <div class="py-5">
-            <div class="container-lg">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="mb-4">{{ __('Select Products') }}</h4>
-                        <form action="" method="POST">
-                            @csrf
-                            <div class="row g-3">
-                                @foreach($allProducts as $product)
-                                    @if($product->status === 'active')
-                                        <div class="col-md-4">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="product_{{ $product->id }}" name="products[]" value="{{ $product->id }}">
-                                                <label class="form-check-label" for="product_{{ $product->id }}">
-                                                    {{ $product->wine_name }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
+            <div class="">
+                <div class="container-lg">
+                    {{-- Product Details Card --}}
+                    <div class="col-md-12 col-xl-12 mt-5">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-header border-bottom-0 d-flex pb-0 justify-content-between">
+                                <div>
+                                    <label class="main-content-label mb-2 pt-1">Products Details</label>
+                                    <p class="fs-12 mb-3 text-muted mb-0">
+                                        The details displayed often include size, color, price, shipping information, reviews, and other relevant information customers may want to know before making a purchase
+                                    </p>
+                                </div>
+                                <div class="card-options float-end">
+                                    <a href="javascript:void(0);" class="me-0 text-default" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                                        <span class="fe fe-more-vertical fs-17 float-end"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" role="menu">
+                                        <li><a href="#"><i class="fe fe-download-cloud me-2"></i>Download</a></li>
+                                    </ul>
+                                </div>
                             </div>
-
-                            <div class="mt-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Submit
-                                </button>
+                            <div class="card-body pt-0">
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter border mb-0 text-nowrap table-product">
+                                        <thead>
+                                            <tr>
+                                                <th>Product ID</th>
+                                                <th>Product</th>
+                                                <th>Type</th>
+                                                <th>Vintage</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($allProducts as $product)
+                                                <tr>
+                                                    <td>#{{ $product->id }}</td>
+                                                    <td class="d-flex align-items-center">
+                                                        @php
+                                                            $image = $product->images->first();
+                                                        @endphp
+                                                        <img src="{{ $image ? asset('storage/products/' . $image->image_path) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
+                                                        <span class="my-auto text-truncate">{{ $product->wine_name }}</span>
+                                                        <a href="" class="ms-2" title="View Product">
+                                                            <i class="bi bi-box-arrow-up-right"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                    @php
+                                                        $icons = [
+                                                            'red' => '<i class="fas fa-wine-glass text-danger" title="Red Wine"></i>',
+                                                            'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>',
+                                                            'sparkling' => '<i class="fas fa-champagne-glasses text-info" title="Sparkling Wine"></i>',
+                                                            'still' => '<i class="fas fa-tint text-primary" title="Still Wine"></i>',
+                                                        ];
+                                                    @endphp
+                                                    {!! $icons[$product->type] ?? '<i class="fas fa-question-circle"></i>' !!}
+                                                    {{ ucfirst($product->type) }}
+                                                    </td>
+                                                    <td>{{ $product->vintage_year }}</td>
+                                                    <td>
+                                                    <span class="badge rounded-pill {{ $product->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                        {{ $product->status === 'active' ? 'Available' : 'Not in Stock' }}
+                                                    </span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-
-                        </form>
-
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         <!-- End::Content -->
+
+        <!-- Pagination Code Starts -->
+            @if ($allProducts->hasPages())
+                <div class="d-flex justify-content-center my-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($allProducts->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link"><i class="bi bi-caret-left"></i></span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $allProducts->previousPageUrl() }}" rel="prev">
+                                        <i class="bi bi-caret-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Page Number Links --}}
+                            @foreach ($allProducts->getUrlRange(1, $allProducts->lastPage()) as $page => $url)
+                                <li class="page-item {{ $allProducts->currentPage() == $page ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                </li>
+                            @endforeach
+
+                            {{-- Next Page Link --}}
+                            @if ($allProducts->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $allProducts->nextPageUrl() }}" rel="next">
+                                        <i class="bi bi-caret-right"></i>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link"><i class="bi bi-caret-right"></i></span>
+                                </li>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
+            @endif
+        <!-- Pagination Code ends -->
+
+
+
 
     </div>
 </div>

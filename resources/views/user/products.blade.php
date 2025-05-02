@@ -15,41 +15,37 @@
             </div>
         <!-- End::page-header -->
 
+            <!-- Start::row-6 -->
+                <div class="row row-sm">
+                    @foreach ($products as $product)
+                        <div class="col-xl-4">
+                            <div class="card custom-card">
+                                <!-- Image at the top -->
+                                @php
+                                    $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                @endphp
+                                <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top" alt="{{ $product->wine_name }}">
 
-        @foreach ($products as $product)
-            <div class="card shadow-sm border-0 p-3 mb-4">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0 text-primary">{{ $product->wine_name }}</h3>
-                    <span class="badge bg-{{ $product->status === 'active' ? 'success' : 'danger' }} text-uppercase px-3 py-2">
-                        {{ ucfirst($product->status) }}
-                    </span>
-                </div>
+                                <!-- Card body with product information -->
+                                <div class="card-body">
+                                    <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h6>
+                                    <p><strong>Type:</strong> {{ ucfirst($product->type) }} </p> 
+                                    <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                    <p><strong>Tasting Notes:</strong> {{ Str::words($product->tasting_notes, 20, '...') }}</p>
 
-                <div class="card-body">
-                    <div class="row">
-                        @php
-                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                        @endphp
-                        <div class="col-md-4 mb-3">
-                            @if ($primaryImage)
-                                <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
-                            @else
-                                <p class="text-muted">No image available</p>
-                            @endif
+                                    <!-- Button to check the product details -->
+                                    <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-primary mt-2">
+                                        I want to try Now !!
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="col-md-8">
-                            <p><strong>Type:</strong> {{ $product->type }}</p>
-                            <p><strong>Variety:</strong> {{ $product->grape_variety }}</p>
-                            <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
-                            <p><strong>Palate :</strong> {{ $product->palate }}</p>
-                            <p><strong>Tasting Notes:</strong> {{ $product->tasting_notes }}</p>
-                            <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-outline-primary mt-3">I want to check this !!</a>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-            </div>
-        @endforeach
+            <!-- End::row-6 -->
+
+        <!-- End::row-6 -->
+
        
         <!-- Pagination Code -->
         @if ($products->hasPages())

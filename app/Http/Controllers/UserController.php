@@ -131,7 +131,7 @@ class UserController extends Controller
    
     public function products()
     {
-        $products = Product::with('images')->paginate(5); // 5 products per page
+        $products = Product::with('images')->paginate(6); // 5 products per page
         return view('user.products', compact('products'));
     }
     

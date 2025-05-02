@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $allProducts = Product::where('status', 'active')->get();
+        $allProducts = Product::where('status', 'active')->paginate(10);
         $store = Auth::user()->store;
         $storeProducts = $store->products->pluck('id')->toArray();
         
