@@ -314,38 +314,65 @@ class QuestionnaireController extends Controller
     }
 
 
-public function getQuestions($id)
-{
-    try {
-        $questions = Question::where('template_id', $id)->get()->map(function ($q) {
-            $options = [];
+    public function getQuestions($id)
+    {
+        try {
+            $questions = Question::where('template_id', $id)->get()->map(function ($q) {
+                $options = [];
 
-            for ($i = 1; $i <= 15; $i++) {
-                $key = "option_$i";
-                if (!is_null($q->$key)) {
-                    $options[] = $q->$key;
+                for ($i = 1; $i <= 15; $i++) {
+                    $key = "option_$i";
+                    if (!is_null($q->$key)) {
+                        $options[] = $q->$key;
+                    }
                 }
-            }
 
-            return [
-                'question' => $q->question,
-                'type' => $q->type,
-                'options' => $options,
-                'min_value' => $q->min_value,
-                'max_value' => $q->max_value,
-                'step' => $q->step,
-                'default' => $q->default,
-            ];
-        });
+                return [
+                    'question' => $q->question,
+                    'type' => $q->type,
+                    'options' => $options,
+                    'min_value' => $q->min_value,
+                    'max_value' => $q->max_value,
+                    'step' => $q->step,
+                    'default' => $q->default,
+                ];
+            });
 
-        return response()->json($questions);
+            return response()->json($questions);
 
-    } catch (\Exception $e) {
-        Log::error('Error in getQuestions: ' . $e->getMessage());
-        return response()->json(['error' => 'Something went wrong.'], 500);
+        } catch (\Exception $e) {
+            Log::error('Error in getQuestions: ' . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong.'], 500);
+        }
     }
-}
 
+
+    public function storeResponse(Request $request)
+    {
+    
+
+        // Validate the incoming data
+        $validated = $request->validate([
+            'template_id' => 'required|integer',  
+            'answers' => 'required|array',        
+        ]);
+
+        // Log or save the data to the database
+        // Example: Storing in a 'responses' table (you can modify this as per your database schema)
+        
+        $templateId = $validated['template_id'];
+        $answers = $validated['answers'];
+
+        // Store the response (this example assumes a "responses" table with template_id and answers columns)
+        \DB::table('responses')->insert([
+            'template_id' => $templateId,
+            'answers' => json_encode($answers), 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json(['message' => 'Response saved successfully!'], 200);
+    }
 
 
 

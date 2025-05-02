@@ -302,7 +302,7 @@
 @endsection
 @push('scripts')
 
-    <script>
+    <!-- <script>
         let questions = [];
         let currentStep = 0;
 
@@ -450,6 +450,262 @@
                 renderQuestion();
             }
         });
+    </script> -->
+
+    <script>
+            let questions = [];
+            let currentStep = 0;
+            let responses = {};  
+            let selectedQuestionnaireId = null;
+
+            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    selectedQuestionnaireId = this.getAttribute('data-questionnaire-id');
+                    console.log("Selected questionnaire ID:", selectedQuestionnaireId);
+
+                    // Optional: reset previous responses and local storage
+                    responses = {};
+                    localStorage.removeItem('userResponses');
+                });
+            });
+
+
+            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    const questionnaireId = this.getAttribute('data-questionnaire-id');
+
+                    fetch(`/get-questions/${questionnaireId}`)
+                        .then(response => {
+                            console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
+                            console.log('Response status:', response.status);
+
+                            if (!response.ok) {
+                                console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
+                                throw new Error('Failed to fetch questions.');
+                            }
+
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Raw question data received:', data);
+
+                            if (!Array.isArray(data) || data.length === 0) {
+                                console.warn('No questions returned or data format is incorrect:', data);
+                                alert('No questions available for this questionnaire.');
+                                return;
+                            }
+
+                            // Store and use the data
+                            questions = data;
+                            currentStep = 0;
+                            console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+
+                            renderQuestion();
+                            new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+                        })
+                        .catch(error => {
+                            console.error('An error occurred while loading questions:', error);
+                            alert('Something went wrong while loading the questionnaire. Please try again.');
+                        });
+
+                });
+            });
+
+            function renderQuestion() {
+                if (questions.length === 0 || currentStep >= questions.length) return;
+
+                if (!questions[currentStep].id) {
+                    questions[currentStep].id = `question${currentStep + 1}`;
+                }
+
+                const q = questions[currentStep];
+                const container = document.getElementById('question-container');
+
+                console.log("Rendering question: ", q);
+
+                let optionsHtml = '';
+
+                if (q.type === 'slider') {
+                    const min = q.min_value ?? 0;
+                    const max = q.max_value ?? 10000;
+                    const step = q.step ?? 100;
+                    const defaultValue = q.default ?? min;
+
+                    // Create tick marks
+                    let tickMarks = '';
+                    for (let i = min; i <= max; i += step) {
+                        tickMarks += `<option value="${i}"></option>`;
+                    }
+
+                    optionsHtml = `
+                        <div class="mb-4">
+                            <input 
+                                type="range" 
+                                class="form-range" 
+                                id="budgetSlider" 
+                                min="${min}" 
+                                max="${max}" 
+                                step="${step}" 
+                                value="${defaultValue}" 
+                                list="tickmarks"
+                            >
+                            <datalist id="tickmarks">
+                                ${tickMarks}
+                            </datalist>
+                            <div class="d-flex justify-content-between text-muted mt-2">
+                                <small>₹${min}</small>
+                                <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
+                                <small>₹${max}</small>
+                            </div>
+                        </div>
+                    `;
+                } 
+                else if (q.type === 'single' && Array.isArray(q.options)) {
+                    q.options.forEach((opt, idx) => {
+                        optionsHtml += `
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
+                                <label class="form-check-label" for="option${idx}">${opt}</label>
+                            </div>`;
+                    });
+                } 
+                else if (q.type === 'multiple' && Array.isArray(q.options)) {
+                    q.options.forEach((opt, idx) => {
+                        optionsHtml += `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="answer" id="option${idx}" value="${opt}">
+                                <label class="form-check-label" for="option${idx}">${opt}</label>
+                            </div>`;
+                    });
+                }
+
+                // ✅ Now render the final HTML after all conditions are processed
+                container.innerHTML = `
+                    <h5>${q.question}</h5>
+                    ${optionsHtml}
+                `;
+
+                // Attach the slider event listener AFTER rendering
+                if (q.type === 'slider') {
+                    const slider = document.getElementById('budgetSlider');
+                    const output = document.getElementById('sliderValue');
+                    if (slider && output) {
+                        slider.addEventListener('input', (e) => {
+                            output.textContent = e.target.value;
+                        });
+                    }
+                }
+
+                document.getElementById('backBtn').disabled = currentStep === 0;
+            }
+
+            // Capture the user's response and store it locally
+            function captureResponse() 
+            {
+                const q = questions[currentStep];
+
+                // Ensure question has an ID
+                if (!q.id) {
+                    q.id = `question${currentStep + 1}`;
+                }
+
+                console.log("Capturing response for question:", q);
+
+                if (q.type === 'slider') {
+                    const slider = document.getElementById('budgetSlider');
+                    if (slider) {
+                        responses[q.id] = slider.value;
+                        console.log(`Slider value stored for ${q.id}:`, slider.value);
+                    } else {
+                        console.warn(`Slider input not found for ${q.id}`);
+                    }
+                } 
+                else if (q.type === 'single') {
+                    const selected = document.querySelector('input[name="answer"]:checked');
+                    if (selected) {
+                        responses[q.id] = selected.value;
+                        console.log(`Radio button selected for ${q.id}:`, selected.value);
+                    } else {
+                        console.warn(`No radio button selected for ${q.id}`);
+                    }
+                } 
+                else if (q.type === 'multiple') {
+                    const selected = document.querySelectorAll('input[name="answer"]:checked');
+                    if (selected.length > 0) {
+                        const values = Array.from(selected).map(el => el.value);
+                        responses[q.id] = values;
+                        console.log(`Checkboxes selected for ${q.id}:`, values);
+                    } else {
+                        console.warn(`No checkboxes selected for ${q.id}`);
+                    }
+                }
+
+                // Store to localStorage (optional but helpful for debugging or persistence)
+                localStorage.setItem('userResponses', JSON.stringify(responses));
+                console.log("Responses so far:", JSON.stringify(responses, null, 2));
+            }
+
+
+
+            // Navigation buttons
+            document.getElementById('nextBtn').addEventListener('click', function () {
+                captureResponse(); // Save the current response before moving to next question
+                if (currentStep < questions.length - 1) {
+                    currentStep++;
+                    renderQuestion();
+                } else {
+                    // On Finish button, store responses and send to backend
+                    nextBtn.textContent = 'Finish';
+                    // Store responses in localStorage
+                    localStorage.setItem('userResponses', JSON.stringify(responses));
+                    alert(localStorage.getItem('userResponses'));  
+                    alert(selectedQuestionnaireId);
+
+                    // Call the function to submit responses
+                    alert("calling function");
+                    submitResponses();
+
+                    // Close modal
+                    const modal = document.getElementById('questionnaireModal');
+                    if (modal) {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        if (modalInstance) modalInstance.hide();
+                    }
+
+                    alert('You’ve completed the questionnaire!');
+                }
+            });
+
+            // Send responses to backend
+            function submitResponses() 
+            {
+                alert("I am in");
+                fetch('/submit-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        template_id: selectedQuestionnaireId,  // Send the questionnaire ID
+                        answers: responses                     // Send the responses object
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response saved:', data);
+                })
+                .catch(error => {
+                    console.error('Error saving response:', error);
+                });
+            }
+
+
+            document.getElementById('backBtn').addEventListener('click', function () {
+                if (currentStep > 0) {
+                    currentStep--;
+                    renderQuestion();
+                }
+            });
     </script>
 
    
