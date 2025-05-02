@@ -33,17 +33,17 @@ use Illuminate\Support\Facades\Route;
         return view('welcome');
     });
 
-    Route::get('/dashboard', function () 
-    {
+    Route::get('/dashboard', function () {
+        // Add success message in the session
         if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with('success', 'Login successful!');
         }
-        elseif(auth()->user()->role === 'store_manager')
-        {
-            return redirect()->route('store-manager.dashboard');
+        elseif(auth()->user()->role === 'store_manager') {
+            return redirect()->route('store-manager.dashboard')->with('success', 'Login successful!');
         }
-        return redirect()->route('user.dashboard');
+        return redirect()->route('user.dashboard')->with('success', 'Login successful!');
     })->middleware(['auth', 'verified'])->name('dashboard');
+    
 
     Route::middleware(['auth', 'verified'])->group(function () 
     {

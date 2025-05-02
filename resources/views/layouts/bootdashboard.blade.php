@@ -24,7 +24,6 @@
         @include("partials/headersearch_modal")
         @include("partials/footer")
         @include("partials/right-sidebar")
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -32,7 +31,7 @@
         @include("partials/commonjs")
 
     <!-- JSVector Maps JS -->
-    <script src="{{ asset('assets/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>    
 
     <!-- JSVector Maps MapsJS -->
     <script src="{{ asset('assets/libs/jsvectormap/maps/world-merc.js') }}"></script>
@@ -66,6 +65,9 @@
     <!-- Internal Datatables JS -->
     <script src="{{ asset('assets/js/datatables.js') }}"></script>
 
+     <!-- Toastr JS -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+     
     @stack('scripts')
 
 
@@ -73,6 +75,9 @@
 
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+   
+
 
 </body>
 

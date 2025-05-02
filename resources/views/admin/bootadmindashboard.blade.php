@@ -128,9 +128,6 @@
             </div>
             <!-- End::row -->    
 
-
-
-
             <!-- Start::row-1 -->
             <div class="row row-sm">
                 <div class="col-sm-12 col-lg-12 col-xl-12">
@@ -279,13 +276,36 @@
             </div>
             <!-- End::row-1 -->
         </div>
-    </div>
-    
+    </div> 
 <!-- End::app-content -->
 
 @endsection
 @push('scripts')
-   
+
+    @if(session('success') || session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            @if(session('success'))
+                toastr.success(@json(session('success')));
+            @endif
+
+            @if(session('error'))
+                toastr.error(@json(session('error')));
+            @endif
+        </script>
+    @endif
+
     <!-- Pie chart for wine types -->
     <script>
         const productTypeLabels = @json($productTypeLabels); 

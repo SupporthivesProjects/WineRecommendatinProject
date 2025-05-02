@@ -452,6 +452,31 @@
         });
     </script> -->
 
+    @if(session('success') || session('error'))
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        @if(session('success'))
+            toastr.success(@json(session('success')));
+        @endif
+
+        @if(session('error'))
+            toastr.error(@json(session('error')));
+        @endif
+    </script>
+@endif
+
+
     <script>
             let questions = [];
             let currentStep = 0;
