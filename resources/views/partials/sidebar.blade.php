@@ -71,12 +71,6 @@
                             <span class="side-menu__label">Store Products</span>
                         </a>
                     </li>
-                    <li class="slide">
-                        <a href="{{ route('store-manager.featuredproducts') }}" class="side-menu__item">
-                            <i class="side-menu__icon fe fe-star"></i>
-                            <span class="side-menu__label">Featured Products</span>
-                        </a>
-                    </li>
                 @elseif(Auth::user()->role === 'user')
                     <li class="slide">
                         <a href="{{ route('user.dashboard') }}" class="side-menu__item">

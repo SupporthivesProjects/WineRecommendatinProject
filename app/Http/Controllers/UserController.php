@@ -8,6 +8,8 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireResponse;
 use App\Models\Product;
 use App\Models\UserQuestionnaireResponse;
+use Illuminate\Support\Facades\DB;
+
 
 class UserController extends Controller
 {
@@ -131,9 +133,33 @@ class UserController extends Controller
    
     public function products()
     {
-        $products = Product::with('images')->paginate(6); // 5 products per page
+        $store = Auth::user()->store;
+
+        // Fetch products linked to this store and eager load the 'images' relationship
+        $storeProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->get()
+            ->keyBy('product_id'); 
+
+        // Fetch the products with their images for the store products
+        $productsQuery = Product::with('images')
+            ->whereIn('id', $storeProducts->pluck('product_id'));
+
+        // Apply pagination after applying map
+        $products = $productsQuery->paginate(6);
+
+        // Map the 'is_featured' value from store_products to each product
+        $products->getCollection()->transform(function ($product) use ($storeProducts) {
+            $product->is_featured = $storeProducts[$product->id]->is_featured;
+            return $product;
+        });
+
+
         return view('user.products', compact('products'));
     }
+
+
+
     
     public function productDetails($id)
     {
