@@ -131,41 +131,101 @@ class UserController extends Controller
         
     }
    
+    // public function products()
+    // {
+    //     $store = Auth::user()->store;
+
+    //     // Fetch products linked to this store and eager load the 'images' relationship
+    //     $storeProducts = DB::table('store_products')
+    //         ->where('store_id', $store->id)
+    //         ->get()
+    //         ->keyBy('product_id'); 
+
+    //     // Fetch the products with their images for the store products
+    //     $productsQuery = Product::with('images')
+    //         ->whereIn('id', $storeProducts->pluck('product_id'));
+
+    //     // Apply pagination after applying map
+    //     $products = $productsQuery->paginate(6);
+
+    //     // Map the 'is_featured' value from store_products to each product
+    //     $products->getCollection()->transform(function ($product) use ($storeProducts) {
+    //         $product->is_featured = $storeProducts[$product->id]->is_featured;
+    //         return $product;
+    //     });
+
+
+    //     return view('user.products', compact('products'));
+    // }
     public function products()
     {
-        $store = Auth::user()->store;
+        // Get the matching products from the session
+        $products = session('matching_products', []);
 
-        // Fetch products linked to this store and eager load the 'images' relationship
-        $storeProducts = DB::table('store_products')
-            ->where('store_id', $store->id)
-            ->get()
-            ->keyBy('product_id'); 
-
-        // Fetch the products with their images for the store products
-        $productsQuery = Product::with('images')
-            ->whereIn('id', $storeProducts->pluck('product_id'));
-
-        // Apply pagination after applying map
-        $products = $productsQuery->paginate(6);
-
-        // Map the 'is_featured' value from store_products to each product
-        $products->getCollection()->transform(function ($product) use ($storeProducts) {
-            $product->is_featured = $storeProducts[$product->id]->is_featured;
-            return $product;
-        });
-
-
+        // Pass the products to the view
         return view('user.products', compact('products'));
     }
 
 
-
-    
     public function productDetails($id)
     {
         $product = Product::findOrFail($id);
         return view('user.product-detail', compact('product'));
     }
+
+    public function storeResponse(Request $request)
+    {
+
+        $responses = $request->all();
+
+        // Find matching products
+        $matchingProducts = $this->getMatchingProducts($responses);
+
+        dd($matchingProducts);
+
+        // If no products found, you can return a fallback or 'No Results' page
+        if ($matchingProducts->isEmpty()) {
+            return redirect()->route('no.results'); // Your fallback route
+        }
+
+        // Store the matching products in the session
+        session(['matching_products' => $matchingProducts]);
+
+        // Redirect to the 'user.products' route
+        return redirect()->route('user.products');
+    }
+
+
+    public function getMatchingProducts($responses)
+    {
+        // Start with a query for all products
+        $query = Product::query();
+
+        // Loop through all responses and add conditions to the query
+        foreach ($responses as $key => $value) {
+            // Ensure the response matches the product's attribute
+            // Adjust the column names as per your database schema
+            switch ($key) {
+                case 'wine_type':
+                    $query->where('wine_type', $value);
+                    break;
+                case 'sweetness':
+                    $query->where('sweetness', $value);
+                    break;
+                case 'region':
+                    $query->where('region', $value);
+                    break;
+                // Add more cases for other response fields
+            }
+        }
+
+        // Execute the query to get matching products
+        $matchingProducts = $query->get();
+
+        return $matchingProducts;
+    }
+
+
 
     
 

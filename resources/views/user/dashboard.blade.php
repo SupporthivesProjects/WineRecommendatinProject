@@ -55,6 +55,12 @@
             padding: 10px 0;
         }
 
+        .emoji-icon {
+            font-size: 1.5em;      /* or 2em, adjust as needed */
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
 
 
     </style>
@@ -275,28 +281,30 @@
     </div>
 
 
-<!-- modal code -->
-<div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body d-flex p-0" style="height: 500px;">
-                    <!-- Left Image Side -->
-                    <div class="w-50 bg-cover" style="background-image: url('{{ asset('images/template1.jpg') }}'); background-size: cover;"></div>
-                        <!-- Right Question Side -->
-                        <div class="w-50 p-4 d-flex flex-column justify-content-between">
-                            <div id="question-container">
-                                <!-- Question and options will load here -->
-                            </div>
-                            <div class="d-flex justify-content-between mt-4 gap-2">
-                                <button class="btn btn-secondary btn-lg flex-fill" id="backBtn">Back</button>
-                                <button class="btn btn-danger  btn-lg flex-fill" data-bs-dismiss="modal">Cancel</button>
-                                <button class="btn btn-primary  btn-lg flex-fill" id="nextBtn">Next</button>
-                            </div>
+    <!-- modal code -->
+    <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column p-0">
+                    <!-- Lottie Animation (instead of the image) -->
+                    <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px;width:auto"></div>
+
+                    <!-- Question Side -->
+                    <div class="w-100 p-4 d-flex flex-column justify-content-between">
+                        <div id="question-container">
+                            <!-- Question and options will load here -->
+                        </div>
+                        <div class="d-flex justify-content-between mt-4 gap-2">
+                            <button class="btn btn-secondary btn-lg flex-fill" id="backBtn">Back</button>
+                            <button class="btn btn-danger btn-lg flex-fill" data-bs-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary btn-lg flex-fill" id="nextBtn">Next</button>
                         </div>
                     </div>
+                </div>
             </div>
+        </div>
     </div>
-</div>
+
 
 
 @endsection
@@ -482,6 +490,71 @@
             let responses = {};  
             let selectedQuestionnaireId = null;
 
+            const emojiMap = {
+                // Q1 - Wine Type
+                "Red": "🍷",
+                "White": "🥂",
+                "Rosé": "🌹",
+                "Fruit": "🍇",
+                
+                // Q2 - Still or Sparkling
+                "Still": "🧊",
+                "Sparkling": "🍾",
+                "Sparkling/Champagne": "🍾",
+
+                // Q3 - Sweetness
+                "Sweet": "🍬",
+                "Medium Sweet": "🍯",
+                "Lightly Sweet": "🧁",
+                "Dry": "🍂",
+
+                // Q4 - Flavor Profile
+                "Fruit-Driven": "🍓",
+                "Juicy/Fruit-Forward": "🍒",
+                "Aromatic": "🌸",
+                "Earthy": "🌱",
+                "Mineral-Driven": "🪨",
+                "SKIP": "⏭️",
+
+                // Q5 - Boldness
+                "Light-bodied (Soft & Refreshing)": "☁️",
+                "Medium-bodied (Balanced & Smooth)": "🥃",
+                "Full-bodied (Rich & Intense)": "💪",
+
+                // Q6 - Fruity Level
+                "Very Fruity": "🍉",
+                "Slightly Fruity": "🍑",
+                "Not Fruity": "🥖",
+
+                // Q7 - Age Preference
+                "Young and Refreshing": "🧃",
+                "Bold and Old": "🧓",
+
+                // Q8 - Regions
+                "Any": "🌍",
+                "India": "🇮🇳",
+                "France": "🇫🇷",
+                "Italy": "🇮🇹",
+                "Spain": "🇪🇸",
+                "Australia": "🇦🇺",
+                "USA": "🇺🇸",
+                "Rest of the World": "🌎",
+
+                // Q9 - Budget (slider — not clickable)
+                // (No emojis needed for slider, but adding for consistency)
+                "Budget": "💰",
+
+                // Q10 - Occasion
+                "Everyday sipping": "🛋️",
+                "Celebration": "🎉",
+                "Gifting": "🎁",
+                "Pairing with food (Coming Soon)": "🍽️"
+            };
+
+
+
+
+
             document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
                 button.addEventListener('click', function () {
                     selectedQuestionnaireId = this.getAttribute('data-questionnaire-id');
@@ -586,22 +659,29 @@
                 } 
                 else if (q.type === 'single' && Array.isArray(q.options)) {
                     q.options.forEach((opt, idx) => {
+                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? emojiMap[opt] + ' ' : '';
+                        const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<span class="emoji-icon">${emojiMap[opt]}</span> ` : '';
+
                         optionsHtml += `
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
-                                <label class="form-check-label" for="option${idx}">${opt}</label>
-                            </div>`;
-                    });
-                } 
-                else if (q.type === 'multiple' && Array.isArray(q.options)) {
-                    q.options.forEach((opt, idx) => {
-                        optionsHtml += `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="answer" id="option${idx}" value="${opt}">
-                                <label class="form-check-label" for="option${idx}">${opt}</label>
+                                <label class="form-check-label" for="option${idx}">${emoji}${opt}</label>
                             </div>`;
                     });
                 }
+                else if (q.type === 'multiple' && Array.isArray(q.options)) {
+                    q.options.forEach((opt, idx) => {
+                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? emojiMap[opt] + ' ' : '';
+                        const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<span class="emoji-icon">${emojiMap[opt]}</span> ` : '';
+
+                        optionsHtml += `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="answer" id="option${idx}" value="${opt}">
+                                <label class="form-check-label" for="option${idx}">${emoji}${opt}</label>
+                            </div>`;
+                    });
+                }
+
 
                 // ✅ Now render the final HTML after all conditions are processed
                 container.innerHTML = `
@@ -682,11 +762,11 @@
                     nextBtn.textContent = 'Finish';
                     // Store responses in localStorage
                     localStorage.setItem('userResponses', JSON.stringify(responses));
-                    alert(localStorage.getItem('userResponses'));  
-                    alert(selectedQuestionnaireId);
+                    //alert(localStorage.getItem('userResponses'));  
+                    //alert(selectedQuestionnaireId);
 
                     // Call the function to submit responses
-                    alert("calling function");
+                    //alert("calling function");
                     submitResponses();
 
                     // Close modal
@@ -696,18 +776,20 @@
                         if (modalInstance) modalInstance.hide();
                     }
 
-                    alert('You’ve completed the questionnaire!');
+                    //alert('You’ve completed the questionnaire!');
                 }
             });
 
             // Send responses to backend
             function submitResponses() 
             {
-                alert("I am in");
+                //alert("I am in");
+                // 
                 fetch('/submit-response', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Add CSRF token
                     },
                     body: JSON.stringify({
                         template_id: selectedQuestionnaireId,  // Send the questionnaire ID
@@ -721,6 +803,9 @@
                 .catch(error => {
                     console.error('Error saving response:', error);
                 });
+
+
+
             }
 
 
@@ -732,5 +817,46 @@
             });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var lottieAnimation;
+
+            // Array of Lottie animation paths (replace these with your actual paths)
+            var animationPaths = [
+                '{{ asset('Lottie/Lottie2.json') }}',
+                '{{ asset('Lottie/Lottie3.json') }}',
+                '{{ asset('Lottie/Lottie5.json') }}',
+              
+            ];
+
+            // Function to get a random animation path
+            function getRandomAnimationPath() {
+                var randomIndex = Math.floor(Math.random() * animationPaths.length); // Get a random index
+                return animationPaths[randomIndex]; // Return the random animation path
+            }
+
+            // Set up the Lottie player on modal open
+            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    // Destroy previous animation if any
+                    if (lottieAnimation) {
+                        lottieAnimation.destroy();
+                    }
+
+                    // Get a random animation path
+                    var animationPath = getRandomAnimationPath();
+
+                    // Initialize Lottie animation inside the modal
+                    lottieAnimation = lottie.loadAnimation({
+                        container: document.getElementById('lottieAnimation'), // Container for the Lottie animation
+                        renderer: 'svg', // Use SVG renderer for better scalability
+                        loop: true, // Set to true if you want the animation to loop
+                        autoplay: true, // Set to true to autoplay the animation
+                        path: animationPath // Path to the Lottie animation JSON file
+                    });
+                });
+            });
+        });   
+    </script>
    
 @endpush
