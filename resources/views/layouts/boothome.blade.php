@@ -10,8 +10,8 @@
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ asset('images/wine_store_favicon.ico') }}" type="image/x-icon">
+     <!-- Favicon -->
+     <link rel="icon" href="{{ asset('images/wine_store_favicon.ico') }}" type="image/x-icon">
     <!-- Bootstrap Css -->
     <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" >
     <!-- Style Css -->

@@ -50,6 +50,17 @@ class ProductController extends Controller
         
         return view('store-manager.products.store-products', compact('products'));
     }
+
+     /**
+     * redirect store manager to single product page.
+     */
+    public function singleproduct($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('store-manager.storeDashboard.storeSingleProduct', compact('product'));
+    }
+
+
     
     /**
      * Display and manage featured products.

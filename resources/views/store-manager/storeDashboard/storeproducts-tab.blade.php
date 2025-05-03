@@ -68,7 +68,7 @@
                                                         @endphp
                                                         <img src="{{ $image ? asset('storage/products/' . $image->image_path) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
                                                         <span class="my-auto text-truncate">{{ $product->wine_name }}</span>
-                                                        <a href="" class="ms-2" title="View Product">
+                                                        <a href="{{ route('store-manager.singleproduct', $product->id) }}" class="ms-2" title="View Product">
                                                             <i class="bi bi-box-arrow-up-right"></i>
                                                         </a>
                                                     </td>

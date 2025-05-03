@@ -122,6 +122,7 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
         Route::get('/dashboard', [StoreDashboardController::class, 'index'])->name('dashboard');
         Route::get('/products', [StoreManagerProductController::class, 'index'])->name('products');
+        Route::get('/products/{id}', [StoreManagerProductController::class, 'singleproduct'])->name('singleproduct');
         Route::get('/featuredproducts', [FeaturedProductController::class, 'index'])->name('featuredproducts');
         Route::get('/test', [StoreDashboardController::class, 'test'])->name('test');
         
