@@ -56,6 +56,8 @@
                                                 <th>Type</th>
                                                 <th>Vintage</th>
                                                 <th>Status</th>
+                                                <th>Available</th>
+                                                <th>Featured</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -89,6 +91,15 @@
                                                     <span class="badge rounded-pill {{ $product->status === 'active' ? 'bg-success' : 'bg-danger' }}">
                                                         {{ $product->status === 'active' ? 'Available' : 'Not in Stock' }}
                                                     </span>
+                                                    </td>
+                                                     <!-- Available Checkbox -->
+                                                    <td>
+                                                        <input type="checkbox" name="available[]" value="{{ $product->id }}" >
+                                                    </td>
+
+                                                    <!-- Featured Checkbox -->
+                                                    <td>
+                                                        <input type="checkbox" name="featured[]" value="{{ $product->id }}">
                                                     </td>
                                                 </tr>
                                             @endforeach
