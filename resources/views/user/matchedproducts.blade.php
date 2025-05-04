@@ -1,0 +1,84 @@
+@extends('layouts.bootdashboard')
+@section('admindashboardcontent')
+
+@push('styles')
+
+    <style>
+       .featured-badge {
+            background-color: red; 
+            color: white; 
+            padding: 5px 10px; 
+            border-radius: 50px; 
+            font-size: 10px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            z-index: 10; 
+
+        }
+
+    </style>
+
+@endpush
+
+<div class="main-content app-content">
+    <div class="container-fluid">
+        <!-- Start::page-header -->
+            <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
+                <div>
+                    <h2 class="main-content-title fs-24 mb-1">Welcome To Products Board</h2>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Products</li>
+                    </ol>
+                </div>
+            </div>
+        <!-- End::page-header -->
+
+            <!-- Start::row-6 -->
+                <div class="row row-sm">
+                    @foreach ($products as $product)
+                        <div class="col-xl-4">
+                            <div class="card custom-card">
+                                <!-- Image at the top -->
+                                <div class="image-wrapper" style="position: relative;">
+                                    @php
+                                        $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                    @endphp
+                                    <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top" alt="{{ $product->wine_name }}">
+
+                                    <!-- Featured badge on the image -->
+                                    @if ($product->is_featured == 1)
+                                        <span class="featured-badge">Featured</span>
+                                    @endif
+                                </div>
+                               
+
+                                <!-- Card body with product information -->
+                                <div class="card-body">
+                                    <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h5>
+                                    <p><strong>Type:</strong> {{ ucfirst($product->type) }} </p> 
+                                    <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                    <p><strong>Tasting Notes:</strong> {{ Str::words($product->tasting_notes, 20, '...') }}</p>
+
+                                    
+
+                                    <!-- Button to check the product details -->
+                                    <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-primary mt-2">
+                                        I want to try Now !!
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            <!-- End::row-6 -->
+
+        <!-- End::row-6 --> 
+      
+    </div>
+</div>
+
+@endsection

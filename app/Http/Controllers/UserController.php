@@ -9,6 +9,8 @@ use App\Models\QuestionnaireResponse;
 use App\Models\Product;
 use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 
 class UserController extends Controller
@@ -131,39 +133,40 @@ class UserController extends Controller
         
     }
    
-    // public function products()
-    // {
-    //     $store = Auth::user()->store;
-
-    //     // Fetch products linked to this store and eager load the 'images' relationship
-    //     $storeProducts = DB::table('store_products')
-    //         ->where('store_id', $store->id)
-    //         ->get()
-    //         ->keyBy('product_id'); 
-
-    //     // Fetch the products with their images for the store products
-    //     $productsQuery = Product::with('images')
-    //         ->whereIn('id', $storeProducts->pluck('product_id'));
-
-    //     // Apply pagination after applying map
-    //     $products = $productsQuery->paginate(6);
-
-    //     // Map the 'is_featured' value from store_products to each product
-    //     $products->getCollection()->transform(function ($product) use ($storeProducts) {
-    //         $product->is_featured = $storeProducts[$product->id]->is_featured;
-    //         return $product;
-    //     });
-
-
-    //     return view('user.products', compact('products'));
-    // }
     public function products()
+    {
+        $store = Auth::user()->store;
+
+        // Fetch products linked to this store and eager load the 'images' relationship
+        $storeProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->get()
+            ->keyBy('product_id'); 
+
+        // Fetch the products with their images for the store products
+        $productsQuery = Product::with('images')
+            ->whereIn('id', $storeProducts->pluck('product_id'));
+
+        // Apply pagination after applying map
+        $products = $productsQuery->paginate(6);
+
+        // Map the 'is_featured' value from store_products to each product
+        $products->getCollection()->transform(function ($product) use ($storeProducts) {
+            $product->is_featured = $storeProducts[$product->id]->is_featured;
+            return $product;
+        });
+
+
+        return view('user.products', compact('products'));
+    }
+
+    public function matchedproducts()
     {
         // Get the matching products from the session
         $products = session('matching_products', []);
 
         // Pass the products to the view
-        return view('user.products', compact('products'));
+        return view('user.matchedproducts', compact('products'));
     }
 
 
@@ -181,49 +184,150 @@ class UserController extends Controller
         // Find matching products
         $matchingProducts = $this->getMatchingProducts($responses);
 
-        dd($matchingProducts);
 
         // If no products found, you can return a fallback or 'No Results' page
         if ($matchingProducts->isEmpty()) {
-            return redirect()->route('no.results'); // Your fallback route
+            return response()->json([
+                'status' => 'no_results'
+                //'redirect' => route('no.results')
+            ], 200); // Status 200 for AJAX to process
         }
 
         // Store the matching products in the session
         session(['matching_products' => $matchingProducts]);
 
         // Redirect to the 'user.products' route
-        return redirect()->route('user.products');
+        return response()->json([
+            'status' => 'success',
+            'redirect' => route('user.matchedproducts')
+        ], 200);
     }
-
 
     public function getMatchingProducts($responses)
     {
         // Start with a query for all products
         $query = Product::query();
 
+        // Get the template_id and answers from responses
+        $templateId = $responses['template_id'];
+        $answers = $responses['answers'];
+
+        // Print for debugging template_id
+        Log::debug('Template ID:', ['template_id' => $templateId]);
+
         // Loop through all responses and add conditions to the query
-        foreach ($responses as $key => $value) {
-            // Ensure the response matches the product's attribute
-            // Adjust the column names as per your database schema
-            switch ($key) {
-                case 'wine_type':
-                    $query->where('wine_type', $value);
+        foreach ($answers as $key => $value) {
+            // Print the answer key and value for debugging
+            Log::debug('Response:', ['key' => $key, 'value' => $value]);
+
+            // Adjust the conditions based on template_id
+            switch ($templateId) {
+                case '1':
+                    // Template 1 conditions (already implemented)
+                    switch ($key) {
+                        case 'question1': // Wine Type
+                            $query->where('type', $value);
+                            break;
+                        case 'question2': // Sweetness
+                            $query->where('sweetness_level', $value);
+                            break;
+                        case 'question3': // Region
+                            $query->where('nature', $value);
+                            break;
+                        case 'question4': // Aroma
+                            if (is_array($value)) {
+                                foreach ($value as $aroma) {
+                                    $query->where('aroma', 'like', "%$aroma%");
+                                }
+                            }
+                            break;
+                        case 'question5': // Body
+                            $query->where('body', $value);
+                            break;
+                        case 'question6': // Fruity
+                            $query->where('palate', 'like', "%$value%");
+                            break;
+                        case 'question7': // Age
+                            $query->where('aging', $value);
+                            break;
+                        case 'question8': // Country
+                            $query->where('country', $value);
+                            break;
+                        case 'question9': // Price
+                            $query->where('retail_price', '<=', $value);
+                            break;
+                        case 'question10': // Occasion
+                            $query->where('style', 'like', "%$value%");
+                            break;
+                        // Add more cases as needed for Template 1
+                    }
                     break;
-                case 'sweetness':
-                    $query->where('sweetness', $value);
+
+                // Add Template 2, 3, and other cases later
+                case '2':
+                    // Template 2 conditions (to be implemented later)
                     break;
-                case 'region':
-                    $query->where('region', $value);
+
+                case '3':
+                    // Template 3 conditions (to be implemented later)
                     break;
-                // Add more cases for other response fields
+
+                // Add additional template cases as needed
+                case '4':
+                    // Template 4 conditions (to be implemented later)
+                    break;
+
+                default:
+                    // Default case for unrecognized templates
+                    break;
             }
         }
+
+        // Log the generated query
+        \Log::debug('Generated Query: ' . $query->toSql());
+        \Log::debug('Bindings: ' . json_encode($query->getBindings()));
+
+        // Execute the query to get matching products
+        $matchingProducts = $query->get();
+
 
         // Execute the query to get matching products
         $matchingProducts = $query->get();
 
         return $matchingProducts;
     }
+
+
+
+    // public function getMatchingProducts($responses)
+    // {
+    //     // Start with a query for all products
+    //     $query = Product::query();
+
+    //     // Loop through all responses and add conditions to the query
+    //     foreach ($responses as $key => $value) {
+    //         // Ensure the response matches the product's attribute
+    //         // Adjust the column names as per your database schema
+    //         switch ($key) {
+    //             case 'wine_type':
+    //                 $query->where('type', $value);
+    //                 break;
+    //             case 'sweetness':
+    //                 $query->where('sweetness', $value);
+    //                 break;
+    //             case 'region':
+    //                 $query->where('region', $value);
+    //                 break;
+    //             // Add more cases for other response fields
+    //         }
+    //     }
+
+    //     // Execute the query to get matching products
+    //     $matchingProducts = $query->get();
+
+
+    //     return $matchingProducts;
+    // }
 
 
 

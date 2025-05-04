@@ -6,6 +6,28 @@
 
     <style>
 
+        #loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         #question-container h5 {
             font-size: 1.6rem;
             color: var(--primary-color);
@@ -82,7 +104,6 @@
 
             <!-- End::page-header -->
             <!-- Start Row 1 -->
-
             <!-- Start::row-1 -->
                 <div class="row row-sm">
                     <div class="col-sm-12 col-lg-12 col-xl-8">
@@ -781,32 +802,95 @@
             });
 
             // Send responses to backend
-            function submitResponses() 
-            {
-                //alert("I am in");
-                // 
+            // function submitResponses() 
+            // {
+            //     // Show loader before making the request
+            //     document.getElementById('loader').style.display = 'block'; // Assuming you have a loader element with id 'loader'
+
+            //     fetch('/submit-response', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Use meta tag CSRF
+            //         },
+            //         body: JSON.stringify({
+            //             template_id: selectedQuestionnaireId,
+            //             answers: responses
+            //         })
+            //     })
+            //     .then(response => {
+            //         if (!response.ok) {
+            //             toastr.error('There was an issue with your submission. Please try again.');
+            //             document.getElementById('loader').style.display = 'none'; // Hide loader if error
+            //             throw new Error('Network response was not ok');
+            //         }
+            //         return response.json();
+            //     })
+            //     .then(data => {
+            //         if (data.status === 'success') {
+            //             toastr.success('Your responses have been successfully submitted.');
+            //         } else if (data.status === 'no_results') {
+            //             toastr.warning('No matching products were found.');
+            //         } else {
+            //             console.error('Unexpected status:', data);
+            //             toastr.error('An unexpected error occurred.');
+            //         }
+
+            //         // Wait for 2 seconds before redirecting
+            //         setTimeout(function() {
+            //             document.getElementById('loader').style.display = 'none'; // Hide loader
+            //             window.location.href = data.redirect;  // Perform redirect
+            //         }, 2000);  // 2 seconds delay
+            //     })
+            //     .catch(error => {
+            //         console.error('Error saving response:', error);
+            //         toastr.error('There was an error processing your response.');
+            //         document.getElementById('loader').style.display = 'none'; // Hide loader if error
+            //     });
+            // }
+            // Send responses to backend
+            function submitResponses() {
                 fetch('/submit-response', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Add CSRF token
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Use meta tag CSRF
                     },
                     body: JSON.stringify({
-                        template_id: selectedQuestionnaireId,  // Send the questionnaire ID
-                        answers: responses                     // Send the responses object
+                        template_id: selectedQuestionnaireId,
+                        answers: responses
                     })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        toastr.error('There was an issue with your submission. Please try again.');
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    console.log('Response saved:', data);
+                    if (data.status === 'success') {
+                        toastr.success('Your responses have been successfully submitted.');
+                    } else if (data.status === 'no_results') {
+                        toastr.warning('No matching products were found.');
+                    } else {
+                        console.error('Unexpected status:', data);
+                        toastr.error('An unexpected error occurred.');
+                    }
+
+                    // Wait for 2 seconds before redirecting
+                    setTimeout(function() {
+                        window.location.href = data.redirect;  // Perform redirect
+                    },2000);  // 2 seconds delay
                 })
                 .catch(error => {
                     console.error('Error saving response:', error);
+                    toastr.error('There was an error processing your response.');
+    
                 });
-
-
-
             }
+
+
 
 
             document.getElementById('backBtn').addEventListener('click', function () {

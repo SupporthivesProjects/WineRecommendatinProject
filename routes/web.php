@@ -50,6 +50,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
 
         Route::get('/user/products', [UserDashboardController::class, 'products'])->name('user.products');
+        Route::get('/user/matched-products', [UserDashboardController::class, 'matchedproducts'])->name('user.matchedproducts');
         
         Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
         Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
