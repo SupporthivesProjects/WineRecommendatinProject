@@ -217,13 +217,13 @@
                                 <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
-                                            <img src="{{ asset('storage/products/chateau_margaux_2015.jpg') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('storage/products/19 Crimes Hard Chardonnay.jpg') }}" class="d-block w-100" alt="...">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="{{ asset('storage/products/chateau_margaux_2015.jpg') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('storage/products/19 Crimes Hard Chardonnay.jpg') }}" class="d-block w-100" alt="...">
                                         </div>
                                         <div class="carousel-item">
-                                            <img src="{{ asset('storage/products/chateau_margaux_2015.jpg') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('storage/products/19 Crimes Hard Chardonnay.jpg') }}" class="d-block w-100" alt="...">
                                         </div>
                                     </div>
                                 </div>
