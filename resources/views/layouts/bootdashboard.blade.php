@@ -77,6 +77,25 @@
     <script src="{{ asset('assets/js/custom.js') }}"></script>
 
    
+        <!-- Your existing content -->
+
+        @if(auth()->check() && auth()->user()->role === 'user')
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const sidebarToggle = document.querySelector('.sidemenu-toggle');
+                    if (sidebarToggle) {
+                        sidebarToggle.click(); // Auto-click to hide the sidebar
+                    }
+                });
+            </script>
+        @endif
+
+</body>
+</html>
+
+
+    
+
 
 
 </body>

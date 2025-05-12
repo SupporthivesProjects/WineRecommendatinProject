@@ -77,12 +77,87 @@
             padding: 10px 0;
         }
 
+
         .emoji-icon {
-            font-size: 1.5em;      /* or 2em, adjust as needed */
-            margin-right: 6px;
-            vertical-align: middle;
+            font-size: 4.0rem;
+            line-height: 1;
         }
 
+        .option-box {
+            height: 120px;
+            text-align: center;
+        }
+
+        .option-text {
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+
+
+        .modal-content {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .lottie-container {
+            background-color: #f0f4f8;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        #question-container h5 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .btn {
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-box {
+            border-radius: 12px;
+            height: 120px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .option-box.active {
+            border-color: #0d6efd;
+            background-color: #e6f0ff;
+        }
+
+        .questionnaire-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(253, 96, 116, 0.7) !important; 
+            color: #fff;
+            font-size: 1.0rem;
+            padding: 5px 10px;
+            /* border-radius: 5px;  */
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .card.custom-card {
+            position: relative; /* So the label can be positioned absolutely inside */
+        }
 
 
     </style>
@@ -94,17 +169,130 @@
             <!-- Start::page-header -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
                 <div>
-                    <h2 class="main-content-title fs-24 mb-1">Welcome To Wine Recommendation Dashboard</h2>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Recommendation Dashboard</li>
-                    </ol>
+                    <h2 class="main-content-title fs-24 mb-1">Tell us what you like — your perfect wine is just a few answers away.</h2>
                 </div>
             </div>
 
             <!-- End::page-header -->
-            <!-- Start Row 1 -->
+
+            <!-- Start row 0 -->
+            <div class="row row-sm ">
+                <div class="col-xxl-3 col-xl-12">
+                    <div class="card custom-card">
+                        <!-- Badge Label -->
+                        <div class="questionnaire-label">First Sip</div>
+                        <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-semibold mb-0">Find Your Perfect Pour</h6>
+                        </div>
+                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="1">
+                            I want to try Now !!
+                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-xl-12">
+                    <div class="card custom-card">
+                        <!-- Badge Label -->
+                        <div class="questionnaire-label">Savy Sip</div>
+                        <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-semibold mb-0">Discover Your Wine Personality</h6>
+                        </div>
+                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="2">
+                            I want to try Now !!
+                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-xl-12">
+                    <div class="card custom-card">
+                        <!-- Badge Label -->
+                        <div class="questionnaire-label">Cork Master</div>
+                        <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-semibold mb-0">Sip Smarter, Choose Better</h6>
+                        </div>
+                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="3">
+                            I want to try Now !!
+                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-xl-12">
+                    <div class="card custom-card">
+                        <!-- Badge Label -->
+                        <div class="questionnaire-label">Quick Pour</div>
+                        <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-semibold mb-0">Wine, Tailored to You</h6>
+                        </div>
+                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="4">
+                            I want to try Now !!
+                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End Row 0 -->
+
+           
+
             <!-- Start::row-1 -->
+                <!-- <div class="row row-sm">
+                    <div class="col-xl-4">
+                        <div class="card custom-card">
+                            <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold">First Sip (Basic Level)</h6>
+                                <h3 class="card-title">"Every expert was once a beginner."</h3>
+                                <p class="card-text mb-3 text-muted">Just getting started? Discover your taste preferences with simple, 
+                                    fun questions that guide you to wines you’ll love. No pressure—just your first step into the 
+                                    world of wine.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                            <h6 class="card-title fw-semibold">Savvy Sipper (Semi-Pro Level)</h6>
+                            <h3 class="card-title">"You've got the swirl, now master the sip."</h3>
+                                <p class="card-text mb-3 text-muted">Already know a Cabernet from a Pinot? Dive deeper into regions, aromas, 
+                                    and notes. This questionnaire refines your palate and helps you explore the wines that suit your 
+                                    evolving taste.
+                                </p>
+                            </div>
+                            <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-bottom" alt="...">
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold mb-1">Pro (Advanced Level)</h6>
+                                <h3 class="card-title">"Challenge your palate. Define your style."</h3>
+                                <p class="card-text mb-1 text-muted">You speak the language of tannins and terroir. This expert-level quiz 
+                                    delves into nuanced wine traits, helping you pinpoint exactly what excites 
+                                    your refined wine-loving senses.
+                                </p>
+                            </div>
+                            <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img rounded-0" alt="...">
+                            
+                        </div>
+                    </div>
+                </div> -->
+            <!-- Row 1 ends -->
+             
+            <!-- Start::row-2 -->
                 <div class="row row-sm">
                     <div class="col-sm-12 col-lg-12 col-xl-8">
                         <!-- Purple box row starts -->
@@ -205,8 +393,6 @@
                                 </div>
                             </div>
                         <!-- End::row -->
-
-                        
                     </div><!-- End of first col -->
                     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
                         <div class="card custom-card">
@@ -231,73 +417,7 @@
                         </div>
                     </div>
                 </div>
-            <!-- end of row 1 -->
-             <!--Second row starts  -->
-
-                <!-- Start::row-6 -->
-                    <div class="row row-sm">
-                        <div class="col-xl-4">
-                            <div class="card custom-card">
-                                <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h6 class="card-title fw-semibold">First Sip (Basic Level)</h6>
-                                    <h3 class="card-title">"Every expert was once a beginner."</h3>
-                                    <p class="card-text mb-3 text-muted">Just getting started? Discover your taste preferences with simple, 
-                                        fun questions that guide you to wines you’ll love. No pressure—just your first step into the 
-                                        world of wine.
-                                    </p>
-                                    <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="1">
-                                        I want to try Now !!
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                        </svg>
-                                    </button>
-                            
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4">
-                            <div class="card custom-card">
-                                <div class="card-body">
-                                <h6 class="card-title fw-semibold">Savvy Sipper (Semi-Pro Level)</h6>
-                                <h3 class="card-title">"You've got the swirl, now master the sip."</h3>
-                                    <p class="card-text mb-3 text-muted">Already know a Cabernet from a Pinot? Dive deeper into regions, aromas, 
-                                        and notes. This questionnaire refines your palate and helps you explore the wines that suit your 
-                                        evolving taste.
-                                    </p>
-                                    <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="2">
-                                        I want to try Now !!
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                        </svg>
-                                    </button>
-                
-                                </div>
-                                <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-bottom" alt="...">
-                            </div>
-                        </div>
-                        <div class="col-xl-4">
-                            <div class="card custom-card">
-                                <div class="card-body">
-                                    <h6 class="card-title fw-semibold mb-1">Pro (Advanced Level)</h6>
-                                    <h3 class="card-title">"Challenge your palate. Define your style."</h3>
-                                    <p class="card-text mb-1 text-muted">You speak the language of tannins and terroir. This expert-level quiz 
-                                        delves into nuanced wine traits, helping you pinpoint exactly what excites 
-                                        your refined wine-loving senses.
-                                    </p>
-                                    <button class="btn btn-primary mt-2 open-questionnaire-modal" data-questionnaire-id="3">
-                                        I want to try Now !!
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img rounded-0" alt="...">
-                                
-                            </div>
-                        </div>
-                    </div>
-             <!-- Second row ends -->
+            <!-- end of row 2 -->
         </div>
     </div>
 
@@ -330,157 +450,6 @@
 
 @endsection
 @push('scripts')
-
-    <!-- <script>
-        let questions = [];
-        let currentStep = 0;
-
-        document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
-            button.addEventListener('click', function () {
-                const questionnaireId = this.getAttribute('data-questionnaire-id');
-
-                fetch(`/get-questions/${questionnaireId}`)
-                    .then(response => {
-                        console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
-                        console.log('Response status:', response.status);
-
-                        if (!response.ok) {
-                            console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
-                            throw new Error('Failed to fetch questions.');
-                        }
-
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Raw question data received:', data);
-
-                        if (!Array.isArray(data) || data.length === 0) {
-                            console.warn('No questions returned or data format is incorrect:', data);
-                            alert('No questions available for this questionnaire.');
-                            return;
-                        }
-
-                        // Store and use the data
-                        questions = data;
-                        currentStep = 0;
-                        console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
-
-                        renderQuestion();
-                        new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
-                    })
-                    .catch(error => {
-                        console.error('An error occurred while loading questions:', error);
-                        alert('Something went wrong while loading the questionnaire. Please try again.');
-                    });
-
-            });
-        });
-
-        function renderQuestion() 
-        {
-            if (questions.length === 0 || currentStep >= questions.length) return;
-
-            const q = questions[currentStep];
-            const container = document.getElementById('question-container');
-
-            console.log("Rendering question: ", q);
-
-            let optionsHtml = '';
-
-            if (q.type === 'slider') {
-                const min = q.min_value ?? 0;
-                const max = q.max_value ?? 10000;
-                const step = q.step ?? 100;
-                const defaultValue = q.default ?? min;
-
-                // Create tick marks
-                let tickMarks = '';
-                for (let i = min; i <= max; i += step) {
-                    tickMarks += `<option value="${i}"></option>`;
-                }
-
-                optionsHtml = `
-                    <div class="mb-4">
-                        <input 
-                            type="range" 
-                            class="form-range" 
-                            id="budgetSlider" 
-                            min="${min}" 
-                            max="${max}" 
-                            step="${step}" 
-                            value="${defaultValue}" 
-                            list="tickmarks"
-                        >
-                        <datalist id="tickmarks">
-                            ${tickMarks}
-                        </datalist>
-                        <div class="d-flex justify-content-between text-muted mt-2">
-                            <small>₹${min}</small>
-                            <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
-                            <small>₹${max}</small>
-                        </div>
-                    </div>
-                `;
-            } 
-            else if (q.type === 'single' && Array.isArray(q.options)) {
-                q.options.forEach((opt, idx) => {
-                    optionsHtml += `
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
-                            <label class="form-check-label" for="option${idx}">${opt}</label>
-                        </div>`;
-                });
-            } 
-            else if (q.type === 'multiple' && Array.isArray(q.options)) {
-                q.options.forEach((opt, idx) => {
-                    optionsHtml += `
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="answer" id="option${idx}" value="${opt}">
-                            <label class="form-check-label" for="option${idx}">${opt}</label>
-                        </div>`;
-                });
-            }
-
-            // ✅ Now render the final HTML after all conditions are processed
-            container.innerHTML = `
-                <h5>${q.question}</h5>
-                ${optionsHtml}
-            `;
-
-            // ✅ Attach the slider event listener AFTER rendering
-            if (q.type === 'slider') {
-                const slider = document.getElementById('budgetSlider');
-                const output = document.getElementById('sliderValue');
-                if (slider && output) {
-                    slider.addEventListener('input', (e) => {
-                        output.textContent = e.target.value;
-                    });
-                }
-            }
-
-            document.getElementById('backBtn').disabled = currentStep === 0;
-        }
-
-        // Navigation buttons
-        document.getElementById('nextBtn').addEventListener('click', function () {
-            if (currentStep < questions.length - 1) {
-                currentStep++;
-                renderQuestion();
-            } else {
-                // Final submit or thank you logic
-                nextBtn.textContent = 'Finish';
-                alert('You’ve completed the questionnaire!');
-            }
-        });
-
-        document.getElementById('backBtn').addEventListener('click', function () {
-            if (currentStep > 0) {
-                currentStep--;
-                renderQuestion();
-            }
-        });
-    </script> -->
-
     @if(session('success') || session('error'))
         <script>
             toastr.options = {
@@ -572,10 +541,6 @@
                 "Pairing with food (Coming Soon)": "🍽️"
             };
 
-
-
-
-
             document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
                 button.addEventListener('click', function () {
                     selectedQuestionnaireId = this.getAttribute('data-questionnaire-id');
@@ -629,6 +594,125 @@
                 });
             });
 
+            // function renderQuestion() {
+            //     if (questions.length === 0 || currentStep >= questions.length) return;
+
+            //     if (!questions[currentStep].id) {
+            //         questions[currentStep].id = `question${currentStep + 1}`;
+            //     }
+
+            //     const q = questions[currentStep];
+            //     const container = document.getElementById('question-container');
+
+            //     console.log("Rendering question: ", q);
+
+            //     let optionsHtml = '';
+
+            //     if (q.type === 'slider') {
+            //         const min = q.min_value ?? 0;
+            //         const max = q.max_value ?? 10000;
+            //         const step = q.step ?? 100;
+            //         const defaultValue = q.default ?? min;
+
+            //         // Create tick marks
+            //         let tickMarks = '';
+            //         for (let i = min; i <= max; i += step) {
+            //             tickMarks += `<option value="${i}"></option>`;
+            //         }
+
+            //         optionsHtml = `
+            //             <div class="mb-4">
+            //                 <input 
+            //                     type="range" 
+            //                     class="form-range" 
+            //                     id="budgetSlider" 
+            //                     min="${min}" 
+            //                     max="${max}" 
+            //                     step="${step}" 
+            //                     value="${defaultValue}" 
+            //                     list="tickmarks"
+            //                 >
+            //                 <datalist id="tickmarks">
+            //                     ${tickMarks}
+            //                 </datalist>
+            //                 <div class="d-flex justify-content-between text-muted mt-2">
+            //                     <small>₹${min}</small>
+            //                     <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
+            //                     <small>₹${max}</small>
+            //                 </div>
+            //             </div>
+            //         `;
+            //     } else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+            //         let rowHtml = '';
+            //         q.options.forEach((opt, idx) => {
+            //             const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<span class="emoji-icon">${emojiMap[opt]}</span> ` : '';
+            //             const inputType = q.type === 'single' ? 'radio' : 'checkbox';
+
+            //             rowHtml += `
+            //                 <div class="col-md-3 mb-3">
+            //                     <input class="d-none" type="${inputType}" name="answer" id="option${idx}" value="${opt}">
+            //                     <label 
+            //                         for="option${idx}" 
+            //                         class="btn btn-outline-primary w-100"
+            //                         style="cursor: pointer;"
+            //                     >
+            //                         ${emoji}${opt}
+            //                     </label>
+            //                 </div>
+            //             `;
+
+            //             if ((idx + 1) % 4 === 0 || idx === q.options.length - 1) {
+            //                 optionsHtml += `<div class="row">${rowHtml}</div>`;
+            //                 rowHtml = '';
+            //             }
+            //         });
+            //     }
+
+            //     // ✅ Now render the final HTML after all conditions are processed
+            //     container.innerHTML = `
+            //         <h5>${q.question}</h5>
+            //         ${optionsHtml}
+            //     `;
+
+            //     // Attach the slider event listener AFTER rendering
+            //     if (q.type === 'slider') {
+            //         const slider = document.getElementById('budgetSlider');
+            //         const output = document.getElementById('sliderValue');
+            //         if (slider && output) {
+            //             slider.addEventListener('input', (e) => {
+            //                 output.textContent = e.target.value;
+            //             });
+            //         }
+            //     }
+
+            //     // ✅ Attach active label highlight logic AFTER rendering options
+            //     if (q.type === 'single' || q.type === 'multiple') {
+            //         const inputs = document.querySelectorAll('input[name="answer"]');
+
+            //         inputs.forEach(input => {
+            //             input.addEventListener('change', () => {
+            //                 if (q.type === 'single') {
+            //                     inputs.forEach(i => {
+            //                         const label = document.querySelector(`label[for="${i.id}"]`);
+            //                         if (label) label.classList.remove('active');
+            //                     });
+            //                 }
+
+            //                 const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+            //                 if (selectedLabel) {
+            //                     if (q.type === 'multiple') {
+            //                         selectedLabel.classList.toggle('active', input.checked);
+            //                     } else {
+            //                         selectedLabel.classList.add('active');
+            //                     }
+            //                 }
+            //             });
+            //         });
+            //     }
+
+            //     document.getElementById('backBtn').disabled = currentStep === 0;
+            // }
+
             function renderQuestion() {
                 if (questions.length === 0 || currentStep >= questions.length) return;
 
@@ -649,7 +733,6 @@
                     const step = q.step ?? 100;
                     const defaultValue = q.default ?? min;
 
-                    // Create tick marks
                     let tickMarks = '';
                     for (let i = min; i <= max; i += step) {
                         tickMarks += `<option value="${i}"></option>`;
@@ -677,40 +760,40 @@
                             </div>
                         </div>
                     `;
-                } 
-                else if (q.type === 'single' && Array.isArray(q.options)) {
-                    q.options.forEach((opt, idx) => {
-                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? emojiMap[opt] + ' ' : '';
-                        const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<span class="emoji-icon">${emojiMap[opt]}</span> ` : '';
+                } else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+                    let rowHtml = '';
+                    const inputType = q.type === 'single' ? 'radio' : 'checkbox';
 
-                        optionsHtml += `
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="answer" id="option${idx}" value="${opt}">
-                                <label class="form-check-label" for="option${idx}">${emoji}${opt}</label>
-                            </div>`;
+                    q.options.forEach((opt, idx) => {
+                        const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
+
+                        rowHtml += `
+                            <div class="col-md-6 mb-3">
+                                <input class="d-none" type="${inputType}" name="answer" id="option${idx}" value="${opt}">
+                                <label 
+                                    for="option${idx}" 
+                                    class="btn btn-outline-primary w-100 d-flex flex-column align-items-center justify-content-center p-3 option-box"
+                                    style="cursor: pointer;"
+                                >
+                                    ${emoji}
+                                    <div class="option-text text-center">${opt}</div>
+                                </label>
+                            </div>
+                        `;
+
+                        if ((idx + 1) % 2 === 0 || idx === q.options.length - 1) {
+                            optionsHtml += `<div class="row">${rowHtml}</div>`;
+                            rowHtml = '';
+                        }
                     });
                 }
-                else if (q.type === 'multiple' && Array.isArray(q.options)) {
-                    q.options.forEach((opt, idx) => {
-                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? emojiMap[opt] + ' ' : '';
-                        const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<span class="emoji-icon">${emojiMap[opt]}</span> ` : '';
 
-                        optionsHtml += `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="answer" id="option${idx}" value="${opt}">
-                                <label class="form-check-label" for="option${idx}">${emoji}${opt}</label>
-                            </div>`;
-                    });
-                }
-
-
-                // ✅ Now render the final HTML after all conditions are processed
                 container.innerHTML = `
                     <h5>${q.question}</h5>
                     ${optionsHtml}
                 `;
 
-                // Attach the slider event listener AFTER rendering
+                // Slider event
                 if (q.type === 'slider') {
                     const slider = document.getElementById('budgetSlider');
                     const output = document.getElementById('sliderValue');
@@ -721,8 +804,35 @@
                     }
                 }
 
+                // Highlight selected labels
+                if (q.type === 'single' || q.type === 'multiple') {
+                    const inputs = document.querySelectorAll('input[name="answer"]');
+
+                    inputs.forEach(input => {
+                        input.addEventListener('change', () => {
+                            if (q.type === 'single') {
+                                inputs.forEach(i => {
+                                    const label = document.querySelector(`label[for="${i.id}"]`);
+                                    if (label) label.classList.remove('active');
+                                });
+                            }
+
+                            const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+                            if (selectedLabel) {
+                                if (q.type === 'multiple') {
+                                    selectedLabel.classList.toggle('active', input.checked);
+                                } else {
+                                    selectedLabel.classList.add('active');
+                                }
+                            }
+                        });
+                    });
+                }
+
                 document.getElementById('backBtn').disabled = currentStep === 0;
             }
+
+
 
             // Capture the user's response and store it locally
             function captureResponse() 
