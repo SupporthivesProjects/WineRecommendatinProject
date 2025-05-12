@@ -4,8 +4,19 @@
 
 @push('styles')
 
-    <style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
+
+    <style>
+        .card-title 
+        {
+            font-family: 'Cinzel Decorative', serif;
+        }
+        #mystyle
+        {
+            font-family: 'Cinzel Decorative', serif;
+
+        }
         #loader {
             position: fixed;
             top: 50%;
@@ -145,7 +156,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: rgba(253, 96, 116, 0.7) !important; 
+            background-color: rgba(0, 0, 0, 0.7) !important; 
             color: #fff;
             font-size: 1.0rem;
             padding: 5px 10px;
@@ -156,296 +167,377 @@
         }
 
         .card.custom-card {
-            position: relative; /* So the label can be positioned absolutely inside */
+            position: relative; 
+            background-color:white;
+
         }
 
+        #userdashboard
+        {
+            background-color:white;
+        }
 
+        .custom-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* soft floating shadow */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fff; /* Ensure a clean white background */
+        }
+
+        .custom-card:hover {
+            transform: translateY(-5px); /* lift effect on hover */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        #questionnaire_btn
+        {
+            background-color: #de9313 !important;
+            border: 0px;
+        }
+
+        #landing-section {
+                position: relative;
+                height: 100vh; /* full viewport height */
+                background: url('{{ asset('images/blackwine.jpg') }}') no-repeat center center/cover;
+                background-attachment: fixed; /* Keeps image fixed on scroll */
+                z-index: 1;
+            }
+
+        #mainNavbar {
+            z-index: 999;
+            background-color: transparent;
+            position:fixed; 
+            top: 60px;
+            padding: 20px 0;
+            width: 100%;
+            right: 0px;
+            color:white;
+            font-size : 1.0rem;
+            transition: background-color 0.3s ease;
+            border-radius: 0px;
+        }
+
+        .scrolled
+        {
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            color: black!important;
+            font-size : 1.0rem !important;
+        }
+
+       
+        .enlarged-icon {
+            width: 60px;
+            height: auto;
+        }
+
+        .grayscale-img 
+        {
+            filter: grayscale(100%);
+        }
+        .video-section 
+        {
+                position: relative;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .bg-video {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                z-index: -1;
+                transform: translate(-50%, -50%);
+                object-fit: cover;
+                filter: brightness(0.5);
+            }
+
+            .video-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 2rem;
+                z-index: 2;
+            }
+
+            .video-overlay .content h2 {
+                font-family: 'Playfair Display', serif;
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+
+            .video-overlay .content p {
+                font-size: 1.25rem;
+            }
+
+
+            .btn-close 
+            {
+                z-index: 1056 !important; /* Higher than modal backdrop */
+            }
+       
     </style>
 
 @endpush
-<!-- Start::app-content -->
-    <div class="main-content app-content">
-        <div class="container-fluid">
-            <!-- Start::page-header -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-                <div>
-                    <h2 class="main-content-title fs-24 mb-1">Tell us what you like — your perfect wine is just a few answers away.</h2>
-                </div>
-            </div>
+        <!-- Start::app-content -->
 
-            <!-- End::page-header -->
-
-            <!-- Start row 0 -->
-            <div class="row row-sm ">
-                <div class="col-xxl-3 col-xl-12">
-                    <div class="card custom-card">
-                        <!-- Badge Label -->
-                        <div class="questionnaire-label">First Sip</div>
-                        <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title fw-semibold mb-0">Find Your Perfect Pour</h6>
-                        </div>
-                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="1">
-                            I want to try Now !!
-                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                            </svg>
+        <!-- Landing Section -->
+            <section id="landing-section">
+                <!-- Navbar (stays on top of landing image) -->
+                <nav id="mainNavbar" class="navbar navbar-expand-lg ">
+                    <div class="container">
+                        <a class="navbar-brand text-white" href="#">
+                            <lottie-player 
+                                src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
+                                background="transparent" 
+                                speed="1"  
+                                style="width: 40px; height: 40px;" 
+                                loop 
+                                autoplay>
+                            </lottie-player>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
                         </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link text-white">Dashboard</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link text-white">Questionnaires</a></li>
+                                <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link text-white">Browse Wines</a></li>
+                                <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link text-white">Featured Products</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Centered Text on Landing Image -->
+                <div class="d-flex justify-content-center align-items-center text-white text-center" style="height: 100vh;">
+                    <div>
+                        <h1 class="display-3 fw-bold" id="mystyle">Discover the Wine That Speaks to You</h1>
                     </div>
                 </div>
-                <div class="col-xxl-3 col-xl-12">
-                    <div class="card custom-card">
-                        <!-- Badge Label -->
-                        <div class="questionnaire-label">Savy Sip</div>
-                        <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title fw-semibold mb-0">Discover Your Wine Personality</h6>
-                        </div>
-                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="2">
-                            I want to try Now !!
-                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-xxl-3 col-xl-12">
-                    <div class="card custom-card">
-                        <!-- Badge Label -->
-                        <div class="questionnaire-label">Cork Master</div>
-                        <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title fw-semibold mb-0">Sip Smarter, Choose Better</h6>
-                        </div>
-                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="3">
-                            I want to try Now !!
-                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-xxl-3 col-xl-12">
-                    <div class="card custom-card">
-                        <!-- Badge Label -->
-                        <div class="questionnaire-label">Quick Pour</div>
-                        <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h6 class="card-title fw-semibold mb-0">Wine, Tailored to You</h6>
-                        </div>
-                        <button class="btn btn-danger mt-2 open-questionnaire-modal" data-questionnaire-id="4">
-                            I want to try Now !!
-                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <!-- End Row 0 -->
+            <!-- Scrollable Content Section Starts-->
+                <!-- Second Sectin starts -->
+                    <div class="container-fluid py-3 bg-light">
+                        <!-- card container row starts -->
+                        <section>
+                                <div class="container mt-5 py-3">
+                                    <div class="row">
+                                        <!-- Left Image with Text -->
+                                        <div class="col-md-5 d-flex align-items-center justify-content-center position-relative">
+                                        <img src="{{ asset('images/winebottle3.jpg') }}" class="img-fluid w-100 h-100 object-fit-cover rounded shadow" alt="Wine Selection">
+                                            <div class="position-absolute text-white text-center p-4" style="top: 20%; left: 10%;">
+                                                <h2 class="fw-bold display-6">Help us choose your perfect wine</h2>
+                                                <p class="fs-5">Answer a few simple questions to get the best recommendations tailored just for you.</p>
+                                            </div>
+                                        </div>
 
-           
-
-            <!-- Start::row-1 -->
-                <!-- <div class="row row-sm">
-                    <div class="col-xl-4">
-                        <div class="card custom-card">
-                            <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h6 class="card-title fw-semibold">First Sip (Basic Level)</h6>
-                                <h3 class="card-title">"Every expert was once a beginner."</h3>
-                                <p class="card-text mb-3 text-muted">Just getting started? Discover your taste preferences with simple, 
-                                    fun questions that guide you to wines you’ll love. No pressure—just your first step into the 
-                                    world of wine.
-                                </p>
+                                        <!-- Right Questionnaires -->
+                                        <div class="col-md-7">
+                                            <div class="row g-4">
+                                                <!-- Start Card 1 -->
+                                                <div class="col-12 col-md-6">
+                                                    <div class="card custom-card">
+                                                        <div class="questionnaire-label">First Sip</div>
+                                                        <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title fw-semibold mb-0">Find Your Perfect Pour !!</h5>
+                                                        </div>
+                                                        <div class="text-left">
+                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
+                                                                I want to try now !!
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Card 2 -->
+                                                <div class="col-12 col-md-6">
+                                                    <div class="card custom-card">
+                                                        <div class="questionnaire-label">Savy Sip</div>
+                                                        <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title fw-semibold mb-0">Your Wine Personality !!</h5>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
+                                                                I want to try now !!
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Card 3 -->
+                                                <div class="col-12 col-md-6">
+                                                    <div class="card custom-card">
+                                                        <div class="questionnaire-label">Cork Master</div>
+                                                        <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title fw-semibold mb-0">Sip Smarter, Choose Better !!</h5>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
+                                                                I want to try now !!
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Card 4 -->
+                                                <div class="col-12 col-md-6">
+                                                    <div class="card custom-card">
+                                                        <div class="questionnaire-label">Quick Pour</div>
+                                                        <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title fw-semibold mb-0">Wine, Tailored for You !!</h5>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
+                                                                I want to try now !!
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Repeat similar for cards 2-4 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!-- card container row ends -->
+                    </div>
+                <!-- Second Section ends -->
+                <!-- Third Section starts-->
+                <div class="container-fluid py-5 bg-white ">
+                    <!-- Section with alternating image and text -->
+                    <section>
+                        <!-- Row 1: Image Left, Text Right -->
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/blacklabel.jpg') }}" class="img-fluid w-100 grayscale-img" alt="Image Left">
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="card custom-card">
-                            <div class="card-body">
-                            <h6 class="card-title fw-semibold">Savvy Sipper (Semi-Pro Level)</h6>
-                            <h3 class="card-title">"You've got the swirl, now master the sip."</h3>
-                                <p class="card-text mb-3 text-muted">Already know a Cabernet from a Pinot? Dive deeper into regions, aromas, 
-                                    and notes. This questionnaire refines your palate and helps you explore the wines that suit your 
-                                    evolving taste.
-                                </p>
+                            <div class="col-md-6 text-center p-3">
+                                <h2 id="mystyle">Products</h2>
+                                <h4 class="mb-5">Welcome to the Cellar !!</h4>
+                                <p class="fs-20">Discover our curated collection of fine spirits and exceptional beverages, handpicked from 
+                                    around the world. Whether you're a connoisseur or a casual enthusiast, our cellar offers 
+                                    something special for every palate. Explore and indulge in quality like never before.</p>
+                                    <button class="btn btn-dark">
+                                        Explore 
+                                    </button>
                             </div>
-                            <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-bottom" alt="...">
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="card custom-card">
-                            <div class="card-body">
-                                <h6 class="card-title fw-semibold mb-1">Pro (Advanced Level)</h6>
-                                <h3 class="card-title">"Challenge your palate. Define your style."</h3>
-                                <p class="card-text mb-1 text-muted">You speak the language of tannins and terroir. This expert-level quiz 
-                                    delves into nuanced wine traits, helping you pinpoint exactly what excites 
-                                    your refined wine-loving senses.
-                                </p>
-                            </div>
-                            <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img rounded-0" alt="...">
                             
                         </div>
-                    </div>
-                </div> -->
-            <!-- Row 1 ends -->
-             
-            <!-- Start::row-2 -->
-                <div class="row row-sm">
-                    <div class="col-sm-12 col-lg-12 col-xl-8">
-                        <!-- Purple box row starts -->
-                        <div class="row row-sm banner-img">
-                            <div class="col-sm-12 col-lg-12 col-xl-12">
-                                <div class="card bg-primary custom-card card-box">
-                                    <div class="card-body p-4">
-                                        <div class="row">
-                                            <div class="offset-xl-3 offset-sm-6 col-xl-8 col-sm-6 col-12 text-end">
-                                                <h4 class="d-flex mb-3 justify-content-end">
-                                                    <span class="fw-bold text-fixed-white ">Welcome !</span>
-                                                </h4>
-                                                <p class="tx-white-7 mb-1 fs-3  ">Welcome to a world where, <br> every bottle tells a story.</p>
-                                            </div>
-                                        </div>
-                                        <img src="{{ asset('images/3312991-photoroom.png') }}" alt="user-img" style="width:300px;height:200px">
-                                    </div>
-                                </div>
+
+                        <!-- Row 2: Text Left, Image Right -->
+                        <div class="row g-0 align-items-center flex-md-row-reverse">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/Redlabel.jpg') }}" class="img-fluid w-100 grayscale-img" alt="Image Right">
+                            </div>
+                            <div class="col-md-6 text-center p-5">
+                                <h3 id="mystyle">Featured Products</h3>
+                                <h4 class="mb-5">Handpicked Elegance. Uncork the Best.</h4>
+                                <p class="fs-20">Our featured selection showcases the finest bottles from our collection—chosen for their 
+                                    exceptional quality, taste, and craftsmanship. From bold reds to smooth whiskeys, these 
+                                    standout products represent the very best of what we offer. Perfect for gifting or savoring 
+                                    yourself.</p>
+                                <button class="btn btn-light">
+                                    Explore 
+                                </button>
                             </div>
                         </div>
-                        <!-- Purple Box row ends -->
-                         <!-- Start::row -->
-                            <div class="row row-sm">
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                                    <div class="card custom-card">
-                                        <div class="card-body">
-                                            <div class="card-item">
-                                                <div class="card-item-icon card-icon">
-                                                    <img src="{{ asset('images/wine-bottle.png') }}">
-                                                </div>
-                                                <div class="card-item-title mb-2">
-                                                    <label class="main-content-label fs-15fw-bold mb-1">Products</label>
-                                                    <span class="d-block fs-15 mb-0 text-muted">Welcome to the<br>Cellar</span>
-                                                </div>
-                                                <div class="card-item-body">
-                                                    <div class="card-item-stat">
-                                                        <h4 class="fw-bold"></h4>
-                                                        <a href="{{ route('user.products') }}" class="btn btn-sm btn-outline-primary mt-2">View
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                            </svg>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                                    <div class="card custom-card">
-                                        <div class="card-body">
-                                            <div class="card-item">
-                                                <div class="card-item-icon card-icon">
-                                                <img src="{{ asset('images/form.png') }}">
-                                                </div>
-                                                <div class="card-item-title mb-2">
-                                                    <label class="main-content-label fs-13 fw-bold mb-1">Questionnaires</label>
-                                                    <span class="d-block fs-15 mb-0 text-muted">Find Your<br> Perfect Pour</span>
-                                                </div>
-                                                <div class="card-item-body">
-                                                    <div class="card-item-stat">
-                                                        <h4 class="fw-bold"></h4>
-                                                        <a href="" class="btn btn-sm btn-outline-primary mt-2">View
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                            </svg>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
-                                    <div class="card custom-card">
-                                        <div class="card-body">
-                                            <div class="card-item">
-                                                <div class="card-item-icon card-icon">
-                                                    <img src="{{ asset('images/red-wine.png') }}">
-                                                </div>
-                                                <div class="card-item-title  mb-2">
-                                                    <label class="main-content-label fs-13 fw-bold mb-1">Featured Products</label>
-                                                    <span class="d-block fs-15 mb-0 text-muted">Handpicked Elegance. Uncork the Best.</span>
-                                                </div>
-                                                <div class="card-item-body">
-                                                    <div class="card-item-stat">
-                                                        <h4 class="fw-bold"></h4>
-                                                        <a href="{{ route('user.featuredproducts') }}" class="btn btn-sm btn-outline-primary mt-2">View
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                            </svg>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+                        <!-- Row 3: Image Left, Text Right -->
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid w-100 grayscale-img" alt="Image Left">
                             </div>
-                        <!-- End::row -->
-                    </div><!-- End of first col -->
-                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                        <div class="card custom-card">
-                            <div class="card-header justify-content-between">
-                                <div class="card-title">Top Picks</div>
-                            </div>
-                            <div class="card-body">
-                                <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <img src="{{ asset('storage/products/19 Crimes Hard Chardonnay.jpg') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img src="{{ asset('storage/products/19 Crimes Hard Chardonnay.jpg') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img src="{{ asset('storage/products/19 Crimes Hard Chardonnay.jpg') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-md-6 text-center p-5">
+                                <h3 id="mystyle">Questionnaires</h3>
+                                <h4 class="mb-5">Find Your perfect pour</h4>
+                                <p class="fs-20">Explore our curated questionnaire to uncover your ideal wine match. 
+                                    Whether you're a seasoned connoisseur or just beginning your journey, our tailored questions 
+                                    will guide you to the perfect bottle for your taste and occasion.</p>
+                                <button class="btn btn-dark">
+                                    Explore 
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
-            <!-- end of row 2 -->
-        </div>
-    </div>
 
+                <!-- Third section ends -->
 
-    <!-- modal code -->
-    <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body d-flex flex-column p-0">
-                    <!-- Lottie Animation (instead of the image) -->
-                    <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px;width:auto"></div>
+                <!-- Video Parallax section -->
 
-                    <!-- Question Side -->
-                    <div class="w-100 p-4 d-flex flex-column justify-content-between">
-                        <div id="question-container">
-                            <!-- Question and options will load here -->
+                <!-- Video Parallax Section -->
+                    <section class="video-section">
+                        <div class="video-overlay">
+                            <div class="content text-center text-white">
+                                <h2 class="display-4">Experience the Essence</h2>
+                                <p class="lead">Dive into the story behind every bottle.</p>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between mt-4 gap-2">
-                            <button class="btn btn-secondary btn-lg flex-fill" id="backBtn">Back</button>
-                            <button class="btn btn-danger btn-lg flex-fill" data-bs-dismiss="modal">Cancel</button>
-                            <button class="btn btn-primary btn-lg flex-fill" id="nextBtn">Next</button>
+                        <video class="bg-video" autoplay muted loop playsinline>
+                            <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </section>
+                <!-- Video Parallax section -->
+            <!-- Scrollable Content Section Ends-->
+
+
+
+        <!-- modal code -->
+        <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-0">
+                    <div class="modal-body d-flex flex-column p-0 position-relative">
+
+                        <!-- Close button (top-right) -->
+                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        <!-- Lottie Animation -->
+                        <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px; width: auto;"></div>
+
+                        <!-- Question Side -->
+                        <div class="w-100 p-4 d-flex flex-column justify-content-between">
+                            <div id="question-container">
+                                <!-- Question and options will load here -->
+                            </div>
+
+                            <!-- Buttons Row -->
+                            <div class="d-flex mt-4 gap-2">
+                                <button class="btn btn-secondary btn-lg w-50" id="backBtn">Back</button>
+                                <button class="btn btn-primary btn-lg w-50" id="nextBtn">Next</button>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
 
 
 @endsection
@@ -594,125 +686,7 @@
                 });
             });
 
-            // function renderQuestion() {
-            //     if (questions.length === 0 || currentStep >= questions.length) return;
-
-            //     if (!questions[currentStep].id) {
-            //         questions[currentStep].id = `question${currentStep + 1}`;
-            //     }
-
-            //     const q = questions[currentStep];
-            //     const container = document.getElementById('question-container');
-
-            //     console.log("Rendering question: ", q);
-
-            //     let optionsHtml = '';
-
-            //     if (q.type === 'slider') {
-            //         const min = q.min_value ?? 0;
-            //         const max = q.max_value ?? 10000;
-            //         const step = q.step ?? 100;
-            //         const defaultValue = q.default ?? min;
-
-            //         // Create tick marks
-            //         let tickMarks = '';
-            //         for (let i = min; i <= max; i += step) {
-            //             tickMarks += `<option value="${i}"></option>`;
-            //         }
-
-            //         optionsHtml = `
-            //             <div class="mb-4">
-            //                 <input 
-            //                     type="range" 
-            //                     class="form-range" 
-            //                     id="budgetSlider" 
-            //                     min="${min}" 
-            //                     max="${max}" 
-            //                     step="${step}" 
-            //                     value="${defaultValue}" 
-            //                     list="tickmarks"
-            //                 >
-            //                 <datalist id="tickmarks">
-            //                     ${tickMarks}
-            //                 </datalist>
-            //                 <div class="d-flex justify-content-between text-muted mt-2">
-            //                     <small>₹${min}</small>
-            //                     <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
-            //                     <small>₹${max}</small>
-            //                 </div>
-            //             </div>
-            //         `;
-            //     } else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
-            //         let rowHtml = '';
-            //         q.options.forEach((opt, idx) => {
-            //             const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<span class="emoji-icon">${emojiMap[opt]}</span> ` : '';
-            //             const inputType = q.type === 'single' ? 'radio' : 'checkbox';
-
-            //             rowHtml += `
-            //                 <div class="col-md-3 mb-3">
-            //                     <input class="d-none" type="${inputType}" name="answer" id="option${idx}" value="${opt}">
-            //                     <label 
-            //                         for="option${idx}" 
-            //                         class="btn btn-outline-primary w-100"
-            //                         style="cursor: pointer;"
-            //                     >
-            //                         ${emoji}${opt}
-            //                     </label>
-            //                 </div>
-            //             `;
-
-            //             if ((idx + 1) % 4 === 0 || idx === q.options.length - 1) {
-            //                 optionsHtml += `<div class="row">${rowHtml}</div>`;
-            //                 rowHtml = '';
-            //             }
-            //         });
-            //     }
-
-            //     // ✅ Now render the final HTML after all conditions are processed
-            //     container.innerHTML = `
-            //         <h5>${q.question}</h5>
-            //         ${optionsHtml}
-            //     `;
-
-            //     // Attach the slider event listener AFTER rendering
-            //     if (q.type === 'slider') {
-            //         const slider = document.getElementById('budgetSlider');
-            //         const output = document.getElementById('sliderValue');
-            //         if (slider && output) {
-            //             slider.addEventListener('input', (e) => {
-            //                 output.textContent = e.target.value;
-            //             });
-            //         }
-            //     }
-
-            //     // ✅ Attach active label highlight logic AFTER rendering options
-            //     if (q.type === 'single' || q.type === 'multiple') {
-            //         const inputs = document.querySelectorAll('input[name="answer"]');
-
-            //         inputs.forEach(input => {
-            //             input.addEventListener('change', () => {
-            //                 if (q.type === 'single') {
-            //                     inputs.forEach(i => {
-            //                         const label = document.querySelector(`label[for="${i.id}"]`);
-            //                         if (label) label.classList.remove('active');
-            //                     });
-            //                 }
-
-            //                 const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
-            //                 if (selectedLabel) {
-            //                     if (q.type === 'multiple') {
-            //                         selectedLabel.classList.toggle('active', input.checked);
-            //                     } else {
-            //                         selectedLabel.classList.add('active');
-            //                     }
-            //                 }
-            //             });
-            //         });
-            //     }
-
-            //     document.getElementById('backBtn').disabled = currentStep === 0;
-            // }
-
+    
             function renderQuestion() {
                 if (questions.length === 0 || currentStep >= questions.length) return;
 
@@ -911,54 +885,7 @@
                 }
             });
 
-            // Send responses to backend
-            // function submitResponses() 
-            // {
-            //     // Show loader before making the request
-            //     document.getElementById('loader').style.display = 'block'; // Assuming you have a loader element with id 'loader'
-
-            //     fetch('/submit-response', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Use meta tag CSRF
-            //         },
-            //         body: JSON.stringify({
-            //             template_id: selectedQuestionnaireId,
-            //             answers: responses
-            //         })
-            //     })
-            //     .then(response => {
-            //         if (!response.ok) {
-            //             toastr.error('There was an issue with your submission. Please try again.');
-            //             document.getElementById('loader').style.display = 'none'; // Hide loader if error
-            //             throw new Error('Network response was not ok');
-            //         }
-            //         return response.json();
-            //     })
-            //     .then(data => {
-            //         if (data.status === 'success') {
-            //             toastr.success('Your responses have been successfully submitted.');
-            //         } else if (data.status === 'no_results') {
-            //             toastr.warning('No matching products were found.');
-            //         } else {
-            //             console.error('Unexpected status:', data);
-            //             toastr.error('An unexpected error occurred.');
-            //         }
-
-            //         // Wait for 2 seconds before redirecting
-            //         setTimeout(function() {
-            //             document.getElementById('loader').style.display = 'none'; // Hide loader
-            //             window.location.href = data.redirect;  // Perform redirect
-            //         }, 2000);  // 2 seconds delay
-            //     })
-            //     .catch(error => {
-            //         console.error('Error saving response:', error);
-            //         toastr.error('There was an error processing your response.');
-            //         document.getElementById('loader').style.display = 'none'; // Hide loader if error
-            //     });
-            // }
-            // Send responses to backend
+            
             function submitResponses() {
                 fetch('/submit-response', {
                     method: 'POST',
@@ -999,9 +926,6 @@
     
                 });
             }
-
-
-
 
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (currentStep > 0) {
@@ -1052,5 +976,19 @@
             });
         });   
     </script>
+
+<script>
+  window.addEventListener("scroll", function () {
+    const navbar = document.getElementById("mainNavbar");
+    if (window.scrollY > 50) 
+    {
+        navbar.classList.add("scrolled"); 
+    } else {
+        navbar.classList.remove("scrolled");
+    }
+  });
+</script>
+
+
    
 @endpush
