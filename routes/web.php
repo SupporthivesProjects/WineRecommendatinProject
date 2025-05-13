@@ -54,7 +54,9 @@ use Illuminate\Support\Facades\Route;
         
         Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
         Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
+        Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
         Route::post('/submit-response', [UserDashboardController::class, 'storeResponse']);
+
         
 
 

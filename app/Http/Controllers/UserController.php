@@ -132,6 +132,12 @@ class UserController extends Controller
         return view('user.featuredproducts');    
         
     }
+
+    public function userquestionnaire()
+    {
+        return view('user.userquestionnaire');    
+        
+    }
    
     public function products()
     {
@@ -140,6 +146,7 @@ class UserController extends Controller
         // Fetch products linked to this store and eager load the 'images' relationship
         $storeProducts = DB::table('store_products')
             ->where('store_id', $store->id)
+            ->orderBy('is_featured', 'desc')
             ->get()
             ->keyBy('product_id'); 
 
@@ -188,8 +195,8 @@ class UserController extends Controller
         // If no products found, you can return a fallback or 'No Results' page
         if ($matchingProducts->isEmpty()) {
             return response()->json([
-                'status' => 'no_results'
-                //'redirect' => route('no.results')
+                'status' => 'no_results',
+                'redirect' => route('user.dashboard')
             ], 200); // Status 200 for AJAX to process
         }
 
@@ -205,97 +212,281 @@ class UserController extends Controller
 
     public function getMatchingProducts($responses)
     {
-        // Start with a query for all products
-        $query = Product::query();
-
-        // Get the template_id and answers from responses
         $templateId = $responses['template_id'];
         $answers = $responses['answers'];
 
-        // Print for debugging template_id
         Log::debug('Template ID:', ['template_id' => $templateId]);
 
-        // Loop through all responses and add conditions to the query
-        foreach ($answers as $key => $value) {
-            // Print the answer key and value for debugging
-            Log::debug('Response:', ['key' => $key, 'value' => $value]);
+        $query = Product::query();
 
-            // Adjust the conditions based on template_id
-            switch ($templateId) {
-                case '1':
-                    // Template 1 conditions (already implemented)
-                    switch ($key) {
-                        case 'question1': // Wine Type
-                            $query->where('type', $value);
-                            break;
-                        case 'question2': // Sweetness
-                            $query->where('sweetness_level', $value);
-                            break;
-                        case 'question3': // Region
-                            $query->where('nature', $value);
-                            break;
-                        case 'question4': // Aroma
-                            if (is_array($value)) {
-                                foreach ($value as $aroma) {
-                                    $query->where('aroma', 'like', "%$aroma%");
+        // Wrap all conditions in a single where closure to group the ORs
+        $query->where(function ($q) use ($templateId, $answers) {
+            foreach ($answers as $key => $value) {
+                Log::debug('Response:', ['key' => $key, 'value' => $value]);
+
+                switch ($templateId) {
+                    case '1':
+                        switch ($key) {
+                            case 'question1': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question3': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question4': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
                                 }
-                            }
-                            break;
-                        case 'question5': // Body
-                            $query->where('body', $value);
-                            break;
-                        case 'question6': // Fruity
-                            $query->where('palate', 'like', "%$value%");
-                            break;
-                        case 'question7': // Age
-                            $query->where('aging', $value);
-                            break;
-                        case 'question8': // Country
-                            $query->where('country', $value);
-                            break;
-                        case 'question9': // Price
-                            $query->where('retail_price', '<=', $value);
-                            break;
-                        case 'question10': // Occasion
-                            $query->where('style', 'like', "%$value%");
-                            break;
-                        // Add more cases as needed for Template 1
-                    }
-                    break;
+                                break;
+                            case 'question5': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question6': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question7': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question8': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question9': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question10': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
 
-                // Add Template 2, 3, and other cases later
-                case '2':
-                    // Template 2 conditions (to be implemented later)
-                    break;
+                    case '2':
+                        switch ($key) {
+                            case 'question1': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question3': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question4': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                }
+                                break;
+                            case 'question5': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question6': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question7': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question8': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question9': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question10': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
 
-                case '3':
-                    // Template 3 conditions (to be implemented later)
-                    break;
+                    case '3':
+                        switch ($key) {
+                            case 'question1': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question3': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question4': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                }
+                                break;
+                            case 'question5': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question6': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question7': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question8': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question9': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question10': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
 
-                // Add additional template cases as needed
-                case '4':
-                    // Template 4 conditions (to be implemented later)
-                    break;
+                    case '4':
+                        switch ($key) {
+                            case 'question2': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question3': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question4': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                }
+                                break;
+                            case 'question5': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question6': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question7': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question8': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question9': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question10': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
 
-                default:
-                    // Default case for unrecognized templates
-                    break;
+                    default:
+                        break;
+                }
             }
-        }
+        });
 
-        // Log the generated query
-        \Log::debug('Generated Query: ' . $query->toSql());
-        \Log::debug('Bindings: ' . json_encode($query->getBindings()));
+        Log::debug('Generated Query: ' . $query->toSql());
+        Log::debug('Bindings: ' . json_encode($query->getBindings()));
 
-        // Execute the query to get matching products
-        $matchingProducts = $query->get();
-
-
-        // Execute the query to get matching products
-        $matchingProducts = $query->get();
-
-        return $matchingProducts;
+        return $query->get();
     }
+
+
+    // public function getMatchingProducts($responses)
+    // {
+    //     // Start with a query for all products
+    //     $query = Product::query();
+
+    //     // Get the template_id and answers from responses
+    //     $templateId = $responses['template_id'];
+    //     $answers = $responses['answers'];
+
+    //     // Print for debugging template_id
+    //     Log::debug('Template ID:', ['template_id' => $templateId]);
+
+    //     // Loop through all responses and add conditions to the query
+    //     foreach ($answers as $key => $value) {
+    //         // Print the answer key and value for debugging
+    //         Log::debug('Response:', ['key' => $key, 'value' => $value]);
+
+    //         // Adjust the conditions based on template_id
+    //         switch ($templateId) {
+    //             case '1':
+    //                 // Template 1 conditions (already implemented)
+    //                 switch ($key) {
+    //                     case 'question1': // Wine Type
+    //                         $query->where('type', $value);
+    //                         break;
+    //                     case 'question2': // Sweetness
+    //                         $query->where('sweetness_level', $value);
+    //                         break;
+    //                     case 'question3': // Region
+    //                         $query->where('nature', $value);
+    //                         break;
+    //                     case 'question4': // Aroma
+    //                         if (is_array($value)) {
+    //                             foreach ($value as $aroma) {
+    //                                 $query->where('aroma', 'like', "%$aroma%");
+    //                             }
+    //                         }
+    //                         break;
+    //                     case 'question5': // Body
+    //                         $query->where('body', $value);
+    //                         break;
+    //                     case 'question6': // Fruity
+    //                         $query->where('palate', 'like', "%$value%");
+    //                         break;
+    //                     case 'question7': // Age
+    //                         $query->where('aging', $value);
+    //                         break;
+    //                     case 'question8': // Country
+    //                         $query->where('country', $value);
+    //                         break;
+    //                     case 'question9': // Price
+    //                         $query->where('retail_price', '<=', $value);
+    //                         break;
+    //                     case 'question10': // Occasion
+    //                         $query->where('style', 'like', "%$value%");
+    //                         break;
+    //                     // Add more cases as needed for Template 1
+    //                 }
+    //                 break;
+
+    //             // Add Template 2, 3, and other cases later
+    //             case '2':
+    //                 // Template 2 conditions (to be implemented later)
+    //                 break;
+
+    //             case '3':
+    //                 // Template 3 conditions (to be implemented later)
+    //                 break;
+
+    //             // Add additional template cases as needed
+    //             case '4':
+    //                 // Template 4 conditions (to be implemented later)
+    //                 break;
+
+    //             default:
+    //                 // Default case for unrecognized templates
+    //                 break;
+    //         }
+    //     }
+
+    //     // Log the generated query
+    //     \Log::debug('Generated Query: ' . $query->toSql());
+    //     \Log::debug('Bindings: ' . json_encode($query->getBindings()));
+
+    //     // Execute the query to get matching products
+    //     $matchingProducts = $query->get();
+
+
+    //     // Execute the query to get matching products
+    //     $matchingProducts = $query->get();
+
+    //     return $matchingProducts;
+    // }
 
 
 

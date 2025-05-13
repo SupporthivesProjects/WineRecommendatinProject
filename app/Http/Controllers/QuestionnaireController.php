@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Question;
 use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class QuestionnaireController extends Controller
 {
@@ -153,32 +155,82 @@ class QuestionnaireController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function submit(Request $request, QuestionnaireTemplate $questionnaire)
-    {
-        $request->validate([
-            'answers' => 'required|array',
-        ]);
+{
+    Log::info('Questionnaire submission started', [
+        'user_id' => Auth::id(),
+        'questionnaire_id' => $questionnaire->id,
+        'request_data' => $request->all(),
+    ]);
+
+    $request->validate([
+        'answers' => 'required|array',
+    ]);
+    
+    $user = Auth::user();
+    $answers = $request->answers;
+
+    Log::info('Answers received', ['answers' => $answers]);
+
+    // Process answers to extract preferences
+    $preferences = $this->processAnswers($questionnaire, $answers);
+    Log::info('Preferences extracted', ['preferences' => $preferences]);
+
+    // Store the questionnaire response
+    $response = UserQuestionnaireResponse::create([
+        'user_id' => $user->id,
+        'questionnaire_id' => $questionnaire->id,
+        'responses' => json_encode([
+            'answers' => $answers,
+            'preferences' => $preferences
+        ]),
+    ]);
+
+    Log::info('UserQuestionnaireResponse stored', [
+        'response_id' => $response->id,
+        'user_id' => $user->id,
+        'questionnaire_id' => $questionnaire->id,
+    ]);
+
+    // Get recommended products based on preferences
+    $recommendedProducts = $this->getRecommendedProducts($preferences);
+    Log::info('Recommended products retrieved', [
+        'product_ids' => collect($recommendedProducts)->pluck('id')->all()
+    ]);
+
+    Log::info('Returning results view', [
+        'user_id' => $user->id,
+        'questionnaire_id' => $questionnaire->id,
+    ]);
+
+    return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
+}
+    // public function submit(Request $request, QuestionnaireTemplate $questionnaire)
+    // {
+    //     $request->validate([
+    //         'answers' => 'required|array',
+    //     ]);
         
-        $user = Auth::user();
-        $answers = $request->answers;
+    //     $user = Auth::user();
+    //     $answers = $request->answers;
         
-        // Process answers to extract preferences
-        $preferences = $this->processAnswers($questionnaire, $answers);
+    //     // Process answers to extract preferences
+    //     $preferences = $this->processAnswers($questionnaire, $answers);
         
-        // Store the questionnaire response
-        UserQuestionnaireResponse::create([
-            'user_id' => $user->id,
-            'questionnaire_id' => $questionnaire->id,
-            'responses' => json_encode([
-                'answers' => $answers,
-                'preferences' => $preferences
-            ]),
-        ]);
+    //     // Store the questionnaire response
+    //     UserQuestionnaireResponse::create([
+    //         'user_id' => $user->id,
+    //         'questionnaire_id' => $questionnaire->id,
+    //         'responses' => json_encode([
+    //             'answers' => $answers,
+    //             'preferences' => $preferences
+    //         ]),
+    //     ]);
         
-        // Get recommended products based on preferences
-        $recommendedProducts = $this->getRecommendedProducts($preferences);
+    //     // Get recommended products based on preferences
+    //     $recommendedProducts = $this->getRecommendedProducts($preferences);
         
-        return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
-    }
+    //     return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
+    // }
     
     /**
      * Process questionnaire answers to extract wine preferences.

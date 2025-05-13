@@ -4,9 +4,6 @@
 
 @push('styles')
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
-
     <style>
         .card-title 
         {
@@ -90,7 +87,7 @@
 
 
         .emoji-icon {
-            font-size: 4.0rem;
+            font-size: 3.0rem;
             line-height: 1;
         }
 
@@ -238,54 +235,53 @@
         }
         .video-section 
         {
-                position: relative;
-                height: 100vh;
-                overflow: hidden;
-            }
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-            .bg-video {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                min-width: 100%;
-                min-height: 100%;
-                width: auto;
-                height: auto;
-                z-index: -1;
-                transform: translate(-50%, -50%);
-                object-fit: cover;
-                filter: brightness(0.5);
-            }
+        .bg-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
 
-            .video-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                padding: 2rem;
-                z-index: 2;
-            }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            z-index: 2;
+        }
 
-            .video-overlay .content h2 {
-                font-family: 'Playfair Display', serif;
-                font-size: 3rem;
-                margin-bottom: 1rem;
-            }
+        .video-overlay .content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
 
-            .video-overlay .content p {
-                font-size: 1.25rem;
-            }
+        .video-overlay .content p {
+            font-size: 1.25rem;
+        }
 
-            .btn-close 
-            {
-                z-index: 1056 !important; /* Higher than modal backdrop */
-            }
-
+        .btn-close 
+        {
+            z-index: 1056 !important; /* Higher than modal backdrop */
+        }
 
         .background-section 
         {
@@ -334,7 +330,6 @@
             {
                 color:black;
             }
-            
         }
 
         @media (max-width: 768px) {
@@ -385,43 +380,41 @@
         }
 
         @media (max-width: 768px) {
-    .video-section {
-        position: relative;
-        min-height: 300px; /* adjust as needed */
-        overflow: hidden;
-        padding: 2rem 1rem;
-        background-color: #000; /* fallback in case video doesn't load */
+        .video-section {
+            position: relative;
+            min-height: 300px; /* adjust as needed */
+            overflow: hidden;
+            padding: 2rem 1rem;
+            background-color: #000; /* fallback in case video doesn't load */
+        }
+
+        .bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .video-overlay {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .video-overlay .content {
+            position: relative;
+            z-index: 3;
+        }
     }
 
-    .bg-video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 1;
-    }
-
-    .video-overlay {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-    }
-
-    .video-overlay .content {
-        position: relative;
-        z-index: 3;
-    }
-}
-
-
-        
     </style>
 
 @endpush
@@ -448,7 +441,7 @@
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link text-white">Dashboard</a></li>
-                                <li class="nav-item"><a href="#" class="nav-link text-white">Questionnaires</a></li>
+                                <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link text-white">Questionnaires</a></li>
                                 <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link text-white">Browse Wines</a></li>
                                 <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link text-white">Featured Products</a></li>
                             </ul>
@@ -485,7 +478,7 @@
                                                     <div class="questionnaire-label">First Sip</div>
                                                     <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">Find Your Perfect Pour !!</h5>
+                                                        <h5 class="card-title fw-semibold mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                       </h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
@@ -503,7 +496,7 @@
                                                     <div class="questionnaire-label">Savy Sip</div>
                                                     <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">Your Wine Personality !!</h5>
+                                                        <h5 class="card-title fw-semibold mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
@@ -521,7 +514,7 @@
                                                     <div class="questionnaire-label">Cork Master</div>
                                                     <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">Sip Smarter, Choose Better !!</h5>
+                                                        <h5 class="card-title fw-semibold mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
@@ -539,7 +532,7 @@
                                                     <div class="questionnaire-label">Quick Pour</div>
                                                     <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">Wine, Tailored for You !!</h5>
+                                                        <h5 class="card-title fw-semibold mb-0">For when you need a wine—quick and right.!!</h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
@@ -574,9 +567,9 @@
                                 <p class="fs-20">Discover our curated collection of fine spirits and exceptional beverages, handpicked from 
                                     around the world. Whether you're a connoisseur or a casual enthusiast, our cellar offers 
                                     something special for every palate. Explore and indulge in quality like never before.</p>
-                                    <button class="btn btn-dark">
+                                    <a class="btn btn-dark" type="button" href="{{ route('user.products') }}">
                                         Explore 
-                                    </button>
+                                    </a>
                             </div>
                             
                         </div>
@@ -593,9 +586,9 @@
                                     exceptional quality, taste, and craftsmanship. From bold reds to smooth whiskeys, these 
                                     standout products represent the very best of what we offer. Perfect for gifting or savoring 
                                     yourself.</p>
-                                <button class="btn btn-light">
-                                    Explore 
-                                </button>
+                                    <a class="btn btn-light" type="button" href="{{ route('user.featuredproducts') }}">
+                                        Explore 
+                                    </a>
                             </div>
                         </div>
 
@@ -610,9 +603,10 @@
                                 <p class="fs-20">Explore our curated questionnaire to uncover your ideal wine match. 
                                     Whether you're a seasoned connoisseur or just beginning your journey, our tailored questions 
                                     will guide you to the perfect bottle for your taste and occasion.</p>
-                                <button class="btn btn-dark">
-                                    Explore 
-                                </button>
+                                    <a class="btn btn-light" type="button" href="{{ route('user.showQuestionnaire') }}">
+                                        Explore 
+                                    </a>
+                                
                             </div>
                         </div>
                     </section>
@@ -706,65 +700,137 @@
             let selectedQuestionnaireId = null;
 
             const emojiMap = {
-                // Q1 - Wine Type
-                "Red": "🍷",
-                "White": "🥂",
-                "Rosé": "🌹",
-                "Fruit": "🍇",
-                
-                // Q2 - Still or Sparkling
-                "Still": "🧊",
-                "Sparkling": "🍾",
-                "Sparkling/Champagne": "🍾",
+            "Red": "🍷",
+            "White": "🥂",
+            "Rosé": "🌹",
+            "Fruit": "🍇",
+            "Sparkling / Champagne": "🥂🍾",
+            "Yes": "✅",
+            "No": "❌",
+            "SKIP": "⏭️",
+            "Fruit Wine": "🍇",
+            "Still": "🧊",
+            "Sparkling": "🍾",
+            "Sparkling/Champagne": "🍾",
+            "Sweet": "🍬",
+            "Medium Sweet": "🍯",
+            "Lightly Sweet": "🧁",
+            "Dry": "🍂",
+            "Skip": "⏭️",
+            "Fruit-Driven": "🍓",
+            "Juicy/Fruit-Forward": "🍒",
+            "Aromatic": "🌸",
+            "Earthy": "🌱",
+            "Mineral-Driven": "🪨",
+            "Light-bodied (Soft & Refreshing)": "☁️",
+            "Medium-bodied (Balanced & Smooth)": "🥃",
+            "Full-bodied (Rich & Intense)": "💪",
+            "Very Fruity": "🍉",
+            "Slightly Fruity": "🍑",
+            "Not Fruity": "🥖",
+            "Young and Refreshing": "🧃",
+            "Bold and Old": "🧓",
+            "Any": "🌍",
+            "India": "🇮🇳",
+            "France": "🇫🇷",
+            "Italy": "🇮🇹",
+            "Spain": "🇪🇸",
+            "Australia": "🇦🇺",
+            "USA": "🇺🇸",
+            "Rest of the World": "🌎",
+            "Budget": "💰",
+            "Everyday sipping": "🛋️",
+            "Celebration": "🎉",
+            "Gifting": "🎁",
+            "Dinner with Friends": "🍽️",
+            "Wine and Cheese": "🧀🍷",
+            "Pairing with food (Coming Soon)": "🍽️",
+            "Semi-Sweet": "🍇🍯",
+            "Off-Dry (Lightly Sweet)": "🍷🍃",
+            "Dry (Not Sweet)": "🍇🍋",
+            "No Preference": "🤷",
+            "Bordeaux (France)": "🍷🇫🇷",
+            "Burgundy (France)": "🍇🇫🇷",
+            "Champagne (France)": "🥂🇫🇷",
+            "Rhône Valley (France)": "🌱🇫🇷",
+            "Tuscany (Italy)": "🍇🇮🇹",
+            "Piedmont (Italy)": "🍇🍷🇮🇹",
+            "Veneto (Italy)": "🍇🍷🇮🇹",
+            "Rioja (Spain)": "🍇🇪🇸",
+            "Ribera del Duero (Spain)": "🍷🇪🇸",
+            "Napa Valley (USA)": "🍇🇺🇸",
+            "Sonoma (USA)": "🍷🇺🇸",
+            "Barossa Valley (Australia)": "🍇🇦🇺",
+            "Margaret River (Australia)": "🍷🇦🇺",
+            "Marlborough (New Zealand)": "🍇🇳🇿",
+            "Chardonnay": "🍇🥂",
+            "Riesling": "🍇🍯",
+            "Sauvignon Blanc": "🍇🌿",
+            "Chenin Blanc": "🍇🍯",
+            "Pinot Noir": "🍇🍷",
+            "Cabernet Sauvignon": "🍇🍷",
+            "Merlot": "🍇🍷",
+            "Syrah/Shiraz": "🍇🍷",
+            "Refreshingly Young (1-3 years)": "🍃🍷",
+            "Fairly Young (3-5 years)": "🍇🌱",
+            "Slightly Aged (5-7 years)": "🍂🍷",
+            "Aged (>7 years)": "🍷🕰️",
+            "Nuts, Dried, Cooked, Fresh, Caramel, Jammy": "🍑🍲",
+            "Earthy, Moldy, Petroleum, Sulfur, Minerality": "💨🪨",
+            "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "🍞🥛",
+            "Herbaceous, Vegetative": "🌿🍃",
+            "Surprise Me": "🎉",
+            "Fortified": "🍷🍾",
+            "Varietal": "🍇",
+            "Blends": "🍷🔄🍇",
+            "Noble Grapes": "🍇👑",
+            "Regional Hero Grapes": "🍇🏆",
+            "Domestic Indian": "🇮🇳🍷",
+            "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "🌍🍷",
+            "New World (USA, Chile, Australia, Argentina)": "🌍🍷",
+            "Brut": "🥂🍾",
+            "Dry": "🍂🍷",
+            "Off-Dry": "🍷🍃",
+            "Semi Sweet": "🍇🍯",
+            "Sweet-Dessert": "🍬🍰",
+            "Young (1-2 years)": "🌱🍇",
+            "Fairly Young (2-5 years)": "🌿🍷",
+            "Slightly Aged (5-7 years)": "🍂🍷",
+            "Well-Aged (8-10 years)": "🍷🕰️",
+            "Fully Matured (10 years and above)": "🍷🍇",
+            "Acidity: Low, Light to medium, Medium to high, High": "🥴🍷",
+            "Tannins: Low, Light to medium, Medium to high, High":"🍃🍷",
+            "Body: Light bodied/ Medium bodied/ Full bodied": "🥃🍷",
+            "Acidity: Light to medium": "🍋🍷",
+            "Acidity: Medium to high": "🍋🔥",
+            "Acidity: High": "🍋🔥",
+            "Tannins: Low": "🌿🍷",
+            "Tannins: Light to medium": "🍃🍷",
+            "Tannins: Medium to high": "🍂🍷",
+            "Body: Light bodied": "☁️🍷",
+            "Body: Medium bodied": "🥃🍷",
+            "Body: Full bodied": "💪🍷",
+            "Bold": "🔥🍷",
+            "Crisp": "❄️🍷",
+            "Rich": "💰🍷",
+            "Light": "🌞🍷",
+            "Medium-bodied": "🥃🍷",
+            "Aromatic": "🌸🍷",
+            "Fruit-driven": "🍇🍷",
+            "Dry": "🍂🍷",
+            "Mineral-Driven": "🪨🍷",
+            "Earthy": "🌱🍷",
+            "Juicy / Fruit-Forward": "🍉🍷",
+            "Elegant / Refined": "💎🍷",
+            "Chile" : "🇨🇱",
+            "Portugal" : "🇵🇹",
+            "Argentina" : "🇦🇷",
+            "England": "🇬🇧",
+            "South Africa" : "🇿🇦",
+            "New Zealand" : "🇳🇿"
+        };
 
-                // Q3 - Sweetness
-                "Sweet": "🍬",
-                "Medium Sweet": "🍯",
-                "Lightly Sweet": "🧁",
-                "Dry": "🍂",
 
-                // Q4 - Flavor Profile
-                "Fruit-Driven": "🍓",
-                "Juicy/Fruit-Forward": "🍒",
-                "Aromatic": "🌸",
-                "Earthy": "🌱",
-                "Mineral-Driven": "🪨",
-                "SKIP": "⏭️",
-
-                // Q5 - Boldness
-                "Light-bodied (Soft & Refreshing)": "☁️",
-                "Medium-bodied (Balanced & Smooth)": "🥃",
-                "Full-bodied (Rich & Intense)": "💪",
-
-                // Q6 - Fruity Level
-                "Very Fruity": "🍉",
-                "Slightly Fruity": "🍑",
-                "Not Fruity": "🥖",
-
-                // Q7 - Age Preference
-                "Young and Refreshing": "🧃",
-                "Bold and Old": "🧓",
-
-                // Q8 - Regions
-                "Any": "🌍",
-                "India": "🇮🇳",
-                "France": "🇫🇷",
-                "Italy": "🇮🇹",
-                "Spain": "🇪🇸",
-                "Australia": "🇦🇺",
-                "USA": "🇺🇸",
-                "Rest of the World": "🌎",
-
-                // Q9 - Budget (slider — not clickable)
-                // (No emojis needed for slider, but adding for consistency)
-                "Budget": "💰",
-
-                // Q10 - Occasion
-                "Everyday sipping": "🛋️",
-                "Celebration": "🎉",
-                "Gifting": "🎁",
-                "Pairing with food (Coming Soon)": "🍽️"
-            };
 
             document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
                 button.addEventListener('click', function () {
@@ -872,7 +938,8 @@
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
 
                     q.options.forEach((opt, idx) => {
-                        const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
+                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
+                        const emoji = emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
 
                         rowHtml += `
                             <div class="col-md-6 mb-3">
@@ -1042,7 +1109,7 @@
                     if (data.status === 'success') {
                         toastr.success('Your responses have been successfully submitted.');
                     } else if (data.status === 'no_results') {
-                        toastr.warning('No matching products were found.');
+                        toastr.warning('No matching products were found. But we have a few recommendations.');
                     } else {
                         console.error('Unexpected status:', data);
                         toastr.error('An unexpected error occurred.');
