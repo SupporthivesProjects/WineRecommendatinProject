@@ -199,7 +199,7 @@
         #landing-section {
                 position: relative;
                 height: 100vh; /* full viewport height */
-                background: url('{{ asset('images/blackwine.jpg') }}') no-repeat center center/cover;
+                background: url('{{ asset('images/redlabel.jpg') }}') no-repeat center center/cover;
                 background-attachment: fixed; /* Keeps image fixed on scroll */
                 z-index: 1;
             }
@@ -223,6 +223,7 @@
             background-color: rgba(0, 0, 0, 0.5) !important;
             color: black!important;
             font-size : 1.0rem !important;
+            z-index:2000!important;
         }
 
        
@@ -280,12 +281,147 @@
                 font-size: 1.25rem;
             }
 
-
             .btn-close 
             {
                 z-index: 1056 !important; /* Higher than modal backdrop */
             }
-       
+
+
+        .background-section 
+        {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            
+        }
+
+        .background-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('images/winebottle3.jpg') }}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            filter: grayscale(100%);
+            z-index: -1;
+        }
+
+        html, body {
+            overflow-x: hidden;
+        }
+
+
+        @media (max-width: 768px) {
+            .background-section 
+            {
+                z-index: 1;
+            }
+            .background-section::before {
+                display: none !important;   
+            }
+            #myheading 
+            {
+                color:black!important;
+            }
+            #mysubheading
+            {
+                color:black;
+            }
+            
+        }
+
+        @media (max-width: 768px) {
+            .custom-card {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .navbar .navbar-toggler .navbar-toggler-icon:before 
+            {
+                content: "\f479";
+                font-family: bootstrap-icons !important;
+                position: absolute;
+                right:10px;
+                font-size: 1rem;
+                color: #ffffff!important;
+                inset-inline-start: 0;
+            }
+
+            .row.g-4 {
+                margin: 0 !important;
+            }
+
+            .container, .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            .card-img-top {
+                width: 100%;
+                height: auto;
+            }
+
+            .open-questionnaire-modal {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .scrolled
+            {
+                background-color: rgba(0, 0, 0,0.7) !important;
+                color: black!important;
+                font-size : 1.0rem !important;
+                z-index: 1000;;
+            }
+        }
+
+        @media (max-width: 768px) {
+    .video-section {
+        position: relative;
+        min-height: 300px; /* adjust as needed */
+        overflow: hidden;
+        padding: 2rem 1rem;
+        background-color: #000; /* fallback in case video doesn't load */
+    }
+
+    .bg-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1;
+    }
+
+    .video-overlay {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .video-overlay .content {
+        position: relative;
+        z-index: 3;
+    }
+}
+
+
+        
     </style>
 
 @endpush
@@ -323,111 +459,106 @@
                 <!-- Centered Text on Landing Image -->
                 <div class="d-flex justify-content-center align-items-center text-white text-center" style="height: 100vh;">
                     <div>
-                        <h1 class="display-3 fw-bold" id="mystyle">Discover the Wine That Speaks to You</h1>
+                        <!-- <h1 class="display-3 fw-bold" id="mystyle">Discover the Wine That Speaks to You</h1> -->
                     </div>
                 </div>
             </section>
 
             <!-- Scrollable Content Section Starts-->
                 <!-- Second Sectin starts -->
-                    <div class="container-fluid py-3 bg-light">
+                    <div class="container-fluid p-0">
                         <!-- card container row starts -->
-                        <section>
-                                <div class="container mt-5 py-3">
-                                    <div class="row">
-                                        <!-- Left Image with Text -->
-                                        <div class="col-md-5 d-flex align-items-center justify-content-center position-relative">
-                                        <img src="{{ asset('images/winebottle3.jpg') }}" class="img-fluid w-100 h-100 object-fit-cover rounded shadow" alt="Wine Selection">
-                                            <div class="position-absolute text-white text-center p-4" style="top: 20%; left: 10%;">
-                                                <h2 class="fw-bold display-6">Help us choose your perfect wine</h2>
-                                                <p class="fs-5">Answer a few simple questions to get the best recommendations tailored just for you.</p>
+                        <section class="background-section">
+                            <div class="container py-5 text-white px-0">
+                                <div class="row">
+                                    <!-- Title and Description -->
+                                    <div class="col-12 text-center mb-4">
+                                        <h2 class="fw-bold display-6" id="myheading">Help us choose your perfect wine</h2>
+                                        <p class="fs-5" id="mysubheading">Answer a few simple questions to get the best recommendations tailored just for you.</p>
+                                    </div>
+                                    <!-- Cards -->
+                                    <div class="col-12">
+                                        <div class="row g-4">
+                                            <!-- Card 1 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card    ">
+                                                    <div class="questionnaire-label">First Sip</div>
+                                                    <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">Find Your Perfect Pour !!</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <!-- Right Questionnaires -->
-                                        <div class="col-md-7">
-                                            <div class="row g-4">
-                                                <!-- Start Card 1 -->
-                                                <div class="col-12 col-md-6">
-                                                    <div class="card custom-card">
-                                                        <div class="questionnaire-label">First Sip</div>
-                                                        <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title fw-semibold mb-0">Find Your Perfect Pour !!</h5>
-                                                        </div>
-                                                        <div class="text-left">
-                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
-                                                                I want to try now !!
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
+                                            <!-- Card 2 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card">
+                                                    <div class="questionnaire-label">Savy Sip</div>
+                                                    <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">Your Wine Personality !!</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <!-- Card 2 -->
-                                                <div class="col-12 col-md-6">
-                                                    <div class="card custom-card">
-                                                        <div class="questionnaire-label">Savy Sip</div>
-                                                        <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title fw-semibold mb-0">Your Wine Personality !!</h5>
-                                                        </div>
-                                                        <div class="text-center">
-                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
-                                                                I want to try now !!
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
+                                            </div>
+                                            <!-- Card 3 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card">
+                                                    <div class="questionnaire-label">Cork Master</div>
+                                                    <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">Sip Smarter, Choose Better !!</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <!-- Card 3 -->
-                                                <div class="col-12 col-md-6">
-                                                    <div class="card custom-card">
-                                                        <div class="questionnaire-label">Cork Master</div>
-                                                        <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title fw-semibold mb-0">Sip Smarter, Choose Better !!</h5>
-                                                        </div>
-                                                        <div class="text-center">
-                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
-                                                                I want to try now !!
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
+                                            </div>
+                                            <!-- Card 4 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card">
+                                                    <div class="questionnaire-label">Quick Pour</div>
+                                                    <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">Wine, Tailored for You !!</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <!-- Card 4 -->
-                                                <div class="col-12 col-md-6">
-                                                    <div class="card custom-card">
-                                                        <div class="questionnaire-label">Quick Pour</div>
-                                                        <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title fw-semibold mb-0">Wine, Tailored for You !!</h5>
-                                                        </div>
-                                                        <div class="text-center">
-                                                            <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
-                                                                I want to try now !!
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Repeat similar for cards 2-4 -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </section>
-                            <!-- card container row ends -->
+                            </div>
+                        </section>
                     </div>
                 <!-- Second Section ends -->
+                
                 <!-- Third Section starts-->
                 <div class="container-fluid py-5 bg-white ">
                     <!-- Section with alternating image and text -->
@@ -435,10 +566,10 @@
                         <!-- Row 1: Image Left, Text Right -->
                         <div class="row g-0 align-items-center">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/blacklabel.jpg') }}" class="img-fluid w-100 grayscale-img" alt="Image Left">
+                                <img src="{{ asset('images/blacklabel.jpg') }}" class="img-fluid w-100" alt="Image Left">
                             </div>
                             <div class="col-md-6 text-center p-3">
-                                <h2 id="mystyle">Products</h2>
+                                <h1 id="mystyle">Products</h1>
                                 <h4 class="mb-5">Welcome to the Cellar !!</h4>
                                 <p class="fs-20">Discover our curated collection of fine spirits and exceptional beverages, handpicked from 
                                     around the world. Whether you're a connoisseur or a casual enthusiast, our cellar offers 
@@ -453,10 +584,10 @@
                         <!-- Row 2: Text Left, Image Right -->
                         <div class="row g-0 align-items-center flex-md-row-reverse">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/Redlabel.jpg') }}" class="img-fluid w-100 grayscale-img" alt="Image Right">
+                                <img src="{{ asset('images/Redlabel.jpg') }}" class="img-fluid w-100" alt="Image Right">
                             </div>
                             <div class="col-md-6 text-center p-5">
-                                <h3 id="mystyle">Featured Products</h3>
+                                <h1 id="mystyle">Featured Products</h1>
                                 <h4 class="mb-5">Handpicked Elegance. Uncork the Best.</h4>
                                 <p class="fs-20">Our featured selection showcases the finest bottles from our collection—chosen for their 
                                     exceptional quality, taste, and craftsmanship. From bold reds to smooth whiskeys, these 
@@ -471,10 +602,10 @@
                         <!-- Row 3: Image Left, Text Right -->
                         <div class="row g-0 align-items-center">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid w-100 grayscale-img" alt="Image Left">
+                                <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid w-100" alt="Image Left">
                             </div>
                             <div class="col-md-6 text-center p-5">
-                                <h3 id="mystyle">Questionnaires</h3>
+                                <h1 id="mystyle">Questionnaires</h1>
                                 <h4 class="mb-5">Find Your perfect pour</h4>
                                 <p class="fs-20">Explore our curated questionnaire to uncover your ideal wine match. 
                                     Whether you're a seasoned connoisseur or just beginning your journey, our tailored questions 
@@ -486,7 +617,6 @@
                         </div>
                     </section>
                 </div>
-
                 <!-- Third section ends -->
 
                 <!-- Video Parallax section -->
@@ -497,6 +627,9 @@
                             <div class="content text-center text-white">
                                 <h2 class="display-4">Experience the Essence</h2>
                                 <p class="lead">Dive into the story behind every bottle.</p>
+                                <button class="btn btn-light">
+                                    Explore 
+                                </button>
                             </div>
                         </div>
                         <video class="bg-video" autoplay muted loop playsinline>
