@@ -308,6 +308,16 @@
             filter: grayscale(100%);
             z-index: -1;
         }
+        .overlay 
+        {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.4); 
+                z-index: 0; 
+        }
 
         html, body {
             overflow-x: hidden;
@@ -466,6 +476,7 @@
                                 <div class="row">
                                     <!-- Title and Description -->
                                     <div class="col-12 text-center mb-4">
+                                        <div class="overlay"></div>
                                         <h2 class="fw-bold display-6" id="myheading">Help us choose your perfect wine</h2>
                                         <p class="fs-5" id="mysubheading">Answer a few simple questions to get the best recommendations tailored just for you.</p>
                                     </div>

@@ -236,6 +236,48 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
         
+        .parallax-container 
+        {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .parallax-bg 
+        {
+            background-image:  url('{{ asset('images/wineshelf.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 150%; /* Make it larger so we can scroll it */
+            z-index: -1;
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        .hero-text 
+        {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            padding-top: 30vh;
+            text-align: right;          /* Right-align text */
+            width: 100%;
+            padding-right: 5%; 
+            
+        }
+
+        .filters-and-cards 
+        {
+            background: #fff;
+            padding: 100px 20px;
+            min-height: 100vh;
+        }
+
     </style>
 
 @endpush
@@ -244,14 +286,7 @@
     <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
         <div class="container">
             <a class="navbar-brand text-white" href="#">
-                <lottie-player 
-                    src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
-                    background="transparent" 
-                    speed="1"  
-                    style="width: 40px; height: 40px;" 
-                    loop 
-                    autoplay>
-                </lottie-player>
+                My Brand
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -267,66 +302,68 @@
         </div>
     </nav>
 
-    <section class="hero-section">
+    <!-- header section -->
+    <section class="parallax-container">
+        <div class="parallax-bg"></div>
         <div class="hero-text">
-        <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
+            <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
+            <p>Curated selections for every occasion</p>
         </div>
     </section>
-      
-    <section class="bg-white">
-    <div class="container my-5">
-        <div class="row gx-3 gy-3">
-            <div class="col-md-6">
-                <div class="image-card open-questionnaire-modal" data-questionnaire-id="1" >
-                    <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid" alt="Image 1">
-                    <div class="overlay">
-                        <div class="overlay-text">
-                            <h4 class="default-text">First Sip</h4>
-                            <h4 class="hover-text">New to wine? Start with your First Sip <br> we'll keep it simple and fun.</h4>
-                            
+    <section class="filters-and-cards bg-white">
+        <div class="container my-5">
+            <div class="row gx-3 gy-3">
+                <div class="col-md-6">
+                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="1" >
+                        <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid" alt="Image 1">
+                        <div class="overlay">
+                            <div class="overlay-text">
+                                <h4 class="default-text">First Sip</h4>
+                                <h4 class="hover-text">New to wine? Start with your First Sip <br> we'll keep it simple and fun.</h4>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                <div class="image-card open-questionnaire-modal" data-questionnaire-id="2">
-                    <img src="{{ asset('images/wineglasses.jpg') }}" class="img-fluid" alt="Image 2">
-                    <div class="overlay">
-                        <div class="overlay-text">
-                            <h4 class="default-text">Savy Sip</h4>
-                            <h4 class="hover-text">Let’s fine-tune your sips with Savy Sipper.</h4>
+                <div class="col-md-6">
+                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="2">
+                        <img src="{{ asset('images/wineglasses.jpg') }}" class="img-fluid" alt="Image 2">
+                        <div class="overlay">
+                            <div class="overlay-text">
+                                <h4 class="default-text">Savy Sip</h4>
+                                <h4 class="hover-text">Let’s fine-tune your sips with Savy Sipper.</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                <div class="image-card open-questionnaire-modal" data-questionnaire-id="3">
-                    <img src="{{ asset('images/questionnaire2.jpg') }}" class="img-fluid" alt="Image 3">
-                    <div class="overlay">
-                        <div class="overlay-text">
-                            <h4 class="default-text">Cork Master</h4>
-                            <h4 class="hover-text">Crafted for connoisseurs <br> Unlock your palate with Cork Master.</h4>
+                <div class="col-md-6">
+                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="3">
+                        <img src="{{ asset('images/questionnaire2.jpg') }}" class="img-fluid" alt="Image 3">
+                        <div class="overlay">
+                            <div class="overlay-text">
+                                <h4 class="default-text">Cork Master</h4>
+                                <h4 class="hover-text">Crafted for connoisseurs <br> Unlock your palate with Cork Master.</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                <div class="image-card open-questionnaire-modal" data-questionnaire-id="1">
-                    <img src="{{ asset('images/questionnaire3.jpg') }}" class="img-fluid" alt="Image 4">
-                    <div class="overlay">
-                        <div class="overlay-text">
-                            <h4 class="default-text">Quick Pour</h4>
-                            <h4 class="hover-text">For when you need a wine—quick and right.!!</h4>
+                <div class="col-md-6">
+                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="1">
+                        <img src="{{ asset('images/questionnaire3.jpg') }}" class="img-fluid" alt="Image 4">
+                        <div class="overlay">
+                            <div class="overlay-text">
+                                <h4 class="default-text">Quick Pour</h4>
+                                <h4 class="hover-text">For when you need a wine—quick and right.!!</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
  <!-- modal code -->
  <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-labelledby="questionnaireModalLabel" aria-hidden="true">>
@@ -864,6 +901,15 @@
         navbar.classList.remove("scrolled");
     }
   });
+</script>
+<script>
+    document.addEventListener("scroll", function () {
+        const scrolled = window.scrollY;
+        const parallax = document.querySelector(".parallax-bg");
+        if (parallax) {
+            parallax.style.transform = `translateY(${scrolled * 0.4}px)`; // adjust 0.4 for speed
+        }
+    });
 </script>
 
 @endpush

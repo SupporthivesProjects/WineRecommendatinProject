@@ -3,7 +3,7 @@
 @push('styles')
 
     <style>
-        #mystyle
+         #mystyle
         {
             font-family: 'Cinzel Decorative', serif;
 
@@ -37,14 +37,6 @@
             position: relative;
             z-index: 1;
         }
-
-        .hero-text 
-        {
-            text-align: right;          /* Right-align text */
-            width: 100%;
-            padding-right: 5%; 
-        }
-
         .hero-text h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -109,7 +101,49 @@
             background-color: rgba(0, 0, 0,0.7) !important;
             border-radius:0px;
         }
-        
+
+        .parallax-container 
+        {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .parallax-bg 
+        {
+            background-image:  url('{{ asset('images/productsredwine.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 150%; /* Make it larger so we can scroll it */
+            z-index: -1;
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        .hero-text 
+        {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            padding-top: 30vh;
+            text-align: right;          
+            width: 100%;
+            padding-right: 5%; 
+            
+        }
+
+        .filters-and-cards 
+        {
+            background: #fff;
+            padding: 100px 20px;
+            min-height: 100vh;
+        }
+
     </style>
 
 @endpush
@@ -117,15 +151,8 @@
     <!-- Transparent Navbar -->
     <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
         <div class="container">
-            <a class="navbar-brand text-white" href="#">
-                <lottie-player 
-                    src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
-                    background="transparent" 
-                    speed="1"  
-                    style="width: 40px; height: 40px;" 
-                    loop 
-                    autoplay>
-                </lottie-player>
+            <a class="navbar-brand text-dark" href="#">
+                My Brand
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -140,201 +167,204 @@
             </div>
         </div>
     </nav>
-
-    <section class="hero-section">
+    <!-- header section -->
+    <section class="parallax-container">
+        <div class="parallax-bg"></div>
         <div class="hero-text">
-        <h1 class="text-black" id="mystyle">Explore Our Finest Wines</h1>
-        <p style="color:#a50908">Curated selections for every occasion</p>
+            <h1 class="text-black" id="mystyle">Explore Our Finest Wines</h1>
+            <p>Curated selections for every occasion</p>
         </div>
     </section>
-
-<div class="">
-    <div class="container my-5">
-         <!-- Start::row-6 -->
-            <div class="row">
-                <!-- Filter sidebar -->
-                <div class="col-3">
-                    <div class="filter-group">
-                    <!-- Types Filter -->
-                        <h4 class="fw-bold mb-4">Types</h4>
-                        @php
-                            $types = $products->pluck('type')->unique()->sort();
-                        @endphp
-                        @foreach ($types as $type)
-                            <div class="form-check">
-                                <input class="form-check-input wine-type-filter" type="checkbox" value="{{ strtolower($type) }}" id="type-{{ strtolower($type) }}">
-                                <label class="form-check-label fs-15" for="type-{{ strtolower($type) }}">
-                                    {{ ucfirst($type) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Vintage Year Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Vintage Year</h4>
-                        @php
-                            $vintageYears = $products->pluck('vintage_year')->unique()->sort();
-                        @endphp
-                        @foreach ($vintageYears as $year)
-                            <div class="form-check">
-                                <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
-                                <label class="form-check-label" for="vintage-year-{{ $year }}">
-                                    {{ $year }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Winery Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Winery</h4>
-                        @php
-                            $wineries = $products->pluck('winery')->unique()->sort();
-                        @endphp
-                        @foreach ($wineries as $winery)
-                            <div class="form-check">
-                                <input class="form-check-input wine-winery-filter" type="checkbox" value="{{ $winery }}" id="winery-{{ strtolower($winery) }}">
-                                <label class="form-check-label" for="winery-{{ strtolower($winery) }}">
-                                    {{ ucfirst($winery) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Retail Price Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Retail Price</h4>
-                        @php
-                            $prices = $products->pluck('retail_price')->unique()->sort();
-                        @endphp
-                        @foreach ($prices as $price)
-                            <div class="form-check">
-                                <input class="form-check-input wine-retail-price-filter" type="checkbox" value="{{ $price }}" id="retail-price-{{ $price }}">
-                                <label class="form-check-label" for="retail-price-{{ $price }}">
-                                    ${{ number_format($price, 2) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Country Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Country</h4>
-                        @php
-                            $countries = $products->pluck('country')->unique()->sort();
-                        @endphp
-                        @foreach ($countries as $country)
-                            <div class="form-check">
-                                <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $country }}" id="country-{{ strtolower($country) }}">
-                                <label class="form-check-label" for="country-{{ strtolower($country) }}">
-                                    {{ ucfirst($country) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-
-                <!-- Products grid -->
-                <div class="col-9">
-                    <div class="row row-sm">
-                        @foreach ($products as $product)
-                            <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
-                            data-vintage-year="{{ $product->vintage_year }}"
-                            data-winery="{{ $product->winery }}"
-                            data-retail-price="{{ $product->retail_price }}"
-                            data-country="{{ $product->country }}">
-                                <div class="card custom-card wine-card">
-                                    <!-- Image at the top -->
-                                    <div class="image-wrapper" style="position: relative;">
-                                        @php
-                                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                                        @endphp
-                                        <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
-
-                                        <!-- Featured badge on the image -->
-                                        @if ($product->is_featured == 1)
-                                            <span class="featured-badge">Featured</span>
-                                        @endif
+    <!-- section 2 of scrolling cards -->
+    <section class="filters-and-cards">
+         <div class="">
+            <div class="container my-5">
+                <!-- Start::row-6 -->
+                    <div class="row">
+                        <!-- Filter sidebar -->
+                        <div class="col-3">
+                            <div class="filter-group">
+                            <!-- Types Filter -->
+                                <h4 class="fw-bold mb-4">Types</h4>
+                                @php
+                                    $types = $products->pluck('type')->unique()->sort();
+                                @endphp
+                                @foreach ($types as $type)
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-type-filter" type="checkbox" value="{{ strtolower($type) }}" id="type-{{ strtolower($type) }}">
+                                        <label class="form-check-label fs-15" for="type-{{ strtolower($type) }}">
+                                            {{ ucfirst($type) }}
+                                        </label>
                                     </div>
+                                @endforeach
+                            </div>
 
-                                    <!-- Card body with product information -->
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h5>
-                                        @php
-                                            $type = strtolower($product->type);
-                                            $emoji = match($type) {
-                                                'red' => '🍷',
-                                                'white' => '🥂',
-                                                'sparkling' => '✨',
-                                                default => ''
-                                            };
-                                        @endphp
-                                        <p>
-                                            <strong>Type:</strong> {{ ucfirst($type) }}
-                                            @if ($emoji)
-                                                <span style="font-size: 1.5em;">{{ $emoji }}</span>
-                                            @endif
-                                        </p>
+                            <!-- Vintage Year Filter -->
+                            <div class="filter-group">
+                                <h4 class="fw-bold mb-4">Vintage Year</h4>
+                                @php
+                                    $vintageYears = $products->pluck('vintage_year')->unique()->sort();
+                                @endphp
+                                @foreach ($vintageYears as $year)
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
+                                        <label class="form-check-label" for="vintage-year-{{ $year }}">
+                                            {{ $year }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
 
-                                        <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
-                                        <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
-                                            I want to try Now !!
+                            <!-- Winery Filter -->
+                            <div class="filter-group">
+                                <h4 class="fw-bold mb-4">Winery</h4>
+                                @php
+                                    $wineries = $products->pluck('winery')->unique()->sort();
+                                @endphp
+                                @foreach ($wineries as $winery)
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-winery-filter" type="checkbox" value="{{ $winery }}" id="winery-{{ strtolower($winery) }}">
+                                        <label class="form-check-label" for="winery-{{ strtolower($winery) }}">
+                                            {{ ucfirst($winery) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Retail Price Filter -->
+                            <div class="filter-group">
+                                <h4 class="fw-bold mb-4">Retail Price</h4>
+                                @php
+                                    $prices = $products->pluck('retail_price')->unique()->sort();
+                                @endphp
+                                @foreach ($prices as $price)
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-retail-price-filter" type="checkbox" value="{{ $price }}" id="retail-price-{{ $price }}">
+                                        <label class="form-check-label" for="retail-price-{{ $price }}">
+                                            ${{ number_format($price, 2) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Country Filter -->
+                            <div class="filter-group">
+                                <h4 class="fw-bold mb-4">Country</h4>
+                                @php
+                                    $countries = $products->pluck('country')->unique()->sort();
+                                @endphp
+                                @foreach ($countries as $country)
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $country }}" id="country-{{ strtolower($country) }}">
+                                        <label class="form-check-label" for="country-{{ strtolower($country) }}">
+                                            {{ ucfirst($country) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+
+                        <!-- Products grid -->
+                        <div class="col-9">
+                            <div class="row row-sm">
+                                @foreach ($products as $product)
+                                    <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                    data-vintage-year="{{ $product->vintage_year }}"
+                                    data-winery="{{ $product->winery }}"
+                                    data-retail-price="{{ $product->retail_price }}"
+                                    data-country="{{ $product->country }}">
+                                        <div class="card custom-card wine-card">
+                                            <!-- Image at the top -->
+                                            <div class="image-wrapper" style="position: relative;">
+                                                @php
+                                                    $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                                @endphp
+                                                <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+
+                                                <!-- Featured badge on the image -->
+                                                @if ($product->is_featured == 1)
+                                                    <span class="featured-badge">Featured</span>
+                                                @endif
+                                            </div>
+
+                                            <!-- Card body with product information -->
+                                            <div class="card-body">
+                                                <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h5>
+                                                @php
+                                                    $type = strtolower($product->type);
+                                                    $emoji = match($type) {
+                                                        'red' => '🍷',
+                                                        'white' => '🥂',
+                                                        'sparkling' => '✨',
+                                                        default => ''
+                                                    };
+                                                @endphp
+                                                <p>
+                                                    <strong>Type:</strong> {{ ucfirst($type) }}
+                                                    @if ($emoji)
+                                                        <span style="font-size: 1.5em;">{{ $emoji }}</span>
+                                                    @endif
+                                                </p>
+
+                                                <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                                <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
+                                                    I want to try Now !!
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div> 
+                <!-- End::row-6 -->
+
+            
+                <!-- Pagination Code -->
+                @if ($products->hasPages())
+                    <div class="d-flex justify-content-center my-4">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination mb-0">
+                                {{-- Previous Page Link --}}
+                                @if ($products->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <span class="page-link"><i class="bi bi-caret-left"></i></span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
+                                            <i class="bi bi-caret-left"></i>
                                         </a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+                                    </li>
+                                @endif
+
+                                {{-- Pagination Elements --}}
+                                @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                                    <li class="page-item {{ $products->currentPage() == $page ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if ($products->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
+                                            <i class="bi bi-caret-right"></i>
+                                        </a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <span class="page-link"><i class="bi bi-caret-right"></i></span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
                     </div>
-                </div>
-            </div> 
-        <!-- End::row-6 -->
-
-       
-        <!-- Pagination Code -->
-        @if ($products->hasPages())
-            <div class="d-flex justify-content-center my-4">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination mb-0">
-                        {{-- Previous Page Link --}}
-                        @if ($products->onFirstPage())
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="bi bi-caret-left"></i></span>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
-                                    <i class="bi bi-caret-left"></i>
-                                </a>
-                            </li>
-                        @endif
-
-                        {{-- Pagination Elements --}}
-                        @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-                            <li class="page-item {{ $products->currentPage() == $page ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                            </li>
-                        @endforeach
-
-                        {{-- Next Page Link --}}
-                        @if ($products->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
-                                    <i class="bi bi-caret-right"></i>
-                                </a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <span class="page-link"><i class="bi bi-caret-right"></i></span>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
+                @endif
             </div>
-        @endif
-    </div>
-</div>
+        </div>
+    </section>
 
 @endsection
 @push('scripts')
@@ -392,6 +422,15 @@
         navbar.classList.remove("scrolled");
     }
   });
+</script>
+<script>
+    document.addEventListener("scroll", function () {
+        const scrolled = window.scrollY;
+        const parallax = document.querySelector(".parallax-bg");
+        if (parallax) {
+            parallax.style.transform = `translateY(${scrolled * 0.4}px)`; // adjust 0.4 for speed
+        }
+    });
 </script>
 
 
