@@ -46,7 +46,7 @@
         #question-container .form-check-input {
             width: 20px;
             height: 20px;
-            border: 2px solid #6c757d; /* Bootstrap's secondary color or use your own */
+            border: 2px solid #6c757d;
             border-radius: 50%;
             margin-right: 10px;
             cursor: pointer;
@@ -177,13 +177,13 @@
         .custom-card {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* soft floating shadow */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            background-color: #fff; /* Ensure a clean white background */
+            background-color: #fff; 
         }
 
         .custom-card:hover {
-            transform: translateY(-5px); /* lift effect on hover */
+            transform: translateY(-5px); 
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
@@ -460,11 +460,15 @@
                 </nav>
 
                 <!-- Centered Text on Landing Image -->
-                <div class="d-flex justify-content-center align-items-center text-white text-center" style="height: 100vh;">
+                <div class="d-flex justify-content-end align-items-center text-end text-white" style="height: 100vh; padding-right: 50px;">
                     <div>
-                        <!-- <h1 class="display-3 fw-bold" id="mystyle">Discover the Wine That Speaks to You</h1> -->
+                        <h1 class="display-3 fw-bold" style="color: #dacea1;">
+                            Discover the Wine That <br>
+                            <span style="color: #754638;">Speaks to You</span>
+                        </h1>
                     </div>
                 </div>
+
             </section>
 
             <!-- Scrollable Content Section Starts-->
