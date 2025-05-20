@@ -54,9 +54,17 @@ class StoreController extends Controller
     /**
      * Display the specified store.
      */
+    // public function show(Store $store)
+    // {
+    //     return view('admin.stores.show', compact('store'));
+    // }
     public function show(Store $store)
     {
-        return view('admin.stores.show', compact('store'));
+        $store->load('users');
+
+        $activeProducts = $store->products()->wherePivot('status', 'active')->get();
+
+        return view('admin.stores.show', compact('store', 'activeProducts'));
     }
 
     /**

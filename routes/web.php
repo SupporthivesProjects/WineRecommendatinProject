@@ -5,12 +5,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StoreController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\IsFeaturedController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\QuestionnaireController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
 use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductController;
 use App\Http\Controllers\StoreManager\FeaturedProductController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +96,19 @@ use Illuminate\Support\Facades\Route;
         // Routes for assigning users to stores
         Route::get('/stores/{store}/available-managers', [StoreController::class, 'getAvailableManagers']);
         Route::post('/stores/{store}/assign-user', [StoreController::class, 'assignUser']);
+
+        //is_featured_products
+        Route::get('/is-featured-products', [IsFeaturedController::class, 'index'])->name('isFeatured.index');
+        Route::get('/is-featured-products/{store_id}', [IsFeaturedController::class, 'show'])->name('isFeatured.show');
+
+        //Questionnaire-Response page 
+        // Page showing all submissions
+        Route::get('/questionnaire/responses', [QuestionnaireController::class, 'showRespnses'])->name('questionnaire.responses');
+
+        // View individual submission details
+        Route::get('/questionnaire/responses/{submission_id}', [QuestionnaireController::class, 'showIndividualResponses'])->name('questionnaire.responses.show');
+
+
     });
 
     // Admin Questionnaire Routes

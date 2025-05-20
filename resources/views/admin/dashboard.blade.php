@@ -679,27 +679,29 @@
 
             // Questionnaire Usage Bar Chart
             const questionnaireCtx = document.getElementById('questionnaireChart');
-            if (questionnaireCtx) {
+
+            if (questionnaireCtx) 
+            {
                 const questionnaireChart = new Chart(questionnaireCtx.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: {!! json_encode($dates ?? ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5']) !!},
+                        labels: {!! json_encode($dates ?? ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7']) !!},
                         datasets: [{
-                                label: 'Admin',
-                                data: {!! json_encode($adminData ?? [0, 0, 0, 0, 0]) !!},
-                                backgroundColor: '#3B82F6', // Blue
-                            },
-                            {
-                                label: 'Admin1',
-                                data: {!! json_encode($admin1Data ?? [0, 0, 0, 0, 0]) !!},
-                                backgroundColor: '#10B981', // Green
-                            },
-                            {
-                                label: 'Admin2',
-                                data: {!! json_encode($admin2Data ?? [0, 0, 0, 0, 0]) !!},
-                                backgroundColor: '#F97316', // Orange
-                            }
-                        ]
+                            label: 'Admin',
+                            data: {!! json_encode($adminData ?? array_fill(0, count($dates ?? []), 0)) !!},
+                            backgroundColor: '#3B82F6',
+                        },
+                        {
+                            label: 'Admin1',
+                            data: {!! json_encode($admin1Data ?? array_fill(0, count($dates ?? []), 0)) !!},
+                            backgroundColor: '#10B981',
+                        },
+                        {
+                            label: 'Admin2',
+                            data: {!! json_encode($admin2Data ?? array_fill(0, count($dates ?? []), 0)) !!},
+                            backgroundColor: '#F97316',
+                        }]
+
                     },
                     options: {
                         responsive: true,

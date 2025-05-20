@@ -95,10 +95,10 @@
         .transparent-navbar {
             background: transparent;
             position: fixed;
-            top:80px;
+            top:20px;
             width: 100%;
             z-index: 10;
-            padding: 10px 0;
+            padding: 20px 0;
         }
         .navbar-dark .nav-link {
             /* color: #a50908!important; */
@@ -148,7 +148,7 @@
         </div>
     </section>
 
-<div class="">
+<div class="" id="matchedproducts">
     <div class="container my-5">
          <!-- Start::row-6 -->
             <div class="row">

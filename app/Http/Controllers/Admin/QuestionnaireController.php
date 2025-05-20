@@ -8,6 +8,8 @@ use App\Models\UserQuestionnaireResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class QuestionnaireController extends Controller
 {
@@ -300,5 +302,68 @@ class QuestionnaireController extends Controller
         
         return "rgb($r, $g, $b)";
     }
+
+    public function showRespnses()
+    {
+        $submissions = DB::table('question_responses')
+        ->join('questionnaire_usage', 'question_responses.customerID', '=', 'questionnaire_usage.id')
+        ->select(
+            'question_responses.submission_id',
+            'question_responses.customerID',
+            DB::raw('MIN(question_responses.created_at) as created_at'),
+            'questionnaire_usage.cust_name',
+            'questionnaire_usage.cust_email',
+            'questionnaire_usage.cust_phone'
+        )
+        ->groupBy(
+            'question_responses.submission_id',
+            'question_responses.customerID',
+            'questionnaire_usage.cust_name',
+            'questionnaire_usage.cust_email',
+            'questionnaire_usage.cust_phone'
+        )
+        ->orderByDesc('created_at')
+        ->get();
+
+
+        // You may need to fetch customer details from another table if not present in `question_responses`
+        return view('admin.questionnaires.showResponses', compact('submissions'));
+    }
+
+    // Show a specific submission
+    public function showIndividualResponses($submission_id)
+    {
+            // Fetch customer info from `questionnaire_usage`
+                $customer = DB::table('questionnaire_usage')
+                ->where('submission_id', $submission_id)
+                ->first();
+
+            // Fetch all responses for this submission
+            $responses = DB::table('question_responses')
+                ->where('submission_id', $submission_id)
+                ->get();
+
+            // Get template ID from one of the responses
+            $templateId = optional($responses->first())->template_id;
+
+            // Get all questions for that template
+            $questions = DB::table('questions')
+            ->where('template_id', $templateId)
+            ->orderBy('question_order')
+            ->pluck('question');  
+
+
+
+            // Get template name (assuming you have a `templates` table)
+            $templateName = DB::table('questionnaire_templates')
+                ->where('id', $templateId)
+                ->value('name');
+
+            return view('admin.questionnaires.showIndividualResponses', compact('customer', 'responses', 'questions', 'templateName'));
+    }
+
+
+
+
 }
 

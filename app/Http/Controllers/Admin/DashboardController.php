@@ -277,6 +277,45 @@ class DashboardController extends Controller
         // Ensure that $dates has the same format and the missing dates are added with count = 0
         $dates = $allDates->toArray();  
 
+
+        //QUESTIONNAIRE CHART DATA 
+        // Get past 7 days' labels
+        $dates = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $dates[] = Carbon::now()->subDays($i)->format('d M');
+        }
+
+        // Fetch counts of unique submissions grouped by day
+        $responseData = DB::table('question_responses')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT submission_id) as count')
+            )
+            ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+
+        // Initialize graph data with zeros
+        $graphData = array_fill(0, count($dates), 0);
+
+        // Map the result to corresponding dates
+        foreach ($responseData as $row) {
+            $dateLabel = Carbon::parse($row->date)->format('d M');
+            $index = array_search($dateLabel, $dates);
+            if ($index !== false) {
+                $graphData[$index] = $row->count;
+            }
+        }
+
+         //send list of all featured products
+         $featuredCount = DB::table('store_products')
+                    ->where('is_featured', 1)
+                    ->count();
+   
+
+
+
         return view('admin.bootadmindashboard', compact(
             'activeTab',
             'productTypeLabels',
@@ -307,6 +346,10 @@ class DashboardController extends Controller
             'usersCount',
             'storesCount',
             'productsCount',
+            'dates',
+            'graphData',
+            'featuredCount',
+            
         ));
     }
 

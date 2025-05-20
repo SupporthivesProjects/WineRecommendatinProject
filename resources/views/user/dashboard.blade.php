@@ -1,10 +1,14 @@
 
 @extends('layouts.bootdashboard')
 @section('admindashboardcontent')
-
 @push('styles')
 
     <style>
+        html, body {
+            overscroll-behavior: none;       
+            overflow-x: hidden;             
+        }
+
         .card-title 
         {
             font-family: 'Cinzel Decorative', serif;
@@ -101,17 +105,41 @@
             line-height: 1.2;
         }
 
+        .modal.fade .modal-dialog {
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        .modal.fade.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .btn-close.white-close {
+            filter: invert(1) brightness(2);
+        }
+
+
 
         .modal-content {
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+            /* background: linear-gradient(to bottom, #ffffff, #f9f9f9); */
+            background: radial-gradient(
+            ellipse at right top,
+            #00458f8f 0%,
+            #151419 45%,
+            #151419 100%
+            );
+            opacity: 0.95;
             overflow: hidden;
             transition: all 0.3s ease-in-out;
         }
 
         .lottie-container {
-            background-color: #f0f4f8;
+            /* background-color: #f0f4f8; */
+            background-color: #acfbff;
             border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: center;
@@ -193,19 +221,20 @@
             border: 0px;
         }
 
-        #landing-section {
+        #landing-section 
+        {
                 position: relative;
-                height: 100vh; /* full viewport height */
+                height: 100vh; 
                 background: url('{{ asset('images/redlabel.jpg') }}') no-repeat center center/cover;
-                background-attachment: fixed; /* Keeps image fixed on scroll */
+                background-attachment: fixed; 
                 z-index: 1;
-            }
+                
+        }
 
         #mainNavbar {
             z-index: 999;
             background-color: transparent;
             position:fixed; 
-            top: 60px;
             padding: 20px 0;
             width: 100%;
             right: 0px;
@@ -214,6 +243,7 @@
             transition: background-color 0.3s ease;
             border-radius: 0px;
         }
+        
 
         .scrolled
         {
@@ -389,52 +419,68 @@
             }
         }
 
-        @media (max-width: 768px) {
-        .video-section {
-            position: relative;
-            min-height: 300px; /* adjust as needed */
-            overflow: hidden;
-            padding: 2rem 1rem;
-            background-color: #000; /* fallback in case video doesn't load */
+        @media (max-width: 768px) 
+        {
+            .video-section {
+                position: relative;
+                min-height: 300px; /* adjust as needed */
+                overflow: hidden;
+                padding: 2rem 1rem;
+                background-color: #000; /* fallback in case video doesn't load */
+            }
+
+            .bg-video {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 1;
+            }
+
+            .video-overlay {
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem;
+            }
+
+            .video-overlay .content 
+            {
+                    position: relative;
+                z-index: 3;
+            }
         }
 
-        .bg-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
+        #explorebtn
+        {
+            background-color : #dacea1;
+            color: #754638;
         }
 
-        .video-overlay {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
+        #explorebtn:hover 
+        {
+            background-color: #754638;
+            color:#dacea1;
         }
 
-        .video-overlay .content {
-            position: relative;
-            z-index: 3;
-        }
-    }
+       
+
 
     </style>
 
 @endpush
         <!-- Start::app-content -->
-
         <!-- Landing Section -->
             <section id="landing-section">
                 <!-- Navbar (stays on top of landing image) -->
                 <nav id="mainNavbar" class="navbar navbar-expand-lg ">
-                    <div class="container">
+                    <div class="container ">
                         <a class="navbar-brand text-white" href="#">
                             <lottie-player 
                                 src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
@@ -448,12 +494,26 @@
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav ms-auto">
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                            <!-- Left-aligned nav items -->
+                            <ul class="navbar-nav">
                                 <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link text-white">Dashboard</a></li>
                                 <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link text-white">Questionnaires</a></li>
                                 <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link text-white">Browse Wines</a></li>
                                 <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link text-white">Featured Products</a></li>
+                            </ul>
+
+                            <!-- Right-aligned logout button -->
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                                        @csrf
+                                        <a class="nav-link text-white d-flex align-items-center"  href="{{ route('logout') }}" 
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
+                                        </a>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -465,6 +525,8 @@
                         <h1 class="display-3 fw-bold" style="color: #dacea1;">
                             Discover the Wine That <br>
                             <span style="color: #754638;">Speaks to You</span>
+                            <br>
+                            <a href="#questionnairesdashboard" type="button" class="btn" id="explorebtn">Explore</a>
                         </h1>
                     </div>
                 </div>
@@ -483,9 +545,10 @@
                                         <div class="overlay"></div>
                                         <h2 class="fw-bold display-6" id="myheading">Help us choose your perfect wine</h2>
                                         <p class="fs-5" id="mysubheading">Answer a few simple questions to get the best recommendations tailored just for you.</p>
+                                        
                                     </div>
                                     <!-- Cards -->
-                                    <div class="col-12">
+                                    <div class="col-12" id="questionnairesdashboard">
                                         <div class="row g-4">
                                             <!-- Card 1 -->
                                             <div class="col-12 col-md-6 col-lg-3">
@@ -545,7 +608,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Quick Pour</div>
-                                                    <img src="{{ asset('images/questinnaire4.jpg') }}" class="card-img-top" alt="...">
+                                                    <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title fw-semibold mb-0">For when you need a wine—quick and right.!!</h5>
                                                     </div>
@@ -654,14 +717,16 @@
         <!-- modal code -->
         <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content rounded-0">
+                <div class="modal-content">
                     <div class="modal-body d-flex flex-column p-0 position-relative">
 
                         <!-- Close button (top-right) -->
-                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <!-- <button type="button" class="btn-close position-absolute top-0 end-0 m-3 text-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                        <button type="button" class="btn-close white-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
 
                         <!-- Lottie Animation -->
-                        <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px; width: auto;"></div>
+                        <!-- <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px; width: auto;"></div> -->
 
                         <!-- Question Side -->
                         <div class="w-100 p-4 d-flex flex-column justify-content-between">
@@ -671,8 +736,8 @@
 
                             <!-- Buttons Row -->
                             <div class="d-flex mt-4 gap-2">
-                                <button class="btn btn-secondary btn-lg w-50" id="backBtn">Back</button>
-                                <button class="btn btn-primary btn-lg w-50" id="nextBtn">Next</button>
+                                <button class="btn btn-danger btn-lg w-50" id="backBtn">Back</button>
+                                <button class="btn btn-success btn-lg w-50" id="nextBtn">Next</button>
                             </div>
                         </div>
 
@@ -948,7 +1013,22 @@
                             </div>
                         </div>
                     `;
-                } else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+                } 
+                else if (q.type === 'input') 
+                {
+                    optionsHtml = `
+                        <div class="mb-4">
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="textInputAnswer" 
+                                placeholder="Enter your answer"
+                            >
+                        </div>
+                    `;
+                }
+
+                else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
                     let rowHtml = '';
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
 
@@ -978,7 +1058,7 @@
                 }
 
                 container.innerHTML = `
-                    <h5>${q.question}</h5>
+                    <h5 class='text-white'>${q.question}</h5>
                     ${optionsHtml}
                 `;
 
@@ -1041,7 +1121,9 @@
                         responses[q.id] = slider.value;
                         console.log(`Slider value stored for ${q.id}:`, slider.value);
                     } else {
+                        responses[q.id] = 'no response';
                         console.warn(`Slider input not found for ${q.id}`);
+
                     }
                 } 
                 else if (q.type === 'single') {
@@ -1050,6 +1132,7 @@
                         responses[q.id] = selected.value;
                         console.log(`Radio button selected for ${q.id}:`, selected.value);
                     } else {
+                        responses[q.id] = 'no response';
                         console.warn(`No radio button selected for ${q.id}`);
                     }
                 } 
@@ -1060,9 +1143,22 @@
                         responses[q.id] = values;
                         console.log(`Checkboxes selected for ${q.id}:`, values);
                     } else {
+                        responses[q.id] = 'no response';
                         console.warn(`No checkboxes selected for ${q.id}`);
                     }
                 }
+                else if (q.type === 'input') 
+                {
+                    const input = document.getElementById('textInputAnswer');
+                    if (input) {
+                        responses[q.id] = input.value.trim() || 'no response';
+                        console.log(`Text input captured for ${q.id}:`, responses[q.id]);
+                    } else {
+                        console.warn(`Text input not found for ${q.id}`);
+                        responses[q.id] = 'no response';
+                    }
+                }
+
 
                 // Store to localStorage (optional but helpful for debugging or persistence)
                 localStorage.setItem('userResponses', JSON.stringify(responses));
@@ -1102,6 +1198,7 @@
 
             
             function submitResponses() {
+    
                 fetch('/submit-response', {
                     method: 'POST',
                     headers: {
@@ -1198,8 +1295,10 @@
     if (window.scrollY > 50) 
     {
         navbar.classList.add("scrolled"); 
+        
     } else {
         navbar.classList.remove("scrolled");
+        
     }
   });
 </script>

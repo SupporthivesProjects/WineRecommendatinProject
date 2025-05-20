@@ -3,13 +3,16 @@
 @push('styles')
 
     <style>
+        html, body {
+            overscroll-behavior: none;       
+            overflow-x: hidden;             
+        }
          #mystyle
         {
             font-family: 'Cinzel Decorative', serif;
 
         }
        .featured-badge {
-            /*background-color: rgba(0,0,0,0.4);*/
             background-color: rgba(165, 9, 8, 0.7);
             color: white; 
             padding: 5px 10px; 
@@ -87,10 +90,10 @@
         .transparent-navbar {
             background: transparent;
             position: fixed;
-            top:80px;
-            width: 100%;
+            top:20px;
+            width: 101%;
             z-index: 10;
-            padding: 10px 0;
+            padding: 20px 0;
         }
         .navbar-dark .nav-link {
             /* color: #a50908!important; */
@@ -149,20 +152,32 @@
 @endpush
 
     <!-- Transparent Navbar -->
+    <!-- Transparent Navbar -->
     <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
-        <div class="container">
-            <a class="navbar-brand text-dark" href="#">
-                My Brand
-            </a>
+        <div class="container d-flex align-items-center">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+
+            <div class="collapse navbar-collapse justify-content-between w-100" id="navbarNav">
+                <!-- Nav links (left aligned) -->
+                <ul class="navbar-nav">
                     <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
                     <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
+                </ul>
+                <!-- Logout (right aligned) -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                            @csrf
+                            <a class="nav-link d-flex align-items-center" href="{{ route('logout') }}" 
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
+                            </a>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -173,10 +188,13 @@
         <div class="hero-text">
             <h1 class="text-black" id="mystyle">Explore Our Finest Wines</h1>
             <p>Curated selections for every occasion</p>
+            <a type="button" class="btn btn-dark" href="#products">
+                Explore
+            </a>
         </div>
     </section>
     <!-- section 2 of scrolling cards -->
-    <section class="filters-and-cards">
+    <section class="filters-and-cards" id="products">
          <div class="">
             <div class="container my-5">
                 <!-- Start::row-6 -->
