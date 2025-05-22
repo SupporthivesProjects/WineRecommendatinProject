@@ -25,7 +25,7 @@
 
         .hero-section 
         {
-            height: 100vh;
+            height: 70vh;
             background-image: url('{{ asset('images/matchedProducts.jpg') }}');
             background-size: cover;
             background-position: center;

@@ -50,6 +50,17 @@
                             <p><strong>Template:</strong> {{ $templateName }}</p>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Store Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Name:</strong> {{ $store->store_name }}</p>
+                            <p><strong>Email:</strong> {{ $store->address }}</p>
+                            <p><strong>Phone:</strong> {{ $store->state }}</p>
+                            
+                        </div>
+                    </div>
                     <div class="card custom-card">
                         <div class="card-body">
                             <!-- Table -->

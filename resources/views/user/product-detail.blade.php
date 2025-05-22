@@ -2,8 +2,8 @@
 @extends('layouts.bootdashboard')
 @section('admindashboardcontent')
 
-<div class="main-content app-content">
-    <div class="container-fluid">
+<div class="">
+    <div class="container">
         <!-- Start::page-header -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
             <div>
@@ -13,7 +13,17 @@
                     <li class="breadcrumb-item active" aria-current="page">Products</li>
                 </ol>
             </div>
+
+            <div>
+                <!-- <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a> -->
+                <a href="{{ route('user.products') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a>
+            </div>
         </div>
+
         <!-- End::page-header -->
         
 
@@ -25,34 +35,23 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-12 col-md-12">
                                 <div class="row">
-                                    <div class="col-2">
-                                        <div class="clearfix carousel-slider">
-                                            <div id="thumbcarousel" class="carousel slide" data-bs-interval="false">
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active">
-                                                        @foreach (['image1', 'image2', 'image3', 'image4'] as $index => $img)
-                                                            @if($product->$img)
-                                                                <div data-bs-target="#carousel" data-bs-slide-to="{{ $index }}" class="thumb my-2">
-                                                                    <img src="{{ asset('storage/' . $product->$img) }}" alt="thumb-{{ $index }}">
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-md-7 offset-md-1 col-sm-9 col-8">
                                         <div class="product-carousel">
                                             <div id="carousel" class="carousel slide" data-bs-ride="false">
                                                 <div class="carousel-inner">
-                                                    @foreach (['image1', 'image2', 'image3', 'image4'] as $index => $img)
-                                                        @if($product->$img)
-                                                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                                <img src="{{ asset('storage/' . $product->$img) }}" alt="product-image-{{ $index }}" class="img-fluid mx-auto d-block">
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
+                                                    @php
+                                                        $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                                    @endphp
+
+                                                    @if($primaryImage)
+                                                        <div class="thumb my-2">
+                                                            <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
+                                                        </div>
+                                                    @else
+                                                        <div class="thumb my-2">
+                                                            <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -115,7 +114,7 @@
                                     </h5>
 
                                     <h6 class="mt-4 fs-16">Description</h6>
-                                    <p>{{ $product->wine_story }}</p>
+                                    <p>{{ $product->tasting_notes ?? 'N/A' }}</p>
 
                                     <div class="d-flex mt-2">
                                         <div class="mt-2 sizes">Quantity:</div>
@@ -179,8 +178,8 @@
                                             <td>{{ $product->sp_mentions ?? 'N/A' }}</td>
                                         </tr>
                                         <tr>
-                                            <th scope="row">Tasting Notes</th>
-                                            <td style="white-space: normal; word-wrap: break-word;">{{ $product->tasting_notes ?? 'N/A' }}</td>
+                                            <th scope="row">Wine Story</th>
+                                            <td style="white-space: normal; word-wrap: break-word;">{{ $product->wine_story ?? 'N/A' }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -304,6 +303,68 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Related Products -->
+            <div class="col-xl-12 mt-4">
+                <div class="card">
+                    <div class="d-flex p-3 border-bottom">
+                        <h5 class="main-content-label mb-0 mt-2">Related Products</h5>
+                    </div>
+                    <div class="p-4">
+                        <div class="row row-sm">
+                            @foreach ($relatedProducts as $product)
+                                <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                    data-vintage-year="{{ $product->vintage_year }}"
+                                    data-winery="{{ $product->winery }}"
+                                    data-retail-price="{{ $product->retail_price }}"
+                                    data-country="{{ $product->country }}">
+                                    <div class="card custom-card wine-card">
+                                        <!-- Image -->
+                                        <div class="image-wrapper" style="position: relative;">
+                                            @php
+                                                $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                            @endphp
+                                            <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                            
+                                            @if ($product->is_featured == 1)
+                                                <span class="featured-badge">Featured</span>
+                                            @endif
+                                        </div>
+
+                                        <!-- Product Info -->
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-semibold">{{ $product->wine_name }}</h5>
+                                            @php
+                                                $type = strtolower($product->type);
+                                                $emoji = match($type) {
+                                                    'red' => '🍷',
+                                                    'white' => '🥂',
+                                                    'sparkling' => '✨',
+                                                    default => ''
+                                                };
+                                            @endphp
+                                            <p>
+                                                <strong>Type:</strong> {{ ucfirst($type) }}
+                                                @if ($emoji)
+                                                    <span style="font-size: 1.5em;">{{ $emoji }}</span>
+                                                @endif
+                                            </p>
+
+                                            <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                            <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
+                                                I want to try Now !!
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                    
+
+
         </div>
         <!--End::row-1 -->
     </div>

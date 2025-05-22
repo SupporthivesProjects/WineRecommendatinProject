@@ -343,6 +343,8 @@ class QuestionnaireController extends Controller
                 ->where('submission_id', $submission_id)
                 ->get();
 
+                
+
             // Get template ID from one of the responses
             $templateId = optional($responses->first())->template_id;
 
@@ -359,7 +361,28 @@ class QuestionnaireController extends Controller
                 ->where('id', $templateId)
                 ->value('name');
 
-            return view('admin.questionnaires.showIndividualResponses', compact('customer', 'responses', 'questions', 'templateName'));
+            // Get user_id from one of the responses
+            $userId = optional($responses->first())->user_id;
+
+            // Fetch store_id from users table
+            $storeId = DB::table('users')
+                ->where('id', $userId)
+                ->value('store_id');
+
+            // Fetch store details
+            $store = DB::table('stores')
+                ->where('id', $storeId)
+                ->first();
+
+            return view('admin.questionnaires.showIndividualResponses', compact(
+                'customer',
+                'responses',
+                'questions',
+                'templateName',
+                'store'
+            ));
+
+
     }
 
 

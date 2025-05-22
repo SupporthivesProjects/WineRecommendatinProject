@@ -201,7 +201,7 @@
             font-weight: 600;
             font-size: 1.25rem;
             margin-bottom: 1rem;
-            color: #333;
+            color: #000000;
         }
 
         .btn {
@@ -243,7 +243,7 @@
         .parallax-container 
         {
             position: relative;
-            height: 100vh;
+            height: 70vh;
             overflow: hidden;
         }
 
@@ -330,6 +330,7 @@
             </a>
         </div>
     </section>
+    
     <section class="filters-and-cards bg-white" id="questionnaires">
         <div class="container my-5">
             <div class="row gx-3 gy-3">
@@ -385,25 +386,56 @@
         </div>
     </section>
 
- <!-- modal code -->
- <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-labelledby="questionnaireModalLabel" aria-hidden="true">>
+
+  <!-- modal code -->
+        <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-labelledby="questionnaireModalLabel" aria-hidden="true" style="background:rgba(0,0,0,0.7)!important;">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content rounded-2" style="min-height: 500px;">
+                    <div class="modal-body p-0 position-relative d-flex flex-wrap">
+
+                        <!-- Close Button -->
+                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        <!-- Left Side: same design as login box -->
+                        <div class="col-lg-6 col-xl-5 d-none d-lg-block text-center details" id="leftModalImageContainer">
+                            <div class="mt-5 pt-4 p-2 position-absolute text-center" >
+                                
+                            </div>
+                        </div>
+
+                        <!-- Right Side: your original questionnaire content -->
+                        <div class="col-lg-6 col-xl-7 col-xs-12 col-sm-12 p-4 d-flex flex-column justify-content-between">
+                            <!-- Lottie Animation -->
+                            <!-- <div class="lottie-container w-100 mb-3" id="lottieAnimation" style="height: 250px; width: auto;"></div> -->
+
+                            <!-- Question Side -->
+                            <div class="flex-grow-1" id="question-container">
+                                <!-- Question and options will load here -->
+                            </div>
+
+                            <!-- Buttons Row -->
+                            <div class="d-flex mt-4 gap-2">
+                                <button class="btn btn-secondary btn-lg w-50" id="backBtn">Back</button>
+                                <button class="btn btn-primary btn-lg w-50" id="nextBtn">Next</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+ <!-- <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-labelledby="questionnaireModalLabel" aria-hidden="true">>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-0">
             <div class="modal-body d-flex flex-column p-0 position-relative">
-
-                <!-- Close button (top-right) -->
                 <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
-
-                <!-- Lottie Animation -->
                 <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px; width: auto;"></div>
-
-                <!-- Question Side -->
                 <div class="w-100 p-4 d-flex flex-column justify-content-between">
                     <div id="question-container">
-                        <!-- Question and options will load here -->
                     </div>
 
-                    <!-- Buttons Row -->
+                    
                     <div class="d-flex mt-4 gap-2">
                         <button class="btn btn-secondary btn-lg w-50" id="backBtn">Back</button>
                         <button class="btn btn-primary btn-lg w-50" id="nextBtn">Next</button>
@@ -413,7 +445,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 @endsection
@@ -427,6 +459,7 @@
 
 
 </script>
+
 <script>
             let questions = [];
             let currentStep = 0;
@@ -667,7 +700,22 @@
                             </div>
                         </div>
                     `;
-                } else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+                } 
+                else if (q.type === 'input') 
+                {
+                    optionsHtml = `
+                        <div class="mb-4">
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="textInputAnswer" 
+                                placeholder="Enter your answer"
+                            >
+                        </div>
+                    `;
+                }
+
+                else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
                     let rowHtml = '';
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
 
@@ -697,7 +745,7 @@
                 }
 
                 container.innerHTML = `
-                    <h5>${q.question}</h5>
+                    <h5 class='text-dark'>${q.question}</h5>
                     ${optionsHtml}
                 `;
 
@@ -760,7 +808,9 @@
                         responses[q.id] = slider.value;
                         console.log(`Slider value stored for ${q.id}:`, slider.value);
                     } else {
+                        responses[q.id] = 'no response';
                         console.warn(`Slider input not found for ${q.id}`);
+
                     }
                 } 
                 else if (q.type === 'single') {
@@ -769,6 +819,7 @@
                         responses[q.id] = selected.value;
                         console.log(`Radio button selected for ${q.id}:`, selected.value);
                     } else {
+                        responses[q.id] = 'no response';
                         console.warn(`No radio button selected for ${q.id}`);
                     }
                 } 
@@ -779,9 +830,22 @@
                         responses[q.id] = values;
                         console.log(`Checkboxes selected for ${q.id}:`, values);
                     } else {
+                        responses[q.id] = 'no response';
                         console.warn(`No checkboxes selected for ${q.id}`);
                     }
                 }
+                else if (q.type === 'input') 
+                {
+                    const input = document.getElementById('textInputAnswer');
+                    if (input) {
+                        responses[q.id] = input.value.trim() || 'no response';
+                        console.log(`Text input captured for ${q.id}:`, responses[q.id]);
+                    } else {
+                        console.warn(`Text input not found for ${q.id}`);
+                        responses[q.id] = 'no response';
+                    }
+                }
+
 
                 // Store to localStorage (optional but helpful for debugging or persistence)
                 localStorage.setItem('userResponses', JSON.stringify(responses));
@@ -821,6 +885,7 @@
 
             
             function submitResponses() {
+    
                 fetch('/submit-response', {
                     method: 'POST',
                     headers: {
@@ -931,5 +996,28 @@
         }
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const images = [
+        "{{ asset('images/QuestModal1.jpg') }}",
+        "{{ asset('images/QuestModal2.jpg') }}",
+        "{{ asset('images/QuestModal3.jpg') }}",
+    ];
+
+    const modal = document.getElementById('questionnaireModal');
+    const container = document.getElementById('leftModalImageContainer');
+
+    modal.addEventListener('shown.bs.modal', function () {
+        const randomIndex = Math.floor(Math.random() * images.length);
+        container.style.backgroundImage = `url('${images[randomIndex]}')`;
+        container.style.backgroundSize = 'cover';
+        container.style.backgroundPosition = 'center';
+        container.style.backgroundRepeat = 'no-repeat';
+    });
+});
+</script>
+
+
+
 
 @endpush

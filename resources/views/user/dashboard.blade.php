@@ -469,9 +469,6 @@
             color:#dacea1;
         }
 
-       
-
-
     </style>
 
 @endpush
@@ -715,7 +712,7 @@
 
 
         <!-- modal code -->
-        <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.7)!important;">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body d-flex flex-column p-0 position-relative">

@@ -132,9 +132,31 @@ class UserController extends Controller
 
     public function featuredproducts()
     {
-        return view('user.featuredproducts');    
-        
+        $store = Auth::user()->store;
+
+        // Fetch featured store_products for this store (with product_id as key)
+        $featuredStoreProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->where('is_featured', 1)
+            ->get()
+            ->keyBy('product_id');
+
+        // Fetch products with images where product id is in featured store products
+        $productsQuery = Product::with('images')
+            ->whereIn('id', $featuredStoreProducts->pluck('product_id'));
+
+        // Paginate products
+        $products = $productsQuery->paginate(6);
+
+        // Attach is_featured value to each product from store_products
+        $products->getCollection()->transform(function ($product) use ($featuredStoreProducts) {
+            $product->is_featured = $featuredStoreProducts[$product->id]->is_featured ?? 0;
+            return $product;
+        });
+
+        return view('user.featuredproducts', compact('products'));
     }
+
 
     public function userquestionnaire()
     {
@@ -182,9 +204,37 @@ class UserController extends Controller
 
     public function productDetails($id)
     {
-        $product = Product::findOrFail($id);
-        return view('user.product-detail', compact('product'));
+        // Fetch the current product with images
+        $product = Product::with('images')->findOrFail($id);
+
+        // Fetch 3 related products based on matching type or country, excluding the current product
+        $relatedProducts = Product::with('images')
+            ->where('id', '!=', $product->id)
+            ->where(function($query) use ($product) {
+                $query->where('type', $product->type)
+                    ->orWhere('country', $product->country);
+            })
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
+            // If less than 3 related products, fetch random other products excluding current and already fetched
+            if ($relatedProducts->count() < 3) {
+                $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
+            
+                $additionalProducts = Product::with('images')
+                    ->whereNotIn('id', $excludeIds)
+                    ->inRandomOrder()
+                    ->limit(3 - $relatedProducts->count())
+                    ->get();
+            
+                // Merge additional products with related products
+                $relatedProducts = $relatedProducts->merge($additionalProducts);
+            }    
+ 
+        return view('user.product-detail', compact('product', 'relatedProducts'));
     }
+
 
     public function storeResponse(Request $request)
     {
