@@ -171,7 +171,7 @@
                                 @forelse ($store->products as $product)
                                     <tr>
                                         <td>{{ $product->wine_name }}</td>
-                                        <td>{{ $product->type }}</td>
+                                        <td>{{ ucfirst($product->type) }}</td>
                                         <td>{{ $product->vintage_year }}</td>
                                         <td>{{ $product->retail_price }}</td>
                                     </tr>

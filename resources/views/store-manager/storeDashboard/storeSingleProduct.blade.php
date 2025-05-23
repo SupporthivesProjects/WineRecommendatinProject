@@ -13,6 +13,14 @@
                     <li class="breadcrumb-item active" aria-current="page">Products</li>
                 </ol>
             </div>
+            <div>
+                <!-- <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a> -->
+                <a href="{{ route('store-manager.dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a>
+            </div>
         </div>
         <!-- End::page-header -->
         
@@ -30,13 +38,19 @@
                                             <div id="thumbcarousel" class="carousel slide" data-bs-interval="false">
                                                 <div class="carousel-inner">
                                                     <div class="carousel-item active">
-                                                        @foreach (['image1', 'image2', 'image3', 'image4'] as $index => $img)
-                                                            @if($product->$img)
-                                                                <div data-bs-target="#carousel" data-bs-slide-to="{{ $index }}" class="thumb my-2">
-                                                                    <img src="{{ asset('storage/' . $product->$img) }}" alt="thumb-{{ $index }}">
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
+                                                        @php
+                                                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                                        @endphp
+
+                                                        @if($primaryImage)
+                                                            <div class="thumb my-2">
+                                                                <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
+                                                            </div>
+                                                        @else
+                                                            <div class="thumb my-2">
+                                                                <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -46,13 +60,19 @@
                                         <div class="product-carousel">
                                             <div id="carousel" class="carousel slide" data-bs-ride="false">
                                                 <div class="carousel-inner">
-                                                    @foreach (['image1', 'image2', 'image3', 'image4'] as $index => $img)
-                                                        @if($product->$img)
-                                                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                                <img src="{{ asset('storage/' . $product->$img) }}" alt="product-image-{{ $index }}" class="img-fluid mx-auto d-block">
+                                                        @php
+                                                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                                        @endphp
+
+                                                        @if($primaryImage)
+                                                            <div class="thumb my-2">
+                                                                <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
+                                                            </div>
+                                                        @else
+                                                            <div class="thumb my-2">
+                                                                <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
                                                             </div>
                                                         @endif
-                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>

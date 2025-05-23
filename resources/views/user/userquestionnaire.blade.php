@@ -392,7 +392,6 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content rounded-2" style="min-height: 500px;">
                     <div class="modal-body p-0 position-relative d-flex flex-wrap">
-
                         <!-- Close Button -->
                         <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
 
@@ -415,8 +414,8 @@
 
                             <!-- Buttons Row -->
                             <div class="d-flex mt-4 gap-2">
-                                <button class="btn btn-secondary btn-lg w-50" id="backBtn">Back</button>
-                                <button class="btn btn-primary btn-lg w-50" id="nextBtn">Next</button>
+                                <button class="btn btn-danger btn-lg w-50" id="backBtn">Back</button>
+                                <button class="btn btn-success btn-lg w-50" id="nextBtn">Next</button>
                             </div>
                         </div>
 
@@ -997,24 +996,24 @@
     });
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const images = [
-        "{{ asset('images/QuestModal1.jpg') }}",
-        "{{ asset('images/QuestModal2.jpg') }}",
-        "{{ asset('images/QuestModal3.jpg') }}",
-    ];
+    document.addEventListener('DOMContentLoaded', function () {
+        const images = [
+            "{{ asset('images/QuestModal1.jpg') }}",
+            "{{ asset('images/QuestModal2.jpg') }}",
+            "{{ asset('images/QuestModal3.jpg') }}",
+        ];
 
-    const modal = document.getElementById('questionnaireModal');
-    const container = document.getElementById('leftModalImageContainer');
+        const modal = document.getElementById('questionnaireModal');
+        const container = document.getElementById('leftModalImageContainer');
 
-    modal.addEventListener('shown.bs.modal', function () {
-        const randomIndex = Math.floor(Math.random() * images.length);
-        container.style.backgroundImage = `url('${images[randomIndex]}')`;
-        container.style.backgroundSize = 'cover';
-        container.style.backgroundPosition = 'center';
-        container.style.backgroundRepeat = 'no-repeat';
+        modal.addEventListener('shown.bs.modal', function () {
+            const randomIndex = Math.floor(Math.random() * images.length);
+            container.style.backgroundImage = `url('${images[randomIndex]}')`;
+            container.style.backgroundSize = 'cover';
+            container.style.backgroundPosition = 'center';
+            container.style.backgroundRepeat = 'no-repeat';
+        });
     });
-});
 </script>
 
 

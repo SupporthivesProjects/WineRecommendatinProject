@@ -135,7 +135,8 @@ class ProductController extends Controller
      */
     public function singleproduct($id)
     {
-        $product = Product::findOrFail($id);
+        //$product = Product::findOrFail($id);    
+        $product = Product::with('images')->findOrFail($id);
         return view('store-manager.storeDashboard.storeSingleProduct', compact('product'));
     }
 

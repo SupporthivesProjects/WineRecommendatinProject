@@ -1,5 +1,7 @@
 @extends('layouts.bootdashboard')
 @section('admindashboardcontent')
+
+
 <!-- Start::app-content -->
     <div class="main-content app-content">
         <div class="container-fluid">
@@ -11,13 +13,6 @@
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
                     </ol>
-                </div>
-                <div class="d-flex">
-                    <div class="justify-content-center">
-                        <button type="button" class="btn btn-primary my-2 btn-icon-text d-inline-flex align-items-center">
-                            <i class="fe fe-download-cloud me-2 fs-14"></i> Download Report
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -41,13 +36,12 @@
                                     </svg>
                                 </div>
                                 <div class="card-item-title mb-2">
-                                    <label class="main-content-label fs-13 fw-bold mb-1">Total
-                                        Users</label>
-                                    <span class="d-block fs-12 mb-0 text-muted">Total Users registered</span>
+                                    <label class="main-content-label fs-13 fw-bold mb-1">Products </label>
+                                    <span class="d-block fs-12 mb-0 text-muted">Total Products in Store</span>
                                 </div>
                                 <div class="card-item-body">
                                     <div class="card-item-stat">
-                                        <h4 class="fw-bold">userCount</h4>
+                                        <h4 class="fw-bold">{{ $products->count() }}</h4>
                                         <small></small>
                                     </div>
                                 </div>
@@ -82,20 +76,20 @@
                                 </div>
                                 <div class="card-item-title mb-2">
                                     <label class="main-content-label fs-13 fw-bold mb-1">
-                                        Total Stores
+                                        Featured Products
                                     </label>
-                                    <span class="d-block fs-12 mb-0 text-muted">Number of Stores</span>
+                                    <span class="d-block fs-12 mb-0 text-muted">Featured Products</span>
                                 </div>
                                 <div class="card-item-body">
                                     <div class="card-item-stat">
-                                        <h4 class="fw-bold">Stores Count</h4>
+                                        <h4 class="fw-bold">{{ $featuredCount }}</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <div class="card custom-card">
                         <div class="card-body">
                             <div class="card-item">
@@ -124,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <!-- End::row -->    
             <!-- Start::row-1 -->
@@ -172,7 +166,9 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div id="project"></div>
+                                    <div id="project2">
+                                        
+                                    </div>
                                 </div>
                             </div>
                         </div><!-- col end -->
@@ -201,8 +197,33 @@
                                                 @forelse($products as $index => $product)
                                                     <tr>
                                                         <td class="align-middle">{{ $index + 1 }}</td>
-                                                        <td class="align-middle">{{ $product->wine_name }}</td>
-                                                        <td class="align-middle">{{ ucfirst($product->type) }}</td>
+                                                        <td class="align-middle">{{ $product->wine_name }}
+                                                            <a href="{{ route('store-manager.singleproduct', $product->id) }}" class="ms-2" title="View Product">
+                                                                <i class="bi bi-box-arrow-up-right"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                                @php
+                                                                    $icons = [
+                                                                        'red' => '<i class="fas fa-wine-glass text-danger" title="Red Wine"></i>',
+                                                                        'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>',
+                                                                        'sparkling' => '<i class="fas fa-champagne-glasses text-info" title="Sparkling Wine"></i>',
+                                                                        'still' => '<i class="fas fa-tint text-primary" title="Still Wine"></i>',
+                                                                    ];
+
+                                                                    $textClasses = [
+                                                                        'red' => 'text-danger',
+                                                                        'white' => 'text-warning',
+                                                                        'sparkling' => 'text-info',
+                                                                        'still' => 'text-primary',
+                                                                    ];
+
+                                                                    $type = $product->type ?? 'unknown';
+                                                                @endphp
+
+                                                                {!! $icons[$type] ?? '<i class="fas fa-question-circle"></i>' !!}
+                                                                <span class="{{ $textClasses[$type] ?? 'text-muted' }}"><b>{{ ucfirst($type) }} Wine</b></span>
+                                                        </td>
                                                         <td class="align-middle">{{ $product->winery }}</td>
                                                         <td class="align-middle">${{ number_format($product->retail_price, 2) }}</td>
                                                         <td class="align-middle">
@@ -212,7 +233,9 @@
 
                                                         </td>
                                                         <td class="align-middle">
-                                                            <a href="{{ route('admin.products.show', $product) }}" class="text-primary">View</a>
+                                                            <a href="{{ route('store-manager.singleproduct', $product->id) }}" class="ms-2" title="View Product">
+                                                                View
+                                                            </a>                                                    
                                                         </td>
                                                     </tr>
                                                     @empty
@@ -355,6 +378,86 @@
             config44
         );
     </script>
+    <!-- Questionnaire Usage -->
+        <script>
+            var usageDates = @json($dates); 
+            var graphData = @json($graphData);
+
+            // Calculate max value for Y-axis
+            var maxValue = Math.max(...graphData);
+            var roundedMax = Math.ceil(maxValue / 5) * 5; // Round to nearest 5
+            var tickCount = roundedMax / 5;
+
+            var options = {
+                series: [{
+                    name: "Total Submissions",
+                    data: graphData
+                }],
+                chart: {
+                    height: 320,
+                    type: 'line',
+                    zoom: { enabled: false },
+                    toolbar: { show: false },
+                    dropShadow: {
+                        enabled: true,
+                        top: 5,
+                        left: 0,
+                        blur: 3,
+                        color: '#000',
+                        opacity: 0.1
+                    }
+                },
+                dataLabels: { enabled: false },
+                legend: {
+                    position: "top",
+                    horizontalAlign: "center",
+                    offsetX: -15,
+                    fontWeight: "bold"
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3,
+                    dashArray: [0]
+                },
+                grid: {
+                    borderColor: '#f2f6f7'
+                },
+                colors: ["#3B82F6"],
+                yaxis: {
+                    min: 0,
+                    max: roundedMax,
+                    tickAmount: tickCount,
+                    labels: {
+                        formatter: function (value) {
+                            return Math.round(value);
+                        }
+                    },
+                    title: { 
+                        text: '',
+                        style: {
+                            color: '#adb5be',
+                            fontSize: '14px',
+                            fontFamily: 'poppins, sans-serif',
+                            fontWeight: 600,
+                            cssClass: 'apexcharts-yaxis-label'
+                        }
+                    }
+                },
+                xaxis: {
+                    type: 'category',
+                    categories: usageDates,
+                    axisBorder: { show: false },
+                    axisTicks: { show: true, borderType: 'solid', width: 6 },
+                    labels: { rotate: -45 }
+                }
+            };
+
+            // Clear previous chart if exists
+            document.getElementById('project2').innerHTML = '';
+            var chart = new ApexCharts(document.querySelector("#project2"), options);
+            chart.render();
+        </script>
+
 
     
 @endpush

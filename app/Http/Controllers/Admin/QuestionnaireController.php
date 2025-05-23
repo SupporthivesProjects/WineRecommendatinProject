@@ -19,8 +19,59 @@ class QuestionnaireController extends Controller
     public function index()
     {
         $templates = QuestionnaireTemplate::orderBy('level')->get();
-        return view('admin.dashboard.questionnaires-tab', compact('templates'));
+
+        // Get data for last 7 days, grouped by template_id and date
+        $last7Days = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $last7Days->push(Carbon::today()->subDays($i)->format('Y-m-d'));
+        }
+
+        $rawData = DB::table('question_responses')
+            ->select(DB::raw('DATE(created_at) as date'), 'template_id', DB::raw('COUNT(DISTINCT submission_id) as count'))
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->groupBy('template_id', DB::raw('DATE(created_at)'))
+            ->get();
+
+        // Format data for Chart.js
+        $chartData = [];
+        foreach ($templates as $template) {
+            $data = [];
+            foreach ($last7Days as $date) {
+                $match = $rawData->first(fn($item) => $item->template_id == $template->id && $item->date == $date);
+                $data[] = $match ? $match->count : 0;
+            }
+            $chartData[] = [
+                'label' => $template->name,
+                'data' => $data,
+            ];
+        }
+
+        // Get total counts by template_id (distinct submissions)
+        $totalCounts = DB::table('question_responses')
+            ->select('template_id', DB::raw('COUNT(DISTINCT submission_id) as count'))
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->groupBy('template_id')
+            ->pluck('count', 'template_id');
+
+        // Assign to individual variables
+        $firstSipCount = $totalCounts[1] ?? 0;      
+        $savySipperCount = $totalCounts[2] ?? 0;    
+        $proCount = $totalCounts[3] ?? 0;           
+        $quickPourCount = $totalCounts[4] ?? 0;
+
+    
+
+        return view('admin.dashboard.questionnaires-tab', compact(
+            'templates',
+            'chartData',
+            'last7Days',
+            'firstSipCount',
+            'savySipperCount',
+            'quickPourCount',
+            'proCount'
+        ));
     }
+
 
     /**
      * Show the form for creating a new questionnaire template.

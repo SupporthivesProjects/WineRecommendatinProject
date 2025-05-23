@@ -84,7 +84,7 @@
                 <!-- Start::Analytics Section -->
                 <div class="row mt-5">
                     <!-- First Sip -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card custom-card">
                             <div class="card-body">
                                 <h5 class="card-title">First Sip (Basic)</h5>
@@ -102,7 +102,7 @@
                     </div>
 
                     <!-- Savy Sipper -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card custom-card">
                             <div class="card-body">
                                 <h5 class="card-title">Savy Sipper (Intermediate)</h5>
@@ -120,7 +120,7 @@
                     </div>
 
                     <!-- Pro -->
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="card custom-card">
                             <div class="card-body">
                                 <h5 class="card-title">Pro (Advanced)</h5>
@@ -136,6 +136,26 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Quick Pour -->
+                    <div class="col-md-3">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Quick Pour</h5>
+                                <div class="d-flex align-items-center justify-content-between mt-3">
+                                    <div>
+                                        <p class="mb-1 text-muted">Total Responses</p>
+                                        <h3 class="fw-bold">{{ $quickPourCount ?? 0 }}</h3>
+                                    </div>
+                                    <div class="text-primary fs-1">
+                                        <i class="fe fe-navigation"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <!-- Recent Responses Chart -->
@@ -159,55 +179,44 @@
 
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Recent Responses Chart
-            const responsesCtx = document.getElementById('responsesChart').getContext('2d');
-            const responsesChart = new Chart(responsesCtx, {
-                type: 'line',
-                data: {
-                    labels: @json($dateLabels ?? []),
-                    datasets: [
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('responsesChart').getContext('2d');
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($last7Days),
+                datasets: [
+                    @foreach ($chartData as $dataset)
                         {
-                            label: 'First Sip',
-                            data: @json($firstSipData ?? []),
-                            borderColor: 'rgba(16, 185, 129, 1)',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.4,
-                            fill: true
+                            label: '{{ $dataset['label'] }}',
+                            data: @json($dataset['data']),
+                            borderWidth: 2,
+                            fill: false,
+                            borderColor: '#' + Math.floor(Math.random()*16777215).toString(16), // random color
+                            tension: 0.3,
                         },
-                        {
-                            label: 'Savy Sipper',
-                            data: @json($savySipperData ?? []),
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        },
-                        {
-                            label: 'Pro',
-                            data: @json($proData ?? []),
-                            borderColor: 'rgba(139, 92, 246, 1)',
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        }
+                    @endforeach
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: false,
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
         });
-    </script>
+    });
+</script>
 @endpush
