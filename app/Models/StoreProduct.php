@@ -18,6 +18,7 @@ class StoreProduct extends Model
         'store_id',
         'product_id',
         'status',
+        'is_featured',
     ];
 
     /**

@@ -8,6 +8,8 @@ use App\Models\UserQuestionnaireResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class QuestionnaireController extends Controller
 {
@@ -17,8 +19,59 @@ class QuestionnaireController extends Controller
     public function index()
     {
         $templates = QuestionnaireTemplate::orderBy('level')->get();
-        return view('admin.questionnaires.index', compact('templates'));
+
+        // Get data for last 7 days, grouped by template_id and date
+        $last7Days = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $last7Days->push(Carbon::today()->subDays($i)->format('Y-m-d'));
+        }
+
+        $rawData = DB::table('question_responses')
+            ->select(DB::raw('DATE(created_at) as date'), 'template_id', DB::raw('COUNT(DISTINCT submission_id) as count'))
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->groupBy('template_id', DB::raw('DATE(created_at)'))
+            ->get();
+
+        // Format data for Chart.js
+        $chartData = [];
+        foreach ($templates as $template) {
+            $data = [];
+            foreach ($last7Days as $date) {
+                $match = $rawData->first(fn($item) => $item->template_id == $template->id && $item->date == $date);
+                $data[] = $match ? $match->count : 0;
+            }
+            $chartData[] = [
+                'label' => $template->name,
+                'data' => $data,
+            ];
+        }
+
+        // Get total counts by template_id (distinct submissions)
+        $totalCounts = DB::table('question_responses')
+            ->select('template_id', DB::raw('COUNT(DISTINCT submission_id) as count'))
+            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->groupBy('template_id')
+            ->pluck('count', 'template_id');
+
+        // Assign to individual variables
+        $firstSipCount = $totalCounts[1] ?? 0;      
+        $savySipperCount = $totalCounts[2] ?? 0;    
+        $proCount = $totalCounts[3] ?? 0;           
+        $quickPourCount = $totalCounts[4] ?? 0;
+
+    
+
+        return view('admin.dashboard.questionnaires-tab', compact(
+            'templates',
+            'chartData',
+            'last7Days',
+            'firstSipCount',
+            'savySipperCount',
+            'quickPourCount',
+            'proCount'
+        ));
     }
+
 
     /**
      * Show the form for creating a new questionnaire template.
@@ -81,6 +134,37 @@ class QuestionnaireController extends Controller
             'questions' => $questions,
             'is_active' => $request->has('is_active'),
         ]);
+
+
+        // After saving the questionnaire template, store the questions in the 'questions' table
+        foreach ($questions as $question) {
+            \DB::table('questions')->insert([
+                'template_id' => $questionnaireTemplate->id,
+                'question' => $question['text'],
+                'type' => $question['type'],
+                'option_1' => $question['option_1'] ?? null,
+                'option_2' => $question['option_2'] ?? null,
+                'option_3' => $question['option_3'] ?? null,
+                'option_4' => $question['option_4'] ?? null,
+                'option_5' => $question['option_5'] ?? null,
+                'option_6' => $question['option_6'] ?? null,
+                'option_7' => $question['option_7'] ?? null,
+                'option_8' => $question['option_8'] ?? null,
+                'option_9' => $question['option_9'] ?? null,
+                'option_10' => $question['option_10'] ?? null,
+                'option_11' => $question['option_11'] ?? null,
+                'option_12' => $question['option_12'] ?? null,
+                'option_13' => $question['option_13'] ?? null,
+                'option_14' => $question['option_14'] ?? null,
+                'option_15' => $question['option_15'] ?? null,
+                'min_value' => $question['min_value'] ?? null,
+                'max_value' => $question['max_value'] ?? null,
+                'step' => $question['step'] ?? null,
+                'default' => $question['default'] ?? null,
+            ]);
+        }
+
+
 
         return redirect()->route('admin.questionnaires.index')
             ->with('success', 'Questionnaire template created successfully.');
@@ -269,5 +353,91 @@ class QuestionnaireController extends Controller
         
         return "rgb($r, $g, $b)";
     }
+
+    public function showRespnses()
+    {
+        $submissions = DB::table('question_responses')
+        ->join('questionnaire_usage', 'question_responses.customerID', '=', 'questionnaire_usage.id')
+        ->select(
+            'question_responses.submission_id',
+            'question_responses.customerID',
+            DB::raw('MIN(question_responses.created_at) as created_at'),
+            'questionnaire_usage.cust_name',
+            'questionnaire_usage.cust_email',
+            'questionnaire_usage.cust_phone'
+        )
+        ->groupBy(
+            'question_responses.submission_id',
+            'question_responses.customerID',
+            'questionnaire_usage.cust_name',
+            'questionnaire_usage.cust_email',
+            'questionnaire_usage.cust_phone'
+        )
+        ->orderByDesc('created_at')
+        ->get();
+
+
+        // You may need to fetch customer details from another table if not present in `question_responses`
+        return view('admin.questionnaires.showResponses', compact('submissions'));
+    }
+
+    // Show a specific submission
+    public function showIndividualResponses($submission_id)
+    {
+            // Fetch customer info from `questionnaire_usage`
+                $customer = DB::table('questionnaire_usage')
+                ->where('submission_id', $submission_id)
+                ->first();
+
+            // Fetch all responses for this submission
+            $responses = DB::table('question_responses')
+                ->where('submission_id', $submission_id)
+                ->get();
+
+                
+
+            // Get template ID from one of the responses
+            $templateId = optional($responses->first())->template_id;
+
+            // Get all questions for that template
+            $questions = DB::table('questions')
+            ->where('template_id', $templateId)
+            ->orderBy('question_order')
+            ->pluck('question');  
+
+
+
+            // Get template name (assuming you have a `templates` table)
+            $templateName = DB::table('questionnaire_templates')
+                ->where('id', $templateId)
+                ->value('name');
+
+            // Get user_id from one of the responses
+            $userId = optional($responses->first())->user_id;
+
+            // Fetch store_id from users table
+            $storeId = DB::table('users')
+                ->where('id', $userId)
+                ->value('store_id');
+
+            // Fetch store details
+            $store = DB::table('stores')
+                ->where('id', $storeId)
+                ->first();
+
+            return view('admin.questionnaires.showIndividualResponses', compact(
+                'customer',
+                'responses',
+                'questions',
+                'templateName',
+                'store'
+            ));
+
+
+    }
+
+
+
+
 }
 

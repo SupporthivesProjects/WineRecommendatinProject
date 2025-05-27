@@ -25,7 +25,7 @@ class StoreController extends Controller
         
         $stores = $query->paginate(10);
         
-        return view('stores.index', compact('stores'));
+        return view('admin.stores.index', compact('stores'));
     }
     
     /**

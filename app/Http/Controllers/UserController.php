@@ -8,6 +8,13 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireResponse;
 use App\Models\Product;
 use App\Models\UserQuestionnaireResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Models\QuestionResponse;
+use Illuminate\Support\Str;
+
+
+
 
 class UserController extends Controller
 {
@@ -122,4 +129,356 @@ class UserController extends Controller
         
         return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
     }
+
+    public function featuredproducts()
+    {
+        $store = Auth::user()->store;
+
+        // Fetch featured store_products for this store (with product_id as key)
+        $featuredStoreProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->where('is_featured', 1)
+            ->get()
+            ->keyBy('product_id');
+
+        // Fetch products with images where product id is in featured store products
+        $productsQuery = Product::with('images')
+            ->whereIn('id', $featuredStoreProducts->pluck('product_id'));
+
+        // Paginate products
+        $products = $productsQuery->paginate(6);
+
+        // Attach is_featured value to each product from store_products
+        $products->getCollection()->transform(function ($product) use ($featuredStoreProducts) {
+            $product->is_featured = $featuredStoreProducts[$product->id]->is_featured ?? 0;
+            return $product;
+        });
+
+        return view('user.featuredproducts', compact('products'));
+    }
+
+
+    public function userquestionnaire()
+    {
+        return view('user.userquestionnaire');    
+        
+    }
+   
+    public function products()
+    {
+        $store = Auth::user()->store;
+
+        // Fetch products linked to this store and eager load the 'images' relationship
+        $storeProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->orderBy('is_featured', 'desc')
+            ->get()
+            ->keyBy('product_id'); 
+
+        // Fetch the products with their images for the store products
+        $productsQuery = Product::with('images')
+            ->whereIn('id', $storeProducts->pluck('product_id'));
+
+        // Apply pagination after applying map
+        $products = $productsQuery->paginate(6);
+
+        // Map the 'is_featured' value from store_products to each product
+        $products->getCollection()->transform(function ($product) use ($storeProducts) {
+            $product->is_featured = $storeProducts[$product->id]->is_featured;
+            return $product;
+        });
+
+
+        return view('user.products', compact('products'));
+    }
+
+    public function matchedproducts()
+    {
+        // Get the matching products from the session
+        $products = session('matching_products', []);
+
+        // Pass the products to the view
+        return view('user.matchedproducts', compact('products'));
+    }
+
+
+    public function productDetails($id)
+    {
+        // Fetch the current product with images
+        $product = Product::with('images')->findOrFail($id);
+
+        // Fetch 3 related products based on matching type or country, excluding the current product
+        $relatedProducts = Product::with('images')
+            ->where('id', '!=', $product->id)
+            ->where(function($query) use ($product) {
+                $query->where('type', $product->type)
+                    ->orWhere('country', $product->country);
+            })
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
+            // If less than 3 related products, fetch random other products excluding current and already fetched
+            if ($relatedProducts->count() < 3) {
+                $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
+            
+                $additionalProducts = Product::with('images')
+                    ->whereNotIn('id', $excludeIds)
+                    ->inRandomOrder()
+                    ->limit(3 - $relatedProducts->count())
+                    ->get();
+            
+                // Merge additional products with related products
+                $relatedProducts = $relatedProducts->merge($additionalProducts);
+            }    
+ 
+        return view('user.product-detail', compact('product', 'relatedProducts'));
+    }
+
+
+    public function storeResponse(Request $request)
+    {
+
+        $responses = $request->all();
+        $templateId = $responses['template_id'] ?? null;
+        $answers = $responses['answers'] ?? [];
+
+        $submissionId = Str::uuid();
+
+
+        // Get values from the first 3 questions or set defaults
+        $name = $answers['question1'] ?? 'John Doe';
+        $phone = $answers['question2'] ?? '9988998899';
+        $email = $answers['question3'] ?? 'johndoe@test.com';
+
+        // If any of them have 'no response', replace with defaults
+        if ($name === 'no response') {
+            $name = 'John Doe';
+        }
+        if ($phone === 'no response') {
+            $phone = '9988998899';
+        }
+        if ($email === 'no response') {
+            $email = 'johndoe@test.com';
+        }
+
+        // Save to questionnaire_usage table
+        $customerID = DB::table('questionnaire_usage')->insertGetId([
+            'cust_name' => $name,
+            'cust_phone' => $phone,
+            'cust_email' => $email,
+            'submission_id' => $submissionId,
+            'created_on' => now()
+        ]);
+
+        Log::debug('Customer ID:', ['template_id' => $customerID]);
+
+        foreach ($answers as $questionKey => $answerValue) {
+            QuestionResponse::create([
+                'template_id' => $templateId,
+                'question_key' => $questionKey,
+                'answer' => is_array($answerValue) ? json_encode($answerValue) : $answerValue,
+                'user_id' => auth()->id(),
+                'submission_id' => $submissionId,
+                'customerID' => $customerID, 
+            ]);
+        }
+
+        // Filter out the first 3 questions before sending to product matcher
+        $filteredAnswers = $answers;
+        unset($filteredAnswers['question1'], $filteredAnswers['question2'], $filteredAnswers['question3']);
+
+
+
+        // Pass only the filtered responses to product matcher
+        $filteredResponses = $responses;
+        $filteredResponses['answers'] = $filteredAnswers;
+
+        // Get matching products
+        $matchingProducts = $this->getMatchingProducts($filteredResponses);
+
+
+        // If no products found, you can return a fallback or 'No Results' page
+        if ($matchingProducts->isEmpty()) {
+            return response()->json([
+                'status' => 'no_results',
+                'redirect' => route('user.dashboard')
+            ], 200); // Status 200 for AJAX to process
+        }
+
+        // Store the matching products in the session
+        session(['matching_products' => $matchingProducts]);
+
+        // Redirect to the 'user.products' route
+        return response()->json([
+            'status' => 'success',
+            'redirect' => route('user.matchedproducts')
+        ], 200);
+    }
+
+    public function getMatchingProducts($responses)
+    {
+        $templateId = $responses['template_id'];
+        $answers = $responses['answers'];
+
+        Log::debug('Template ID:', ['template_id' => $templateId]);
+
+        $query = Product::query();
+
+        // Wrap all conditions in a single where closure to group the ORs
+        $query->where(function ($q) use ($templateId, $answers) {
+            foreach ($answers as $key => $value) {
+                Log::debug('Response:', ['key' => $key, 'value' => $value]);
+
+                switch ($templateId) {
+                    case '1':
+                        switch ($key) {
+                            case 'question4': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question6': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question7': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                }
+                                break;
+                            case 'question8': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question9': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question10': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question11': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question12': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question13': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
+
+                    case '2':
+                        switch ($key) {
+                            case 'question4': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question5': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question10': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                }
+                                break;
+                            case 'question2': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question1': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question7': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question6': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question12': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question11': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
+
+                    case '3':
+                        switch ($key) {
+                            case 'question4': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+                            // case 'question2': // Cork yes or no
+                            //     $q->orWhere('sweetness_level', $value);
+                            //     break;
+                            case 'question5': // wine sweet or dry
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question5': // flavour
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                }
+                                break;
+                            case 'question10': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question6': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question10': // how old 
+                                $q->orWhere('aging', $value);
+                                break;
+                            case 'question8': // Region
+                                $q->orWhere('country', $value);
+                                break;
+                            case 'question14': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question111': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
+
+                    case '4':
+                        switch ($key) {
+                            case 'question5': // Wine Type
+                                $q->orWhere('type', $value);
+                                break;
+        
+                            case 'question5': // how bold would you like your wine to be
+                                $q->orWhere('body', $value);
+                                break;
+                            case 'question6': // how fruity
+                                $q->orWhere('palate', 'like', "%$value%");
+                                break;
+                            case 'question7': // Price
+                                $q->orWhere('retail_price', '<=', $value);
+                                break;
+                            case 'question10': // Occasion
+                                $q->orWhere('style', 'like', "%$value%");
+                                break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+
+        Log::debug('Generated Query: ' . $query->toSql());
+        Log::debug('Bindings: ' . json_encode($query->getBindings()));
+
+        return $query->get();
+    }
+
 }

@@ -19,7 +19,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('store')->get();
-        return redirect()->route('admin.dashboard')->with('activeTab', 'users');
+        return view('admin.dashboard.users-tab', compact('users'));
+        
     }
 
     /**

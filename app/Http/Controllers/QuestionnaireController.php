@@ -7,8 +7,11 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireResponse;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Question;
 use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class QuestionnaireController extends Controller
 {
@@ -19,6 +22,7 @@ class QuestionnaireController extends Controller
      */
     public function index()
     {
+        
         $questionnaires = QuestionnaireTemplate::where('is_active', true)
             ->orderBy('id', 'asc')
             ->get();
@@ -152,18 +156,27 @@ class QuestionnaireController extends Controller
      */
     public function submit(Request $request, QuestionnaireTemplate $questionnaire)
     {
+        Log::info('Questionnaire submission started', [
+            'user_id' => Auth::id(),
+            'questionnaire_id' => $questionnaire->id,
+            'request_data' => $request->all(),
+        ]);
+
         $request->validate([
             'answers' => 'required|array',
         ]);
         
         $user = Auth::user();
         $answers = $request->answers;
-        
+
+        Log::info('Answers received', ['answers' => $answers]);
+
         // Process answers to extract preferences
         $preferences = $this->processAnswers($questionnaire, $answers);
-        
+        Log::info('Preferences extracted', ['preferences' => $preferences]);
+
         // Store the questionnaire response
-        UserQuestionnaireResponse::create([
+        $response = UserQuestionnaireResponse::create([
             'user_id' => $user->id,
             'questionnaire_id' => $questionnaire->id,
             'responses' => json_encode([
@@ -171,12 +184,53 @@ class QuestionnaireController extends Controller
                 'preferences' => $preferences
             ]),
         ]);
-        
+
+        Log::info('UserQuestionnaireResponse stored', [
+            'response_id' => $response->id,
+            'user_id' => $user->id,
+            'questionnaire_id' => $questionnaire->id,
+        ]);
+
         // Get recommended products based on preferences
         $recommendedProducts = $this->getRecommendedProducts($preferences);
-        
+        Log::info('Recommended products retrieved', [
+            'product_ids' => collect($recommendedProducts)->pluck('id')->all()
+        ]);
+
+        Log::info('Returning results view', [
+            'user_id' => $user->id,
+            'questionnaire_id' => $questionnaire->id,
+        ]);
+
         return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
     }
+    // public function submit(Request $request, QuestionnaireTemplate $questionnaire)
+    // {
+    //     $request->validate([
+    //         'answers' => 'required|array',
+    //     ]);
+        
+    //     $user = Auth::user();
+    //     $answers = $request->answers;
+        
+    //     // Process answers to extract preferences
+    //     $preferences = $this->processAnswers($questionnaire, $answers);
+        
+    //     // Store the questionnaire response
+    //     UserQuestionnaireResponse::create([
+    //         'user_id' => $user->id,
+    //         'questionnaire_id' => $questionnaire->id,
+    //         'responses' => json_encode([
+    //             'answers' => $answers,
+    //             'preferences' => $preferences
+    //         ]),
+    //     ]);
+        
+    //     // Get recommended products based on preferences
+    //     $recommendedProducts = $this->getRecommendedProducts($preferences);
+        
+    //     return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
+    // }
     
     /**
      * Process questionnaire answers to extract wine preferences.
@@ -310,4 +364,68 @@ class QuestionnaireController extends Controller
         // Limit to a reasonable number of recommendations
         return $query->inRandomOrder()->limit(6)->get();
     }
+
+
+    public function getQuestions($id)
+    {
+        try {
+            $questions = Question::where('template_id', $id)->orderBy('question_order', 'asc')->get()->map(function ($q) {
+                $options = [];
+
+                for ($i = 1; $i <= 15; $i++) {
+                    $key = "option_$i";
+                    if (!is_null($q->$key)) {
+                        $options[] = $q->$key;
+                    }
+                }
+
+                return [
+                    'question' => $q->question,
+                    'type' => $q->type,
+                    'options' => $options,
+                    'min_value' => $q->min_value,
+                    'max_value' => $q->max_value,
+                    'step' => $q->step,
+                    'default' => $q->default,
+                ];
+            });
+
+            return response()->json($questions);
+
+        } catch (\Exception $e) {
+            Log::error('Error in getQuestions: ' . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong.'], 500);
+        }
+    }
+
+
+    public function storeResponse(Request $request)
+    {
+    
+
+        // Validate the incoming data
+        $validated = $request->validate([
+            'template_id' => 'required|integer',  
+            'answers' => 'required|array',        
+        ]);
+
+        // Log or save the data to the database
+        // Example: Storing in a 'responses' table (you can modify this as per your database schema)
+        
+        $templateId = $validated['template_id'];
+        $answers = $validated['answers'];
+
+        // Store the response (this example assumes a "responses" table with template_id and answers columns)
+        \DB::table('responses')->insert([
+            'template_id' => $templateId,
+            'answers' => json_encode($answers), 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json(['message' => 'Response saved successfully!'], 200);
+    }
+
+
+
 }

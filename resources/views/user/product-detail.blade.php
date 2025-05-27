@@ -1,151 +1,359 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center">
-            <a href="{{ route('products.index') }}" class="mr-2">
-                <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-            </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ $product->wine_name }}
-            </h2>
-        </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex flex-col md:flex-row">
-                        <!-- Product Image -->
-                        <div class="md:w-1/3 mb-6 md:mb-0 md:pr-6">
-                            <div class="h-64 md:h-96 bg-gray-200 rounded-lg overflow-hidden">
-                                @if($product->image_url)
-                                    <img src="{{ $product->image_url }}" alt="{{ $product->wine_name }}" class="h-full w-full object-cover">
-                                @else
-                                    <div class="h-full w-full flex items-center justify-center bg-gradient-to-br 
-                                        @if($product->type == 'red') from-red-100 to-red-200
-                                        @elseif($product->type == 'white') from-yellow-50 to-yellow-100
-                                        @elseif($product->type == 'rose') from-pink-100 to-pink-200
-                                        @else from-blue-100 to-blue-200 @endif">
-                                        <svg class="h-32 w-32 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                        </svg>
+@extends('layouts.bootdashboard')
+@section('admindashboardcontent')
+
+<div class="">
+    <div class="container">
+        <!-- Start::page-header -->
+        <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
+            <div>
+                <h2 class="main-content-title fs-24 mb-1">Welcome To Products Board</h2>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Products</li>
+                </ol>
+            </div>
+
+            <div>
+                <!-- <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a> -->
+                <a href="{{ route('user.products') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                </a>
+            </div>
+        </div>
+
+        <!-- End::page-header -->
+        
+
+        <!-- Start::row-1 -->
+        <div class="row row-sm">
+            <div class="col-lg-12 col-md-12">
+                <div class="card custom-card productdesc">
+                    <div class="card-body h-100">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-md-7 offset-md-1 col-sm-9 col-8">
+                                        <div class="product-carousel">
+                                            <div id="carousel" class="carousel slide" data-bs-ride="false">
+                                                <div class="carousel-inner">
+                                                    @php
+                                                        $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                                    @endphp
+
+                                                    @if($primaryImage)
+                                                        <div class="thumb my-2">
+                                                            <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
+                                                        </div>
+                                                    @else
+                                                        <div class="thumb my-2">
+                                                            <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                @endif
+                                </div>
+                            </div>
+
+                            {{-- Right Column --}}
+                            <div class="col-xl-6 col-lg-12 col-md-12">
+                                <div class="mt-4 mb-4">
+                                    <h4 class="mt-1 mb-3">{{ $product->wine_name }}</h4>
+                                    <h5>
+                                        @php
+                                            $icons = [
+                                                'red' => '<i class="fas fa-wine-glass text-danger" title="Red Wine"></i>',
+                                                'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>',
+                                                'sparkling' => '<i class="fas fa-champagne-glasses text-info" title="Sparkling Wine"></i>',
+                                                'still' => '<i class="fas fa-tint text-primary" title="Still Wine"></i>',
+                                            ];
+
+                                            $textClasses = [
+                                                'red' => 'text-danger',
+                                                'white' => 'text-warning',
+                                                'sparkling' => 'text-info',
+                                                'still' => 'text-primary',
+                                            ];
+
+                                            $type = $product->type ?? 'unknown';
+                                        @endphp
+
+                                        {!! $icons[$type] ?? '<i class="fas fa-question-circle"></i>' !!}
+                                        <span class="{{ $textClasses[$type] ?? 'text-muted' }}">{{ ucfirst($type) }} Wine</span>
+                                    </h5>
+                                    <p class="text-muted float-start me-3">
+                                        <span class="fe fe-star text-warning"></span>
+                                        <span class="fe fe-star text-warning"></span>
+                                        <span class="fe fe-star text-warning"></span>
+                                        <span class="fe fe-star text-warning"></span>
+                                        <span class="fe fe-star"></span>
+                                    </p>
+                                    <p class="text-muted mb-4">( 135 Customers Review )</p>
+
+                                    @if($product->discounts)
+                                        <h6 class="text-success text-uppercase">{{ $product->discounts }} % Off</h6>
+                                    @endif
+
+                                    <h5 class="mb-2">
+                                        Price:
+                                        @if($product->discounts)
+                                            @php
+                                                $discountAmount = $product->retail_price * ($product->discounts / 100);
+                                                $discountedPrice = $product->retail_price - $discountAmount;
+                                            @endphp
+                                            <span class="text-muted me-2"><del>₹{{ number_format($product->retail_price, 2) }} INR</del></span>
+                                            <b>₹{{ number_format($discountedPrice, 2) }} INR</b>
+                                        @else
+                                            <b>₹{{ number_format($product->retail_price, 2) }} INR</b>
+                                        @endif
+
+                                    </h5>
+
+                                    <h6 class="mt-4 fs-16">Description</h6>
+                                    <p>{{ $product->tasting_notes ?? 'N/A' }}</p>
+
+                                    <div class="d-flex mt-2">
+                                        <div class="mt-2 sizes">Quantity:</div>
+                                        <div class="d-flex ms-2">
+                                            <form method="POST" action="">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <select name="quantity" class="form-control wd-150">
+                                                        @for ($i = 1; $i <= 4; $i++)
+                                                            <option value="{{ $i }}">{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <!-- Product Details -->
-                        <div class="md:w-2/3">
-                            <div class="flex justify-between items-start mb-4">
-                                <h1 class="text-2xl font-bold text-gray-900">{{ $product->wine_name }}</h1>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
-                                    @if($product->type == 'red') bg-red-100 text-red-800
-                                    @elseif($product->type == 'white') bg-yellow-100 text-yellow-800
-                                    @elseif($product->type == 'rose') bg-pink-100 text-pink-800
-                                    @else bg-blue-100 text-blue-800 @endif">
-                                    {{ ucfirst($product->type) }} Wine
-                                </span>
-                            </div>
-                            
-                            <p class="text-xl font-bold text-gray-900 mb-6">${{ number_format($product->retail_price, 2) }}</p>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Winery</h3>
-                                    <p class="text-base text-gray-900">{{ $product->winery }}</p>
-                                </div>
-                                
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Grape Variety</h3>
-                                    <p class="text-base text-gray-900">{{ $product->grape_variety ?: 'Not specified' }}</p>
-                                </div>
-                                
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Country</h3>
-                                    <p class="text-base text-gray-900">{{ $product->country ?: 'Not specified' }}</p>
-                                </div>
-                                
-                                <div>
-                                    <h3 class="text-sm font-medium text-gray-500">Region</h3>
-                                    <p class="text-base text-gray-900">{{ $product->region ?: 'Not specified' }}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="border-t border-gray-200 pt-6 mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-3">Description</h3>
-                                @if($product->description)
-                                    <p class="text-gray-700">{{ $product->description }}</p>
-                                @else
-                                    <p class="text-gray-500 italic">No description available for this wine.</p>
-                                @endif
-                            </div>
-                            
-                            <div class="border-t border-gray-200 pt-6">
-                                <h3 class="text-lg font-medium text-gray-900 mb-3">Tasting Notes</h3>
-                                @if($product->tasting_notes)
-                                    <p class="text-gray-700">{{ $product->tasting_notes }}</p>
-                                @else
-                                    <p class="text-gray-500 italic">No tasting notes available for this wine.</p>
-                                @endif
-                            </div>
-                            
-                            <div class="mt-8 flex space-x-4">
-                                <button type="button" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Find in Stores
-                                </button>
-                                <button type="button" class="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="h-5 w-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                    Save
-                                </button>
+
+                        {{-- Specifications --}}
+                        <div class="mt-4">
+                            <h5 class="mb-3">Specifications :</h5>
+                            <div class="table-responsive">
+                                <table class="table mb-0 border table-bordered text-nowrap">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Type</th>
+                                            <td>{{ $product->type ? ucfirst($product->type) : 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Brand</th>
+                                            <td>{{ $product->winery ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Color</th>
+                                            <td>{{ $product->color ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Alcohol Volume</th>
+                                            <td>{{ $product->alcohol_vol }}%</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Closure Type</th>
+                                            <td>{{ $product->closure_type }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Vintage Year</th>
+                                            <td>{{ $product->vintage_year }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Country</th>
+                                            <td>{{ $product->country }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Designation</th>
+                                            <td>{{ $product->designation ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">SP Mentions</th>
+                                            <td>{{ $product->sp_mentions ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Wine Story</th>
+                                            <td style="white-space: normal; word-wrap: break-word;">{{ $product->wine_story ?? 'N/A' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                    </div> {{-- card-body --}}
+                </div>
+            </div>
+            <!-- All Ratings and Reviews -->
+            <div class="col-xl-12 mt-4">
+                <div class="card">
+                    <div>
+                        <div class="d-flex p-3">
+                            <h5 class="float-start main-content-label mb-0 mt-2">All Ratings and Reviews</h5>
+                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm float-end ms-auto">Top Rated</a>
+                        </div>
+                        <div class="media mt-0 p-4 border-bottom border-top">
+                            <div class="d-flex me-3">
+                                <a href="javascript:void(0);"><img class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/8.jpg"> </a>
+                            </div>
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1 fw-medium fs-16">Bruce Tran
+                                    <span class="fs-14 ms-0" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
+                                </h5>
+                                <span class="text-muted fs-13">Tue, 20 Mar 2020</span>
+                                <div class="text-warning mt-1">
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star"></i>
+                                    </div>
+                                <p class="font-13  mb-2 mt-2">
+                                    Lorem Ipsum available, quis Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et  nostrud exercitation ullamco laboris   commodo consequat.
+                                </p>
+                                <a href="javascript:void(0);" class="me-2"><span class="badge bg-primary">Helpful</span></a>
+                                <a href="javascript:void(0);" class="me-2"><span class="">Comment</span></a>
+                                <a href="javascript:void(0);" class="me-2"><span class="">Report</span></a>
+                            </div>
+                        </div>
+                        <div class="media mt-0  p-4 border-bottom">
+                            <div class="d-flex me-3">
+                                <a href="javascript:void(0);"><img class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/3.jpg"> </a>
+                            </div>
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1 fw-medium fs-16">Mina Harpe
+                                    <span class="fs-14 ms-0" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
+                                </h5>
+                                <span class="text-muted fs-13">Tue, 20 Mar 2020</span>
+                                <div class="text-warning mt-1">
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star"></i>
+                                    </div>
+                                <p class="font-13  mb-2 mt-2">
+                                    Lorem Ipsum available, quis Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et  nostrud exercitation ullamco laboris   commodo consequat.
+                                </p>
+                                <a href="javascript:void(0);" class="me-2"><span class="badge bg-primary">Helpful</span></a>
+                                <a href="javascript:void(0);" class="me-2"><span class="">Comment</span></a>
+                                <a href="javascript:void(0);" class="me-2"><span class="">Report</span></a>
+                            </div>
+                        </div>
+                        <div class="media mt-0 p-4 border-bottom">
+                            <div class="d-flex me-3">
+                                <a href="javascript:void(0);"><img class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/5.jpg"> </a>
+                            </div>
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1 fw-medium fs-16">Maria Quinn
+                                    <span class="fs-14 ms-0" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="verified"><i class="fa fa-check-circle-o text-success"></i></span>
+                                </h5>
+                                <span class="text-muted fs-13">Tue, 20 Mar 2020</span>
+                                <div class="text-warning mt-1">
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star active"></i>
+                                    <i class="bx bxs-star text-light"></i>
+                                    </div>
+                                <p class="font-13  mb-2 mt-2">
+                                    Lorem Ipsum available, quis Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et  nostrud exercitation ullamco laboris   commodo consequat.
+                                </p>
+                                <a href="javascript:void(0);" class="me-2"><span class="badge bg-primary">Helpful</span></a>
+                                <a href="javascript:void(0);" class="me-2"><span class="">Comment</span></a>
+                                <a href="javascript:void(0);" class="me-2"><span class="">Report</span></a>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <a class="text-center w-100 p-3 fw-medium" href="javascript:void(0);">See All Reviews</a>
+                        </div>
+                    </div>
+                    <div class="border-top px-4 pb-2 pt-4">
+                        <h5 class="mb-4">Leave Comment</h5>
+                        <div class="mb-1">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <div class="mb-3 fw-medium">Your Name</div> <input class="form-control" placeholder="Your Name" type="text">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <div class="mb-3 fw-medium">Email Address</div> <input class="form-control" placeholder="Email Address" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <span class="star-rating">
+                            <a href="javascript:void(0);"><i class="icofont-ui-rating icofont-2x"></i></a>
+                            <a href="javascript:void(0);"><i class="icofont-ui-rating icofont-2x"></i></a>
+                            <a href="javascript:void(0);"><i class="icofont-ui-rating icofont-2x"></i></a>
+                            <a href="javascript:void(0);"><i class="icofont-ui-rating icofont-2x"></i></a>
+                            <a href="javascript:void(0);"><i class="icofont-ui-rating icofont-2x"></i></a>
+                        </span>
+                        <form>
+                            <div class="form-group">
+                                <div class="mb-3 fw-medium">Your Comment</div>
+                                <textarea class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary mt-3 mb-0" type="button">Post your review</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            
-            <!-- Similar Products -->
-            @if(count($similarProducts) > 0)
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">You May Also Like</h3>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            @foreach($similarProducts as $similarProduct)
-                                <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                    <div class="h-40 bg-gray-200 flex items-center justify-center">
-                                        @if($similarProduct->image_url)
-                                            <img src="{{ $similarProduct->image_url }}" alt="{{ $similarProduct->wine_name }}" class="h-full w-full object-cover">
-                                        @else
-                                            <div class="h-full w-full flex items-center justify-center bg-gradient-to-br 
-                                                @if($similarProduct->type == 'red') from-red-100 to-red-200
-                                                @elseif($similarProduct->type == 'white') from-yellow-50 to-yellow-100
-                                                @elseif($similarProduct->type == 'rose') from-pink-100 to-pink-200
-                                                @else from-blue-100 to-blue-200 @endif">
-                                                <svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                                </svg>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="p-4">
-                                        <div class="flex justify-between items-start">
-                                            <h4 class="font-medium text-gray-900 text-sm">{{ Str::limit($similarProduct->wine_name, 30) }}</h4>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium 
-                                                @if($similarProduct->type == 'red') bg-red-100 text-red-800
-                                                @elseif($similarProduct->type == 'white') bg-yellow-100 text-yellow-800
-                                                @elseif($similarProduct->type == 'rose') bg-pink-100 text-pink-800
-                                                @else bg-blue-100 text-blue-800 @endif">
-                                                {{ ucfirst($similarProduct->type) }}
-                                            </span>
+
+            <!-- Related Products -->
+            <div class="col-xl-12 mt-4">
+                <div class="card">
+                    <div class="d-flex p-3 border-bottom">
+                        <h5 class="main-content-label mb-0 mt-2">Related Products</h5>
+                    </div>
+                    <div class="p-4">
+                        <div class="row row-sm">
+                            @foreach ($relatedProducts as $product)
+                                <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                    data-vintage-year="{{ $product->vintage_year }}"
+                                    data-winery="{{ $product->winery }}"
+                                    data-retail-price="{{ $product->retail_price }}"
+                                    data-country="{{ $product->country }}">
+                                    <div class="card custom-card wine-card">
+                                        <!-- Image -->
+                                        <div class="image-wrapper" style="position: relative;">
+                                            @php
+                                                $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                            @endphp
+                                            <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                            
+                                            @if ($product->is_featured == 1)
+                                                <span class="featured-badge">Featured</span>
+                                            @endif
                                         </div>
-                                        <p class="text-xs text-gray-600 mt-1">{{ $similarProduct->winery }}</p>
-                                        <div class="flex justify-between items-center mt-2">
-                                            <p class="text-sm font-bold text-gray-900">${{ number_format($similarProduct->retail_price, 2) }}</p>
-                                            <a href="{{ route('products.show', $similarProduct) }}" class="text-xs text-indigo-600 hover:text-indigo-900">View</a>
+
+                                        <!-- Product Info -->
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-semibold">{{ $product->wine_name }}</h5>
+                                            @php
+                                                $type = strtolower($product->type);
+                                                $emoji = match($type) {
+                                                    'red' => '🍷',
+                                                    'white' => '🥂',
+                                                    'sparkling' => '✨',
+                                                    default => ''
+                                                };
+                                            @endphp
+                                            <p>
+                                                <strong>Type:</strong> {{ ucfirst($type) }}
+                                                @if ($emoji)
+                                                    <span style="font-size: 1.5em;">{{ $emoji }}</span>
+                                                @endif
+                                            </p>
+
+                                            <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                            <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
+                                                I want to try Now !!
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -153,7 +361,17 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
+                                    
+
+
         </div>
+        <!--End::row-1 -->
     </div>
-</x-app-layout>
+</div>
+
+@endsection
+
+
+
+

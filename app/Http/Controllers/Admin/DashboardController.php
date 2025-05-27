@@ -11,6 +11,7 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireLog;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -38,7 +39,8 @@ class DashboardController extends Controller
         }
 
         // Get products for the table with pagination
-        $products = $productsQuery->orderBy('id', 'desc')->paginate(10);
+        $productsCount = $productsQuery->count();
+        $products = $productsQuery->orderBy('id', 'desc')->paginate(5);
 
         // Stores data with search functionality
         $storesQuery = Store::query();
@@ -60,6 +62,7 @@ class DashboardController extends Controller
         }
 
         // Get stores for the table with pagination
+        $storesCount = $storesQuery->count();
         $stores = $storesQuery->orderBy('id', 'desc')->paginate(10);
 
         // Get unique states for the filter dropdown
@@ -85,7 +88,9 @@ class DashboardController extends Controller
         }
 
         // Get users for the table with pagination
+        $usersCount = $usersQuery->count();
         $users = $usersQuery->orderBy('id', 'desc')->paginate(10);
+        
 
         // Products data for pie chart - categorized by wine type
         $productTypes = Product::select('type')
@@ -243,7 +248,75 @@ class DashboardController extends Controller
             $q1Values = [0, 0, 0];
         }
 
-        return view('admin.dashboard', compact(
+        // Get the data from the database
+        $usageData = DB::table('questionnaire_usage')
+        ->select(DB::raw('DATE(created_on) as date'), DB::raw('count(*) as count'))
+        ->where('created_on', '>=', now()->subDays(7)) 
+        ->groupBy(DB::raw('DATE(created_on)'))
+        ->orderBy('date', 'asc')
+        ->get();
+
+        // Convert the collection to arrays of dates and counts
+        $dates = $usageData->pluck('date')->toArray();
+        $counts = $usageData->pluck('count')->toArray();
+
+        // Generate an array of all dates in the past 7 days
+        $allDates = collect(range(0, 6))->map(function ($i) {
+        return now()->subDays(6 - $i)->toDateString();  
+        });
+
+        // Map over the generated dates and assign counts
+        $counts = $allDates->map(function ($date) use ($usageData) {
+        // Use Carbon to parse the date correctly
+        $record = $usageData->firstWhere('date', Carbon::parse($date)->toDateString());
+
+        // Return the count if it exists, otherwise 0
+        return $record ? $record->count : 0;
+        });
+
+        // Ensure that $dates has the same format and the missing dates are added with count = 0
+        $dates = $allDates->toArray();  
+
+
+        //QUESTIONNAIRE CHART DATA 
+        // Get past 7 days' labels
+        $dates = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $dates[] = Carbon::now()->subDays($i)->format('d M');
+        }
+
+        // Fetch counts of unique submissions grouped by day
+        $responseData = DB::table('question_responses')
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(DISTINCT submission_id) as count')
+            )
+            ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+
+        // Initialize graph data with zeros
+        $graphData = array_fill(0, count($dates), 0);
+
+        // Map the result to corresponding dates
+        foreach ($responseData as $row) {
+            $dateLabel = Carbon::parse($row->date)->format('d M');
+            $index = array_search($dateLabel, $dates);
+            if ($index !== false) {
+                $graphData[$index] = $row->count;
+            }
+        }
+
+         //send list of all featured products
+         $featuredCount = DB::table('store_products')
+                    ->where('is_featured', 1)
+                    ->count();
+   
+
+
+
+        return view('admin.bootadmindashboard', compact(
             'activeTab',
             'productTypeLabels',
             'productTypeData',
@@ -267,7 +340,16 @@ class DashboardController extends Controller
             'products',
             'templates',
             'q1Labels',
-            'q1Values'
+            'q1Values',
+            'dates',
+            'counts',
+            'usersCount',
+            'storesCount',
+            'productsCount',
+            'dates',
+            'graphData',
+            'featuredCount',
+            
         ));
     }
 
@@ -354,4 +436,9 @@ class DashboardController extends Controller
         return redirect()->route('admin.questionnaires.index')
             ->with('success', 'Questionnaire deleted successfully.');
     }
+
+    
+
+
+
 }

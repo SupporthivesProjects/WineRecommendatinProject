@@ -102,22 +102,22 @@
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script>
-    $(document).ready(function(){
-        $(".owl-carousel").owlCarousel({
-            loop: true,
-            margin: 20,
-            nav: true,
-            dots: true,
-            autoplay: true,
-            autoplayTimeout: 5000,
-            responsive: {
-                0: { items: 1 },
-                768: { items: 2 },
-                1024: { items: 3 }
-            }
+        $(document).ready(function(){
+            $(".owl-carousel").owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: true,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                responsive: {
+                    0: { items: 1 },
+                    768: { items: 2 },
+                    1024: { items: 3 }
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
 

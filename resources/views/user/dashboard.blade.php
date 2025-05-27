@@ -1,677 +1,1305 @@
-<x-app-layout>
+
+@extends('layouts.bootdashboard')
+@section('admindashboardcontent')
+@push('styles')
+
     <style>
-        /* Sidebar styles */
-        .dashboard-container {
-            display: flex;
-            min-height: calc(100vh - 128px); /* Adjusted for both main nav and header */
+        html, body {
+            overscroll-behavior: none;       
+            overflow-x: hidden;             
         }
-        
-        .sidebar {
-            width: 250px;
-            background-color: white;
-            border-right: 1px solid #e5e7eb;
+
+        .card-title 
+        {
+            font-family: 'Cinzel Decorative', serif;
+        }
+        #mystyle
+        {
+            font-family: 'Cinzel Decorative', serif;
+
+        }
+        #loader {
             position: fixed;
-            top: 128px; /* Position below both headers (64px + 64px) */
-            height: calc(100vh - 128px);
-            z-index: 10;
-            overflow-y: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #question-container h5 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        #question-container .form-check-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #6c757d;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    
+        #question-container .form-check {
+            margin-bottom: 1rem; 
+        }
+
+        #question-container .form-check-label {
+            font-size: 1.1rem;
+        }
+
+        .move-arrow {
+            animation: arrowBounce 1s infinite ease-in-out;
+            margin-left: 5px;
+        }
+
+        @keyframes arrowBounce {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            background: #007bff;
+            border: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-container {
+            position: relative;
+            padding: 10px 0;
+        }
+
+
+        .emoji-icon {
+            font-size: 3.0rem;
+            line-height: 1;
+        }
+
+        .option-box {
+            height: 120px;
+            text-align: center;
+        }
+
+        .option-text {
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+
+        .modal.fade .modal-dialog {
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        .modal.fade.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .btn-close.white-close {
+            filter: invert(1) brightness(2);
+        }
+
+
+
+        .modal-content {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            /* background: linear-gradient(to bottom, #ffffff, #f9f9f9); */
+            background: radial-gradient(
+            ellipse at right top,
+            #00458f8f 0%,
+            #151419 45%,
+            #151419 100%
+            );
+            opacity: 0.95;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .lottie-container {
+            /* background-color: #f0f4f8; */
+            background-color: #acfbff;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        #question-container h5 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .btn {
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-box {
+            border-radius: 12px;
+            height: 120px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .option-box.active {
+            border-color: #0d6efd;
+            background-color: #e6f0ff;
+        }
+
+        .questionnaire-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7) !important; 
+            color: #fff;
+            font-size: 1.0rem;
+            padding: 5px 10px;
+            /* border-radius: 5px;  */
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .card.custom-card {
+            position: relative; 
+            background-color:white;
+
+        }
+
+        #userdashboard
+        {
+            background-color:white;
+        }
+
+        .custom-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: #fff; 
+        }
+
+        .custom-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        #questionnaire_btn
+        {
+            background-color: #de9313 !important;
+            border: 0px;
+        }
+
+        #landing-section 
+        {
+                position: relative;
+                height: 100vh; 
+                background: url('{{ asset('images/redlabel.jpg') }}') no-repeat center center/cover;
+                background-attachment: fixed; 
+                z-index: 1;
+                
+        }
+
+        #mainNavbar {
+            z-index: 999;
+            background-color: transparent;
+            position:fixed; 
+            padding: 20px 0;
+            width: 100%;
+            right: 0px;
+            color:white;
+            font-size : 1.0rem;
+            transition: background-color 0.3s ease;
+            border-radius: 0px;
         }
         
-        .sidebar-link {
+
+        .scrolled
+        {
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            color: black!important;
+            font-size : 1.0rem !important;
+            z-index:2000!important;
+        }
+
+       
+        .enlarged-icon {
+            width: 60px;
+            height: auto;
+        }
+
+        .grayscale-img 
+        {
+            filter: grayscale(100%);
+        }
+        .video-section 
+        {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .bg-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            z-index: 2;
+        }
+
+        .video-overlay .content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-overlay .content p {
+            font-size: 1.25rem;
+        }
+
+        .btn-close 
+        {
+            z-index: 1056 !important; /* Higher than modal backdrop */
+        }
+
+        .background-section 
+        {
+            position: relative;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 0.75rem 1rem;
-            color: #4B5563;
-            transition: all 0.2s;
+            justify-content: center;
+            overflow: hidden;
+            
         }
-        
-        .sidebar-link:hover {
-            background-color: #F3F4F6;
+
+        .background-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ asset('images/winebottle3.jpg') }}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            filter: grayscale(100%);
+            z-index: -1;
         }
-        
-        .sidebar-link.active {
-            background-color: #EEF2FF;
-            color: #4F46E5;
-            border-left: 3px solid #4F46E5;
+        .overlay 
+        {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.4); 
+                z-index: 0; 
         }
-        
-        .sidebar-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            margin-right: 0.75rem;
+
+        html, body {
+            overflow-x: hidden;
         }
-        
-        .main-content {
-            flex: 1;
-            margin-left: 250px;
-            padding: 1.5rem;
-            margin-top: 60px; /* Adjusted for both headers (64px + 64px) */
-        }
-        
+
+
         @media (max-width: 768px) {
-            .sidebar {
-                width: 0;
+            .background-section 
+            {
+                z-index: 1;
+            }
+            .background-section::before {
+                display: none !important;   
+            }
+            #myheading 
+            {
+                color:black!important;
+            }
+            #mysubheading
+            {
+                color:black;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .custom-card {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .navbar .navbar-toggler .navbar-toggler-icon:before 
+            {
+                content: "\f479";
+                font-family: bootstrap-icons !important;
+                position: absolute;
+                right:10px;
+                font-size: 1rem;
+                color: #ffffff!important;
+                inset-inline-start: 0;
+            }
+
+            .row.g-4 {
+                margin: 0 !important;
+            }
+
+            .container, .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            .card-img-top {
+                width: 100%;
+                height: auto;
+            }
+
+            .open-questionnaire-modal {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .scrolled
+            {
+                background-color: rgba(0, 0, 0,0.7) !important;
+                color: black!important;
+                font-size : 1.0rem !important;
+                z-index: 1000;;
+            }
+        }
+
+        @media (max-width: 768px) 
+        {
+            .video-section {
+                position: relative;
+                min-height: 300px; /* adjust as needed */
                 overflow: hidden;
-                top: 128px; /* Keep consistent with desktop */
+                padding: 2rem 1rem;
+                background-color: #000; /* fallback in case video doesn't load */
             }
-            
-            .main-content {
-                margin-left: 0;
-                margin-top: 60px; /* Keep consistent with desktop */
+
+            .bg-video {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 1;
             }
-            
-            .sidebar.open {
-                width: 250px;
+
+            .video-overlay {
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem;
+            }
+
+            .video-overlay .content 
+            {
+                    position: relative;
+                z-index: 3;
             }
         }
-        
-        .tab-content {
-            display: none;
+
+        #explorebtn
+        {
+            background-color : #dacea1;
+            color: #754638;
         }
-        
-        .tab-content.active {
-            display: block;
+
+        #explorebtn:hover 
+        {
+            background-color: #754638;
+            color:#dacea1;
         }
+
     </style>
 
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Wine Recommender Dashboard') }}
-            </h2>
-            
-            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
-        </div>
-    </x-slot>
+@endpush
+        <!-- Start::app-content -->
+        <!-- Landing Section -->
+            <section id="landing-section">
+                <!-- Navbar (stays on top of landing image) -->
+                <nav id="mainNavbar" class="navbar navbar-expand-lg ">
+                    <div class="container ">
+                        <a class="navbar-brand text-white" href="#">
+                            <lottie-player 
+                                src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
+                                background="transparent" 
+                                speed="1"  
+                                style="width: 40px; height: 40px;" 
+                                loop 
+                                autoplay>
+                            </lottie-player>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                            <!-- Left-aligned nav items -->
+                            <ul class="navbar-nav">
+                                <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link text-white">Dashboard</a></li>
+                                <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link text-white">Questionnaires</a></li>
+                                <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link text-white">Browse Wines</a></li>
+                                <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link text-white">Featured Products</a></li>
+                            </ul>
 
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <x-user-sidebar />
+                            <!-- Right-aligned logout button -->
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                                        @csrf
+                                        <a class="nav-link text-white d-flex align-items-center"  href="{{ route('logout') }}" 
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Tab content containers -->
-            <div id="dashboard" class="tab-content active">
-                <!-- Welcome Section -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">Welcome, {{ Auth::user()->name }}!</h3>
-                        
-                        @if(session('success'))
-                            <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-green-700">
-                                            {{ session('success') }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        
-                        @if(session('error'))
-                            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
-                                <div class="flex">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-red-700">
-                                            {{ session('error') }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        
-                        <div class="mt-4 flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <p class="text-gray-600">Your wine expertise level:</p>
-                                <div class="mt-2">
-                                    @if(Auth::user()->expertise_level)
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
-                                            @if(Auth::user()->expertise_level == 'first_sip') bg-green-100 text-green-800
-                                            @elseif(Auth::user()->expertise_level == 'savy_sipper') bg-blue-100 text-blue-800
-                                            @else bg-purple-100 text-purple-800 @endif">
-                                            @if(Auth::user()->expertise_level == 'first_sip')
-                                                First Sip
-                                            @elseif(Auth::user()->expertise_level == 'savy_sipper')
-                                                Savvy Sipper
-                                            @else
-                                                Wine Pro
-                                            @endif
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                                            Not Assessed
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4 md:mt-0">
-                                @if(Auth::user()->expertise_level)
-                                    <a href="{{ route('questionnaires.expertise') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Reassess Expertise
-                                    </a>
-                                @else
-                                    <a href="{{ route('questionnaires.expertise') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Take Expertise Assessment
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
+                <!-- Centered Text on Landing Image -->
+                <div class="d-flex justify-content-end align-items-center text-end text-white" style="height: 100vh; padding-right: 50px;">
+                    <div>
+                        <h1 class="display-3 fw-bold" style="color: #dacea1;">
+                            Discover the Wine That <br>
+                            <span style="color: #754638;">Speaks to You</span>
+                            <br>
+                            <a href="#questionnairesdashboard" type="button" class="btn" id="explorebtn">Explore</a>
+                        </h1>
                     </div>
                 </div>
-            
-                <!-- Quick Links -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200 h-full flex flex-col">
-                            <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Wine Questionnaires</h3>
-                            <p class="text-gray-600 mb-4 flex-grow">Take our wine questionnaires to get personalized recommendations.</p>
-                            <a href="{{ route('questionnaires.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                View Questionnaires
-                            </a>
-                        </div>
-                    </div>
-                
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200 h-full flex flex-col">
-                            <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-red-100 text-red-600 mb-4">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Browse Wines</h3>
-                            <p class="text-gray-600 mb-4 flex-grow">Explore our collection of wines from around the world.</p>
-                            <a href="{{ route('products.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                View All Wines
-                            </a>
-                        </div>
-                    </div>
-                
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200 h-full flex flex-col">
-                            <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-green-100 text-green-600 mb-4">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                            </div>
-                            {{-- <h3 class="text-lg font-medium text-gray-900 mb-2">Find Stores</h3>
-                            <p class="text-gray-600 mb-4 flex-grow">Locate stores near you that carry our recommended wines.</p>
-                            <a href="{{ route('stores.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                Find Stores
-                            </a> --}}
-                        </div>
-                    </div>
-                </div>
-            
-                <!-- Recent Recommendations -->
-                @if(count($recentRecommendations ?? []) > 0)
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6 bg-white border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Your Recent Recommendations</h3>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                @foreach($recentRecommendations as $product)
-                                    <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                        <div class="h-40 bg-gray-200 flex items-center justify-center">
-                                            @if($product->image_url)
-                                                <img src="{{ $product->image_url }}" alt="{{ $product->wine_name }}" class="h-full w-full object-cover">
-                                            @else
-                                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br 
-                                                    @if($product->type == 'red') from-red-100 to-red-200
-                                                    @elseif($product->type == 'white') from-yellow-50 to-yellow-100
-                                                    @elseif($product->type == 'rose') from-pink-100 to-pink-200
-                                                    @else from-blue-100 to-blue-200 @endif">
-                                                    <svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                                    </svg>
+
+            </section>
+
+            <!-- Scrollable Content Section Starts-->
+                <!-- Second Sectin starts -->
+                    <div class="container-fluid p-0">
+                        <!-- card container row starts -->
+                        <section class="background-section">
+                            <div class="container py-5 text-white px-0">
+                                <div class="row">
+                                    <!-- Title and Description -->
+                                    <div class="col-12 text-center mb-4">
+                                        <div class="overlay"></div>
+                                        <h2 class="fw-bold display-6" id="myheading">Help us choose your perfect wine</h2>
+                                        <p class="fs-5" id="mysubheading">Answer a few simple questions to get the best recommendations tailored just for you.</p>
+                                        
+                                    </div>
+                                    <!-- Cards -->
+                                    <div class="col-12" id="questionnairesdashboard">
+                                        <div class="row g-4">
+                                            <!-- Card 1 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card    ">
+                                                    <div class="questionnaire-label">First Sip</div>
+                                                    <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                       </h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div class="p-4">
-                                            <div class="flex justify-between items-start mb-4">
-                                                <h4 class="font-medium text-gray-900 text-sm">{{ Str::limit($product->wine_name, 30) }}</h4>
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium 
-                                                    @if($product->type == 'red') bg-red-100 text-red-800
-                                                    @elseif($product->type == 'white') bg-yellow-100 text-yellow-800
-                                                    @elseif($product->type == 'rose') bg-pink-100 text-pink-800
-                                                    @else bg-blue-100 text-blue-800 @endif">
-                                                    {{ ucfirst($product->type) }}
-                                                </span>
                                             </div>
-                                            <p class="text-xs text-gray-600 mt-1">{{ $product->winery }}</p>
-                                            <div class="flex justify-between items-center mt-2">
-                                                <p class="text-sm font-bold text-gray-900">${{ number_format($product->retail_price, 2) }}</p>
-                                                <a href="{{ route('products.show', $product) }}" class="text-xs text-indigo-600 hover:text-indigo-900">View</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            
-                <!-- Available Questionnaires -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Available Questionnaires</h3>
-                        
-                        @if(count($questionnaires ?? []) > 0)
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                @foreach($questionnaires as $questionnaire)
-                                    <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                        <div class="p-6">
-                                            <div class="flex justify-between items-start mb-4">
-                                                <h4 class="font-medium text-gray-900">{{ $questionnaire->name }}</h4>
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                    @if($questionnaire->level == 'first_sip') bg-green-100 text-green-800
-                                                    @elseif($questionnaire->level == 'savy_sipper') bg-blue-100 text-blue-800
-                                                    @else bg-purple-100 text-purple-800 @endif">
-                                                    @if($questionnaire->level == 'first_sip')
-                                                        First Sip
-                                                    @elseif($questionnaire->level == 'savy_sipper')
-                                                        Savvy Sipper
-                                                    @else
-                                                        Wine Pro
-                                                    @endif
-                                                </span>
-                                            </div>
-                                        
-                                            <p class="text-sm text-gray-600 mb-4">{{ Str::limit($questionnaire->description, 120) }}</p>
-                                        
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-xs text-gray-500">
-                                                    {{ count(is_array($questionnaire->questions) ? $questionnaire->questions : json_decode($questionnaire->questions, true) ?? []) }} questions
-                                                </span>
-                                                <a href="{{ route('questionnaires.show', $questionnaire) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    Take Questionnaire
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="bg-gray-50 p-6 rounded-md text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900">No questionnaires available</h3>
-                                <p class="mt-1 text-sm text-gray-500">Check back later for new wine questionnaires.</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            
-            <div id="questionnaires" class="tab-content">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">All Questionnaires</h3>
-                        
-                        @if(count($questionnaires ?? []) > 0)
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                @foreach($questionnaires as $questionnaire)
-                                    <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                        <div class="p-6">
-                                            <div class="flex justify-between items-start mb-4">
-                                                <h4 class="font-medium text-gray-900">{{ $questionnaire->name }}</h4>
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                    @if($questionnaire->level == 'first_sip') bg-green-100 text-green-800
-                                                    @elseif($questionnaire->level == 'savy_sipper') bg-blue-100 text-blue-800
-                                                    @else bg-purple-100 text-purple-800 @endif">
-                                                    @if($questionnaire->level == 'first_sip')
-                                                        First Sip
-                                                    @elseif($questionnaire->level == 'savy_sipper')
-                                                        Savvy Sipper
-                                                    @else
-                                                        Wine Pro
-                                                    @endif
-                                                </span>
-                                            </div>
-                                        
-                                            <p class="text-sm text-gray-600 mb-4">{{ Str::limit($questionnaire->description, 120) }}</p>
-                                        
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-xs text-gray-500">
-                                                    {{ count(is_array($questionnaire->questions) ? $questionnaire->questions : json_decode($questionnaire->questions, true) ?? []) }} questions
-                                                </span>
-                                                <a href="{{ route('questionnaires.show', $questionnaire) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    Take Questionnaire
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="bg-gray-50 p-6 rounded-md text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900">No questionnaires available</h3>
-                                <p class="mt-1 text-sm text-gray-500">Check back later for new wine questionnaires.</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            
-            <div id="wines" class="tab-content">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Browse Our Wine Collection</h3>
-                        
-                        <div class="mb-6">
-                            <a href="{{ route('products.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                View All Wines
-                            </a>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow bg-red-50">
-                                <a href="{{ route('products.index', ['type' => 'red']) }}" class="block p-6 text-center">
-                                    <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-red-100 text-red-600 mb-4 mx-auto">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h4 class="font-medium text-gray-900">Red Wines</h4>
-                                </a>
-                            </div>
-                            
-                            <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow bg-yellow-50">
-                                <a href="{{ route('products.index', ['type' => 'white']) }}" class="block p-6 text-center">
-                                    <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-yellow-100 text-yellow-600 mb-4 mx-auto">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h4 class="font-medium text-gray-900">White Wines</h4>
-                                </a>
-                            </div>
-                            
-                            <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow bg-pink-50">
-                                <a href="{{ route('products.index', ['type' => 'rose']) }}" class="block p-6 text-center">
-                                    <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-pink-100 text-pink-600 mb-4 mx-auto">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h4 class="font-medium text-gray-900">Rosé Wines</h4>
-                                </a>
-                            </div>
-                            
-                            <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow bg-blue-50">
-                                <a href="{{ route('products.index', ['type' => 'sparkling']) }}" class="block p-6 text-center">
-                                    <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-md bg-blue-100 text-blue-600 mb-4 mx-auto">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                        </svg>
-                                    </div>
-                                    <h4 class="font-medium text-gray-900">Sparkling Wines</h4>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="recommendations" class="tab-content">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Your Wine Recommendations</h3>
-                        
-                        @if(count($recentRecommendations ?? []) > 0)
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                @foreach($recentRecommendations as $product)
-                                    <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                                        <div class="h-40 bg-gray-200 flex items-center justify-center">
-                                            @if($product->image_url)
-                                                <img src="{{ $product->image_url }}" alt="{{ $product->wine_name }}" class="h-full w-full object-cover">
-                                            @else
-                                                <div class="h-full w-full flex items-center justify-center bg-gradient-to-br 
-                                                    @if($product->type == 'red') from-red-100 to-red-200
-                                                    @elseif($product->type == 'white') from-yellow-50 to-yellow-100
-                                                    @elseif($product->type == 'rose') from-pink-100 to-pink-200
-                                                    @else from-blue-100 to-blue-200 @endif">
-                                                    <svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                                                    </svg>
+                                            <!-- Card 2 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card">
+                                                    <div class="questionnaire-label">Savy Sip</div>
+                                                    <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div class="p-4">
-                                            <div class="flex justify-between items-start mb-4">
-                                                <h4 class="font-medium text-gray-900 text-sm">{{ Str::limit($product->wine_name, 30) }}</h4>
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium 
-                                                    @if($product->type == 'red') bg-red-100 text-red-800
-                                                    @elseif($product->type == 'white') bg-yellow-100 text-yellow-800
-                                                    @elseif($product->type == 'rose') bg-pink-100 text-pink-800
-                                                    @else bg-blue-100 text-blue-800 @endif">
-                                                    {{ ucfirst($product->type) }}
-                                                </span>
                                             </div>
-                                            <p class="text-xs text-gray-600 mt-1">{{ $product->winery }}</p>
-                                            <div class="flex justify-between items-center mt-2">
-                                                <p class="text-sm font-bold text-gray-900">${{ number_format($product->retail_price, 2) }}</p>
-                                                <a href="{{ route('products.show', $product) }}" class="text-xs text-indigo-600 hover:text-indigo-900">View</a>
+                                            <!-- Card 3 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card">
+                                                    <div class="questionnaire-label">Cork Master</div>
+                                                    <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Card 4 -->
+                                            <div class="col-12 col-md-6 col-lg-3">
+                                                <div class="card custom-card">
+                                                    <div class="questionnaire-label">Quick Pour</div>
+                                                    <img src="{{ asset('images/wineglasses.jpg') }}" class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title fw-semibold mb-0">For when you need a wine—quick and right.!!</h5>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
+                                                            I want to try now !!
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                </div>
                             </div>
-                        @else
-                            <div class="bg-gray-50 p-6 rounded-md text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900">No recommendations yet</h3>
-                                <p class="mt-1 text-sm text-gray-500">Take a questionnaire to get personalized wine recommendations.</p>
-                                <div class="mt-6">
-                                    <a href="{{ route('questionnaires.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Take a Questionnaire
+                        </section>
+                    </div>
+                <!-- Second Section ends -->
+                
+                <!-- Third Section starts-->
+                <div class="container-fluid py-5 bg-white ">
+                    <!-- Section with alternating image and text -->
+                    <section>
+                        <!-- Row 1: Image Left, Text Right -->
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/blacklabel.jpg') }}" class="img-fluid w-100" alt="Image Left">
+                            </div>
+                            <div class="col-md-6 text-center p-3">
+                                <h1 id="mystyle">Products</h1>
+                                <h4 class="mb-5">Welcome to the Cellar !!</h4>
+                                <p class="fs-20">Discover our curated collection of fine spirits and exceptional beverages, handpicked from 
+                                    around the world. Whether you're a connoisseur or a casual enthusiast, our cellar offers 
+                                    something special for every palate. Explore and indulge in quality like never before.</p>
+                                    <a class="btn btn-dark" type="button" href="{{ route('user.products') }}">
+                                        Explore 
                                     </a>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            
-            <div id="stores" class="tab-content">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Find Wine Stores Near You</h3>
-                        
-                        <div class="mb-6">
-                            <a href="{{ route('stores.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                View All Stores
-                            </a>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-6 rounded-md">
-                            <div class="text-center mb-6">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900">Find stores that carry our wines</h3>
-                                <p class="mt-1 text-sm text-gray-500">Search for stores by location or browse our partner stores.</p>
                             </div>
                             
-                            <div class="max-w-md mx-auto">
-                                <form action="{{ route('stores.index') }}" method="GET">
-                                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                        <input type="text" name="location" placeholder="Enter your location" class="flex-1 px-4 py-2 focus:outline-none">
-                                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 hover:bg-indigo-700 focus:outline-none">
-                                            Search
-                                        </button>
-                                    </div>
-                                </form>
+                        </div>
+
+                        <!-- Row 2: Text Left, Image Right -->
+                        <div class="row g-0 align-items-center flex-md-row-reverse">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/Redlabel.jpg') }}" class="img-fluid w-100" alt="Image Right">
+                            </div>
+                            <div class="col-md-6 text-center p-5">
+                                <h1 id="mystyle">Featured Products</h1>
+                                <h4 class="mb-5">Handpicked Elegance. Uncork the Best.</h4>
+                                <p class="fs-20">Our featured selection showcases the finest bottles from our collection—chosen for their 
+                                    exceptional quality, taste, and craftsmanship. From bold reds to smooth whiskeys, these 
+                                    standout products represent the very best of what we offer. Perfect for gifting or savoring 
+                                    yourself.</p>
+                                    <a class="btn btn-light" type="button" href="{{ route('user.featuredproducts') }}">
+                                        Explore 
+                                    </a>
                             </div>
                         </div>
-                    </div>
+
+                        <!-- Row 3: Image Left, Text Right -->
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid w-100" alt="Image Left">
+                            </div>
+                            <div class="col-md-6 text-center p-5">
+                                <h1 id="mystyle">Questionnaires</h1>
+                                <h4 class="mb-5">Find Your perfect pour</h4>
+                                <p class="fs-20">Explore our curated questionnaire to uncover your ideal wine match. 
+                                    Whether you're a seasoned connoisseur or just beginning your journey, our tailored questions 
+                                    will guide you to the perfect bottle for your taste and occasion.</p>
+                                    <a class="btn btn-light" type="button" href="{{ route('user.showQuestionnaire') }}">
+                                        Explore 
+                                    </a>
+                                
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </div>
-            
-            <div id="profile" class="tab-content">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Your Profile</h3>
-                        
-                        <div class="mb-6">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500">
-                                    <svg class="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-4">
-                                    <h4 class="text-lg font-medium text-gray-900">{{ Auth::user()->name }}</h4>
-                                    <p class="text-sm text-gray-600">{{ Auth::user()->email }}</p>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        Wine Expertise: 
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            @if(Auth::user()->expertise_level == 'first_sip') bg-green-100 text-green-800
-                                            @elseif(Auth::user()->expertise_level == 'savy_sipper') bg-blue-100 text-blue-800
-                                            @elseif(Auth::user()->expertise_level == 'pro') bg-purple-100 text-purple-800
-                                            @else bg-gray-100 text-gray-800 @endif">
-                                            @if(Auth::user()->expertise_level == 'first_sip')
-                                                First Sip
-                                            @elseif(Auth::user()->expertise_level == 'savy_sipper')
-                                                Savvy Sipper
-                                            @elseif(Auth::user()->expertise_level == 'pro')
-                                                Wine Pro
-                                            @else
-                                                Not Assessed
-                                            @endif
-                                        </span>
-                                    </p>
-                                </div>
+                <!-- Third section ends -->
+
+                <!-- Video Parallax section -->
+
+                <!-- Video Parallax Section -->
+                    <section class="video-section">
+                        <div class="video-overlay">
+                            <div class="content text-center text-white">
+                                <h2 class="display-4">Experience the Essence</h2>
+                                <p class="lead">Dive into the story behind every bottle.</p>
+                                <button class="btn btn-light">
+                                    Explore 
+                                </button>
                             </div>
                         </div>
-                        
-                        <div class="mt-6">
-                            <h4 class="text-md font-medium text-gray-900 mb-4">Account Settings</h4>
-                            
-                            <div class="space-y-4">
-                                <a href="{{ route('profile.edit') }}" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                                    <div class="flex items-center">
-                                        <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                        <div>
-                                            <h5 class="text-sm font-medium text-gray-900">Edit Profile</h5>
-                                            <p class="text-xs text-gray-500">Update your personal information and email</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                <a href="{{ route('questionnaires.expertise') }}" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                                    <div class="flex items-center">
-                                        <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <div>
-                                            <h5 class="text-sm font-medium text-gray-900">Wine Expertise Assessment</h5>
-                                            <p class="text-xs text-gray-500">Update your wine knowledge level</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                <a href="{{ route('password.request') }}" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                                    <div class="flex items-center">
-                                        <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                                        </svg>
-                                        <div>
-                                            <h5 class="text-sm font-medium text-gray-900">Change Password</h5>
-                                            <p class="text-xs text-gray-500">Update your password</p>
-                                        </div>
-                                    </div>
-                                </a>
+                        <video class="bg-video" autoplay muted loop playsinline>
+                            <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </section>
+                <!-- Video Parallax section -->
+            <!-- Scrollable Content Section Ends-->
+
+
+
+        <!-- modal code -->
+        <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.7)!important;">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body d-flex flex-column p-0 position-relative">
+
+                        <!-- Close button (top-right) -->
+                        <!-- <button type="button" class="btn-close position-absolute top-0 end-0 m-3 text-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                        <button type="button" class="btn-close white-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+                        <!-- Lottie Animation -->
+                        <!-- <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px; width: auto;"></div> -->
+
+                        <!-- Question Side -->
+                        <div class="w-100 p-4 d-flex flex-column justify-content-between">
+                            <div id="question-container">
+                                <!-- Question and options will load here -->
+                            </div>
+
+                            <!-- Buttons Row -->
+                            <div class="d-flex mt-4 gap-2">
+                                <button class="btn btn-danger btn-lg w-50" id="backBtn">Back</button>
+                                <button class="btn btn-success btn-lg w-50" id="nextBtn">Next</button>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- JavaScript for Tab Functionality -->
+
+@endsection
+@push('scripts')
+    @if(session('success') || session('error'))
+        <script>
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            @if(session('success'))
+                toastr.success(@json(session('success')));
+            @endif
+
+            @if(session('error'))
+                toastr.error(@json(session('error')));
+            @endif
+        </script>
+    @endif
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get active tab from localStorage or default to dashboard
-            const activeTab = localStorage.getItem('userActiveTab') || 'dashboard';
-            
-            // Activate the tab
-            activateTab(activeTab);
-            
-            // Mobile menu toggle
-            document.getElementById('mobile-menu-button').addEventListener('click', function() {
-                document.getElementById('sidebar').classList.toggle('open');
-            });
-            
-            // Tab navigation
-            document.querySelectorAll('.sidebar-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const tabId = this.getAttribute('data-tab');
-                    activateTab(tabId);
-                    
-                    // Save active tab to localStorage
-                    localStorage.setItem('userActiveTab', tabId);
+            let questions = [];
+            let currentStep = 0;
+            let responses = {};  
+            let selectedQuestionnaireId = null;
+
+            const emojiMap = {
+            "Red": "🍷",
+            "White": "🥂",
+            "Rosé": "🌹",
+            "Fruit": "🍇",
+            "Sparkling / Champagne": "🥂🍾",
+            "Yes": "✅",
+            "No": "❌",
+            "SKIP": "⏭️",
+            "Fruit Wine": "🍇",
+            "Still": "🧊",
+            "Sparkling": "🍾",
+            "Sparkling/Champagne": "🍾",
+            "Sweet": "🍬",
+            "Medium Sweet": "🍯",
+            "Lightly Sweet": "🧁",
+            "Dry": "🍂",
+            "Skip": "⏭️",
+            "Fruit-Driven": "🍓",
+            "Juicy/Fruit-Forward": "🍒",
+            "Aromatic": "🌸",
+            "Earthy": "🌱",
+            "Mineral-Driven": "🪨",
+            "Light-bodied (Soft & Refreshing)": "☁️",
+            "Medium-bodied (Balanced & Smooth)": "🥃",
+            "Full-bodied (Rich & Intense)": "💪",
+            "Very Fruity": "🍉",
+            "Slightly Fruity": "🍑",
+            "Not Fruity": "🥖",
+            "Young and Refreshing": "🧃",
+            "Bold and Old": "🧓",
+            "Any": "🌍",
+            "India": "🇮🇳",
+            "France": "🇫🇷",
+            "Italy": "🇮🇹",
+            "Spain": "🇪🇸",
+            "Australia": "🇦🇺",
+            "USA": "🇺🇸",
+            "Rest of the World": "🌎",
+            "Budget": "💰",
+            "Everyday sipping": "🛋️",
+            "Celebration": "🎉",
+            "Gifting": "🎁",
+            "Dinner with Friends": "🍽️",
+            "Wine and Cheese": "🧀🍷",
+            "Pairing with food (Coming Soon)": "🍽️",
+            "Semi-Sweet": "🍇🍯",
+            "Off-Dry (Lightly Sweet)": "🍷🍃",
+            "Dry (Not Sweet)": "🍇🍋",
+            "No Preference": "🤷",
+            "Bordeaux (France)": "🍷🇫🇷",
+            "Burgundy (France)": "🍇🇫🇷",
+            "Champagne (France)": "🥂🇫🇷",
+            "Rhône Valley (France)": "🌱🇫🇷",
+            "Tuscany (Italy)": "🍇🇮🇹",
+            "Piedmont (Italy)": "🍇🍷🇮🇹",
+            "Veneto (Italy)": "🍇🍷🇮🇹",
+            "Rioja (Spain)": "🍇🇪🇸",
+            "Ribera del Duero (Spain)": "🍷🇪🇸",
+            "Napa Valley (USA)": "🍇🇺🇸",
+            "Sonoma (USA)": "🍷🇺🇸",
+            "Barossa Valley (Australia)": "🍇🇦🇺",
+            "Margaret River (Australia)": "🍷🇦🇺",
+            "Marlborough (New Zealand)": "🍇🇳🇿",
+            "Chardonnay": "🍇🥂",
+            "Riesling": "🍇🍯",
+            "Sauvignon Blanc": "🍇🌿",
+            "Chenin Blanc": "🍇🍯",
+            "Pinot Noir": "🍇🍷",
+            "Cabernet Sauvignon": "🍇🍷",
+            "Merlot": "🍇🍷",
+            "Syrah/Shiraz": "🍇🍷",
+            "Refreshingly Young (1-3 years)": "🍃🍷",
+            "Fairly Young (3-5 years)": "🍇🌱",
+            "Slightly Aged (5-7 years)": "🍂🍷",
+            "Aged (>7 years)": "🍷🕰️",
+            "Nuts, Dried, Cooked, Fresh, Caramel, Jammy": "🍑🍲",
+            "Earthy, Moldy, Petroleum, Sulfur, Minerality": "💨🪨",
+            "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "🍞🥛",
+            "Herbaceous, Vegetative": "🌿🍃",
+            "Surprise Me": "🎉",
+            "Fortified": "🍷🍾",
+            "Varietal": "🍇",
+            "Blends": "🍷🔄🍇",
+            "Noble Grapes": "🍇👑",
+            "Regional Hero Grapes": "🍇🏆",
+            "Domestic Indian": "🇮🇳🍷",
+            "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "🌍🍷",
+            "New World (USA, Chile, Australia, Argentina)": "🌍🍷",
+            "Brut": "🥂🍾",
+            "Dry": "🍂🍷",
+            "Off-Dry": "🍷🍃",
+            "Semi Sweet": "🍇🍯",
+            "Sweet-Dessert": "🍬🍰",
+            "Young (1-2 years)": "🌱🍇",
+            "Fairly Young (2-5 years)": "🌿🍷",
+            "Slightly Aged (5-7 years)": "🍂🍷",
+            "Well-Aged (8-10 years)": "🍷🕰️",
+            "Fully Matured (10 years and above)": "🍷🍇",
+            "Acidity: Low, Light to medium, Medium to high, High": "🥴🍷",
+            "Tannins: Low, Light to medium, Medium to high, High":"🍃🍷",
+            "Body: Light bodied/ Medium bodied/ Full bodied": "🥃🍷",
+            "Acidity: Light to medium": "🍋🍷",
+            "Acidity: Medium to high": "🍋🔥",
+            "Acidity: High": "🍋🔥",
+            "Tannins: Low": "🌿🍷",
+            "Tannins: Light to medium": "🍃🍷",
+            "Tannins: Medium to high": "🍂🍷",
+            "Body: Light bodied": "☁️🍷",
+            "Body: Medium bodied": "🥃🍷",
+            "Body: Full bodied": "💪🍷",
+            "Bold": "🔥🍷",
+            "Crisp": "❄️🍷",
+            "Rich": "💰🍷",
+            "Light": "🌞🍷",
+            "Medium-bodied": "🥃🍷",
+            "Aromatic": "🌸🍷",
+            "Fruit-driven": "🍇🍷",
+            "Dry": "🍂🍷",
+            "Mineral-Driven": "🪨🍷",
+            "Earthy": "🌱🍷",
+            "Juicy / Fruit-Forward": "🍉🍷",
+            "Elegant / Refined": "💎🍷",
+            "Chile" : "🇨🇱",
+            "Portugal" : "🇵🇹",
+            "Argentina" : "🇦🇷",
+            "England": "🇬🇧",
+            "South Africa" : "🇿🇦",
+            "New Zealand" : "🇳🇿"
+        };
+
+
+
+            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    selectedQuestionnaireId = this.getAttribute('data-questionnaire-id');
+                    console.log("Selected questionnaire ID:", selectedQuestionnaireId);
+
+                    // Optional: reset previous responses and local storage
+                    responses = {};
+                    localStorage.removeItem('userResponses');
                 });
             });
-        });
-        
-        // Function to activate a tab
-        function activateTab(tabId) {
-            // Remove active class from all links
-            document.querySelectorAll('.sidebar-link').forEach(link => {
-                link.classList.remove('active');
+
+
+            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    const questionnaireId = this.getAttribute('data-questionnaire-id');
+
+                    fetch(`/get-questions/${questionnaireId}`)
+                        .then(response => {
+                            console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
+                            console.log('Response status:', response.status);
+
+                            if (!response.ok) {
+                                console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
+                                throw new Error('Failed to fetch questions.');
+                            }
+
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Raw question data received:', data);
+
+                            if (!Array.isArray(data) || data.length === 0) {
+                                console.warn('No questions returned or data format is incorrect:', data);
+                                alert('No questions available for this questionnaire.');
+                                return;
+                            }
+
+                            // Store and use the data
+                            questions = data;
+                            currentStep = 0;
+                            console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+
+                            renderQuestion();
+                            new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+                        })
+                        .catch(error => {
+                            console.error('An error occurred while loading questions:', error);
+                            alert('Something went wrong while loading the questionnaire. Please try again.');
+                        });
+
+                });
             });
-            
-            // Add active class to selected link
-            const activeLink = document.querySelector(`.sidebar-link[data-tab="${tabId}"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
+
+    
+            function renderQuestion() {
+                if (questions.length === 0 || currentStep >= questions.length) return;
+
+                if (!questions[currentStep].id) {
+                    questions[currentStep].id = `question${currentStep + 1}`;
+                }
+
+                const q = questions[currentStep];
+                const container = document.getElementById('question-container');
+
+                console.log("Rendering question: ", q);
+
+                let optionsHtml = '';
+
+                if (q.type === 'slider') {
+                    const min = q.min_value ?? 0;
+                    const max = q.max_value ?? 10000;
+                    const step = q.step ?? 100;
+                    const defaultValue = q.default ?? min;
+
+                    let tickMarks = '';
+                    for (let i = min; i <= max; i += step) {
+                        tickMarks += `<option value="${i}"></option>`;
+                    }
+
+                    optionsHtml = `
+                        <div class="mb-4">
+                            <input 
+                                type="range" 
+                                class="form-range" 
+                                id="budgetSlider" 
+                                min="${min}" 
+                                max="${max}" 
+                                step="${step}" 
+                                value="${defaultValue}" 
+                                list="tickmarks"
+                            >
+                            <datalist id="tickmarks">
+                                ${tickMarks}
+                            </datalist>
+                            <div class="d-flex justify-content-between text-muted mt-2">
+                                <small>₹${min}</small>
+                                <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
+                                <small>₹${max}</small>
+                            </div>
+                        </div>
+                    `;
+                } 
+                else if (q.type === 'input') 
+                {
+                    optionsHtml = `
+                        <div class="mb-4">
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="textInputAnswer" 
+                                placeholder="Enter your answer"
+                            >
+                        </div>
+                    `;
+                }
+
+                else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+                    let rowHtml = '';
+                    const inputType = q.type === 'single' ? 'radio' : 'checkbox';
+
+                    q.options.forEach((opt, idx) => {
+                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
+                        const emoji = emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
+
+                        rowHtml += `
+                            <div class="col-md-6 mb-3">
+                                <input class="d-none" type="${inputType}" name="answer" id="option${idx}" value="${opt}">
+                                <label 
+                                    for="option${idx}" 
+                                    class="btn btn-outline-primary w-100 d-flex flex-column align-items-center justify-content-center p-3 option-box"
+                                    style="cursor: pointer;"
+                                >
+                                    ${emoji}
+                                    <div class="option-text text-center">${opt}</div>
+                                </label>
+                            </div>
+                        `;
+
+                        if ((idx + 1) % 2 === 0 || idx === q.options.length - 1) {
+                            optionsHtml += `<div class="row">${rowHtml}</div>`;
+                            rowHtml = '';
+                        }
+                    });
+                }
+
+                container.innerHTML = `
+                    <h5 class='text-white'>${q.question}</h5>
+                    ${optionsHtml}
+                `;
+
+                // Slider event
+                if (q.type === 'slider') {
+                    const slider = document.getElementById('budgetSlider');
+                    const output = document.getElementById('sliderValue');
+                    if (slider && output) {
+                        slider.addEventListener('input', (e) => {
+                            output.textContent = e.target.value;
+                        });
+                    }
+                }
+
+                // Highlight selected labels
+                if (q.type === 'single' || q.type === 'multiple') {
+                    const inputs = document.querySelectorAll('input[name="answer"]');
+
+                    inputs.forEach(input => {
+                        input.addEventListener('change', () => {
+                            if (q.type === 'single') {
+                                inputs.forEach(i => {
+                                    const label = document.querySelector(`label[for="${i.id}"]`);
+                                    if (label) label.classList.remove('active');
+                                });
+                            }
+
+                            const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+                            if (selectedLabel) {
+                                if (q.type === 'multiple') {
+                                    selectedLabel.classList.toggle('active', input.checked);
+                                } else {
+                                    selectedLabel.classList.add('active');
+                                }
+                            }
+                        });
+                    });
+                }
+
+                document.getElementById('backBtn').disabled = currentStep === 0;
             }
-            
-            // Hide all tab content
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-                tab.style.display = 'none';
+
+
+
+            // Capture the user's response and store it locally
+            function captureResponse() 
+            {
+                const q = questions[currentStep];
+
+                // Ensure question has an ID
+                if (!q.id) {
+                    q.id = `question${currentStep + 1}`;
+                }
+
+                console.log("Capturing response for question:", q);
+
+                if (q.type === 'slider') {
+                    const slider = document.getElementById('budgetSlider');
+                    if (slider) {
+                        responses[q.id] = slider.value;
+                        console.log(`Slider value stored for ${q.id}:`, slider.value);
+                    } else {
+                        responses[q.id] = 'no response';
+                        console.warn(`Slider input not found for ${q.id}`);
+
+                    }
+                } 
+                else if (q.type === 'single') {
+                    const selected = document.querySelector('input[name="answer"]:checked');
+                    if (selected) {
+                        responses[q.id] = selected.value;
+                        console.log(`Radio button selected for ${q.id}:`, selected.value);
+                    } else {
+                        responses[q.id] = 'no response';
+                        console.warn(`No radio button selected for ${q.id}`);
+                    }
+                } 
+                else if (q.type === 'multiple') {
+                    const selected = document.querySelectorAll('input[name="answer"]:checked');
+                    if (selected.length > 0) {
+                        const values = Array.from(selected).map(el => el.value);
+                        responses[q.id] = values;
+                        console.log(`Checkboxes selected for ${q.id}:`, values);
+                    } else {
+                        responses[q.id] = 'no response';
+                        console.warn(`No checkboxes selected for ${q.id}`);
+                    }
+                }
+                else if (q.type === 'input') 
+                {
+                    const input = document.getElementById('textInputAnswer');
+                    if (input) {
+                        responses[q.id] = input.value.trim() || 'no response';
+                        console.log(`Text input captured for ${q.id}:`, responses[q.id]);
+                    } else {
+                        console.warn(`Text input not found for ${q.id}`);
+                        responses[q.id] = 'no response';
+                    }
+                }
+
+
+                // Store to localStorage (optional but helpful for debugging or persistence)
+                localStorage.setItem('userResponses', JSON.stringify(responses));
+                console.log("Responses so far:", JSON.stringify(responses, null, 2));
+            }
+
+
+
+            // Navigation buttons
+            document.getElementById('nextBtn').addEventListener('click', function () {
+                captureResponse(); // Save the current response before moving to next question
+                if (currentStep < questions.length - 1) {
+                    currentStep++;
+                    renderQuestion();
+                } else {
+                    // On Finish button, store responses and send to backend
+                    nextBtn.textContent = 'Finish';
+                    // Store responses in localStorage
+                    localStorage.setItem('userResponses', JSON.stringify(responses));
+                    //alert(localStorage.getItem('userResponses'));  
+                    //alert(selectedQuestionnaireId);
+
+                    // Call the function to submit responses
+                    //alert("calling function");
+                    submitResponses();
+
+                    // Close modal
+                    const modal = document.getElementById('questionnaireModal');
+                    if (modal) {
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        if (modalInstance) modalInstance.hide();
+                    }
+
+                    //alert('You’ve completed the questionnaire!');
+                }
             });
+
             
-            // Show selected tab content
-            const activeContent = document.getElementById(tabId);
-            if (activeContent) {
-                activeContent.classList.add('active');
-                activeContent.style.display = 'block';
+            function submitResponses() {
+    
+                fetch('/submit-response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Use meta tag CSRF
+                    },
+                    body: JSON.stringify({
+                        template_id: selectedQuestionnaireId,
+                        answers: responses
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        toastr.error('There was an issue with your submission. Please try again.');
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        toastr.success('Your responses have been successfully submitted.');
+                    } else if (data.status === 'no_results') {
+                        toastr.warning('No matching products were found. But we have a few recommendations.');
+                    } else {
+                        console.error('Unexpected status:', data);
+                        toastr.error('An unexpected error occurred.');
+                    }
+
+                    // Wait for 2 seconds before redirecting
+                    setTimeout(function() {
+                        window.location.href = data.redirect;  // Perform redirect
+                    },2000);  // 2 seconds delay
+                })
+                .catch(error => {
+                    console.error('Error saving response:', error);
+                    toastr.error('There was an error processing your response.');
+    
+                });
             }
-        }
+
+            document.getElementById('backBtn').addEventListener('click', function () {
+                if (currentStep > 0) {
+                    currentStep--;
+                    renderQuestion();
+                }
+            });
     </script>
-</x-app-layout>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var lottieAnimation;
+
+            // Array of Lottie animation paths (replace these with your actual paths)
+            var animationPaths = [
+                '{{ asset('Lottie/Lottie2.json') }}',
+                '{{ asset('Lottie/Lottie3.json') }}',
+                '{{ asset('Lottie/Lottie5.json') }}',
+              
+            ];
+
+            // Function to get a random animation path
+            function getRandomAnimationPath() {
+                var randomIndex = Math.floor(Math.random() * animationPaths.length); // Get a random index
+                return animationPaths[randomIndex]; // Return the random animation path
+            }
+
+            // Set up the Lottie player on modal open
+            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    // Destroy previous animation if any
+                    if (lottieAnimation) {
+                        lottieAnimation.destroy();
+                    }
+
+                    // Get a random animation path
+                    var animationPath = getRandomAnimationPath();
+
+                    // Initialize Lottie animation inside the modal
+                    lottieAnimation = lottie.loadAnimation({
+                        container: document.getElementById('lottieAnimation'), // Container for the Lottie animation
+                        renderer: 'svg', // Use SVG renderer for better scalability
+                        loop: true, // Set to true if you want the animation to loop
+                        autoplay: true, // Set to true to autoplay the animation
+                        path: animationPath // Path to the Lottie animation JSON file
+                    });
+                });
+            });
+        });   
+    </script>
+
+<script>
+  window.addEventListener("scroll", function () {
+    const navbar = document.getElementById("mainNavbar");
+    if (window.scrollY > 50) 
+    {
+        navbar.classList.add("scrolled"); 
+        
+    } else {
+        navbar.classList.remove("scrolled");
+        
+    }
+  });
+</script>
+
+
+   
+@endpush

@@ -1,171 +1,142 @@
-<x-admin-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Store Details') }}
-            </h2>
-            <div class="flex space-x-2">
-                <a href="{{ route('admin.stores.edit', $store) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    Edit
+@extends('layouts.bootdashboard')
+@section('admindashboardcontent')
+
+@push('styles')
+
+
+
+@endpush
+
+<div class="main-content app-content">
+    <div class="container-fluid">
+        <!-- Page Header -->
+        <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
+            <div>
+                <h2 class="main-content-title fs-24 mb-1">{{ __('Store Details') }}</h2>
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Stores</li>
+                </ol>
+            </div>
+            <div class="d-flex">
+                <a href="{{ route('admin.stores.edit', $store) }}" class="btn btn-wave btn-primary my-2 btn-icon-text">
+                    <i class="fe fe-edit me-2"></i>Edit Store
                 </a>
-                <a href="{{ route('admin.stores.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Back
+                <a href="{{ route('admin.stores.index') }}" class="btn btn-wave btn-secondary my-2 btn-icon-text ms-2">
+                    <i class="fe fe-arrow-left me-2"></i>Back
                 </a>
             </div>
         </div>
-    </x-slot>
 
-    <div class="py-20">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="col-span-1 md:col-span-2">
-                            <h3 class="text-lg font-medium text-gray-900">{{ $store->store_name }}</h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                {{ $store->business_type ?? 'No business type specified' }}
-                            </p>
-                        </div>
+        <!-- Tabs Navigation -->
+         <div class="">
+            <ul class="nav nav-tabs mb-3" id="storeTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details"
+                        type="button" role="tab" aria-controls="details" aria-selected="true" style="background-color:transparent!important;border:0px solid black!imporant;">
+                        Store Details
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
+                        type="button" role="tab" aria-controls="users" aria-selected="false" style="background-color:transparent!important;border:0px!imporant;">
+                        Store Users
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="products-tab" data-bs-toggle="tab" data-bs-target="#products"
+                        type="button" role="tab" aria-controls="products" aria-selected="false" style="background-color:transparent!important;border:0px!imporant;">
+                        Store Products
+                    </button>
+                </li>
+            </ul>
+        </div>
 
-                        <div class="border-t border-gray-200 md:col-span-2">
-                            <dl>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Store Name</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->store_name }}</dd>
-                                </div>
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Business Type</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->business_type ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Address</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->address ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Contact Number</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->contact_number ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Email</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->email ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">State</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->state ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">License Type</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->licence_type ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">License Number</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->license_number ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Group</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->group ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">GST/VAT</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->gst_vat ?? 'N/A' }}</dd>
-                                </div>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Status</dt>
-                                    <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $store->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                            {{ ucfirst($store->status) }}
+        <!-- Tabs Content -->
+        <div class="tab-content" id="storeTabContent">
+            <!-- Store Details Tab -->
+            <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
+                    <h3 class="h5 text-dark mb-4">{{ $store->store_name }}</h3>
+                    <dl>
+                        @php
+                            $rows = [
+                                'Store Name' => $store->store_name,
+                                'Business Type' => $store->business_type ?? 'N/A',
+                                'Address' => $store->address ?? 'N/A',
+                                'Contact Number' => $store->contact_number ?? 'N/A',
+                                'Email' => $store->email ?? 'N/A',
+                                'State' => $store->state ?? 'N/A',
+                                'License Type' => $store->licence_type ?? 'N/A',
+                                'License Number' => $store->license_number ?? 'N/A',
+                                'Group' => $store->group ?? 'N/A',
+                                'GST/VAT' => $store->gst_vat ?? 'N/A',
+                                'Status' => $store->status,
+                                'Created At' => $store->created_at->format('F j, Y, g:i a'),
+                                'Last Updated' => $store->updated_at->format('F j, Y, g:i a')
+                            ];
+                        @endphp
+
+                        @foreach($rows as $label => $value)
+                            <div class="row border-bottom py-2">
+                                <dt class="col-sm-3 text-muted">{{ $label }}</dt>
+                                <dd class="col-sm-9">
+                                    @if ($label === 'Status')
+                                        <span class="badge {{ $value === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                            {{ ucfirst($value) }}
                                         </span>
-                                    </dd>
-                                </div>
-                                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Created At</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->created_at->format('F j, Y, g:i a') }}</dd>
-                                </div>
-                                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                    <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
-                                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $store->updated_at->format('F j, Y, g:i a') }}</dd>
-                                </div>
-                            </dl>
-                        </div>
-                    </div>
+                                    @else
+                                        {{ $value }}
+                                    @endif
+                                </dd>
+                            </div>
+                        @endforeach
+                    </dl>
                 </div>
             </div>
 
-            <!-- Store Users Section -->
-            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">Store Users</h3>
-                        <button onclick="openAssignUserModal()" class="inline-flex items-center px-4 py-2 bg-red-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-800 focus:bg-red-800 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add User
+            <!-- Store Users Tab -->
+            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="h5 text-dark">Store Users</h3>
+                        <button onclick="openAssignUserModal()" class="btn btn-danger">
+                            <i class="bi bi-person-plus"></i> Add User
                         </button>
                     </div>
-                    <!-- Users Table -->
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-light">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Email
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Role
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Actions
-                                    </th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody>
                                 @forelse ($store->users as $user)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    {{ $user->first_name }} {{ $user->last_name }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $user->email }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ ucfirst($user->role) }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ ucfirst($user->role) }}</td>
+                                        <td>
+                                            <span class="badge {{ $user->status === 'active' ? 'bg-success' : 'bg-danger' }}">
                                                 {{ ucfirst($user->status) }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div class="flex space-x-2">
-                                                <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                    </svg>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-info btn-sm">
+                                                    <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block">
+                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this user?')">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                        <i class="bi bi-trash"></i>
                                                     </button>
                                                 </form>
                                             </div>
@@ -173,9 +144,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                            No users found for this store.
-                                        </td>
+                                        <td colspan="5" class="text-center text-muted">No users found for this store.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -184,222 +153,196 @@
                 </div>
             </div>
 
-            <!-- Store Products Section -->
-            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">Store Products</h3>
-                    </div>
-
-                    <!-- Products Table -->
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+            <!-- Store Products Tab -->
+            <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
+                <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
+                    <h3 class="h5 text-dark mb-3">Store Products</h3>
+                    <div class="table-responsive">
+                        <table class="table table table-bordered table-striped">
+                            <thead class="table-light">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Wine Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Type
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Vintage
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Price
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
+                                    <th>Wine Name</th>
+                                    <th>Type</th>
+                                    <th>Vintage</th>
+                                    <th>Price</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody>
                                 @forelse ($store->products as $product)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                {{ $product->wine_name }}
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $product->type ?? 'N/A' }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">{{ $product->vintage_year ?? 'N/A' }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500">
-                                                {{ $product->retail_price ? '$' . number_format($product->retail_price, 2) : 'N/A' }}
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $product->pivot->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                {{ ucfirst($product->pivot->status) }}
-                                            </span>
-                                        </td>
+                                        <td>{{ $product->wine_name }}</td>
+                                        <td>{{ ucfirst($product->type) }}</td>
+                                        <td>{{ $product->vintage_year }}</td>
+                                        <td>{{ $product->retail_price }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                            No products found for this store.
-                                        </td>
+                                        <td colspan="4" class="text-center">No products found.</td>
                                     </tr>
                                 @endforelse
+                                
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</x-admin-layout>
 
-<!-- Assign User Modal -->
-<div id="assignUserModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 text-center">Assign User to Store</h3>
-            <div class="mt-2 px-7 py-3">
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 text-left" for="user_search">Search Users</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                           id="user_search" type="text" placeholder="Search by name or email">
-                </div>
-                
-                <div class="mb-4 max-h-60 overflow-y-auto">
-                    <table class="min-w-full bg-white">
-                        <thead>
-                            <tr class="bg-gray-100 text-gray-700 text-xs leading-normal">
-                                <th class="py-2 px-3 text-left">Name</th>
-                                <th class="py-2 px-3 text-left">Email</th>
-                                <th class="py-2 px-3 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users_table_body" class="text-gray-600 text-xs">
-                            <!-- Users will be loaded here via JavaScript -->
-                            <tr>
-                                <td colspan="3" class="py-3 px-3 text-center">Loading users...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="flex items-center justify-between mt-4">
-                    <button class="bg-gray-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-gray-600" 
-                            type="button" onclick="closeAssignUserModal()">
-                        Cancel
-                    </button>
+        </div>
+
+        <!-- Assign User Modal -->
+        <div id="assignUserModal" class="modal fade" tabindex="-1" aria-labelledby="assignUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Assign User to Store</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="user_search" class="form-label">Search Users</label>
+                            <input type="text" class="form-control" id="user_search" placeholder="Search by name or email">
+                        </div>
+
+                        <div class="mb-3 max-h-60 overflow-auto">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users_table_body">
+                                    <tr>
+                                        <td colspan="3" class="text-center">Loading users...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
-<script>
-    // Store ID for use in JavaScript
-    const storeId = {{ $store->id }};
-    
-    // Function to open the assign user modal
-    function openAssignUserModal() {
-        document.getElementById('assignUserModal').classList.remove('hidden');
-        loadAvailableUsers();
-    }
-    
-    // Function to close the assign user modal
-    function closeAssignUserModal() {
-        document.getElementById('assignUserModal').classList.add('hidden');
-    }
-    
-    // Function to load available store managers
-    function loadAvailableUsers() {
-        fetch(`/admin/stores/${storeId}/available-managers`)
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('users_table_body');
-                
-                if (data.length === 0) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="3" class="py-3 px-3 text-center">No available store managers found</td>
-                        </tr>
-                    `;
-                    return;
-                }
-                
-                let html = '';
-                data.forEach(user => {
-                    html += `
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 user-row">
-                            <td class="py-2 px-3 text-left">${user.first_name} ${user.last_name}</td>
-                            <td class="py-2 px-3 text-left">${user.email}</td>
-                            <td class="py-2 px-3 text-center">
-                                <button onclick="assignUserToStore(${user.id})" 
-                                        class="bg-indigo-600 text-white py-1 px-2 rounded text-xs hover:bg-indigo-700">
-                                    Assign
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                });
-                
-                tableBody.innerHTML = html;
-                
-                // Add search functionality
-                document.getElementById('user_search').addEventListener('input', filterUsers);
-            })
-            .catch(error => {
-                console.error('Error loading users:', error);
-                document.getElementById('users_table_body').innerHTML = `
-                    <tr>
-                        <td colspan="3" class="py-3 px-3 text-center text-red-500">Error loading users</td>
-                    </tr>
-                `;
-            });
-    }
-    
-    // Function to filter users based on search input
-    function filterUsers() {
-        const searchTerm = document.getElementById('user_search').value.toLowerCase();
-        const rows = document.querySelectorAll('#users_table_body .user-row');
-        
-        rows.forEach(row => {
-            const name = row.cells[0].textContent.toLowerCase();
-            const email = row.cells[1].textContent.toLowerCase();
+@endsection
+
+    @push('scripts')
+        <script>
+            // Store ID for use in JavaScript
+            const storeId = {{ $store->id }};
             
-            if (name.includes(searchTerm) || email.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+            // Function to open the assign user modal
+            function openAssignUserModal() {
+                const modal = new bootstrap.Modal(document.getElementById('assignUserModal'));
+                modal.show();
+                loadAvailableUsers();
             }
-        });
-    }
-    
-    // Function to assign a user to the store
-    function assignUserToStore(userId) {
-        // Send a POST request to assign the user
-        fetch(`/admin/stores/${storeId}/assign-user`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ user_id: userId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Close the modal
-                closeAssignUserModal();
+            
+            // Function to close the assign user modal
+            function closeAssignUserModal() {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('assignUserModal'));
+                modal.hide();
+            }
+            
+            // Function to load available store managers
+            function loadAvailableUsers() {
+                fetch(`/admin/stores/${storeId}/available-managers`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.getElementById('users_table_body');
+                        
+                        if (data.length === 0) {
+                            tableBody.innerHTML = `
+                                <tr>
+                                    <td colspan="3" class="text-center">No available store managers found</td>
+                                </tr>
+                            `;
+                            return;
+                        }
+                        
+                        let html = '';
+                        data.forEach(user => {
+                            html += `
+                                <tr>
+                                    <td>${user.first_name} ${user.last_name}</td>
+                                    <td>${user.email}</td>
+                                    <td class="text-center">
+                                        <button onclick="assignUserToStore(${user.id})" 
+                                                class="btn btn-indigo btn-sm">
+                                            Assign
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        
+                        tableBody.innerHTML = html;
+                        
+                        // Add search functionality
+                        document.getElementById('user_search').addEventListener('input', filterUsers);
+                    })
+                    .catch(error => {
+                        console.error('Error loading users:', error);
+                        document.getElementById('users_table_body').innerHTML = `
+                            <tr>
+                                <td colspan="3" class="text-center text-danger">Error loading users</td>
+                            </tr>
+                        `;
+                    });
+            }
+            
+            // Function to filter users based on search input
+            function filterUsers() {
+                const searchTerm = document.getElementById('user_search').value.toLowerCase();
+                const rows = document.querySelectorAll('#users_table_body tr');
                 
-                // Refresh the page to show the updated user list
-                window.location.reload();
-            } else {
-                alert(data.message || 'Failed to assign user to store');
+                rows.forEach(row => {
+                    const name = row.cells[0].textContent.toLowerCase();
+                    const email = row.cells[1].textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
             }
-        })
-        .catch(error => {
-            console.error('Error assigning user:', error);
-            alert('An error occurred while assigning the user');
-        });
-    }
-</script>
+            
+            // Function to assign a user to the store
+            function assignUserToStore(userId) {
+                // Send a POST request to assign the user
+                fetch(`/admin/stores/${storeId}/assign-user`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ user_id: userId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close the modal
+                        closeAssignUserModal();
+                        
+                        // Refresh the page to show the updated user list
+                        window.location.reload();
+                    } else {
+                        alert(data.message || 'Failed to assign user to store');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error assigning user:', error);
+                    alert('An error occurred while assigning the user');
+                });
+            }
+        </script>
+    @endpush
+
+

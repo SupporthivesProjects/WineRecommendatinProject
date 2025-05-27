@@ -14,8 +14,8 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::orderBy('id', 'asc')->paginate(10);
-        return redirect()->route('admin.dashboard')->with('activeTab', 'stores');
+        $stores = Store::orderBy('id', 'asc')->get();
+        return view('admin.dashboard.stores-tab', compact('stores'));
     }
 
     /**
@@ -54,9 +54,17 @@ class StoreController extends Controller
     /**
      * Display the specified store.
      */
+    // public function show(Store $store)
+    // {
+    //     return view('admin.stores.show', compact('store'));
+    // }
     public function show(Store $store)
     {
-        return view('admin.stores.show', compact('store'));
+        $store->load('users');
+
+        $activeProducts = $store->products()->wherePivot('status', 'active')->get();
+
+        return view('admin.stores.show', compact('store', 'activeProducts'));
     }
 
     /**
