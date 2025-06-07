@@ -22,11 +22,6 @@
                         <li class="breadcrumb-item active" aria-current="page">Users</li>
                     </ol>
                 </div>
-                <div class="d-flex">
-                    <button type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text" data-bs-toggle="modal" data-bs-target="#addUserModal">
-                        <i class="fe fe-plus me-2"></i> Add User
-                    </button>
-                </div>
             </div>
             <!-- End::page-header -->
 
@@ -71,51 +66,6 @@
                 </div>
             </div>
             <!-- End::row -->
-
-            <!-- Add User Modal -->
-            <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{ route('admin.users.store') }}" method="POST">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="first_name" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="last_name" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select class="form-select" id="role" name="role" required>
-                                        <option value="admin">Admin</option>
-                                        <option value="store_manager">Store Manager</option>
-                                        <option value="customer">Customer</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="mobile" class="form-label">Mobile</label>
-                                    <input type="text" class="form-control" id="mobile" name="mobile" required>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save User</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>

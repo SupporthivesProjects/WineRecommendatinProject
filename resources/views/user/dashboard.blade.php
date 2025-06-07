@@ -95,10 +95,7 @@
             line-height: 1;
         }
 
-        .option-box {
-            height: 120px;
-            text-align: center;
-        }
+       
 
         .option-text {
             font-size: 1rem;
@@ -163,18 +160,6 @@
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .option-box {
-            border-radius: 12px;
-            height: 120px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-        }
-
-        .option-box.active {
-            border-color: #0d6efd;
-            background-color: #e6f0ff;
         }
 
         .questionnaire-label {
@@ -467,6 +452,41 @@
         {
             background-color: #754638;
             color:#dacea1;
+        }
+
+
+        .emoji-img {
+            width: 60px;
+            height:60px;
+            transition: transform 0.2s ease;
+            filter: invert(1) brightness(2);
+
+        }
+
+        .option-box {
+            border-radius: 12px;
+            height: 120px;
+            background-color: transparent !important;
+            border: 1px solid #ddd;
+            height: 120px;
+            text-align: center;
+        }
+
+        .option-box.active {
+            border-color: #0d6efd;
+            background-color: #e6f0ff;
+        }
+
+        .option-box:hover .emoji-img {
+            transform: scale(1.1);
+            filter: brightness(1.1); /* Example effect */
+            color:white;
+        }
+
+        .option-box:hover {
+            background-color: transparent !important;
+            border-color: rgb(98,89,202) !important; /* or any static color */
+            color: white !important;
         }
 
     </style>
@@ -776,136 +796,137 @@
             let responses = {};  
             let selectedQuestionnaireId = null;
 
-            const emojiMap = {
-            "Red": "🍷",
-            "White": "🥂",
-            "Rosé": "🌹",
-            "Fruit": "🍇",
-            "Sparkling / Champagne": "🥂🍾",
-            "Yes": "✅",
-            "No": "❌",
-            "SKIP": "⏭️",
-            "Fruit Wine": "🍇",
-            "Still": "🧊",
-            "Sparkling": "🍾",
-            "Sparkling/Champagne": "🍾",
-            "Sweet": "🍬",
-            "Medium Sweet": "🍯",
-            "Lightly Sweet": "🧁",
-            "Dry": "🍂",
-            "Skip": "⏭️",
-            "Fruit-Driven": "🍓",
-            "Juicy/Fruit-Forward": "🍒",
-            "Aromatic": "🌸",
-            "Earthy": "🌱",
-            "Mineral-Driven": "🪨",
-            "Light-bodied (Soft & Refreshing)": "☁️",
-            "Medium-bodied (Balanced & Smooth)": "🥃",
-            "Full-bodied (Rich & Intense)": "💪",
-            "Very Fruity": "🍉",
-            "Slightly Fruity": "🍑",
-            "Not Fruity": "🥖",
-            "Young and Refreshing": "🧃",
-            "Bold and Old": "🧓",
-            "Any": "🌍",
-            "India": "🇮🇳",
-            "France": "🇫🇷",
-            "Italy": "🇮🇹",
-            "Spain": "🇪🇸",
-            "Australia": "🇦🇺",
-            "USA": "🇺🇸",
-            "Rest of the World": "🌎",
-            "Budget": "💰",
-            "Everyday sipping": "🛋️",
-            "Celebration": "🎉",
-            "Gifting": "🎁",
-            "Dinner with Friends": "🍽️",
-            "Wine and Cheese": "🧀🍷",
-            "Pairing with food (Coming Soon)": "🍽️",
-            "Semi-Sweet": "🍇🍯",
-            "Off-Dry (Lightly Sweet)": "🍷🍃",
-            "Dry (Not Sweet)": "🍇🍋",
-            "No Preference": "🤷",
-            "Bordeaux (France)": "🍷🇫🇷",
-            "Burgundy (France)": "🍇🇫🇷",
-            "Champagne (France)": "🥂🇫🇷",
-            "Rhône Valley (France)": "🌱🇫🇷",
-            "Tuscany (Italy)": "🍇🇮🇹",
-            "Piedmont (Italy)": "🍇🍷🇮🇹",
-            "Veneto (Italy)": "🍇🍷🇮🇹",
-            "Rioja (Spain)": "🍇🇪🇸",
-            "Ribera del Duero (Spain)": "🍷🇪🇸",
-            "Napa Valley (USA)": "🍇🇺🇸",
-            "Sonoma (USA)": "🍷🇺🇸",
-            "Barossa Valley (Australia)": "🍇🇦🇺",
-            "Margaret River (Australia)": "🍷🇦🇺",
-            "Marlborough (New Zealand)": "🍇🇳🇿",
-            "Chardonnay": "🍇🥂",
-            "Riesling": "🍇🍯",
-            "Sauvignon Blanc": "🍇🌿",
-            "Chenin Blanc": "🍇🍯",
-            "Pinot Noir": "🍇🍷",
-            "Cabernet Sauvignon": "🍇🍷",
-            "Merlot": "🍇🍷",
-            "Syrah/Shiraz": "🍇🍷",
-            "Refreshingly Young (1-3 years)": "🍃🍷",
-            "Fairly Young (3-5 years)": "🍇🌱",
-            "Slightly Aged (5-7 years)": "🍂🍷",
-            "Aged (>7 years)": "🍷🕰️",
-            "Nuts, Dried, Cooked, Fresh, Caramel, Jammy": "🍑🍲",
-            "Earthy, Moldy, Petroleum, Sulfur, Minerality": "💨🪨",
-            "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "🍞🥛",
-            "Herbaceous, Vegetative": "🌿🍃",
-            "Surprise Me": "🎉",
-            "Fortified": "🍷🍾",
-            "Varietal": "🍇",
-            "Blends": "🍷🔄🍇",
-            "Noble Grapes": "🍇👑",
-            "Regional Hero Grapes": "🍇🏆",
-            "Domestic Indian": "🇮🇳🍷",
-            "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "🌍🍷",
-            "New World (USA, Chile, Australia, Argentina)": "🌍🍷",
-            "Brut": "🥂🍾",
-            "Dry": "🍂🍷",
-            "Off-Dry": "🍷🍃",
-            "Semi Sweet": "🍇🍯",
-            "Sweet-Dessert": "🍬🍰",
-            "Young (1-2 years)": "🌱🍇",
-            "Fairly Young (2-5 years)": "🌿🍷",
-            "Slightly Aged (5-7 years)": "🍂🍷",
-            "Well-Aged (8-10 years)": "🍷🕰️",
-            "Fully Matured (10 years and above)": "🍷🍇",
-            "Acidity: Low, Light to medium, Medium to high, High": "🥴🍷",
-            "Tannins: Low, Light to medium, Medium to high, High":"🍃🍷",
-            "Body: Light bodied/ Medium bodied/ Full bodied": "🥃🍷",
-            "Acidity: Light to medium": "🍋🍷",
-            "Acidity: Medium to high": "🍋🔥",
-            "Acidity: High": "🍋🔥",
-            "Tannins: Low": "🌿🍷",
-            "Tannins: Light to medium": "🍃🍷",
-            "Tannins: Medium to high": "🍂🍷",
-            "Body: Light bodied": "☁️🍷",
-            "Body: Medium bodied": "🥃🍷",
-            "Body: Full bodied": "💪🍷",
-            "Bold": "🔥🍷",
-            "Crisp": "❄️🍷",
-            "Rich": "💰🍷",
-            "Light": "🌞🍷",
-            "Medium-bodied": "🥃🍷",
-            "Aromatic": "🌸🍷",
-            "Fruit-driven": "🍇🍷",
-            "Dry": "🍂🍷",
-            "Mineral-Driven": "🪨🍷",
-            "Earthy": "🌱🍷",
-            "Juicy / Fruit-Forward": "🍉🍷",
-            "Elegant / Refined": "💎🍷",
-            "Chile" : "🇨🇱",
-            "Portugal" : "🇵🇹",
-            "Argentina" : "🇦🇷",
-            "England": "🇬🇧",
-            "South Africa" : "🇿🇦",
-            "New Zealand" : "🇳🇿"
-        };
+            const emojiMap = 
+            {
+                "Red": "red",
+                "White": "white",
+                "Rosé": "Rosé",
+                "Fruit": "fruit",
+                "Sparkling / Champagne": "sparkling_champagne",
+                "Yes": "Yes",
+                "No": "No",
+                "SKIP": "Skip",
+                "Fruit Wine": "fruit",
+                "Still": "Still",
+                "Sparkling": "Sparkling_champagne",
+                "Sparkling/Champagne": "Sparkling_champagne",
+                "Sweet": "Sweet",
+                "Medium Sweet": "Medium_Sweet",
+                "Lightly Sweet": "Lightly_sweet",
+                "Dry": "Dry",
+                "Skip": "Skip",
+                "Fruit-Driven": "Fruit-Driven",
+                "Juicy/Fruit-Forward": "JuicyFruit-Forward",
+                "Aromatic": "Aromatic",
+                "Earthy": "Earthy",
+                "Mineral-Driven": "Mineral-Driven",
+                "Light-bodied (Soft & Refreshing)": "Light-bodied-Soft-Refreshing",
+                "Medium-bodied (Balanced & Smooth)": "Medium-bodied-(Rich & Intense)",
+                "Full-bodied (Rich & Intense)": "Full-bodied-(Rich & Intense)",
+                "Very Fruity": "VeryFruity",
+                "Slightly Fruity": "SlightlyFruity",
+                "Not Fruity": "NotFruity",
+                "Young and Refreshing": "YoungandRefreshing",
+                "Bold and Old": "BoldandOld",
+                "Any": "Any",
+                "India": "India",
+                "France": "France",
+                "Italy": "Italy",
+                "Spain": "Spain",
+                "Australia": "Australia",
+                "USA": "Usa",
+                "Rest of the World": "RestofTheWorld",
+                "Budget": "💰",
+                "Everyday sipping": "Everydaysipping",
+                "Celebration": "Celebration",
+                "Gifting": "Gifting",
+                "Dinner with Friends": "🍽️",
+                "Wine and Cheese": "🧀🍷",
+                "Pairing with food (Coming Soon)": "Pairingwithfood(ComingSoon)",
+                "Semi-Sweet": "🍇🍯",
+                "Off-Dry (Lightly Sweet)": "🍷🍃",
+                "Dry (Not Sweet)": "🍇🍋",
+                "No Preference": "🤷",
+                "Bordeaux (France)": "🍷🇫🇷",
+                "Burgundy (France)": "🍇🇫🇷",
+                "Champagne (France)": "🥂🇫🇷",
+                "Rhône Valley (France)": "🌱🇫🇷",
+                "Tuscany (Italy)": "🍇🇮🇹",
+                "Piedmont (Italy)": "🍇🍷🇮🇹",
+                "Veneto (Italy)": "🍇🍷🇮🇹",
+                "Rioja (Spain)": "🍇🇪🇸",
+                "Ribera del Duero (Spain)": "🍷🇪🇸",
+                "Napa Valley (USA)": "🍇🇺🇸",
+                "Sonoma (USA)": "🍷🇺🇸",
+                "Barossa Valley (Australia)": "🍇🇦🇺",
+                "Margaret River (Australia)": "🍷🇦🇺",
+                "Marlborough (New Zealand)": "🍇🇳🇿",
+                "Chardonnay": "🍇🥂",
+                "Riesling": "🍇🍯",
+                "Sauvignon Blanc": "🍇🌿",
+                "Chenin Blanc": "🍇🍯",
+                "Pinot Noir": "🍇🍷",
+                "Cabernet Sauvignon": "🍇🍷",
+                "Merlot": "🍇🍷",
+                "Syrah/Shiraz": "🍇🍷",
+                "Refreshingly Young (1-3 years)": "🍃🍷",
+                "Fairly Young (3-5 years)": "🍇🌱",
+                "Slightly Aged (5-7 years)": "🍂🍷",
+                "Aged (>7 years)": "🍷🕰️",
+                "Nuts, Dried, Cooked, Fresh, Caramel, Jammy": "🍑🍲",
+                "Earthy, Moldy, Petroleum, Sulfur, Minerality": "💨🪨",
+                "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "🍞🥛",
+                "Herbaceous, Vegetative": "🌿🍃",
+                "Surprise Me": "🎉",
+                "Fortified": "🍷🍾",
+                "Varietal": "🍇",
+                "Blends": "🍷🔄🍇",
+                "Noble Grapes": "🍇👑",
+                "Regional Hero Grapes": "🍇🏆",
+                "Domestic Indian": "🇮🇳🍷",
+                "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "🌍🍷",
+                "New World (USA, Chile, Australia, Argentina)": "🌍🍷",
+                "Brut": "🥂🍾",
+                "Dry": "Dry",
+                "Off-Dry": "🍷🍃",
+                "Semi Sweet": "🍇🍯",
+                "Sweet-Dessert": "🍬🍰",
+                "Young (1-2 years)": "🌱🍇",
+                "Fairly Young (2-5 years)": "🌿🍷",
+                "Slightly Aged (5-7 years)": "🍂🍷",
+                "Well-Aged (8-10 years)": "🍷🕰️",
+                "Fully Matured (10 years and above)": "🍷🍇",
+                "Acidity: Low, Light to medium, Medium to high, High": "🥴🍷",
+                "Tannins: Low, Light to medium, Medium to high, High":"🍃🍷",
+                "Body: Light bodied/ Medium bodied/ Full bodied": "🥃🍷",
+                "Acidity: Light to medium": "🍋🍷",
+                "Acidity: Medium to high": "🍋🔥",
+                "Acidity: High": "🍋🔥",
+                "Tannins: Low": "🌿🍷",
+                "Tannins: Light to medium": "🍃🍷",
+                "Tannins: Medium to high": "🍂🍷",
+                "Body: Light bodied": "☁️🍷",
+                "Body: Medium bodied": "🥃🍷",
+                "Body: Full bodied": "💪🍷",
+                "Bold": "🔥🍷",
+                "Crisp": "❄️🍷",
+                "Rich": "💰🍷",
+                "Light": "🌞🍷",
+                "Medium-bodied": "🥃🍷",
+                "Aromatic": "Aromatic",
+                "Fruit-driven": "🍇🍷",
+                "Dry": "Dry",
+                "Mineral-Driven": "Mineral-Driven",
+                "Earthy": "Earthy",
+                "Juicy / Fruit-Forward": "🍉🍷",
+                "Elegant / Refined": "💎🍷",
+                "Chile" : "🇨🇱",
+                "Portugal" : "🇵🇹",
+                "Argentina" : "🇦🇷",
+                "England": "🇬🇧",
+                "South Africa" : "🇿🇦",
+                "New Zealand" : "🇳🇿"
+            };
 
 
 
@@ -963,20 +984,49 @@
             });
 
     
-            function renderQuestion() {
-                if (questions.length === 0 || currentStep >= questions.length) return;
-
-                if (!questions[currentStep].id) {
-                    questions[currentStep].id = `question${currentStep + 1}`;
-                }
-
-                const q = questions[currentStep];
+            function renderQuestion() 
+            {
                 const container = document.getElementById('question-container');
 
-                console.log("Rendering question: ", q);
+                // First screen: render 3 questions together
+                if (currentStep === 0) {
+                    let combinedHtml = '';
+                    for (let i = 0; i < 3 && i < questions.length; i++) {
+                        if (!questions[i].id) {
+                            questions[i].id = `question${i + 1}`;
+                        }
 
-                let optionsHtml = '';
+                        combinedHtml += `<div class="mb-4">
+                            <h5 class="text-dark">${questions[i].question}</h5>
+                            ${renderQuestionHTML(questions[i], i)}
+                        </div>`;
+                    }
 
+                    container.innerHTML = combinedHtml;
+                    setupEventsForBatch([0, 1, 2]);
+                    document.getElementById('backBtn').disabled = true;
+                    return;
+                }
+
+                // For questions beyond the first 3
+                if (currentStep >= questions.length) return;
+
+                const q = questions[currentStep];
+                if (!q.id) {
+                    q.id = `question${currentStep + 1}`;
+                }
+
+                container.innerHTML = `
+                    <h5 class='text-dark'>${q.question}</h5>
+                    ${renderQuestionHTML(q, currentStep)}
+                `;
+
+                setupEventsForBatch([currentStep]);
+                document.getElementById('backBtn').disabled = currentStep === 3;
+            }
+
+            function renderQuestionHTML(q, qIndex) 
+            {
                 if (q.type === 'slider') {
                     const min = q.min_value ?? 0;
                     const max = q.max_value ?? 10000;
@@ -988,58 +1038,59 @@
                         tickMarks += `<option value="${i}"></option>`;
                     }
 
-                    optionsHtml = `
-                        <div class="mb-4">
-                            <input 
-                                type="range" 
-                                class="form-range" 
-                                id="budgetSlider" 
-                                min="${min}" 
-                                max="${max}" 
-                                step="${step}" 
-                                value="${defaultValue}" 
-                                list="tickmarks"
-                            >
-                            <datalist id="tickmarks">
-                                ${tickMarks}
-                            </datalist>
-                            <div class="d-flex justify-content-between text-muted mt-2">
-                                <small>₹${min}</small>
-                                <small>Selected: ₹<span id="sliderValue">${defaultValue}</span></small>
-                                <small>₹${max}</small>
-                            </div>
-                        </div>
-                    `;
-                } 
-                else if (q.type === 'input') 
-                {
-                    optionsHtml = `
-                        <div class="mb-4">
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="textInputAnswer" 
-                                placeholder="Enter your answer"
-                            >
+                    return `
+                        <input 
+                            type="range" 
+                            class="form-range" 
+                            id="budgetSlider${qIndex}" 
+                            min="${min}" 
+                            max="${max}" 
+                            step="${step}" 
+                            value="${defaultValue}" 
+                            list="tickmarks${qIndex}"
+                        >
+                        <datalist id="tickmarks${qIndex}">${tickMarks}</datalist>
+                        <div class="d-flex justify-content-between text-muted mt-2">
+                            <small>₹${min}</small>
+                            <small>Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span></small>
+                            <small>₹${max}</small>
                         </div>
                     `;
                 }
 
-                else if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
-                    let rowHtml = '';
+                if (q.type === 'input') {
+                    return `<input type="text" class="form-control" id="textInputAnswer${qIndex}" placeholder="Enter your answer">`;
+                }
+
+                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
+                    let rowHtml = '';
+                    let optionsHtml = '';
 
                     q.options.forEach((opt, idx) => {
-                        //const emoji = (selectedQuestionnaireId === '1' || selectedQuestionnaireId === 1) && emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
-                        const emoji = emojiMap[opt] ? `<div class="emoji-icon mb-1">${emojiMap[opt]}</div>` : '';
+                        const basePath = '/questionnaire';
+                        const emoji = emojiMap[opt]
+                            ? `<div class="emoji-icon mb-1">
+                                    <img 
+                                        src="${basePath}/${emojiMap[opt]}-mono.svg"
+                                        data-mono="${basePath}/${emojiMap[opt]}-mono.svg"
+                                        data-color="${basePath}/${emojiMap[opt]}-colo.svg"
+                                        alt="${opt}"
+                                        class="emoji-img switchable-img"
+                                        onclick="selectOption(this)"
+                                    />
+                            </div>`
+                            : '';
 
                         rowHtml += `
                             <div class="col-md-6 mb-3">
-                                <input class="d-none" type="${inputType}" name="answer" id="option${idx}" value="${opt}">
+                                <input class="d-none" type="${inputType}" name="answer${qIndex}" id="option${qIndex}_${idx}" value="${opt}">
                                 <label 
-                                    for="option${idx}" 
+                                    for="option${qIndex}_${idx}" 
                                     class="btn btn-outline-primary w-100 d-flex flex-column align-items-center justify-content-center p-3 option-box"
                                     style="cursor: pointer;"
+                                    onmouseenter="handleLabelEnter(this)"
+                                    onmouseleave="handleLabelLeave(this)"
                                 >
                                     ${emoji}
                                     <div class="option-text text-center">${opt}</div>
@@ -1052,147 +1103,111 @@
                             rowHtml = '';
                         }
                     });
+
+                    return optionsHtml;
                 }
 
-                container.innerHTML = `
-                    <h5 class='text-white'>${q.question}</h5>
-                    ${optionsHtml}
-                `;
-
-                // Slider event
-                if (q.type === 'slider') {
-                    const slider = document.getElementById('budgetSlider');
-                    const output = document.getElementById('sliderValue');
-                    if (slider && output) {
-                        slider.addEventListener('input', (e) => {
-                            output.textContent = e.target.value;
-                        });
-                    }
-                }
-
-                // Highlight selected labels
-                if (q.type === 'single' || q.type === 'multiple') {
-                    const inputs = document.querySelectorAll('input[name="answer"]');
-
-                    inputs.forEach(input => {
-                        input.addEventListener('change', () => {
-                            if (q.type === 'single') {
-                                inputs.forEach(i => {
-                                    const label = document.querySelector(`label[for="${i.id}"]`);
-                                    if (label) label.classList.remove('active');
-                                });
-                            }
-
-                            const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
-                            if (selectedLabel) {
-                                if (q.type === 'multiple') {
-                                    selectedLabel.classList.toggle('active', input.checked);
-                                } else {
-                                    selectedLabel.classList.add('active');
-                                }
-                            }
-                        });
-                    });
-                }
-
-                document.getElementById('backBtn').disabled = currentStep === 0;
+                return '';
             }
 
+            function setupEventsForBatch(indexes) 
+            {
+                indexes.forEach(index => {
+                    const q = questions[index];
 
+                    if (q.type === 'slider') {
+                        const slider = document.getElementById(`budgetSlider${index}`);
+                        const output = document.getElementById(`sliderValue${index}`);
+                        if (slider && output) {
+                            slider.addEventListener('input', (e) => {
+                                output.textContent = e.target.value;
+                            });
+                        }
+                    }
 
-            // Capture the user's response and store it locally
+                    if (q.type === 'single' || q.type === 'multiple') {
+                        const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
+                        inputs.forEach(input => {
+                            input.addEventListener('change', () => {
+                                if (q.type === 'single') {
+                                    inputs.forEach(i => {
+                                        const label = document.querySelector(`label[for="${i.id}"]`);
+                                        if (label) label.classList.remove('active');
+                                    });
+                                }
+
+                                const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+                                if (selectedLabel) {
+                                    if (q.type === 'multiple') {
+                                        selectedLabel.classList.toggle('active', input.checked);
+                                    } else {
+                                        selectedLabel.classList.add('active');
+                                    }
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+
             function captureResponse() 
             {
-                const q = questions[currentStep];
+                const isBatch = currentStep === 0;
+                const indexes = isBatch ? [0, 1, 2] : [currentStep];
 
-                // Ensure question has an ID
-                if (!q.id) {
-                    q.id = `question${currentStep + 1}`;
-                }
-
-                console.log("Capturing response for question:", q);
-
-                if (q.type === 'slider') {
-                    const slider = document.getElementById('budgetSlider');
-                    if (slider) {
-                        responses[q.id] = slider.value;
-                        console.log(`Slider value stored for ${q.id}:`, slider.value);
-                    } else {
-                        responses[q.id] = 'no response';
-                        console.warn(`Slider input not found for ${q.id}`);
-
+                indexes.forEach(index => {
+                    const q = questions[index];
+                    if (!q.id) {
+                        q.id = `question${index + 1}`;
                     }
-                } 
-                else if (q.type === 'single') {
-                    const selected = document.querySelector('input[name="answer"]:checked');
-                    if (selected) {
-                        responses[q.id] = selected.value;
-                        console.log(`Radio button selected for ${q.id}:`, selected.value);
-                    } else {
-                        responses[q.id] = 'no response';
-                        console.warn(`No radio button selected for ${q.id}`);
-                    }
-                } 
-                else if (q.type === 'multiple') {
-                    const selected = document.querySelectorAll('input[name="answer"]:checked');
-                    if (selected.length > 0) {
-                        const values = Array.from(selected).map(el => el.value);
-                        responses[q.id] = values;
-                        console.log(`Checkboxes selected for ${q.id}:`, values);
-                    } else {
-                        responses[q.id] = 'no response';
-                        console.warn(`No checkboxes selected for ${q.id}`);
-                    }
-                }
-                else if (q.type === 'input') 
-                {
-                    const input = document.getElementById('textInputAnswer');
-                    if (input) {
-                        responses[q.id] = input.value.trim() || 'no response';
-                        console.log(`Text input captured for ${q.id}:`, responses[q.id]);
-                    } else {
-                        console.warn(`Text input not found for ${q.id}`);
-                        responses[q.id] = 'no response';
-                    }
-                }
 
+                    if (q.type === 'slider') {
+                        const slider = document.getElementById(`budgetSlider${index}`);
+                        responses[q.id] = slider ? slider.value : 'no response';
+                    } 
+                    else if (q.type === 'single') {
+                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                        responses[q.id] = selected ? selected.value : 'no response';
+                    } 
+                    else if (q.type === 'multiple') {
+                        const selected = document.querySelectorAll(`input[name="answer${index}"]:checked`);
+                        responses[q.id] = selected.length ? Array.from(selected).map(el => el.value) : 'no response';
+                    } 
+                    else if (q.type === 'input') {
+                        const input = document.getElementById(`textInputAnswer${index}`);
+                        responses[q.id] = input ? input.value.trim() || 'no response' : 'no response';
+                    }
+                });
 
-                // Store to localStorage (optional but helpful for debugging or persistence)
                 localStorage.setItem('userResponses', JSON.stringify(responses));
-                console.log("Responses so far:", JSON.stringify(responses, null, 2));
             }
-
-
 
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
-                captureResponse(); // Save the current response before moving to next question
-                if (currentStep < questions.length - 1) {
-                    currentStep++;
-                    renderQuestion();
-                } else {
-                    // On Finish button, store responses and send to backend
-                    nextBtn.textContent = 'Finish';
-                    // Store responses in localStorage
-                    localStorage.setItem('userResponses', JSON.stringify(responses));
-                    //alert(localStorage.getItem('userResponses'));  
-                    //alert(selectedQuestionnaireId);
+                captureResponse(); // Save current step response(s)
 
-                    // Call the function to submit responses
-                    //alert("calling function");
+                // Jump directly to step 3 after batch questions
+                if (currentStep === 0) {
+                    currentStep = 3;
+                } else {
+                    currentStep++;
+                }
+
+                if (currentStep < questions.length) {
+                    renderQuestion();
+                    nextBtn.textContent = (currentStep === questions.length - 1) ? 'Finish' : 'Next';
+                } else {
+                    nextBtn.textContent = 'Finish';
+                    localStorage.setItem('userResponses', JSON.stringify(responses));
                     submitResponses();
 
-                    // Close modal
                     const modal = document.getElementById('questionnaireModal');
                     if (modal) {
                         const modalInstance = bootstrap.Modal.getInstance(modal);
                         if (modalInstance) modalInstance.hide();
                     }
-
-                    //alert('You’ve completed the questionnaire!');
                 }
             });
-
             
             function submitResponses() {
     
@@ -1300,6 +1315,50 @@
   });
 </script>
 
+<script>
+        function switchToColor(img) {
+            img.src = img.dataset.color;
+        }
 
+        function switchToMono(img) {
+            const inputId = img.closest('label').getAttribute('for');
+            const input = document.getElementById(inputId);
+            if (!input.checked) {
+                img.src = img.dataset.mono;
+            }
+        }
+
+        function selectOption(clickedImg) {
+            // Reset all images to mono except the selected one
+            document.querySelectorAll('.switchable-img').forEach(img => {
+                const inputId = img.closest('label').getAttribute('for');
+                const input = document.getElementById(inputId);
+                if (!input.checked) {
+                    img.src = img.dataset.mono;
+                }
+            });
+
+            clickedImg.src = clickedImg.dataset.color;
+        }
+
+        // NEW — handle hover over the whole label
+        function handleLabelEnter(label) {
+            const img = label.querySelector('.switchable-img');
+            if (img) {
+                switchToColor(img);
+            }
+        }
+
+        function handleLabelLeave(label) {
+            const inputId = label.getAttribute('for');
+            const input = document.getElementById(inputId);
+            if (!input.checked) {
+                const img = label.querySelector('.switchable-img');
+                if (img) {
+                    switchToMono(img);
+                }
+            }
+        }
+    </script>
    
 @endpush

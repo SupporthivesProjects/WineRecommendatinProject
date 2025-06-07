@@ -113,11 +113,11 @@
 
                                     </h5>
 
-                                    <h6 class="mt-4 fs-16">Description</h6>
+                                    <h6 class="mt-4 fs-16">Tasting Notes</h6>
                                     <p>{{ $product->tasting_notes ?? 'N/A' }}</p>
 
                                     <div class="d-flex mt-2">
-                                        <div class="mt-2 sizes">Quantity:</div>
+                                        <!-- <div class="mt-2 sizes">Quantity:</div>
                                         <div class="d-flex ms-2">
                                             <form method="POST" action="">
                                                 @csrf
@@ -129,7 +129,7 @@
                                                     </select>
                                                 </div>
                                             </form>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -352,8 +352,9 @@
 
                                             <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
                                             <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
-                                                I want to try Now !!
+                                                Tell Me More !!
                                             </a>
+
                                         </div>
                                     </div>
                                 </div>

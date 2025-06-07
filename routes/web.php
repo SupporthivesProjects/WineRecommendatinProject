@@ -12,6 +12,8 @@ use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
 use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductController;
 use App\Http\Controllers\StoreManager\FeaturedProductController;
+use App\Http\Controllers\MainManagerController;
+use App\Http\Controllers\StoreAssignmentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,6 +46,9 @@ use Illuminate\Support\Facades\Route;
         elseif(auth()->user()->role === 'store_manager') {
             return redirect()->route('store-manager.dashboard')->with('success', 'Login successful!');
         }
+        elseif (auth()->user()->role === 'main_manager') {
+            return redirect()->route('main-manager.dashboard')->with('success', 'Login successful!');
+        }
         return redirect()->route('user.dashboard')->with('success', 'Login successful!');
     })->middleware(['auth', 'verified'])->name('dashboard');
     
@@ -53,16 +58,19 @@ use Illuminate\Support\Facades\Route;
         Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
 
         Route::get('/user/products', [UserDashboardController::class, 'products'])->name('user.products');
-        Route::get('/user/matched-products', [UserDashboardController::class, 'matchedproducts'])->name('user.matchedproducts');
-        
+        Route::get('user/matched-products/{submissionId}', [UserDashboardController::class, 'matchedproducts'])->name('user.matchedproducts');
+
+        Route::post('/user/cart/add', [UserDashboardController::class, 'addToCart'])->name('user.cart.add');
+        Route::post('/user/cart/remove', [UserDashboardController::class, 'removeFromCart'])->name('user.cart.remove');
+        Route::get('/user/cart', [UserDashboardController::class, 'getCart'])->name('user.cart.get');
+        Route::post('/user/checkout', [UserDashboardController::class, 'checkout'])->name('user.checkout');
+
+
+
         Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
         Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
         Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
         Route::post('/submit-response', [UserDashboardController::class, 'storeResponse']);
-
-        
-
-
 
         Route::get('/user/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
         Route::put('/user/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
@@ -107,6 +115,14 @@ use Illuminate\Support\Facades\Route;
 
         // View individual submission details
         Route::get('/questionnaire/responses/{submission_id}', [QuestionnaireController::class, 'showIndividualResponses'])->name('questionnaire.responses.show');
+
+        //Main Manager route
+        Route::get('/main-manager', [MainManagerController::class, 'index'])->name('main_manager');
+        Route::post('/main-manager/create', [MainManagerController::class, 'store'])->name('main_manager.store');
+    
+        //assign stores to manager
+        Route::get('/assign-stores/{manager}', [StoreAssignmentController::class, 'edit'])->name('assign.stores');
+        Route::post('/assign-stores/{manager}', [StoreAssignmentController::class, 'update'])->name('assign.stores.update');
 
 
     });
@@ -160,5 +176,17 @@ use Illuminate\Support\Facades\Route;
         Route::get('/stores', [App\Http\Controllers\StoreController::class, 'index'])->name('stores.index');
         Route::get('/stores/{store}', [App\Http\Controllers\StoreController::class, 'show'])->name('stores.show');
     });
+
+
+    //main manager routes
+    Route::middleware(['auth', 'main.manager'])->group(function () {
+        Route::get('/main-manager/dashboard', [MainManagerController::class, 'dashboard'])->name('main-manager.dashboard');
+        Route::get('/main-manager/stores', [MainManagerController::class, 'MainManagerAllStores'])->name('main-manager.allStores');
+        Route::get('/manager/store-details/{storeId}', [MainManagerController::class, 'getStoreDetails'])->name('manager.store.details');
+
+
+    });
+    
+
 
     require __DIR__.'/auth.php';

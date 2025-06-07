@@ -94,7 +94,12 @@
                 <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger me-2">Delete</button>
+                        @if ($user->role=="admin")
+
+                        @else
+                            <button type="submit" class="btn btn-danger me-2">Delete</button>
+                        @endif
+
                 </form>
                 <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary">Edit</a>
             </div>

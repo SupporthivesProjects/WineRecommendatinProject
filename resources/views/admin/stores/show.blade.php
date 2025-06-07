@@ -189,39 +189,78 @@
 
         </div>
 
-        <!-- Assign User Modal -->
-        <div id="assignUserModal" class="modal fade" tabindex="-1" aria-labelledby="assignUserModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+       
+        <!-- Add user to a store -->
+
+         <!-- Add User Modal -->
+         <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Assign User to Store</h5>
+                        <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="user_search" class="form-label">Search Users</label>
-                            <input type="text" class="form-control" id="user_search" placeholder="Search by name or email">
-                        </div>
+                        <form action="{{ route('admin.users.store') }}" method="POST">
+                            @csrf
 
-                        <div class="mb-3 max-h-60 overflow-auto">
-                            <table class="table table-bordered table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="users_table_body">
-                                    <tr>
-                                        <td colspan="3" class="text-center">Loading users...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="first_name" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="last_name" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="mobile" class="form-label">Mobile</label>
+                                    <input type="text" class="form-control" id="mobile" name="mobile" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="role" class="form-label">Role</label>
+                                    <input type="text" class="form-control" id="role" name="role" value="store_manager" readonly>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" name="status" required>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="bi bi-eye" id="eyeIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="store_id" class="form-label">Store Id</label>
+                                    <input type="text" class="form-control" id="store_id" name="store_id" value="{{ $store->id }}">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save User</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -229,6 +268,25 @@
 
     </div>
 </div>
+@if ($errors->has('duplicate'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Duplicate User',
+            text: '{{ $errors->first('duplicate') }}'
+        });
+    </script>
+@endif
+
+@if ($errors->any() && !$errors->has('duplicate'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+        });
+    </script>
+@endif
 
 @endsection
 
@@ -239,9 +297,9 @@
             
             // Function to open the assign user modal
             function openAssignUserModal() {
-                const modal = new bootstrap.Modal(document.getElementById('assignUserModal'));
+                const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
                 modal.show();
-                loadAvailableUsers();
+                //loadAvailableUsers();
             }
             
             // Function to close the assign user modal
@@ -343,6 +401,19 @@
                 });
             }
         </script>
+
+        <script>
+            document.getElementById('togglePassword').addEventListener('click', function () {
+                const passwordField = document.getElementById('password');
+                const eyeIcon = document.getElementById('eyeIcon');
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                eyeIcon.classList.toggle('bi-eye');
+                eyeIcon.classList.toggle('bi-eye-slash');
+            });
+        </script>
+
+
     @endpush
 
 
