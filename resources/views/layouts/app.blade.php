@@ -8,24 +8,19 @@
 
     <title>{{ config('app.name', 'Wine Recommender') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+    <!-- Basic CSS -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <!-- Owl Carousel links -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
-
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- You can also use CDN for frameworks like Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Styles -->
     <style>
-        footer 
-        {
-            margin-left: 250px; /* same as your sidebar width */
-            width: calc(100% - 250px); /* to prevent horizontal scroll */
+        footer {
+            margin-left: 250px;
+            /* same as your sidebar width */
+            width: calc(100% - 250px);
+            /* to prevent horizontal scroll */
         }
 
         .wine-bg {
@@ -45,7 +40,6 @@
     </style>
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
@@ -96,13 +90,13 @@
         });
     </script>
 
-     <!-- jQuery (required for Owl Carousel) -->
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery (required for Owl Carousel) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $(".owl-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
@@ -111,9 +105,15 @@
                 autoplay: true,
                 autoplayTimeout: 5000,
                 responsive: {
-                    0: { items: 1 },
-                    768: { items: 2 },
-                    1024: { items: 3 }
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2
+                    },
+                    1024: {
+                        items: 3
+                    }
                 }
             });
         });

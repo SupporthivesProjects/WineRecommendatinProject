@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-            <!-- Favicon -->
-            <link rel="icon" href="{{ asset('images/wine_store_favicon.ico') }}" type="image/x-icon">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-            <!-- Authentication-main Js -->
-            <script src="{{ asset('assets/js/authentication-main.js') }}"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('images/wine_store_favicon.ico') }}" type="image/x-icon">
 
-            <!-- Bootstrap Css -->
-            <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" >
+    <!-- Authentication-main Js -->
+    <script src="{{ asset('assets/js/authentication-main.js') }}"></script>
 
-            <!-- Style Css -->
-            <link href="{{ asset('assets/css/styles.min.css') }}" rel="stylesheet" >
+    <!-- Bootstrap Css -->
+    <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
-            <!-- Icons Css -->
-            <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" >
+    <!-- Style Css -->
+    <link href="{{ asset('assets/css/styles.min.css') }}" rel="stylesheet">
 
-            <script>
-                if(localStorage.spruhalandingdarktheme){
-                    document.querySelector("html").setAttribute("data-theme-mode","dark")
-                }
-                if(localStorage.spruhalandingrtl){
-                    document.querySelector("html").setAttribute("dir","rtl")
-                    document.querySelector("#style")?.setAttribute("href", "../assets/libs/bootstrap/css/bootstrap.rtl.min.css");
-                }
-            </script>
+    <!-- Icons Css -->
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
 
-            <!-- Scripts -->
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        if (localStorage.spruhalandingdarktheme) {
+            document.querySelector("html").setAttribute("data-theme-mode", "dark")
+        }
+        if (localStorage.spruhalandingrtl) {
+            document.querySelector("html").setAttribute("dir", "rtl")
+            document.querySelector("#style")?.setAttribute("href", "../assets/libs/bootstrap/css/bootstrap.rtl.min.css");
+        }
+    </script>
 
-    
+    <!-- Scripts -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
 
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-30 h-30 fill-current text-gray-500" />
-                </a>
-            </div>
 
-            <div class="row signpages text-center">
-                {{ $slot }}
-            </div>
+</head>
+
+<body class="font-sans text-gray-900 antialiased">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div>
+            <a href="/">
+                <x-application-logo class="w-30 h-30 fill-current text-gray-500" />
+            </a>
         </div>
 
-         <!-- Custom-Switcher JS -->
-        <script src="{{ asset('assets/js/custom-switcher.min.js') }}"></script>
+        <div class="row signpages text-center">
+            {{ $slot }}
+        </div>
+    </div>
 
-        <!-- Bootstrap JS -->
-        <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Custom-Switcher JS -->
+    <script src="{{ asset('assets/js/custom-switcher.min.js') }}"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 
-    </body>
+</body>
+
 </html>
