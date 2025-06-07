@@ -351,7 +351,7 @@
                 <!-- Hero Content -->
                 <div class="flex-grow flex items-center justify-center">
                     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
+                        <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discovers Your Perfect Wine</h1>
                         <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
                             Our intelligent recommendation system helps you find the perfect wine for any occasion,
                             based on
