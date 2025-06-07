@@ -40,20 +40,32 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
             'mobile' => ['required', 'string', 'max:20'],
-            'role' => ['required', 'in:admin,store_manager,customer'],
+            'role' => ['required', 'in:store_manager,customer,main_manager'],
             'status' => ['required', 'in:active,inactive'],
             'store_id' => ['nullable', 'exists:stores,id'],
         ]);
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
 
-        // Validate that store managers must have a store assigned
+        // Check for duplicate user by email AND mobile
+        $existingUser = User::where('email', $request->email)
+                            ->where('mobile', $request->mobile)
+                            ->first();
+
+        if ($existingUser) {
+            return redirect()->back()
+                ->withErrors(['duplicate' => 'A user with this email and mobile already exists.'])
+                ->withInput();
+        }
+
+        // Store manager must have a store assigned
         if ($request->input('role') === 'store_manager' && empty($request->input('store_id'))) {
             return redirect()->back()
                 ->withErrors(['store_id' => 'A store manager must be assigned to a store.'])
@@ -75,6 +87,7 @@ class UserController extends Controller
         return redirect()->route('admin.dashboard', ['tab' => 'users'])
             ->with('success', 'User created successfully.');
     }
+
     /**
      * Display the specified user.
      */

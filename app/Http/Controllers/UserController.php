@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\QuestionResponse;
 use Illuminate\Support\Str;
-
-
+use Illuminate\Support\Facades\Session;
+use App\Models\CartCheckout;
 
 
 class UserController extends Controller
@@ -192,10 +192,16 @@ class UserController extends Controller
         return view('user.products', compact('products'));
     }
 
-    public function matchedproducts()
+    public function matchedproducts($submissionId)
     {
+        // Store in session if needed
+        session(['submission_id' => $submissionId]);
+
         // Get the matching products from the session
         $products = session('matching_products', []);
+        $cart = session('cart', []);
+
+    return view('user.matchedproducts', compact('products', 'cart'));
 
         // Pass the products to the view
         return view('user.matchedproducts', compact('products'));
@@ -312,7 +318,7 @@ class UserController extends Controller
         // Redirect to the 'user.products' route
         return response()->json([
             'status' => 'success',
-            'redirect' => route('user.matchedproducts')
+            'redirect' => route('user.matchedproducts', ['submissionId' => $submissionId])
         ], 200);
     }
 
@@ -480,5 +486,129 @@ class UserController extends Controller
 
         return $query->get();
     }
+
+    public function addToCart(Request $request)
+{
+    $cart = session()->get('cart', []);
+
+    $productId = $request->input('product_id');
+    $productName = $request->input('product_name');
+    $productPrice = $request->input('product_price');
+
+    // Check if product already in cart by id
+    $foundIndex = null;
+    foreach ($cart as $index => $item) {
+        if ($item['id'] == $productId) {
+            $foundIndex = $index;
+            break;
+        }
+    }
+
+    if ($foundIndex === null) {
+        // Add new product object
+        $cart[] = [
+            'id' => $productId,
+            'name' => $productName,
+            'retail_price' => $productPrice,
+            'quantity' => 1  // Optional: add quantity if needed
+        ];
+    } else {
+        // Optionally increase quantity or ignore duplicates
+        $cart[$foundIndex]['quantity']++;
+    }
+
+    session(['cart' => $cart]);
+
+    return response()->json(['success' => true]);
+}
+
+
+public function removeFromCart(Request $request)
+{
+    $cart = session()->get('cart', []);
+    $productId = $request->input('product_id');
+
+    $cart = array_filter($cart, fn($item) => $item['id'] != $productId);
+
+    session(['cart' => array_values($cart)]);
+
+    return response()->json(['success' => true]);
+}
+
+
+    public function getCart()
+    {
+        $cart = session('cart', []);
+        // Optional: fetch product details here if needed, e.g.
+        // $products = Product::whereIn('id', $cart)->get();
+
+        return response()->json(['cart' => $cart]);
+    }
+
+   
+    
+
+    public function checkout(Request $request)
+    {
+        $submissionId = $request->submission_id;
+        $userId = auth()->id(); // Securely fetch user ID from session/auth
+    
+        Log::info('Checkout started for submission_id: ' . $submissionId);
+        Log::info('Checkout started for user_id: ' . $userId);
+    
+        $cart = Session::get('cart', []);
+        Log::info('Cart contents: ', $cart);
+    
+        if (empty($cart)) {
+            Log::warning('Cart is empty.');
+            return response()->json(['success' => false, 'message' => 'Cart is empty.']);
+        }
+    
+        $responses = QuestionResponse::where('submission_id', $submissionId)->get();
+        Log::info('Fetched responses count: ' . $responses->count());
+    
+        if ($responses->isEmpty()) {
+            Log::warning('Invalid submission ID: no responses found.');
+            return response()->json(['success' => false, 'message' => 'Invalid submission ID.']);
+        }
+    
+        $username = $email = $phone = 'N/A';
+    
+        foreach ($responses as $response) {
+            Log::info("Processing response: question_key={$response->question_key}, answer={$response->answer}");
+    
+            if ($response->question_key === 'question1') {
+                $username = $response->answer;
+                Log::info("Username set to: $username");
+            } elseif ($response->question_key === 'question2') {
+                $phone = $response->answer;
+                Log::info("Email set to: $email");
+            } elseif ($response->question_key === 'question3') {
+                $email = $response->answer;
+                Log::info("Phone set to: $phone");
+            }
+        }
+    
+        // Save the checkout
+        $checkout = new CartCheckout();
+        $checkout->store_manager_id = $userId; 
+        $checkout->username = $username;
+        $checkout->email = $email;
+        $checkout->phone = $phone;
+        $checkout->submission_id = $submissionId;
+        $checkout->products = json_encode($cart);
+    
+        $saved = $checkout->save();
+        Log::info('Checkout saved: ' . ($saved ? 'yes' : 'no'));
+    
+        // Clear cart
+        Session::forget('cart');
+        Log::info('Cart cleared from session.');
+    
+        return response()->json(['success' => true]);
+    }
+    
+
+
 
 }

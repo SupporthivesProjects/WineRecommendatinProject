@@ -136,6 +136,8 @@
                     <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
+                    <button class="btn btn-outline-dark" id="view-cart-btn">View Cart</button>
+
                 </ul>
             </div>
         </div>
@@ -282,6 +284,12 @@
                                         <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
                                             I want to try Now !!
                                         </a>
+                                        <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
+                                                data-product-id="{{ $product->id }}"
+                                                data-product-name="{{ $product->wine_name }}"
+                                                data-product-price="{{ $product->retail_price }}">
+                                            {{ in_array($product->id, $cart) ? 'Remove from Cart' : 'Buy Now' }}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -295,6 +303,14 @@
 
 @endsection
 @push('scripts')
+<script>
+    for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    console.log(`${key}: ${value}`);
+}
+
+</script>
 <script>
     // Wait for the DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', () => {
@@ -350,6 +366,152 @@
     }
   });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.buy-now-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.getAttribute('data-product-id');
+                const productName = this.getAttribute('data-product-name');
+                const productPrice = this.getAttribute('data-product-price');
+                const isInCart = this.classList.contains('btn-dark');
+                const url = isInCart ? '{{ route("user.cart.remove") }}' : '{{ route("user.cart.add") }}';
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({ 
+                        product_id: productId, 
+                        product_name: productName,
+                        product_price: productPrice
+                    
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (isInCart) {
+                            this.classList.remove('btn-dark');
+                            this.classList.add('btn-light');
+                            this.textContent = 'Buy Now';
+
+                            toastr.warning('Product removed from cart!', 'Removed', {
+                                closeButton: true,
+                                progressBar: true,
+                                positionClass: 'toast-top-right',
+                                timeOut: 3000
+                            });
+                        } else {
+                            this.classList.remove('btn-light');
+                            this.classList.add('btn-dark');
+                            this.textContent = 'Remove from Cart';
+
+                            toastr.success('Product added to cart!', 'Added', {
+                                closeButton: true,
+                                progressBar: true,
+                                positionClass: 'toast-top-right',
+                                timeOut: 3000
+                            });
+                        }
+                    }
+                })
+                .catch(() => {
+                    toastr.error('Something went wrong!', 'Error', {
+                        closeButton: true,
+                        progressBar: true,
+                        positionClass: 'toast-top-right',
+                        timeOut: 3000
+                    });
+                });
+            });
+        });
+
+        // View Cart button
+        document.getElementById('view-cart-btn').addEventListener('click', function () {
+            fetch('{{ route("user.cart.get") }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cart.length === 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Cart is Empty',
+                            text: "You haven't added any products yet!"
+                        });
+                    } else {
+                        const cartList = data.cart.map(product => {
+                            return `<li>${product.name || 'No Name'} - $${product.retail_price} (Qty: ${product.quantity || 1})</li>`;
+                        }).join('');
+
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Your Cart',
+                            html: `
+                                <ul style="text-align: left; margin-bottom: 15px;">
+                                    ${cartList}
+                                </ul>
+                                <button id="checkout-btn" class="swal2-confirm swal2-styled" style="background-color:#28a745">
+                                    Let's Checkout
+                                </button>
+                            `,
+                            showConfirmButton: false
+                        });
+
+                        setTimeout(() => {
+                            const checkoutBtn = document.getElementById('checkout-btn');
+                            if (checkoutBtn) {
+                                checkoutBtn.addEventListener('click', function () {
+                                    const submissionId = '{{ session("submission_id") }}';
+
+                                    fetch('{{ route("user.checkout") }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        },
+                                        body: JSON.stringify({ 
+                                            submission_id: submissionId })
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            toastr.info('Redirecting to browse wines...', '', {
+                                                closeButton: true,
+                                                progressBar: true,
+                                                positionClass: 'toast-top-right',
+                                                timeOut: 2000
+                                            });
+                                            setTimeout(() => {
+                                                window.location.href = '{{ route("user.products") }}';
+                                            }, 2000);
+                                        } else {
+                                            toastr.error(data.message || 'Checkout failed.');
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.error('Checkout error:', error);  
+                                        toastr.error('Something went wrong during checkout.');
+                                    });
+                                });
+                            }
+                        }, 100);
+                    }
+                });
+        });
+    });
+</script>
+
+
+<script>
+    const productsInfo = @json($products->keyBy('id')->map(function($p) {
+        return ['name' => $p->wine_name, 'price' => $p->retail_price];
+    }));
+</script>
+
 
 
 

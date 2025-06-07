@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
+<!-- Sweet Alert  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @stack('styles')
 </head>
@@ -81,6 +83,7 @@
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
 
+    
    
         <!-- Your existing content -->
 
@@ -94,15 +97,5 @@
                 });
             </script>
         @endif
-
 </body>
-</html>
-
-
-    
-
-
-
-</body>
-
 </html>

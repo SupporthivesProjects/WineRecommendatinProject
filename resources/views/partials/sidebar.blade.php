@@ -1,4 +1,4 @@
-@if(Auth::user()->role === 'admin' || Auth::user()->role === 'store_manager')
+@if(Auth::user()->role === 'admin' || Auth::user()->role === 'store_manager' || Auth::user()->role === 'main_manager')
 <!-- Start::app-sidebar -->
 <aside class="app-sidebar sticky" id="sidebar">
     <!-- Start::main-sidebar-header -->
@@ -46,6 +46,12 @@
                         </a>
                     </li>
                     <li class="slide">
+                        <a href="{{ route('admin.main_manager') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-users"></i>
+                            <span class="side-menu__label">Main Manager</span>
+                        </a>
+                    </li>
+                    <li class="slide">
                         <a href="{{ route('admin.questionnaires.index') }}" class="side-menu__item">
                             <i class="side-menu__icon fe fe-edit"></i>
                             <span class="side-menu__label">Questionnaires</span>
@@ -69,6 +75,20 @@
                         <a href="{{ route('store-manager.products') }}" class="side-menu__item">
                             <i class="side-menu__icon fe fe-box"></i>
                             <span class="side-menu__label">Store Products</span>
+                        </a>
+                    </li>
+                @elseif(Auth::user()->role === 'main_manager')
+                    <!-- Main Manager sidebar links -->
+                    <li class="slide">
+                        <a href="{{ route('main-manager.dashboard') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-home"></i>
+                            <span class="side-menu__label">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('main-manager.allStores') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-box"></i>
+                            <span class="side-menu__label">Stores</span>
                         </a>
                     </li>
                 @endif
