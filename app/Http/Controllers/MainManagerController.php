@@ -85,14 +85,30 @@ class MainManagerController extends Controller
             }
         }
 
+        // Get date range from request or set defaults
+        $startDate = $request->input('start_date') 
+            ? Carbon::parse($request->input('start_date'))->startOfDay()
+            : Carbon::now()->subDays(7)->startOfDay();
+            
+        $endDate = $request->input('end_date') 
+            ? Carbon::parse($request->input('end_date'))->endOfDay()
+            : Carbon::now()->endOfDay();
+
+        // Ensure start date is not after end date
+        if ($startDate->gt($endDate)) {
+            $temp = $startDate;
+            $startDate = $endDate;
+            $endDate = $temp;
+        }
 
         // 3. Store users
         $storeUserIds = User::whereIn('store_id', $filteredStoreIds)->pluck('id');
 
-        // 4. Get cart_checkouts
+        // 4. Get cart_checkouts within date range
         $cartCheckouts = DB::table('cart_checkouts')
             ->whereIn('store_manager_id', $storeUserIds)
-            ->get(['products']);
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get(['products', 'created_at']);
 
         // Quantity Calculation
         $totalQuantity = 0;

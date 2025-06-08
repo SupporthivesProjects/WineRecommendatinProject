@@ -226,9 +226,40 @@
                                         <label class="card-title mb-1">Quantity Sold</label>
                                         <span class="d-block fs-12 mb-0 text-muted">Number of times the Questionnaire was used in last 7 days</span>
                                     </div>
+                                    
+                                    <!-- Compact Date Filter for Quantity Chart -->
+                                    <div class="compact-date-filter">
+                                        <form method="GET" action="{{ route('main-manager.dashboard') }}" class="d-flex align-items-center gap-1">
+                                            @if(request('store_id'))
+                                                <input type="hidden" name="store_id" value="{{ request('store_id') }}">
+                                            @endif
+                                            <div class="d-flex align-items-center">
+                                                <label class="filter-label me-1">From:</label>
+                                                <input type="date" class="form-control form-control-xs" name="start_date" 
+                                                       value="{{ request('start_date', $defaultStartDate ?? '') }}">
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <label class="filter-label me-1 ms-2">To:</label>
+                                                <input type="date" class="form-control form-control-xs" name="end_date" 
+                                                       value="{{ request('end_date', $defaultEndDate ?? '') }}">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-xs ms-2" title="Apply Filter">
+                                                <i class="fe fe-filter" style="font-size: 10px;"></i>
+                                            </button>
+                                            <a href="{{ route('main-manager.dashboard') }}{{ request('store_id') ? '?store_id=' . request('store_id') : '' }}" class="btn btn-secondary btn-xs ms-1" title="Reset">
+                                                <i class="fe fe-refresh-cw" style="font-size: 10px;"></i>
+                                            </a>
+                                        </form>
+                                    </div>
                             
                                 </div>
                                 <div class="card-body">
+                                    <!-- Date range display -->
+                                    <div class="mb-2">
+                                        <small class="text-muted">
+                                            Showing data from {{ $displayStartDate ?? 'N/A' }} to {{ $displayEndDate ?? 'N/A' }}
+                                        </small>
+                                    </div>
                                     <div id="project">
                                         <!-- <canvas id="questionnaireChart" class="chartjs-chart"></canvas> -->
                                         <canvas id="sales-last-7-days"></canvas>
@@ -245,9 +276,44 @@
                                         <label class="card-title mb-1">Total Sales</label>
                                         <span class="d-block fs-12 mb-0 text-muted">Revenue in last 7 days</span>
                                     </div>
-                                    <a href="{{ route('admin.questionnaire.responses') }}" class="btn btn-sm btn-outline-primary btn-outline">View all responses</a> 
+                                    
+                                    <!-- View all responses button and compact filter -->
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="{{ route('admin.questionnaire.responses') }}" class="btn btn-sm btn-outline-primary btn-outline">View all responses</a>
+                                        
+                                        <!-- Compact Date Filter for Sales Chart -->
+                                        <div class="compact-date-filter">
+                                            <form method="GET" action="{{ route('main-manager.dashboard') }}" class="d-flex align-items-center gap-1">
+                                                @if(request('store_id'))
+                                                    <input type="hidden" name="store_id" value="{{ request('store_id') }}">
+                                                @endif
+                                                <div class="d-flex align-items-center">
+                                                    <label class="filter-label me-1">From:</label>
+                                                    <input type="date" class="form-control form-control-xs" name="start_date" 
+                                                           value="{{ request('start_date', $defaultStartDate ?? '') }}">
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <label class="filter-label me-1 ms-2">To:</label>
+                                                    <input type="date" class="form-control form-control-xs" name="end_date" 
+                                                           value="{{ request('end_date', $defaultEndDate ?? '') }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-xs ms-2" title="Apply Filter">
+                                                    <i class="fe fe-filter" style="font-size: 10px;"></i>
+                                                </button>
+                                                <a href="{{ route('main-manager.dashboard') }}{{ request('store_id') ? '?store_id=' . request('store_id') : '' }}" class="btn btn-secondary btn-xs ms-1" title="Reset">
+                                                    <i class="fe fe-refresh-cw" style="font-size: 10px;"></i>
+                                                </a>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
+                                    <!-- Date range display -->
+                                    <div class="mb-2">
+                                        <small class="text-muted">
+                                            Showing revenue from {{ $displayStartDate ?? 'N/A' }} to {{ $displayEndDate ?? 'N/A' }}
+                                        </small>
+                                    </div>
                                     <div id="project">
                                     <canvas id="sales-amount-7-days"></canvas>
                                     </div>
@@ -468,4 +534,67 @@
 
 
     
+@endpush
+@push('styles')
+<style>
+    /* Compact Date Filter Styles */
+    .compact-date-filter {
+        background: #f8f9fa;
+        border-radius: 4px;
+        padding: 6px 8px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    
+    .compact-date-filter .filter-label {
+        font-size: 11px;
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 0;
+        white-space: nowrap;
+    }
+    
+    .compact-date-filter .form-control-xs {
+        font-size: 11px;
+        padding: 2px 6px;
+        height: 26px;
+        width: 110px;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+    }
+    
+    .compact-date-filter .form-control-xs:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .compact-date-filter .btn-xs {
+        padding: 3px 6px;
+        font-size: 10px;
+        line-height: 1.2;
+        border-radius: 3px;
+        height: 26px;
+        width: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .compact-date-filter .btn-xs:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .compact-date-filter {
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .compact-date-filter .form-control-xs {
+            width: 100px;
+        }
+    }
+</style>
 @endpush
