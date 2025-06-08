@@ -210,7 +210,7 @@
         {
                 position: relative;
                 height: 100vh; 
-                background: url('{{ asset('images/redlabel.jpg') }}') no-repeat center center/cover;
+                background: url('{{ asset('images/Redlabel.jpg') }}') no-repeat center center/cover;
                 background-attachment: fixed; 
                 z-index: 1;
                 
@@ -316,7 +316,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('{{ asset('images/winebottle3.jpg') }}');
+            background-image: url('{{ asset('images/Winebottle3.jpg') }}');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
@@ -654,7 +654,7 @@
                         <!-- Row 1: Image Left, Text Right -->
                         <div class="row g-0 align-items-center">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/blacklabel.jpg') }}" class="img-fluid w-100" alt="Image Left">
+                                <img src="{{ asset('images/Blacklabel.jpg') }}" class="img-fluid w-100" alt="Image Left">
                             </div>
                             <div class="col-md-6 text-center p-3">
                                 <h1 id="mystyle">Products</h1>
