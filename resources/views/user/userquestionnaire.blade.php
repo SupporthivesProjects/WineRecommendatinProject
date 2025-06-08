@@ -366,7 +366,7 @@
 
                 <div class="col-md-6">
                     <div class="image-card open-questionnaire-modal" data-questionnaire-id="2">
-                        <img src="{{ asset('images/wineglasses.jpg') }}" class="img-fluid" alt="Image 2">
+                        <img src="{{ asset('images/Wineglasses.jpg') }}" class="img-fluid" alt="Image 2">
                         <div class="overlay">
                             <div class="overlay-text">
                                 <h4 class="default-text">Savy Sip</h4>
