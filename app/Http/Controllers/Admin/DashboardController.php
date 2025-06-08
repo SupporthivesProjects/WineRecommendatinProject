@@ -19,6 +19,28 @@ class DashboardController extends Controller
     {
         $activeTab = $request->query('tab', 'dashboard');
 
+        // Get date range from request or set defaults
+        $startDate = $request->input('start_date') 
+            ? Carbon::parse($request->input('start_date'))->startOfDay()
+            : Carbon::now()->subDays(7)->startOfDay();
+            
+        $endDate = $request->input('end_date') 
+            ? Carbon::parse($request->input('end_date'))->endOfDay()
+            : Carbon::now()->endOfDay();
+
+        // Ensure start date is not after end date
+        if ($startDate->gt($endDate)) {
+            $temp = $startDate;
+            $startDate = $endDate;
+            $endDate = $temp;
+        }
+
+        // Format dates for display and form defaults
+        $defaultStartDate = $request->input('start_date', Carbon::now()->subDays(7)->format('Y-m-d'));
+        $defaultEndDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
+        $displayStartDate = Carbon::parse($startDate)->format('M d, Y');
+        $displayEndDate = Carbon::parse($endDate)->format('M d, Y');
+
         // Products data with search functionality
         $productsQuery = Product::query();
 
@@ -206,33 +228,42 @@ class DashboardController extends Controller
             $storeData = [0, 0];
         }
 
-        // Questionnaire usage data for last 5 days
-        $dates = [];
+        // Questionnaire usage data for the selected date range
+        $dateRange = collect();
+        $current = $startDate->copy();
+        
+        while ($current->lte($endDate)) {
+            $dateRange->push($current->format('Y-m-d'));
+            $current->addDay();
+        }
+
+        $dates = $dateRange->map(function($date) {
+            return Carbon::parse($date)->format('d M');
+        })->toArray();
+
         $adminData = [];
         $admin1Data = [];
         $admin2Data = [];
 
-        // Get the last 5 days
-        for ($i = 4; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i);
-            $dates[] = $date->format('d M');
-
-            // Check if questionnaire_logs table exists
-            if (Schema::hasTable('questionnaire_logs')) {
+        // Check if questionnaire_logs table exists
+        if (Schema::hasTable('questionnaire_logs')) {
+            foreach ($dateRange as $date) {
                 // Using model instead of DB facade
                 $adminData[] = QuestionnaireLog::where('admin_id', 1)
-                    ->whereDate('created_at', $date->format('Y-m-d'))
+                    ->whereDate('created_at', $date)
                     ->count();
 
                 $admin1Data[] = QuestionnaireLog::where('admin_id', 2)
-                    ->whereDate('created_at', $date->format('Y-m-d'))
+                    ->whereDate('created_at', $date)
                     ->count();
 
                 $admin2Data[] = QuestionnaireLog::where('admin_id', 3)
-                    ->whereDate('created_at', $date->format('Y-m-d'))
+                    ->whereDate('created_at', $date)
                     ->count();
-            } else {
-                // Provide sample data if table doesn't exist
+            }
+        } else {
+            // Provide sample data if table doesn't exist
+            foreach ($dateRange as $date) {
                 $adminData[] = rand(5, 15);
                 $admin1Data[] = rand(3, 12);
                 $admin2Data[] = rand(2, 10);
@@ -248,50 +279,35 @@ class DashboardController extends Controller
             $q1Values = [0, 0, 0];
         }
 
-        // Get the data from the database
+        // Get the data from the database within date range
         $usageData = DB::table('questionnaire_usage')
-        ->select(DB::raw('DATE(created_on) as date'), DB::raw('count(*) as count'))
-        ->where('created_on', '>=', now()->subDays(7)) 
-        ->groupBy(DB::raw('DATE(created_on)'))
-        ->orderBy('date', 'asc')
-        ->get();
+            ->select(DB::raw('DATE(created_on) as date'), DB::raw('count(*) as count'))
+            ->whereBetween('created_on', [$startDate, $endDate])
+            ->groupBy(DB::raw('DATE(created_on)'))
+            ->orderBy('date', 'asc')
+            ->get();
 
         // Convert the collection to arrays of dates and counts
-        $dates = $usageData->pluck('date')->toArray();
+        $usageDates = $usageData->pluck('date')->toArray();
         $counts = $usageData->pluck('count')->toArray();
 
-        // Generate an array of all dates in the past 7 days
-        $allDates = collect(range(0, 6))->map(function ($i) {
-        return now()->subDays(6 - $i)->toDateString();  
-        });
-
         // Map over the generated dates and assign counts
-        $counts = $allDates->map(function ($date) use ($usageData) {
-        // Use Carbon to parse the date correctly
-        $record = $usageData->firstWhere('date', Carbon::parse($date)->toDateString());
+        $counts = $dateRange->map(function ($date) use ($usageData) {
+            // Use Carbon to parse the date correctly
+            $record = $usageData->firstWhere('date', Carbon::parse($date)->toDateString());
 
-        // Return the count if it exists, otherwise 0
-        return $record ? $record->count : 0;
-        });
+            // Return the count if it exists, otherwise 0
+            return $record ? $record->count : 0;
+        })->toArray();
 
-        // Ensure that $dates has the same format and the missing dates are added with count = 0
-        $dates = $allDates->toArray();  
-
-
-        //QUESTIONNAIRE CHART DATA 
-        // Get past 7 days' labels
-        $dates = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $dates[] = Carbon::now()->subDays($i)->format('d M');
-        }
-
-        // Fetch counts of unique submissions grouped by day
+        // QUESTIONNAIRE CHART DATA within date range
+        // Fetch counts of unique submissions grouped by day within date range
         $responseData = DB::table('question_responses')
             ->select(
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('COUNT(DISTINCT submission_id) as count')
             )
-            ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
@@ -308,13 +324,10 @@ class DashboardController extends Controller
             }
         }
 
-         //send list of all featured products
-         $featuredCount = DB::table('store_products')
+        // Send list of all featured products
+        $featuredCount = DB::table('store_products')
                     ->where('is_featured', 1)
                     ->count();
-   
-
-
 
         return view('admin.bootadmindashboard', compact(
             'activeTab',
@@ -341,15 +354,16 @@ class DashboardController extends Controller
             'templates',
             'q1Labels',
             'q1Values',
-            'dates',
             'counts',
             'usersCount',
             'storesCount',
             'productsCount',
-            'dates',
             'graphData',
             'featuredCount',
-            
+            'defaultStartDate',
+            'defaultEndDate',
+            'displayStartDate',
+            'displayEndDate'
         ));
     }
 

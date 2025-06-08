@@ -16,19 +16,39 @@ class QuestionnaireController extends Controller
     /**
      * Display a listing of the questionnaire templates.
      */
-    public function index()
+    public function index(Request $request)
     {
         $templates = QuestionnaireTemplate::orderBy('level')->get();
 
-        // Get data for last 7 days, grouped by template_id and date
-        $last7Days = collect();
-        for ($i = 6; $i >= 0; $i--) {
-            $last7Days->push(Carbon::today()->subDays($i)->format('Y-m-d'));
+        // Get date range from request or set defaults
+        $startDate = $request->input('start_date') 
+            ? Carbon::parse($request->input('start_date'))->startOfDay()
+            : Carbon::now()->subDays(7)->startOfDay();
+            
+        $endDate = $request->input('end_date') 
+            ? Carbon::parse($request->input('end_date'))->endOfDay()
+            : Carbon::now()->endOfDay();
+
+        // Ensure start date is not after end date
+        if ($startDate->gt($endDate)) {
+            $temp = $startDate;
+            $startDate = $endDate;
+            $endDate = $temp;
         }
 
+        // Generate date range for chart
+        $dateRange = collect();
+        $current = $startDate->copy();
+        
+        while ($current->lte($endDate)) {
+            $dateRange->push($current->format('Y-m-d'));
+            $current->addDay();
+        }
+
+        // Get data within the specified date range
         $rawData = DB::table('question_responses')
             ->select(DB::raw('DATE(created_at) as date'), 'template_id', DB::raw('COUNT(DISTINCT submission_id) as count'))
-            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('template_id', DB::raw('DATE(created_at)'))
             ->get();
 
@@ -36,7 +56,7 @@ class QuestionnaireController extends Controller
         $chartData = [];
         foreach ($templates as $template) {
             $data = [];
-            foreach ($last7Days as $date) {
+            foreach ($dateRange as $date) {
                 $match = $rawData->first(fn($item) => $item->template_id == $template->id && $item->date == $date);
                 $data[] = $match ? $match->count : 0;
             }
@@ -46,10 +66,10 @@ class QuestionnaireController extends Controller
             ];
         }
 
-        // Get total counts by template_id (distinct submissions)
+        // Get total counts by template_id (distinct submissions) within date range
         $totalCounts = DB::table('question_responses')
             ->select('template_id', DB::raw('COUNT(DISTINCT submission_id) as count'))
-            ->where('created_at', '>=', Carbon::now()->subDays(7))
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('template_id')
             ->pluck('count', 'template_id');
 
@@ -59,16 +79,38 @@ class QuestionnaireController extends Controller
         $proCount = $totalCounts[3] ?? 0;           
         $quickPourCount = $totalCounts[4] ?? 0;
 
-    
+        // Format dates for display
+        $defaultStartDate = $request->input('start_date', Carbon::now()->subDays(7)->format('Y-m-d'));
+        $defaultEndDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
+        $displayStartDate = Carbon::parse($startDate)->format('M d, Y');
+        $displayEndDate = Carbon::parse($endDate)->format('M d, Y');
+
+        // Format date labels for chart (limit to reasonable number for readability)
+        $dateLabels = $dateRange->count() > 30 
+            ? $dateRange->filter(function($date, $index) use ($dateRange) { 
+                return $index % ceil($dateRange->count() / 15) === 0; 
+            })->values()
+            : $dateRange->toArray();
+
+        // Also create last7Days for backward compatibility
+        $last7Days = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $last7Days->push(Carbon::today()->subDays($i)->format('Y-m-d'));
+        }
 
         return view('admin.dashboard.questionnaires-tab', compact(
             'templates',
             'chartData',
-            'last7Days',
+            'dateLabels',
+            'last7Days', // Keep for backward compatibility
             'firstSipCount',
             'savySipperCount',
             'quickPourCount',
-            'proCount'
+            'proCount',
+            'defaultStartDate',
+            'defaultEndDate',
+            'displayStartDate',
+            'displayEndDate'
         ));
     }
 
@@ -127,7 +169,7 @@ class QuestionnaireController extends Controller
             $questions[] = $questionData;
         }
 
-        QuestionnaireTemplate::create([
+        $questionnaireTemplate = QuestionnaireTemplate::create([
             'name' => $request->input('name'),
             'level' => $request->input('level'),
             'description' => $request->input('description'),
@@ -135,10 +177,9 @@ class QuestionnaireController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
-
         // After saving the questionnaire template, store the questions in the 'questions' table
         foreach ($questions as $question) {
-            \DB::table('questions')->insert([
+            DB::table('questions')->insert([
                 'template_id' => $questionnaireTemplate->id,
                 'question' => $question['text'],
                 'type' => $question['type'],
@@ -163,8 +204,6 @@ class QuestionnaireController extends Controller
                 'default' => $question['default'] ?? null,
             ]);
         }
-
-
 
         return redirect()->route('admin.questionnaires.index')
             ->with('success', 'Questionnaire template created successfully.');
@@ -238,9 +277,6 @@ class QuestionnaireController extends Controller
         }
 
         $questionnaire->update([
-            'name' => $request->input('name'),
-            'level' => $request->input('level'),
-            'description' => $request->input('description'),
             'name' => $request->input('name'),
             'level' => $request->input('level'),
             'description' => $request->input('description'),
@@ -376,68 +412,55 @@ class QuestionnaireController extends Controller
         ->orderByDesc('created_at')
         ->get();
 
-
-        // You may need to fetch customer details from another table if not present in `question_responses`
         return view('admin.questionnaires.showResponses', compact('submissions'));
     }
 
     // Show a specific submission
     public function showIndividualResponses($submission_id)
     {
-            // Fetch customer info from `questionnaire_usage`
-                $customer = DB::table('questionnaire_usage')
-                ->where('submission_id', $submission_id)
-                ->first();
+        // Fetch customer info from `questionnaire_usage`
+        $customer = DB::table('questionnaire_usage')
+            ->where('submission_id', $submission_id)
+            ->first();
 
-            // Fetch all responses for this submission
-            $responses = DB::table('question_responses')
-                ->where('submission_id', $submission_id)
-                ->get();
+        // Fetch all responses for this submission
+        $responses = DB::table('question_responses')
+            ->where('submission_id', $submission_id)
+            ->get();
 
-                
+        // Get template ID from one of the responses
+        $templateId = optional($responses->first())->template_id;
 
-            // Get template ID from one of the responses
-            $templateId = optional($responses->first())->template_id;
-
-            // Get all questions for that template
-            $questions = DB::table('questions')
+        // Get all questions for that template
+        $questions = DB::table('questions')
             ->where('template_id', $templateId)
             ->orderBy('question_order')
             ->pluck('question');  
 
+        // Get template name (assuming you have a `templates` table)
+        $templateName = DB::table('questionnaire_templates')
+            ->where('id', $templateId)
+            ->value('name');
 
+        // Get user_id from one of the responses
+        $userId = optional($responses->first())->user_id;
 
-            // Get template name (assuming you have a `templates` table)
-            $templateName = DB::table('questionnaire_templates')
-                ->where('id', $templateId)
-                ->value('name');
+        // Fetch store_id from users table
+        $storeId = DB::table('users')
+            ->where('id', $userId)
+            ->value('store_id');
 
-            // Get user_id from one of the responses
-            $userId = optional($responses->first())->user_id;
+        // Fetch store details
+        $store = DB::table('stores')
+            ->where('id', $storeId)
+            ->first();
 
-            // Fetch store_id from users table
-            $storeId = DB::table('users')
-                ->where('id', $userId)
-                ->value('store_id');
-
-            // Fetch store details
-            $store = DB::table('stores')
-                ->where('id', $storeId)
-                ->first();
-
-            return view('admin.questionnaires.showIndividualResponses', compact(
-                'customer',
-                'responses',
-                'questions',
-                'templateName',
-                'store'
-            ));
-
-
+        return view('admin.questionnaires.showIndividualResponses', compact(
+            'customer',
+            'responses',
+            'questions',
+            'templateName',
+            'store'
+        ));
     }
-
-
-
-
 }
-
