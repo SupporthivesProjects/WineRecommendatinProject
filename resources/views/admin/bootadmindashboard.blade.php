@@ -1,5 +1,19 @@
 @extends('layouts.bootdashboard')
 @section('admindashboardcontent')
+@include('wine-loader', [
+        'title' => 'Loading Admin Dashboard',
+        'subtitle' => 'Preparing your wine analytics...',
+    ])
+
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide loader after 2 seconds
+            setTimeout(() => {
+                hideWineLoader();
+            }, 2000);
+        });
+    </script>
+
 <!-- Start::app-content -->
     <div class="main-content app-content">
         <div class="container-fluid">

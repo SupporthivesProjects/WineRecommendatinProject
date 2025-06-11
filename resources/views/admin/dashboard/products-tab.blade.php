@@ -10,6 +10,20 @@
     </style>
     @endpush
 
+    @include('wine-loader', [
+        'title' => 'Loading Admin Products',
+        'subtitle' => 'Preparing your wine analytics...',
+    ])
+
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide loader after 2 seconds
+            setTimeout(() => {
+                hideWineLoader();
+            }, 2000);
+        });
+    </script>
+
     <!-- Products Section -->
     <div class="main-content app-content">
         <div class="container-fluid">
