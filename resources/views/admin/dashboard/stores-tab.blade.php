@@ -1,15 +1,26 @@
-
 @extends('layouts.bootdashboard')
 @section('admindashboardcontent')
+    @include('wine-loader', [
+        'title' => 'Loading Admin Products',
+        'subtitle' => 'Preparing your wine analytics...',
+    ])
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide loader after 2 seconds
+            setTimeout(() => {
+                hideWineLoader();
+            }, 2000);
+        });
+    </script>
     @push('styles')
-    <style>
-        .dataTables_filter input[type="search"] {
-            width: 300px !important; 
-            margin-bottom: 20px;
-            
-        }
-    </style>
+        <style>
+            .dataTables_filter input[type="search"] {
+                width: 300px !important;
+                margin-bottom: 20px;
+
+            }
+        </style>
     @endpush
 
 
@@ -26,8 +37,9 @@
                     </ol>
                 </div>
                 <div class="d-flex">
-                    <button type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text" data-bs-toggle="modal" data-bs-target="#addStoreModal">
-                    <i class="fe fe-plus me-2"></i>Add Store
+                    <button type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text" data-bs-toggle="modal"
+                        data-bs-target="#addStoreModal">
+                        <i class="fe fe-plus me-2"></i>Add Store
                     </button>
                 </div>
             </div>
@@ -35,59 +47,62 @@
             <!-- End::page-header -->
 
             <!-- Start::row -->
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="card custom-card">
-                            <div class="card-header">
-                                <div class="d-flex justify-content-between align-items-center">
-                                   
-                                </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card custom-card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+
                             </div>
-                            <div class="card-body">
-                                <!-- Table -->
-                                <div class="table-responsive">
-                                    <table id="file-export" class="table table-bordered" style="width:100%">
-                                        <thead>
+                        </div>
+                        <div class="card-body">
+                            <!-- Table -->
+                            <div class="table-responsive">
+                                <table id="file-export" class="table table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-start">SR No.</th>
+                                            <th class="text-start">Store Name</th>
+                                            <th class="text-start">Location</th>
+                                            <th class="text-start">Contact</th>
+                                            <th class="text-start">Status</th>
+                                            <th class="text-start">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($stores as $index => $store)
                                             <tr>
-                                                <th class="text-start">SR No.</th>
-                                                <th class="text-start">Store Name</th>
-                                                <th class="text-start">Location</th>
-                                                <th class="text-start">Contact</th>
-                                                <th class="text-start">Status</th>
-                                                <th class="text-start">Action</th>
+                                                <td class="align-middle">{{ $index + 1 }}</td>
+                                                <td class="align-middle">{{ $store->store_name }}</td>
+                                                <td class="align-middle">{{ $store->state }}</td>
+                                                <td class="align-middle">{{ $store->contact_number }}</td>
+                                                <td class="align-middle">
+                                                    <span
+                                                        class="badge rounded-pill border border-{{ $store->status === 'active' ? 'success' : 'danger' }} text-{{ $store->status === 'active' ? 'success' : 'danger' }} py-1 px-3">
+                                                        {{ ucfirst($store->status) }}
+                                                    </span>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="{{ route('admin.stores.show', $store) }}"
+                                                        class="text-primary">View</a>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($stores as $index => $store)
-                                                <tr>
-                                                    <td class="align-middle">{{ $index + 1 }}</td>
-                                                    <td class="align-middle">{{ $store->store_name }}</td>
-                                                    <td class="align-middle">{{ $store->state }}</td>
-                                                    <td class="align-middle">{{ $store->contact_number }}</td>
-                                                    <td class="align-middle">
-                                                        <span class="badge rounded-pill border border-{{ $store->status === 'active' ? 'success' : 'danger' }} text-{{ $store->status === 'active' ? 'success' : 'danger' }} py-1 px-3">
-                                                            {{ ucfirst($store->status) }}
-                                                        </span>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <a href="{{ route('admin.stores.show', $store) }}" class="text-primary">View</a>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="6" class="text-center">No stores found</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center">No stores found</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            <!-- End::row -->    
+            </div>
+            <!-- End::row -->
             <!-- Add Store Modal -->
-            <div class="modal fade" id="addStoreModal" data-bs-effect="effect-fall" tabindex="-1" aria-labelledby="addStoreModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addStoreModal" data-bs-effect="effect-fall" tabindex="-1"
+                aria-labelledby="addStoreModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -100,7 +115,8 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="store_name" class="form-label">Store Name</label>
-                                        <input type="text" class="form-control" id="store_name" name="store_name" required>
+                                        <input type="text" class="form-control" id="store_name" name="store_name"
+                                            required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="gst_vat" class="form-label">GST/VAT</label>
@@ -111,7 +127,8 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="contact_number" class="form-label">Contact</label>
-                                        <input type="text" class="form-control" id="contact_number" name="contact_number" required>
+                                        <input type="text" class="form-control" id="contact_number" name="contact_number"
+                                            required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="group" class="form-label">Group</label>
@@ -127,29 +144,34 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="state" class="form-label">State</label>
-                                        <input type="text" class="form-control" id="state" name="state" required>
+                                        <input type="text" class="form-control" id="state" name="state"
+                                            required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="form-label">Email ID</label>
-                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            required>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="business_type" class="form-label">Business Type</label>
-                                        <input type="text" class="form-control" id="business_type" name="business_type" required>
+                                        <input type="text" class="form-control" id="business_type"
+                                            name="business_type" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="licence_type" class="form-label">License Type</label>
-                                        <input type="text" class="form-control" id="licence_type" name="licence_type" required>
+                                        <input type="text" class="form-control" id="licence_type" name="licence_type"
+                                            required>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="license_number" class="form-label">License Number</label>
-                                        <input type="text" class="form-control" id="license_number" name="license_number" required>
+                                        <input type="text" class="form-control" id="license_number"
+                                            name="license_number" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="status" class="form-label">Status</label>
@@ -161,7 +183,8 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn btn-primary">Add Store</button>
                                 </div>
                             </form>
@@ -169,16 +192,13 @@
                     </div>
                 </div>
             </div>
+        @endsection
 
-@endsection
-
-@push('scripts')
-    <script>
-        function openAddStoreModal() 
-        {
-            var myModal = new bootstrap.Modal(document.getElementById('addStoreModal'));
-            myModal.show();
-        }
-    </script>
-@endpush
-
+        @push('scripts')
+            <script>
+                function openAddStoreModal() {
+                    var myModal = new bootstrap.Modal(document.getElementById('addStoreModal'));
+                    myModal.show();
+                }
+            </script>
+        @endpush
