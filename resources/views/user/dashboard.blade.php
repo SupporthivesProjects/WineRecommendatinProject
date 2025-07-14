@@ -573,7 +573,7 @@
                                                     <div class="questionnaire-label">First Sip</div>
                                                     <img src="{{ asset('images/Wineglasses.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                       </h5>
+                                                        <h5 class="card-title mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                       </h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
@@ -591,7 +591,7 @@
                                                     <div class="questionnaire-label">Savy Sip</div>
                                                     <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
+                                                        <h5 class="card-title  mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
@@ -609,7 +609,7 @@
                                                     <div class="questionnaire-label">Cork Master</div>
                                                     <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
+                                                        <h5 class="card-title mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
@@ -627,7 +627,7 @@
                                                     <div class="questionnaire-label">Quick Pour</div>
                                                     <img src="{{ asset('images/Wineglasses.jpg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title fw-semibold mb-0">For when you need a wine—quick and right.!!</h5>
+                                                        <h5 class="card-title  mb-0">For when you need a wine—quick and right.!!</h5>
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
