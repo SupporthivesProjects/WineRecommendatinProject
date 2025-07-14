@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\IsFeaturedController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\QuestionnaireController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
 use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductController;
@@ -186,6 +187,11 @@ use Illuminate\Support\Facades\Route;
 
 
     });
+
+    // Cart routes
+    Route::get('/cart', [CartController::class, 'index'])->name('user.cart');
+    Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('user.cart.updateQuantity');
+
     
 
 
