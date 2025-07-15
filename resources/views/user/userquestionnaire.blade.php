@@ -535,7 +535,7 @@
                 "Slightly Aged (5-7 years)": "SlightlyAged",
                 "Aged (>7 years)": "Aged",
                 "Nuts, Dried, Cooked, Fresh, Caramel, Jammy": "NutsDriedCookedFreshCaramelJammy",
-                "Earthy, Moldy, Petroleum, Sulfur, Minerality": "EarthyMoldyPetroleumSulfurMinerality-mono",
+                "Earthy, Moldy, Petroleum, Sulfur, Minerality": "EarthyMoldyPetroleumSulfurMinerality",
                 "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "Yeasty",
                 "Herbaceous, Vegetative": "HerbaceousVegetative",
                 "Surprise Me": "SurpriseMe",
