@@ -469,7 +469,7 @@
                 "SKIP": "Skip",
                 "Fruit Wine": "fruit",
                 "Still": "Still",
-                "Sparkling": "Sparkling_champagne",
+                "Sparkling": "sparkling_champagne",
                 "Sparkling/Champagne": "Sparkling_champagne",
                 "Sweet": "Sweet",
                 "Medium Sweet": "Medium_Sweet",
