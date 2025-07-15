@@ -229,7 +229,16 @@
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="role" class="form-label">Role</label>
-                                    <input type="text" class="form-control" id="role" name="role" value="store_manager" readonly>
+                                    <select class="form-control" id="role" name="role" required>
+                                        <option value="store_manager" id="store_manager_option" 
+                                            @if($store->users->where('role', 'store_manager')->count() > 0) disabled @endif>
+                                            Store Manager
+                                        </option>
+                                        <option value="user" 
+                                            @if($store->users->where('role', 'store_manager')->count() > 0) selected @endif>
+                                            User
+                                        </option>
+                                    </select>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="status" class="form-label">Status</label>
@@ -252,9 +261,23 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="store_id" class="form-label">Store Id</label>
-                                    <input type="text" class="form-control" id="store_id" name="store_id" value="{{ $store->id }}">
+                                    <input type="text" class="form-control" id="store_id" name="store_id" value="{{ $store->id }}" readonly>
                                 </div>
                             </div>
+
+                            <!-- Checkbox for adding more store managers -->
+                            @if($store->users->where('role', 'store_manager')->count() > 0)
+                            <div class="row">
+                                <div class="mb-3 col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="addMoreStoreManager" name="add_more_store_manager">
+                                        <label class="form-check-label" for="addMoreStoreManager">
+                                            Do you want to add more store manager?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -295,16 +318,52 @@
             // Store ID for use in JavaScript
             const storeId = {{ $store->id }};
             
+            // Check if store manager exists
+            const hasStoreManager = {{ $store->users->where('role', 'store_manager')->count() > 0 ? 'true' : 'false' }};
+            
             // Function to open the assign user modal
             function openAssignUserModal() {
                 const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
                 modal.show();
-                //loadAvailableUsers();
+                
+                // Reset form when modal opens
+                resetModalForm();
+            }
+            
+            // Function to reset modal form
+            function resetModalForm() {
+                const roleSelect = document.getElementById('role');
+                const storeManagerOption = document.getElementById('store_manager_option');
+                const addMoreCheckbox = document.getElementById('addMoreStoreManager');
+                
+                if (hasStoreManager) {
+                    // If store manager exists, disable store_manager option and select user
+                    storeManagerOption.disabled = true;
+                    roleSelect.value = 'user';
+                    
+                    // Show checkbox and handle its change event
+                    if (addMoreCheckbox) {
+                        addMoreCheckbox.checked = false;
+                        addMoreCheckbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                storeManagerOption.disabled = false;
+                                roleSelect.value = 'store_manager';
+                            } else {
+                                storeManagerOption.disabled = true;
+                                roleSelect.value = 'user';
+                            }
+                        });
+                    }
+                } else {
+                    // If no store manager exists, enable store_manager option and select it by default
+                    storeManagerOption.disabled = false;
+                    roleSelect.value = 'store_manager';
+                }
             }
             
             // Function to close the assign user modal
             function closeAssignUserModal() {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('assignUserModal'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
                 modal.hide();
             }
             

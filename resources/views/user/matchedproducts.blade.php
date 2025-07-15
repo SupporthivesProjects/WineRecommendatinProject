@@ -136,8 +136,7 @@
                     <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">Cart</a></li>
-                    <button class="btn btn-outline-dark" id="view-cart-btn">View Cart</button>
+                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View Cart</a></li>
                 </ul>
             </div>
         </div>
