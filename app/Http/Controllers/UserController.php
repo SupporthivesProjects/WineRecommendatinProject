@@ -329,7 +329,27 @@ class UserController extends Controller
 
         Log::debug('Template ID:', ['template_id' => $templateId]);
 
-        $query = Product::query();
+        // Get the current user's store
+        $store = Auth::user()->store;
+        
+        if (!$store) {
+            Log::warning('User has no associated store');
+            return collect(); // Return empty collection if no store
+        }
+
+        // Get product IDs that are available in this store
+        $storeProductIds = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->pluck('product_id');
+
+        if ($storeProductIds->isEmpty()) {
+            Log::warning('No products found for store ID: ' . $store->id);
+            return collect(); // Return empty collection if no products in store
+        }
+
+        $query = Product::query()
+            ->whereIn('id', $storeProductIds) // Only get products available in this store
+            ->where('status', 'active'); // Ensure products are active
 
         // Wrap all conditions in a single where closure to group the ORs
         $query->where(function ($q) use ($templateId, $answers) {
@@ -483,6 +503,8 @@ class UserController extends Controller
 
         Log::debug('Generated Query: ' . $query->toSql());
         Log::debug('Bindings: ' . json_encode($query->getBindings()));
+        Log::debug('Store ID: ' . $store->id);
+        Log::debug('Store Product IDs: ' . $storeProductIds->implode(', '));
 
         return $query->get();
     }
