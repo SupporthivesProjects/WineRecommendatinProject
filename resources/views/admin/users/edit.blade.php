@@ -80,12 +80,7 @@
                                 <!-- Role -->
                                 <div class="col-12 col-md-6">
                                     <label for="role" class="form-label">{{ __('Role') }}</label>
-                                    <select id="role" name="role" class="form-select" required>
-                                        <option value="">Select Role</option>
-                                        <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
-                                        <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>Staff</option>
-                                        <option value="manager" {{ old('role', $user->role) === 'manager' ? 'selected' : '' }}>Manager</option>
-                                    </select>
+                                    <input id="role" class="form-control" type="text" name="role" value="{{ old('role', $user->role) }}" readonly/>
                                     @error('role')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
@@ -105,13 +100,9 @@
 
                                 <!-- Store ID -->
                                 <div class="col-12 col-md-6">
-                                    <label for="store_id" class="form-label">{{ __('Store') }}</label>
-                                    <select id="store_id" name="store_id" class="form-select" required>
-                                        <option value="">Select Store</option>
-                                        @foreach($stores as $store)
-                                            <option value="{{ $store->id }}" {{ old('store_id', $user->store_id) == $store->id ? 'selected' : '' }}>{{ $store->store_name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="store_display" class="form-label">{{ __('Store') }}</label>
+                                    <input id="store_display" class="form-control" type="text" value="{{ old('store_id', $user->store ? $user->store->store_name : '') }}" readonly />
+                                    <input type="hidden" name="store_id" value="{{ old('store_id', $user->store_id) }}" />
                                     @error('store_id')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
