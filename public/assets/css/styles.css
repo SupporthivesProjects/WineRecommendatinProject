@@ -16837,8 +16837,8 @@ a.tag-addon:hover {
 }
 @media (min-width: 992px) and (min-width: 992px) {
   [data-nav-layout=horizontal] .horizontal-logo .header-logo img {
-    height: 2rem;
-    line-height: 2rem;
+    height: 4rem;
+    line-height: 4rem;
   }
   [data-nav-layout=horizontal] .horizontal-logo .header-logo .desktop-logo {
     display: block;

@@ -79,6 +79,26 @@
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+
+        .fonthover
+        {
+            white-space: nowrap;
+            color: black;
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .fonthover:hover
+        {
+            white-space: nowrap;
+            color: red;
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
     </style>
 
     <!-- Scripts -->
@@ -202,10 +222,10 @@
                     <div class="header-element">
                         <div class="horizontal-logo">
                             <a href="#" class="header-logo">
-                                <img src="{{ asset('assets/images/brand-logos/toggle-logo.png') }}" alt="logo"
+                                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                     class="toggle-logo">
                                 <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
-                                <img src="{{ asset('assets/images/brand-logos/toggle-dark.png') }}" alt="logo"
+                                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                     class="toggle-dark">
                             </a>
                         </div>
@@ -261,15 +281,14 @@
                     <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
-                                <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
+                                <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
                                     background="transparent" speed="1" style="width: 40px; height: 40px;" loop
                                     autoplay>
-                                </lottie-player>
-
-                                <!-- <a href="#" class="header-logo">
-                                    <img src="{{ asset('images/winelogo.png') }}" alt="logo" class="desktop-logo">
-                                    <img src="{{ asset('images/winelogo.png') }}" alt="logo" class="desktop-white">
-                                </a> -->
+                                </lottie-player> -->
+                                <a href="#" class="header-logo">
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" class="desktop-logo">
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" class="desktop-white">
+                                </a> 
                             </div>
                         </div>
                         <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
@@ -280,42 +299,42 @@
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a class="side-menu__item" href="#home">
-                                    <span class="side-menu__label" style="color:black">Home</span>
+                                    <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#HIW" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">How It Works</span>
+                                    <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#featuredwines" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Featured Wines</span>
+                                    <span class="fonthover">Featured Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#pairing" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Food Pairings</span>
+                                    <span class="fonthover">Food Pairings</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#testimonials" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Testimonials</span>
+                                    <span class="fonthover">Testimonials</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#Moments" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Moments</span>
+                                    <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
