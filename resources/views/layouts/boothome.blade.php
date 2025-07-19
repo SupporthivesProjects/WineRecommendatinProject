@@ -92,7 +92,7 @@
         .fonthover:hover
         {
             white-space: nowrap;
-            color: red;
+            color: #7f2c2d;
             position: relative;
             font-size: 0.875rem;
             line-height: 1;
@@ -563,7 +563,9 @@
                             <!-- Pairing 1 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                    <!-- <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                        alt="Steak" class="w-full h-full object-cover"> -->
+                                        <img src="{{ asset('images/firstcheepairing.jpeg') }}"
                                         alt="Steak" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -589,7 +591,7 @@
                             <!-- Pairing 2 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="https://images.unsplash.com/photo-1559737558-2f5a35f4523b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                    <img src="{{ asset('images/secondcheesepairing.avif') }}"
                                         alt="Seafood" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -822,18 +824,35 @@
 
 
     <!-- Optional JavaScript for enhanced functionality -->
-    <script>
+    <!-- <script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
             });
         });
+    </script> -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const yOffset = -50; // Negative value for 50px space from top
+                    const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+                    window.scrollTo({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
+
 
     <!-- jQuery (required for Owl Carousel) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

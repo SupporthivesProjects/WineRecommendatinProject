@@ -181,6 +181,14 @@
                                             <th scope="row">Wine Story</th>
                                             <td style="white-space: normal; word-wrap: break-word;">{{ $product->wine_story ?? 'N/A' }}</td>
                                         </tr>
+                                        <tr>
+                                            <th scope="row">Cheese pairings</th>
+                                            <td style="white-space: normal; word-wrap: break-word;">{{ $product->cheese_pairing ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Importer</th>
+                                            <td style="white-space: normal; word-wrap: break-word;">{{ $product->importer_info ?? 'N/A' }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
