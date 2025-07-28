@@ -102,6 +102,13 @@ use Illuminate\Support\Facades\Route;
         
         // Products management
         Route::resource('products', AdminProductController::class);
+        
+        // Cheese Products management
+        Route::resource('cheese-products', \App\Http\Controllers\Admin\CheeseProductController::class)
+            ->parameters(['cheese-products' => 'cheese_product']);
+            
+        // API route to get cheese product details
+        Route::get('api/cheese-products/{id}', [\App\Http\Controllers\Admin\CheeseProductController::class, 'getProductDetails']);
 
         //Settings
         Route::resource('settings', SettingsController::class);
