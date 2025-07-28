@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             StoreProductsTableSeeder::class,
             FeaturedProductsTableSeeder::class,
             SelectedProductsTableSeeder::class,
+            CheeseProductSeeder::class,
+            StoreInventorySeeder::class,
             QuestionnaireTableSeeder::class,
             QuestionnaireTemplateSeeder::class,
         ]);

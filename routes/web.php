@@ -59,6 +59,10 @@ use Illuminate\Support\Facades\Route;
         Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
 
         Route::get('/user/products', [UserDashboardController::class, 'products'])->name('user.products');
+        
+        // Cheese Products Routes
+        Route::get('/user/cheeses', [\App\Http\Controllers\User\CheeseProductController::class, 'index'])->name('user.cheeses');
+        Route::get('/user/cheeses/{id}', [\App\Http\Controllers\User\CheeseProductController::class, 'show'])->name('user.cheese.show');
         Route::get('user/matched-products/{submissionId}', [UserDashboardController::class, 'matchedproducts'])->name('user.matchedproducts');
 
         Route::post('/user/cart/add', [UserDashboardController::class, 'addToCart'])->name('user.cart.add');

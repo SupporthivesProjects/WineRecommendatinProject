@@ -443,6 +443,7 @@
                                 <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link text-white">Dashboard</a></li>
                                 <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link text-white">Questionnaires</a></li>
                                 <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link text-white">Browse Wines</a></li>
+                                <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link text-white">Browse Cheeses</a></li>
                                 <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link text-white">Featured Products</a></li>
                             </ul>
                         </div>

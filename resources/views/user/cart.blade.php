@@ -162,6 +162,7 @@
                     <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a>
                     </li>
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
+                    <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li> 
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured
                             Products</a></li>
                     <!-- Removed the matched products link since the route doesn't exist -->
@@ -296,6 +297,7 @@
                 <p>Add some wines to get started!</p>
                 <a href="{{ route('user.products') }}" class="btn btn-primary">Browse Wines</a>
             </div>
+            <a href="{{ route('user.cheeses') }}" class="btn btn-primary">Browse Cheeses</a>
         `;
             updateCartSummary([]);
         }
