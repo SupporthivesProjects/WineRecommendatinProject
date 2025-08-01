@@ -163,7 +163,7 @@
                         @php
                             $storeInfo = $cheese->stores->first();
                             $quantity = $storeInfo ? $storeInfo->pivot->quantity : 0;
-                            $isInStock = $quantity > 0 && $storeInfo && $storeInfo->pivot->is_active;
+                            $isInStock = $quantity > 0 && $storeInfo && $storeInfo->pivot->is_available;
                         @endphp
                         <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                             <div class="card cheese-card h-100">
@@ -221,9 +221,44 @@
                 </div>
 
                 <!-- Pagination -->
-                @if($cheeses->hasPages())
-                    <div class="d-flex justify-content-center mt-4">
-                        {{ $cheeses->links() }}
+                @if ($cheeses->hasPages())
+                    <div class="d-flex justify-content-center my-4">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination mb-0">
+                                {{-- Previous Page Link --}}
+                                @if ($cheeses->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <span class="page-link"><i class="bi bi-caret-left"></i></span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $cheeses->previousPageUrl() }}" rel="prev">
+                                            <i class="bi bi-caret-left"></i>
+                                        </a>
+                                    </li>
+                                @endif
+
+                                {{-- Pagination Elements --}}
+                                @foreach ($cheeses->getUrlRange(1, $cheeses->lastPage()) as $page => $url)
+                                    <li class="page-item {{ $cheeses->currentPage() == $page ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if ($cheeses->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $cheeses->nextPageUrl() }}" rel="next">
+                                            <i class="bi bi-caret-right"></i>
+                                        </a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <span class="page-link"><i class="bi bi-caret-right"></i></span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
                     </div>
                 @endif
             </div>

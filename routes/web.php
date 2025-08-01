@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\QuestionnaireController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
+use App\Http\Controllers\StoreManager\StoreManagerCheeseProductController;
 use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductController;
 use App\Http\Controllers\StoreManager\FeaturedProductController;
 use App\Http\Controllers\MainManagerController;
@@ -173,6 +174,11 @@ use Illuminate\Support\Facades\Route;
         Route::get('/test', [StoreDashboardController::class, 'test'])->name('test');
         Route::post('/products/update-status', [StoreManagerProductController::class, 'updateStatus']);
         Route::post('/products/update-featured', [StoreManagerProductController::class, 'updateFeatured']);
+        
+        // Cheese Products Routes
+        Route::get('/store-cheese-products', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'index'])->name('cheese-products.index');
+        Route::post('/store-cheese-products/update-status', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'updateStatus'])->name('cheese-products.update-status');
+        Route::post('/store-cheese-products/update-featured', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'updateFeatured'])->name('cheese-products.update-featured');
 
         
     });

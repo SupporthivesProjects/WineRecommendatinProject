@@ -79,8 +79,14 @@
                     </li>
                     <li class="slide">
                         <a href="{{ route('store-manager.products') }}" class="side-menu__item">
+                            <i class="side-menu__icon fe fe-droplet"></i>
+                            <span class="side-menu__label">Wine Products</span>
+                        </a>
+                    </li>
+                    <li class="slide">
+                        <a href="{{ route('store-manager.cheese-products.index') }}" class="side-menu__item">
                             <i class="side-menu__icon fe fe-box"></i>
-                            <span class="side-menu__label">Store Products</span>
+                            <span class="side-menu__label">Cheese Products</span>
                         </a>
                     </li>
                 @elseif(Auth::user()->role === 'main_manager')

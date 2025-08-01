@@ -22,16 +22,16 @@ class CheeseProductController extends Controller
             return back()->with('error', 'No store assigned to your account. Please contact support.');
         }
 
-        // Get cheeses that are active and available in the user's store
+        // Get cheeses that are available in the user's store
         $cheeses = CheeseProduct::whereHas('stores', function($query) use ($user) {
                 $query->where('store_id', $user->store_id)
-                      ->where('is_active', true)
+                      ->where('is_available', true)
                       ->where('quantity', '>', 0);
             })
             ->with(['stores' => function($query) use ($user) {
                 $query->where('store_id', $user->store_id)
                       ->select('stores.id', 'store_name', 'address')
-                      ->withPivot(['quantity', 'is_active']);
+                      ->withPivot(['quantity', 'is_available']);
             }])
             ->paginate(12);
 

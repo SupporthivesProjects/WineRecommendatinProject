@@ -10,10 +10,10 @@
         <!-- Start::Page Header -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
             <div>
-                <h2 class="main-content-title fs-24 mb-1">{{ __('Select Products for Store') }}</h2>
+                <h2 class="main-content-title fs-24 mb-1">{{ __('Select Wine Products for Store') }}</h2>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Select Products</li>
+                    <li class="breadcrumb-item active" aria-current="page">Select Wine Products</li>
                 </ol>
             </div>
             <div class="d-flex">
@@ -32,7 +32,7 @@
                         <div class="card custom-card overflow-hidden">
                             <div class="card-header border-bottom-0 d-flex pb-0 justify-content-between">
                                 <div>
-                                    <label class="main-content-label mb-2 pt-1">Products Details</label>
+                                    <label class="main-content-label mb-2 pt-1">Wine Products Details</label>
                                     <p class="fs-12 mb-3 text-muted mb-0">
                                         The details displayed often include size, color, price, shipping information, reviews, and other relevant information customers may want to know before making a purchase
                                     </p>

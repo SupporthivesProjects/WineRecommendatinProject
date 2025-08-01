@@ -35,7 +35,7 @@ class Store extends Model
     public function cheeseProducts()
     {
         return $this->belongsToMany(CheeseProduct::class, 'store_inventory')
-            ->withPivot(['quantity', 'is_active']);
+            ->withPivot(['quantity', 'is_available']);
     }
 
     /**

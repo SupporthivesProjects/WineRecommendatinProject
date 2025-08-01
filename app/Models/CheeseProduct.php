@@ -24,7 +24,7 @@ class CheeseProduct extends Model
         'description',
         'price',
         'image',
-        'is_active'
+        'is_available'
     ];
     
     /**
@@ -45,7 +45,7 @@ class CheeseProduct extends Model
     public function stores(): BelongsToMany
     {
         return $this->belongsToMany(Store::class, 'store_inventory')
-            ->withPivot(['quantity', 'is_active'])
+            ->withPivot(['quantity', 'is_available'])
             ->withTimestamps();
     }
 }

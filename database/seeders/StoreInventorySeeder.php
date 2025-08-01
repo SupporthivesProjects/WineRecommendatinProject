@@ -23,7 +23,7 @@ class StoreInventorySeeder extends Seeder
 
                 $store->cheeseProducts()->attach($cheese->id, [
                     'quantity' => $quantity,
-                    'is_active' => $isActive,
+                    'is_available' => $isActive,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
