@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\QuestionnaireController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
+use App\Http\Controllers\StoreManager\StoreManagerCheeseProductController;
 use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductController;
 use App\Http\Controllers\StoreManager\FeaturedProductController;
 use App\Http\Controllers\MainManagerController;
@@ -59,6 +60,10 @@ use Illuminate\Support\Facades\Route;
         Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
 
         Route::get('/user/products', [UserDashboardController::class, 'products'])->name('user.products');
+        
+        // Cheese Products Routes
+        Route::get('/user/cheeses', [\App\Http\Controllers\User\CheeseProductController::class, 'index'])->name('user.cheeses');
+        Route::get('/user/cheeses/{id}', [\App\Http\Controllers\User\CheeseProductController::class, 'show'])->name('user.cheese.show');
         Route::get('user/matched-products/{submissionId}', [UserDashboardController::class, 'matchedproducts'])->name('user.matchedproducts');
 
         Route::post('/user/cart/add', [UserDashboardController::class, 'addToCart'])->name('user.cart.add');
@@ -98,6 +103,13 @@ use Illuminate\Support\Facades\Route;
         
         // Products management
         Route::resource('products', AdminProductController::class);
+        
+        // Cheese Products management
+        Route::resource('cheese-products', \App\Http\Controllers\Admin\CheeseProductController::class)
+            ->parameters(['cheese-products' => 'cheese_product']);
+            
+        // API route to get cheese product details
+        Route::get('api/cheese-products/{id}', [\App\Http\Controllers\Admin\CheeseProductController::class, 'getProductDetails']);
 
         //Settings
         Route::resource('settings', SettingsController::class);
@@ -162,6 +174,11 @@ use Illuminate\Support\Facades\Route;
         Route::get('/test', [StoreDashboardController::class, 'test'])->name('test');
         Route::post('/products/update-status', [StoreManagerProductController::class, 'updateStatus']);
         Route::post('/products/update-featured', [StoreManagerProductController::class, 'updateFeatured']);
+        
+        // Cheese Products Routes
+        Route::get('/store-cheese-products', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'index'])->name('cheese-products.index');
+        Route::post('/store-cheese-products/update-status', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'updateStatus'])->name('cheese-products.update-status');
+        Route::post('/store-cheese-products/update-featured', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'updateFeatured'])->name('cheese-products.update-featured');
 
         
     });

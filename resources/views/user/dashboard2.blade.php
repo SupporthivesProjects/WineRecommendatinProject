@@ -210,6 +210,11 @@
                         </a>
                         </li>
                         <li class="nav-item">
+                        <a href="{{ route('user.cheeses') }}" class="nav-link">
+                            <i class="fe fe-star nav-icon"></i> Browse Cheeses
+                        </a>
+                        </li>
+                        <li class="nav-item">
                         <a href="{{ route('user.featuredproducts') }}" class="nav-link">
                             <i class="fe fe-star nav-icon"></i> Featured Products
                         </a>
