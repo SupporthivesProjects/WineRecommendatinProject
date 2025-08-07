@@ -29,6 +29,16 @@
                 <div class="card-body">
                     <!-- Product Images -->
                     <h5 class="mb-3 text-dark">Product Images</h5>
+                    <!-- Debug Info -->
+                    <div class="alert alert-info mb-3">
+                        <h6>Debug Information:</h6>
+                        <p>Storage Path: {{ storage_path('app/public/products') }}</p>
+                        <p>Public Path: {{ public_path('storage') }}</p>
+                        @if($product->images->count() > 0)
+                            <p>First Image Path: {{ $product->images->first()->image_path }}</p>
+                            <p>Full URL: {{ asset('storage/products/' . basename($product->images->first()->image_path)) }}</p>
+                        @endif
+                    </div>
                     @if ($product->images && $product->images->count() > 0)
                         <div class="row">
                             @php
@@ -36,14 +46,14 @@
                             @endphp
                             <div class="col-md-6 mb-3">
                                 <div class="border p-2 rounded bg-light">
-                                    <img id="main-product-image" src="{{ asset('storage/products/' . $primaryImage->image_path) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
+                                    <img id="main-product-image" src="{{ asset('storage/products/' . basename($primaryImage->image_path)) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="row g-2">
                                     @foreach ($product->images as $image)
                                         <div class="col-4">
-                                            <img src="{{ asset('storage/products/' . $image->image_path) }}" class="img-thumbnail {{ $image->is_primary ? 'border border-3 border-primary' : '' }}" style="cursor:pointer;" onclick="updateMainImage('{{ asset('storage/products/' . $image->image_path) }}')">
+                                            <img src="{{ asset('storage/products/' . basename($image->image_path)) }}" class="img-thumbnail {{ $image->is_primary ? 'border border-3 border-primary' : '' }}" style="cursor:pointer;" onclick="updateMainImage('{{ asset('storage/products/' . basename($image->image_path)) }}')">
                                         </div>
                                     @endforeach
                                 </div>
