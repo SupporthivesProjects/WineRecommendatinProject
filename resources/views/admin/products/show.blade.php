@@ -36,7 +36,7 @@
                         <p>Public Path: {{ public_path('storage') }}</p>
                         @if($product->images->count() > 0)
                             <p>First Image Path: {{ $product->images->first()->image_path }}</p>
-                            <p>Full URL: {{ asset('storage/' . $product->images->first()->image_path) }}</p>
+                            <p>Full URL: {{ asset('storage/products/' . basename($product->images->first()->image_path)) }}</p>
                         @endif
                     </div>
                     @if ($product->images && $product->images->count() > 0)
