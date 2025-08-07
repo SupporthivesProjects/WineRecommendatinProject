@@ -29,16 +29,6 @@
                 <div class="card-body">
                     <!-- Product Images -->
                     <h5 class="mb-3 text-dark">Product Images</h5>
-                    <!-- Debug Info -->
-                    <div class="alert alert-info mb-3">
-                        <h6>Debug Information:</h6>
-                        <p>Storage Path: {{ storage_path('app/public/products') }}</p>
-                        <p>Public Path: {{ public_path('storage') }}</p>
-                        @if($product->images->count() > 0)
-                            <p>First Image Path: {{ $product->images->first()->image_path }}</p>
-                            <p>Full URL: {{ asset('storage/products/' . basename($product->images->first()->image_path)) }}</p>
-                        @endif
-                    </div>
                     @if ($product->images && $product->images->count() > 0)
                         <div class="row">
                             @php
