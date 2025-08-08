@@ -35,6 +35,19 @@ use Illuminate\Support\Facades\Route;
         return view('layouts.boothome');
     })->name('home');
 
+    Route::get('/about', function () {
+        return view('about');
+    })->name('about');
+
+    Route::get('/careers', function () {
+        return view('careers');
+    })->name('careers');
+
+    Route::get('/services', function () {
+        return view('services');
+    })->name('services');
+
+
     Route::get('/welcome', function () 
     {
         return view('welcome');

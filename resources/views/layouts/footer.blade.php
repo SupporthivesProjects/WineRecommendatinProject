@@ -24,9 +24,9 @@
                                         
                                         <ul class="mb-5 mb-lg-0 ps-0">
                                             <li><a href="contacts.html">Contact US</a></li>
-                                            <li><a href="aboutus.html">About Us</a></li>
-                                            <li><a href="search.html">Services</a></li>
-                                            <li><a href="blog.html">Careers @ TechSomm </a></li>
+                                            <li><a href="{{ route('about') }}">About Us</a></li>
+                                            <li><a href="{{ route('services') }}">Services</a></li>
+                                            <li><a href="{{ route('careers') }}">Careers @ TechSomm </a></li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-4 col-sm-12 col-md-4 reveal revealleft">
