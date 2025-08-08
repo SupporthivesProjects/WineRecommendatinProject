@@ -45,27 +45,4 @@ class Handler extends ExceptionHandler
             //
         });
     }
-
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $e
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Throwable
-     */
-    public function render($request, Throwable $e)
-    {
-        // For API requests, return JSON response
-        if ($request->expectsJson()) {
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => config('app.debug') ? $e->getMessage() : null,
-            ], 500);
-        }
-
-        // For web requests, redirect to home
-        return redirect()->route('home');
-    }
 }
