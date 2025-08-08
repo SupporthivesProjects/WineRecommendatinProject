@@ -79,6 +79,26 @@
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+
+        .fonthover
+        {
+            white-space: nowrap;
+            color: black;
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .fonthover:hover
+        {
+            white-space: nowrap;
+            color: #7f2c2d;
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
     </style>
 
     <!-- Scripts -->
@@ -202,10 +222,10 @@
                     <div class="header-element">
                         <div class="horizontal-logo">
                             <a href="#" class="header-logo">
-                                <img src="{{ asset('assets/images/brand-logos/toggle-logo.png') }}" alt="logo"
+                                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                     class="toggle-logo">
                                 <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
-                                <img src="{{ asset('assets/images/brand-logos/toggle-dark.png') }}" alt="logo"
+                                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                     class="toggle-dark">
                             </a>
                         </div>
@@ -261,15 +281,14 @@
                     <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
-                                <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
+                                <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
                                     background="transparent" speed="1" style="width: 40px; height: 40px;" loop
                                     autoplay>
-                                </lottie-player>
-
-                                <!-- <a href="#" class="header-logo">
-                                    <img src="{{ asset('images/winelogo.png') }}" alt="logo" class="desktop-logo">
-                                    <img src="{{ asset('images/winelogo.png') }}" alt="logo" class="desktop-white">
-                                </a> -->
+                                </lottie-player> -->
+                                <a href="#" class="header-logo">
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" class="desktop-logo">
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" class="desktop-white">
+                                </a> 
                             </div>
                         </div>
                         <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
@@ -280,42 +299,42 @@
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a class="side-menu__item" href="#home">
-                                    <span class="side-menu__label" style="color:black">Home</span>
+                                    <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#HIW" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">How It Works</span>
+                                    <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#featuredwines" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Featured Wines</span>
+                                    <span class="fonthover">Featured Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#pairing" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Food Pairings</span>
+                                    <span class="fonthover">Food Pairings</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#testimonials" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Testimonials</span>
+                                    <span class="fonthover">Testimonials</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#Moments" class="side-menu__item">
-                                    <span class="side-menu__label" style="color:black">Moments</span>
+                                    <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
@@ -544,7 +563,9 @@
                             <!-- Pairing 1 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                    <!-- <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                        alt="Steak" class="w-full h-full object-cover"> -->
+                                        <img src="{{ asset('images/firstcheepairing.jpeg') }}"
                                         alt="Steak" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -570,7 +591,7 @@
                             <!-- Pairing 2 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="https://images.unsplash.com/photo-1559737558-2f5a35f4523b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                    <img src="{{ asset('images/secondcheesepairing.avif') }}"
                                         alt="Seafood" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -803,18 +824,35 @@
 
 
     <!-- Optional JavaScript for enhanced functionality -->
-    <script>
+    <!-- <script>
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
             });
         });
+    </script> -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const yOffset = -50; // Negative value for 50px space from top
+                    const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+                    window.scrollTo({
+                        top: y,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
+
 
     <!-- jQuery (required for Owl Carousel) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -43,7 +43,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8'],
             'mobile' => ['required', 'string', 'max:20'],
-            'role' => ['required', 'in:store_manager,customer,main_manager'],
+            'role' => ['required', 'in:store_manager,customer,user,main_manager'],
             'status' => ['required', 'in:active,inactive'],
             'store_id' => ['nullable', 'exists:stores,id'],
         ]);
@@ -58,7 +58,7 @@ class UserController extends Controller
         $existingUser = User::where('email', $request->email)
                             ->where('mobile', $request->mobile)
                             ->first();
-
+       
         if ($existingUser) {
             return redirect()->back()
                 ->withErrors(['duplicate' => 'A user with this email and mobile already exists.'])
@@ -81,7 +81,8 @@ class UserController extends Controller
             'mobile' => $request->mobile,
             'role' => $request->role,
             'status' => $request->status,
-            'store_id' => $request->role === 'store_manager' ? $request->store_id : null,
+            // 'store_id' => $request->role === 'store_manager' ? $request->store_id : null,
+            'store_id' => $request->store_id
         ]);
 
         return redirect()->route('admin.dashboard', ['tab' => 'users'])

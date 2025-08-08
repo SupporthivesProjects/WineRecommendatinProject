@@ -28,7 +28,7 @@ class ProductController extends Controller
             ->get()
             ->keyBy('product_id'); // Makes it easy to lookup
 
-        return view('store-manager.storedashboard.storeproducts-tab', compact('allProducts', 'storeProducts'));
+        return view('store-manager.storeDashboard.storeproducts-tab', compact('allProducts', 'storeProducts'));
     }
 
     

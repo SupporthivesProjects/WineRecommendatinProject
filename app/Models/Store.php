@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CheeseProduct;
 
 class Store extends Model
 {
@@ -27,6 +28,15 @@ class Store extends Model
         'gst_vat',
         'status',
     ];
+
+    /**
+     * The cheese products that belong to the store.
+     */
+    public function cheeseProducts()
+    {
+        return $this->belongsToMany(CheeseProduct::class, 'store_inventory')
+            ->withPivot(['quantity', 'is_available']);
+    }
 
     /**
      * Get the users associated with the store.

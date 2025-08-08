@@ -36,14 +36,14 @@
                             @endphp
                             <div class="col-md-6 mb-3">
                                 <div class="border p-2 rounded bg-light">
-                                    <img id="main-product-image" src="{{ asset('storage/products/' . $primaryImage->image_path) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
+                                    <img id="main-product-image" src="{{ asset('storage/products/' . basename($primaryImage->image_path)) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="row g-2">
                                     @foreach ($product->images as $image)
                                         <div class="col-4">
-                                            <img src="{{ asset('storage/products/' . $image->image_path) }}" class="img-thumbnail {{ $image->is_primary ? 'border border-3 border-primary' : '' }}" style="cursor:pointer;" onclick="updateMainImage('{{ asset('storage/products/' . $image->image_path) }}')">
+                                            <img src="{{ asset('storage/products/' . basename($image->image_path)) }}" class="img-thumbnail {{ $image->is_primary ? 'border border-3 border-primary' : '' }}" style="cursor:pointer;" onclick="updateMainImage('{{ asset('storage/products/' . basename($image->image_path)) }}')">
                                         </div>
                                     @endforeach
                                 </div>

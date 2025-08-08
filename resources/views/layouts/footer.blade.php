@@ -16,8 +16,8 @@
                                             <li><a href="#HIW">How it Works?</a></li>
                                             <li><a href="#featuredwines">Featured Wines</a></li>
                                             <li><a href="#pairing">Food Pairings</a></li>
-                                            <li><a href="#testimonails">Testimonials</a></li>
-                                            <li><a href="#moments">Moments</a></li>
+                                            <li><a href="#testimonials">Testimonials</a></li>
+                                            <li><a href="#Moments">Moments</a></li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-2 col-sm-6 col-md-4 reveal revealleft position-relative ">

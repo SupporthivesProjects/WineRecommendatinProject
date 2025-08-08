@@ -135,9 +135,9 @@
                     <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
                     <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
+                    <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-                    <button class="btn btn-outline-dark" id="view-cart-btn">View Cart</button>
-
+                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View Cart</a></li>
                 </ul>
             </div>
         </div>
@@ -282,7 +282,7 @@
 
                                         <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
                                         <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
-                                            I want to try Now !!
+                                            View !!
                                         </a>
                                         <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
                                                 data-product-id="{{ $product->id }}"
@@ -389,7 +389,6 @@
                         product_id: productId, 
                         product_name: productName,
                         product_price: productPrice
-                    
                     })
                 })
                 .then(response => response.json())
@@ -431,79 +430,13 @@
             });
         });
 
-        // View Cart button
+        // Updated View Cart button - now redirects to cart page
         document.getElementById('view-cart-btn').addEventListener('click', function () {
-            fetch('{{ route("user.cart.get") }}')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.cart.length === 0) {
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Cart is Empty',
-                            text: "You haven't added any products yet!"
-                        });
-                    } else {
-                        const cartList = data.cart.map(product => {
-                            return `<li>${product.name || 'No Name'} - $${product.retail_price} (Qty: ${product.quantity || 1})</li>`;
-                        }).join('');
-
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Your Cart',
-                            html: `
-                                <ul style="text-align: left; margin-bottom: 15px;">
-                                    ${cartList}
-                                </ul>
-                                <button id="checkout-btn" class="swal2-confirm swal2-styled" style="background-color:#28a745">
-                                    Let's Checkout
-                                </button>
-                            `,
-                            showConfirmButton: false
-                        });
-
-                        setTimeout(() => {
-                            const checkoutBtn = document.getElementById('checkout-btn');
-                            if (checkoutBtn) {
-                                checkoutBtn.addEventListener('click', function () {
-                                    const submissionId = '{{ session("submission_id") }}';
-
-                                    fetch('{{ route("user.checkout") }}', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                        },
-                                        body: JSON.stringify({ 
-                                            submission_id: submissionId })
-                                    })
-                                    .then(res => res.json())
-                                    .then(data => {
-                                        if (data.success) {
-                                            toastr.info('Redirecting to browse wines...', '', {
-                                                closeButton: true,
-                                                progressBar: true,
-                                                positionClass: 'toast-top-right',
-                                                timeOut: 2000
-                                            });
-                                            setTimeout(() => {
-                                                window.location.href = '{{ route("user.products") }}';
-                                            }, 2000);
-                                        } else {
-                                            toastr.error(data.message || 'Checkout failed.');
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        console.error('Checkout error:', error);  
-                                        toastr.error('Something went wrong during checkout.');
-                                    });
-                                });
-                            }
-                        }, 100);
-                    }
-                });
+            window.location.href = '{{ route("user.cart") }}';
         });
     });
 </script>
+
 
 
 <script>
