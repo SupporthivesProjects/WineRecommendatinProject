@@ -313,21 +313,21 @@
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#featuredwines" class="side-menu__item">
-                                    <span class="fonthover">Featured Wines</span>
+                                    <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#pairing" class="side-menu__item">
-                                    <span class="fonthover">Food Pairings</span>
+                                    <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a href="#testimonials" class="side-menu__item">
-                                    <span class="fonthover">Testimonials</span>
+                                    <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
@@ -397,9 +397,9 @@
                 <!-- How It Works Section -->
                 <div class="py-16 bg-gray-50">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">How It Works</h2>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">How TechSomm Works</h2>
                         <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                            Our recommendation system uses advanced algorithms to match you with wines you'll love.
+                            Advanced algorithms guided by sommelier insight curate wines that reflect your palate, your mood, and the magic of every occasion.
                         </p>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -415,7 +415,7 @@
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">Create Your Profile</h3>
                                 <p class="text-gray-600">
-                                    Sign up and tell us about your taste preferences, favorite wines, and dining habits.
+                                    Create your Profile, Get personal recommendations and Discover N Enjoy stay the same.
                                 </p>
                             </div>
 
@@ -448,9 +448,8 @@
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">Discover & Enjoy</h3>
                                 <p class="text-gray-600">
-                                    Explore your recommendations, rate wines you try, and refine your profile for even
-                                    better
-                                    matches.
+                                    Explore your recommendations, rate wines you try, add your personal tasting notes 
+                                    for all the wines and refine your profile for even better suggestion and matches.
                                 </p>
                             </div>
                         </div>
@@ -462,11 +461,10 @@
             <!-- Start:: Section-3 Featured Wines Section-->
             <div class="py-16" id="featuredwines">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Featured Wines</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Browse Wines</h2>
                     <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                        Explore our curated selection of exceptional wines from around the world, each with its own
-                        unique
-                        character and story.
+                    Explore the full spectrum of wines available across India from global icons to homegrown favorites, 
+                    ready for your discovery.
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Wine Card 1 -->
@@ -483,7 +481,7 @@
                                     violets, and
                                     cedar. Elegant and powerful.</p>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-900 font-bold">$189.99</span>
+                                    <!-- <span class="text-gray-900 font-bold">$189.99</span> -->
                                     <button
                                         class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
                                         View Details
@@ -506,7 +504,7 @@
                                     lime, and
                                     fresh herbs from New Zealand.</p>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-900 font-bold">$34.99</span>
+                                    <!-- <span class="text-gray-900 font-bold">$34.99</span> -->
                                     <button
                                         class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
                                         View Details
@@ -529,7 +527,7 @@
                                     powdered cocoa,
                                     white fruit, and dried flowers.</p>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-900 font-bold">$219.99</span>
+                                    <!-- <span class="text-gray-900 font-bold">$219.99</span> -->
                                     <button
                                         class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
                                         View Details
@@ -540,7 +538,7 @@
                     </div>
 
                     <div class="text-center mt-12">
-                        <a href="#"
+                        <a href="{{ route('homeBrowseWines') }}"
                             class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
                             View All Wines
                         </a>
@@ -554,9 +552,9 @@
             <section class="section landing-Features" style="padding:0px;" id="pairing">
                 <div class="py-16 bg-gray-50">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Perfect Food Pairings</h2>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Perfect Wine Pairings</h2>
                         <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                            Enhance your dining experience with our expert food and wine pairing suggestions.
+                            From elegant meals to indulgent cheese boards, explore pairings that bring out the best in every wine.
                         </p>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -569,11 +567,10 @@
                                         alt="Steak" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
-                                    <h3 class="text-xl font-bold text-gray-900 mb-2">Steak & Cabernet Sauvignon</h3>
+                                    <h3 class="text-xl font-bold text-gray-900 mb-2">Wine and food</h3>
                                     <p class="text-gray-600 mb-4">
-                                        The rich tannins in Cabernet Sauvignon perfectly complement the proteins in a
-                                        juicy steak,
-                                        creating a harmonious balance of flavors.
+                                    Explore how wine transforms food into an experience from comforting classics to 
+                                    gourmet cuisine, discover pairings that bring harmony, depth, and pleasure to the table.
                                     </p>
                                     <a href="#"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
@@ -595,11 +592,10 @@
                                         alt="Seafood" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
-                                    <h3 class="text-xl font-bold text-gray-900 mb-2">Seafood & Chardonnay</h3>
+                                    <h3 class="text-xl font-bold text-gray-900 mb-2">Wine and Cheese</h3>
                                     <p class="text-gray-600 mb-4">
-                                        The buttery notes and subtle oak in Chardonnay enhance the delicate flavors of
-                                        seafood,
-                                        especially when prepared with creamy sauces.
+                                        Explore how wine transforms food into an experience — from comforting 
+                                        classics to gourmet cuisine, discover pairings that bring harmony, depth, and pleasure to the table.
                                     </p>
                                     <a href="#"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
@@ -717,6 +713,51 @@
                 </div>
             </section>
             <!-- End:: Section-5 -->
+
+            <!-- Start:: Section-4 -->
+            <section class="section landing-Features-two landing-Features border border-danger">
+                <div class="container text-center">
+                    <h2 class="text-3xl font-bold mb-8 text-center text-white">Our Clients</h2>
+                    <h4 class="fw-semibold mb-2 text-white">Client Reviews</h4>
+                    <div class="text-start">
+                        <div class="justify-content-center">
+                            <div class="feature-logos mt-5">
+                                <div class="swiper mySwiper9">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                                            <img src="{{ asset('images/grapes.jpg') }}" alt="image">
+                                            <h5 class="text-center mt-2 text-fixed-white">One</h5>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ asset('images/grapes.jpg') }}" alt="image">
+                                            <h5 class="text-center mt-2 text-fixed-white">Two</h5>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ asset('images/grapes.jpg') }}" alt="image">
+                                            <h5 class="text-center mt-2 text-fixed-white">Three</h5>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ asset('images/grapes.jpg') }}" alt="image">
+                                            <h5 class="text-center mt-2 text-fixed-white">Four</h5>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ asset('images/grapes.jpg') }}" alt="image">
+                                            <h5 class="text-center mt-2 text-fixed-white">Five</h5>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ asset('images/grapes.jpg') }}" alt="image">
+                                            <h5 class="text-center mt-2 text-fixed-white">Six</h5>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </section>
+            <!-- End:: Section-4 -->
+
+            
 
             <!-- Start:: Section-6 -->
             <section class="section section-bg" id="Moments">

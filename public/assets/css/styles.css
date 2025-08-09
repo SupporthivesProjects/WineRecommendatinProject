@@ -21437,6 +21437,14 @@ table.dataTable thead .sorting_asc_disabled:after,
   background-size: cover;
   position: relative;
 }
+
+.landing-Features-two
+{
+  background-color: rebeccapurple;
+  padding: 2rem 0;
+  position: relative;
+}
+
 .landing-body .landing-banner {
   position: relative;
   width: 100%;
