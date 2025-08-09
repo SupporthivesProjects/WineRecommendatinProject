@@ -17,7 +17,7 @@ use App\Http\Controllers\StoreManager\FeaturedProductController;
 use App\Http\Controllers\MainManagerController;
 use App\Http\Controllers\StoreAssignmentController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +39,34 @@ use Illuminate\Support\Facades\Route;
     {
         return view('welcome');
     });
+
+    Route::get('/about', function () {
+        return view('about');
+    })->name('about');
+
+    Route::get('/browse', function () {
+
+        $products = Product::with('images')
+        ->paginate(9);
+
+
+        return view('allwines', compact('products'));
+
+    })->name('homeBrowseWines');
+
+
+
+    Route::get('/careers', function () {
+        return view('careers');
+    })->name('careers');
+
+    Route::get('/services', function () {
+        return view('services');
+    })->name('services');
+
+
+
+
 
     Route::get('/dashboard', function () {
         // Add success message in the session

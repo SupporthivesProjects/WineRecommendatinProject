@@ -14,29 +14,26 @@
                                         <ul class="mb-5 mb-lg-0 ps-0">
                                             <li><a href="#home">Dashboard</a></li>
                                             <li><a href="#HIW">How it Works?</a></li>
-                                            <li><a href="#featuredwines">Featured Wines</a></li>
-                                            <li><a href="#pairing">Food Pairings</a></li>
-                                            <li><a href="#testimonials">Testimonials</a></li>
+                                            <li><a href="#featuredwines">Browse Wines</a></li>
+                                            <li><a href="#pairing">Pairing Wines</a></li>
+                                            <li><a href="#testimonials">Whats users say</a></li>
                                             <li><a href="#Moments">Moments</a></li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-2 col-sm-6 col-md-4 reveal revealleft position-relative ">
                                         
                                         <ul class="mb-5 mb-lg-0 ps-0">
-                                            <li><a href="listgroup.html">Our Team</a></li>
                                             <li><a href="contacts.html">Contact US</a></li>
-                                            <li><a href="aboutus.html">About</a></li>
-                                            <li><a href="search.html">Services</a></li>
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="settings.html">Terms and Services</a></li>
+                                            <li><a href="{{ route('about') }}">About Us</a></li>
+                                            <li><a href="{{ route('services') }}">Services</a></li>
+                                            <li><a href="{{ route('careers') }}">Careers @ TechSomm </a></li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-4 col-sm-12 col-md-4 reveal revealleft">
                                         <div class="">
                                             <a href="index.html"><img loading="lazy" alt="" class="logo mb-3"
-                                                src="{{ asset('assets/images/brand-logos/desktop-white.png') }}"></a>
-                                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                                                dolore eu fugiat nulla pariatur Excepteur sint occaecat.</p>
+                                                src="{{ asset('images/logoblackred.png') }}" style="width:100px;"></a>
+                                            <p></p>
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control"
