@@ -99,7 +99,7 @@
                     </div>
                 @endif
                 
-                <div class="d-flex gap-2">
+                <!-- <div class="d-flex gap-2">
                     <button class="btn {{ in_array($cheese->id, $cart) ? 'btn-dark' : 'btn-light' }} add-to-cart" 
                             data-product-id="{{ $cheese->id }}"
                             data-product-name="{{ $cheese->name }}"
@@ -111,7 +111,7 @@
                     <button class="btn btn-outline-secondary">
                         <i class="fe fe-heart me-2"></i>Add to Wishlist
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

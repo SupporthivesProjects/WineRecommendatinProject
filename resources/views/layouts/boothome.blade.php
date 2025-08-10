@@ -563,7 +563,7 @@
                                 <div class="md:w-1/2">
                                     <!-- <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
                                         alt="Steak" class="w-full h-full object-cover"> -->
-                                        <img src="{{ asset('images/firstcheepairing.jpeg') }}"
+                                        <img src="{{ asset('images/WineandFood.jpg') }}"
                                         alt="Steak" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -588,7 +588,7 @@
                             <!-- Pairing 2 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="{{ asset('images/secondcheesepairing.avif') }}"
+                                    <img src="{{ asset('images/WineandCheese.jpg') }}"
                                         alt="Seafood" class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -611,7 +611,7 @@
                             </div>
                         </div>
                         <div class="text-center mt-12">
-                            <a href="#"
+                            <a href="{{ route('user.cheeses') }}"
                                 class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
                                 View All Pairings
                             </a>

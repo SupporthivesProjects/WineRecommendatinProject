@@ -572,7 +572,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card    ">
                                                     <div class="questionnaire-label">First Sip</div>
-                                                    <img src="{{ asset('images/Wineglasses.jpg') }}" class="card-img-top" alt="...">
+                                                    <img src="{{ asset('images/FirstPour.jpeg') }}" class="card-img-top" alt="..." style="height:250px;">
                                                     <div class="card-body">
                                                         <h5 class="card-title mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                       </h5>
                                                     </div>
@@ -590,7 +590,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Savy Sip</div>
-                                                    <img src="{{ asset('images/questionnaire2.jpg') }}" class="card-img-top" alt="...">
+                                                    <img src="{{ asset('images/SavySipper.png') }}" class="card-img-top" alt="..." >
                                                     <div class="card-body">
                                                         <h5 class="card-title  mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
                                                     </div>
@@ -608,7 +608,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Cork Master</div>
-                                                    <img src="{{ asset('images/questionnaire3.jpg') }}" class="card-img-top" alt="...">
+                                                    <img src="{{ asset('images/CorkMaster.jpeg') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
                                                     </div>
@@ -626,7 +626,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Quick Pour</div>
-                                                    <img src="{{ asset('images/Wineglasses.jpg') }}" class="card-img-top" alt="...">
+                                                    <img src="{{ asset('images/QuickPour2.png') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title  mb-0">For when you need a wine—quick and right.!!</h5>
                                                     </div>

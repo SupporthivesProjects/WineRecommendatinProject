@@ -54,16 +54,16 @@ class CheeseProductController extends Controller
 
         $cheese = CheeseProduct::with(['stores' => function($query) use ($user) {
             $query->where('store_id', $user->store_id)
-                  ->where('is_active', true)
+                  ->where('is_available', true)
                   ->where('quantity', '>', 0)
                   ->select('stores.id', 'store_name', 'address')
-                  ->withPivot(['quantity', 'is_active']);
+                  ->withPivot(['quantity', 'is_available']);
         }])->findOrFail($id);
 
         // Get related cheeses from the same store
         $relatedCheeses = CheeseProduct::whereHas('stores', function($query) use ($user, $id) {
                 $query->where('store_id', $user->store_id)
-                      ->where('is_active', true)
+                      ->where('is_available', true)
                       ->where('quantity', '>', 0);
             })
             ->where('id', '!=', $id)
