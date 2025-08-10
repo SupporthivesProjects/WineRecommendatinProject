@@ -141,8 +141,8 @@
 <section class="parallax-container">
     <div class="parallax-bg"></div>
     <div class="hero-text my-3">
-        <h1 class="text-black" id="mystyle">Discover Artisanal Cheeses</h1>
-        <p>Perfect pairings for your favorite wines</p>
+        <h1  id="mystyle" style="color:#2f0100;">Discover Artisanal Cheeses</h1>
+        <p style="color:#2f0100;">Perfect pairings for your favorite wines</p>
         <a type="button" class="btn btn-dark" href="#products">
             Explore Cheeses
         </a>

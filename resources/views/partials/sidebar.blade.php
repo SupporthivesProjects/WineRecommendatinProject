@@ -1,4 +1,11 @@
 
+<style>
+    /* Sidebar hover text color change */
+    .side-menu__item:hover .side-menu__label {
+        color: var(--primary-color) !important;
+    }
+</style>
+
 @if(Auth::check() && (
     Auth::user()->role === 'admin' || 
     Auth::user()->role === 'store_manager' || 
@@ -28,49 +35,49 @@
                         <!-- Admin sidebar links -->
                         <li class="slide">
                             <a href="{{ route('admin.dashboard') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-home"></i>
+                                <i class="side-menu__icon fe fe-home" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Dashboard</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.products.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-droplet"></i>
+                                <i class="side-menu__icon fe fe-droplet" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Wine Products</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.cheese-products.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-box"></i>
+                                <i class="side-menu__icon fe fe-box" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Cheese Products</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.stores.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-shopping-cart"></i>
+                                <i class="side-menu__icon fe fe-shopping-cart" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Stores</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.users.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-users"></i>
+                                <i class="side-menu__icon fe fe-users" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Users</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.main_manager') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-users"></i>
+                                <i class="side-menu__icon fe fe-users" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Main Manager</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.questionnaires.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-edit"></i>
+                                <i class="side-menu__icon fe fe-edit" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Questionnaires</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.settings.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-settings"></i>
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Settings</span>
                             </a>
                         </li>
@@ -78,19 +85,19 @@
                         <!-- Store Manager sidebar links -->
                         <li class="slide">
                             <a href="{{ route('store-manager.dashboard') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-home"></i>
+                                <i class="side-menu__icon fe fe-home" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Dashboard</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('store-manager.products') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-droplet"></i>
+                                <i class="side-menu__icon fe fe-droplet" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Wine Products</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('store-manager.cheese-products.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-box"></i>
+                                <i class="side-menu__icon fe fe-box" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Cheese Products</span>
                             </a>
                         </li>
@@ -98,13 +105,13 @@
                         <!-- Main Manager sidebar links -->
                         <li class="slide">
                             <a href="{{ route('main-manager.dashboard') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-home"></i>
+                                <i class="side-menu__icon fe fe-home" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Dashboard</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('main-manager.allStores') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-box"></i>
+                                <i class="side-menu__icon fe fe-box" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Stores</span>
                             </a>
                         </li>
