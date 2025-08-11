@@ -12,6 +12,29 @@
             object-fit: cover;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--multiple {
+            min-height: 38px;
+            padding: 5px 5px 0 5px;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #6c757d;
+            margin-right: 5px;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            color: #495057;
+        }
+    </style>
     @endpush
 
     <!-- Products Section -->
@@ -178,7 +201,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="cheese_pairing" class="form-label">Cheese Pairing</label>
-                                        <input type="text" class="form-control" name="cheese_pairing" id="cheese_pairing">
+                                        <select class="form-select select2" name="cheese_pairing[]" id="cheese_pairing" multiple>
+                                            @foreach(\App\Models\CheeseProduct::all() as $cheese)
+                                                <option value="{{ $cheese->name }}">{{ $cheese->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="importer_info" class="form-label">Importer Info</label>
@@ -231,6 +258,41 @@
 @endsection
 
 @push('scripts')
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2
+            $('.select2').select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Select cheese pairings',
+                allowClear: true,
+                tags: true,
+                tokenSeparators: [',', ' '],
+                createTag: function(params) {
+                    return {
+                        id: params.term,
+                        text: params.term,
+                        newOption: true
+                    }
+                },
+                templateResult: function(data) {
+                    var $result = $("<span></span>");
+                    $result.text(data.text);
+                    if (data.newOption) {
+                        $result.append(" <em>(new)</em>");
+                    }
+                    return $result;
+                }
+            });
+
+            // Format the cheese pairings when editing (if needed)
+            @if(isset($product) && $product->cheese_pairing)
+                var cheesePairings = {!! json_encode(explode(',', $product->cheese_pairing)) !!};
+                $('#cheese_pairing').val(cheesePairings).trigger('change');
+            @endif
+        });
+    </script>
     <!-- JS Function to preview images -->
     <!-- <script>
         let selectedFiles = [];
@@ -361,10 +423,4 @@
         // Attach the submitForm function to the form
         document.getElementById('product-form').addEventListener('submit', submitForm);
     </script> -->
-
-
-
-
 @endpush
-
-

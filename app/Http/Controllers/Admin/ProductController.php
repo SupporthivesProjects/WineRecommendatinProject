@@ -76,7 +76,7 @@ class ProductController extends Controller
             'style' => 'nullable|string|max:255',
             'decanting_time' => 'nullable|string|max:255',
             'ageing_potential' => 'nullable|string|max:255',
-            'cheese_pairing' => 'nullable|string|max:255',
+            'cheese_pairing' => 'nullable|array',
             'importer_info' => 'nullable|string|max:255',
             'product_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'primary_image' => 'nullable|numeric',
@@ -102,6 +102,14 @@ class ProductController extends Controller
         }
 
         $productData = $request->except(['product_images', 'primary_image']);
+        
+        // Convert cheese_pairing array to comma-separated string if it exists
+        if ($request->has('cheese_pairing') && is_array($request->cheese_pairing)) {
+            $productData['cheese_pairing'] = implode(',', array_map('trim', $request->cheese_pairing));
+        } else {
+            $productData['cheese_pairing'] = null;
+        }
+        
         Log::debug('Product data to be saved', ['product_data' => $productData]);
 
         // Create the product
@@ -177,7 +185,7 @@ class ProductController extends Controller
             'style' => 'nullable|string|max:255',
             'decanting_time' => 'nullable|string|max:255',
             'ageing_potential' => 'nullable|string|max:255',
-            'cheese_pairing' => 'nullable|string|max:255',
+            'cheese_pairing' => 'nullable|array',
             'importer_info' => 'nullable|string|max:255',
             'product_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20408',
             'primary_image' => 'nullable|numeric',
@@ -201,6 +209,14 @@ class ProductController extends Controller
         
         // Update basic product data
         $productData = $request->except(['product_images', 'primary_image', 'images_to_delete']);
+        
+        // Convert cheese_pairing array to comma-separated string if it exists
+        if ($request->has('cheese_pairing') && is_array($request->cheese_pairing)) {
+            $productData['cheese_pairing'] = implode(',', array_map('trim', $request->cheese_pairing));
+        } else {
+            $productData['cheese_pairing'] = null;
+        }
+        
         $product->update($productData);
        
         // Handle image operations if files were uploaded
