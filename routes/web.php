@@ -125,6 +125,8 @@ use Illuminate\Support\Facades\Log;
         
         // Products management
         Route::resource('products', AdminProductController::class);
+        Route::post('products/toggle-featured/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'toggleFeatured'])
+            ->name('products.toggle-featured');
         
         // Cheese Products management
         Route::resource('cheese-products', \App\Http\Controllers\Admin\CheeseProductController::class)

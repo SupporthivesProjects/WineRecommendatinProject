@@ -5,7 +5,8 @@
              data-vintage-year="{{ $product->vintage_year }}" 
              data-winery="{{ $product->winery }}"
              data-retail-price="{{ $product->retail_price }}"
-             data-country="{{ $product->country }}">
+             data-country="{{ $product->country }}"
+             data-featured="{{ $product->admin_featured_product ? 'true' : 'false' }}">
             <div class="card custom-card wine-card">
                 <div class="image-wrapper" style="position: relative;">
                     @php
@@ -15,8 +16,10 @@
                     <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}"
                          class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
-                    @if($product->is_featured == 1)
-                        <span class="featured-badge">Featured</span>
+                    @if($product->admin_featured_product)
+                        <span class="featured-badge">
+                            <i class="fas fa-star"></i> Featured
+                        </span>
                     @endif
                 </div>
 

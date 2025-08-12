@@ -363,6 +363,14 @@
                     <div class="col-12 col-md-9  rounded rounded-2 p-3">
                         <!-- Type and Country filters at top -->
                         <div class="row mb-4">
+                            <div class="col-12 mb-3">
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <button class="btn btn-outline-dark filter-btn active" data-filter="all">All Wines</button>
+                                    <button class="btn btn-outline-dark filter-btn" data-filter="featured">
+                                        <i class="fas fa-star"></i> Featured Wines
+                                    </button>
+                                </div>
+                            </div>
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                 <h4 class="fw-bold mb-3">Types</h4>
                                 @php
@@ -522,7 +530,7 @@
     <script>
         // Add loading overlay HTML
         const loadingOverlay = `
-            <div id="loading-overlay" style="display: none; position: fixed; top: 50%; left: 50%; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+            <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 9999; display: flex; justify-content: center; align-items: center;">
                 <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
@@ -739,6 +747,11 @@
                 // Create a plain object to store form data
                 const formData = {};
 
+                // Check if featured filter is active
+                if ($('.filter-btn[data-filter="featured"]').hasClass('active')) {
+                    formData['featured'] = 'true';
+                }
+
                 // Get all checked vintage year checkboxes
                 const vintageYears = [];
                 $('.wine-vintage-year-filter:checked').each(function() {
@@ -850,6 +863,13 @@
                     }
                 });
             }
+
+            // Handle filter button clicks
+            $('.filter-btn').on('click', function() {
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+                loadProducts(1); // Reset to first page when changing filters
+            });
 
             // Initial load with any URL parameters
             const urlParams = new URLSearchParams(window.location.search);
