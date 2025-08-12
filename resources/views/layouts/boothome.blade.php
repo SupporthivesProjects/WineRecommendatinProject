@@ -338,6 +338,13 @@
                                 </a>
                             </li>
                             <!-- End::slide -->
+                            <!-- Start::slide -->
+                            <li class="slide">
+                                <a href="{{ route('contact') }}" class="">
+                                    <span class="">Contact Us</span>
+                                </a>
+                            </li>
+                            <!-- End::slide -->
 
                         </ul>
                         <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg"

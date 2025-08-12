@@ -17,6 +17,7 @@ use App\Http\Controllers\StoreManager\FeaturedProductController;
 use App\Http\Controllers\MainManagerController;
 use App\Http\Controllers\StoreAssignmentController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +58,9 @@ use Illuminate\Support\Facades\Log;
     })->name('services');
 
     Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
+
+    Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+    Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
     Route::get('/dashboard', function () {
         // Add success message in the session
@@ -223,6 +227,7 @@ use Illuminate\Support\Facades\Log;
 
     });
 
+   
     // Cart routes
     Route::get('/cart', [CartController::class, 'index'])->name('user.cart');
     Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('user.cart.updateQuantity');
