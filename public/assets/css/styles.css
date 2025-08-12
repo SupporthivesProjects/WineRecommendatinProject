@@ -22227,7 +22227,7 @@ table.dataTable thead .sorting_asc_disabled:after,
   color: var(--gray-5);
 }
 .landing-body .container {
-  max-width: 1140px;
+  max-width: 1182px;
 }
 .landing-body .btn-icon i {
   line-height: 1.5;

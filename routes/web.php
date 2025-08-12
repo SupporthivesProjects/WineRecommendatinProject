@@ -16,8 +16,11 @@ use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductCo
 use App\Http\Controllers\StoreManager\FeaturedProductController;
 use App\Http\Controllers\MainManagerController;
 use App\Http\Controllers\StoreAssignmentController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,17 +47,7 @@ use App\Models\Product;
         return view('about');
     })->name('about');
 
-    Route::get('/browse', function () {
-
-        $products = Product::with('images')
-        ->paginate(9);
-
-
-        return view('allwines', compact('products'));
-
-    })->name('homeBrowseWines');
-
-
+    Route::get('/browse', [ProductController::class, 'browse'])->name('homeBrowseWines');
 
     Route::get('/careers', function () {
         return view('careers');
@@ -64,9 +57,10 @@ use App\Models\Product;
         return view('services');
     })->name('services');
 
+    Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
 
-
-
+    Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+    Route::post('/contact', [ContactController::class, 'store'])->name('contact.submit');
 
     Route::get('/dashboard', function () {
         // Add success message in the session
@@ -131,6 +125,8 @@ use App\Models\Product;
         
         // Products management
         Route::resource('products', AdminProductController::class);
+        Route::post('products/toggle-featured/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'toggleFeatured'])
+            ->name('products.toggle-featured');
         
         // Cheese Products management
         Route::resource('cheese-products', \App\Http\Controllers\Admin\CheeseProductController::class)
@@ -233,6 +229,7 @@ use App\Models\Product;
 
     });
 
+   
     // Cart routes
     Route::get('/cart', [CartController::class, 'index'])->name('user.cart');
     Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('user.cart.updateQuantity');

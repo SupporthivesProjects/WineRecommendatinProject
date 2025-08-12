@@ -46,6 +46,7 @@
                                             <th class="text-start">Winery</th>
                                             <th class="text-start">Country</th>
                                             <th class="text-start">Price</th>
+                                            <th class="text-start">Featured</th>
                                             <th class="text-start">Status</th>
                                             <th class="text-start">Action</th>
                                         </tr>
@@ -59,18 +60,34 @@
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
                                                 <td class="align-middle">${{ number_format($product->retail_price, 2) }}</td>
+                                                <td class="align-middle text-center">
+                                                    <div class="form-check form-switch d-inline-block">
+                                                        <input type="checkbox" class="form-check-input featured-toggle" 
+                                                               data-product-id="{{ $product->id }}"
+                                                               id="featured-{{ $product->id }}"
+                                                               {{ $product->admin_featured_product ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="featured-{{ $product->id }}"></label>
+                                                    </div>
+                                                </td>
                                                 <td class="align-middle">
                                                     <span class="badge rounded-pill border border-{{ $product->status === 'active' ? 'success' : 'danger' }} text-{{ $product->status === 'active' ? 'success' : 'danger' }} py-1 px-3">
                                                         {{ ucfirst($product->status) }}
                                                     </span>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <a href="{{ route('admin.products.show', $product) }}" class="text-primary">View</a>
+                                                    <div class="btn-group">
+                                                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-sm btn-primary">
+                                                            <i class="fe fe-eye"></i>
+                                                        </a>
+                                                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-info">
+                                                            <i class="fe fe-edit"></i>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="8" class="text-center">No products found</td>
+                                                <td colspan="9" class="text-center">No products found</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -87,6 +104,39 @@
 @endsection
 
 @push('scripts')
+    <script>
+        // Toggle featured status
+        $(document).ready(function() {
+            $('.featured-toggle').change(function() {
+                const productId = $(this).data('product-id');
+                const isFeatured = $(this).is(':checked') ? 1 : 0;
+                const url = '{{ route("admin.products.toggle-featured", [""]) }}/' + productId;
+                
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        is_featured: isFeatured
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success('Featured status updated successfully');
+                        } else {
+                            toastr.error('Failed to update featured status');
+                            // Revert the toggle if there was an error
+                            $('.featured-toggle[data-product-id="' + productId + '"]').prop('checked', !isFeatured);
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('An error occurred: ' + (xhr.responseJSON?.message || 'Unknown error'));
+                        // Revert the toggle on error
+                        $('.featured-toggle[data-product-id="' + productId + '"]').prop('checked', !isFeatured);
+                    }
+                });
+            });
+        });
+    </script>
     <!-- JS Function to preview images -->
     <script>
         function previewImages(input) {
@@ -129,5 +179,3 @@
     </script>
 
 @endpush
-
-

@@ -55,6 +55,7 @@ class Product extends Model
         'country',
         'tasting_notes',
         'status',
+        'admin_featured_product',
     ];
 
     /**

@@ -310,6 +310,41 @@ class ProductController extends Controller
         return redirect()->route('admin.products.show', $product)
             ->with('success', 'Product updated successfully.');
     }
+    
+    /**
+     * Toggle the featured status of a product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleFeatured(Request $request, Product $product)
+    {
+        try {
+            $request->validate([
+                'is_featured' => 'required|boolean',
+            ]);
+
+            $product->update([
+                'admin_featured_product' => $request->is_featured,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Featured status updated successfully.',
+                'is_featured' => $product->admin_featured_product,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating featured status: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update featured status.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     /**
      * Remove the specified product from storage.
      */
