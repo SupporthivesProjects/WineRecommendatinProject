@@ -16,8 +16,10 @@ use App\Http\Controllers\StoreManager\ProductController as StoreManagerProductCo
 use App\Http\Controllers\StoreManager\FeaturedProductController;
 use App\Http\Controllers\MainManagerController;
 use App\Http\Controllers\StoreAssignmentController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,17 +46,7 @@ use App\Models\Product;
         return view('about');
     })->name('about');
 
-    Route::get('/browse', function () {
-
-        $products = Product::with('images')
-        ->paginate(9);
-
-
-        return view('allwines', compact('products'));
-
-    })->name('homeBrowseWines');
-
-
+    Route::get('/browse', [ProductController::class, 'browse'])->name('homeBrowseWines');
 
     Route::get('/careers', function () {
         return view('careers');
@@ -64,9 +56,7 @@ use App\Models\Product;
         return view('services');
     })->name('services');
 
-
-
-
+    Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
 
     Route::get('/dashboard', function () {
         // Add success message in the session
