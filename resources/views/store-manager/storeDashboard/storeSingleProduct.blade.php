@@ -33,46 +33,13 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-12 col-md-12">
                                 <div class="row">
-                                    <div class="col-2">
-                                        <div class="clearfix carousel-slider">
-                                            <div id="thumbcarousel" class="carousel slide" data-bs-interval="false">
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active">
-                                                        @php
-                                                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                                                        @endphp
-
-                                                        @if($primaryImage)
-                                                            <div class="thumb my-2">
-                                                                <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
-                                                            </div>
-                                                        @else
-                                                            <div class="thumb my-2">
-                                                                <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-md-7 offset-md-1 col-sm-9 col-8">
                                         <div class="product-carousel">
                                             <div id="carousel" class="carousel slide" data-bs-ride="false">
                                                 <div class="carousel-inner">
-                                                        @php
-                                                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                                                        @endphp
-
-                                                        @if($primaryImage)
-                                                            <div class="thumb my-2">
-                                                                <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
-                                                            </div>
-                                                        @else
-                                                            <div class="thumb my-2">
-                                                                <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
-                                                            </div>
-                                                        @endif
+                                                    <div class="thumb my-2">
+                                                        <img src="{{ asset('storage/' . $product->image1) }}" alt="Product Image">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,22 +103,6 @@
 
                                     <h6 class="mt-4 fs-16">Description</h6>
                                     <p>{{ $product->wine_story }}</p>
-
-                                    <div class="d-flex mt-2">
-                                        <div class="mt-2 sizes">Quantity:</div>
-                                        <div class="d-flex ms-2">
-                                            <form method="POST" action="">
-                                                @csrf
-                                                <div class="form-group">
-                                                    <select name="quantity" class="form-control wd-150">
-                                                        @for ($i = 1; $i <= 4; $i++)
-                                                            <option value="{{ $i }}">{{ $i }}</option>
-                                                        @endfor
-                                                    </select>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
