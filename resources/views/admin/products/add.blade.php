@@ -83,6 +83,30 @@
                                     </div>
 
                                     <div class="col-md-6">
+                                        <label for="type" class="form-label">Speical Mentions</label>
+                                        <select class="form-select" name="sp_mentions" id="sp_mentions">
+                                            <option value="">Select</option>
+                                            <option value="fortified">Fortified</option>
+                                            <option value="port">Port</option>
+                                            <option value="marsala">Marsala</option>
+                                            <option value="sherry">Sherry</option>
+                                            <option value="orange">Orange</option>
+                                            <option value="fruit">Fruit</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="type" class="form-label">Method</label>
+                                        <select class="form-select" name="method" id="method">
+                                            <option value="">Select Method</option>
+                                            <option value="still">Still</option>
+                                            <option value="sparkling">Sparkling</option>
+                                            <option value="semi sparkling">Semi Sparkling</option>
+                                            <option value="fortified">Fortified</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
                                         <label for="winery" class="form-label">Winery</label>
                                         <input type="text" class="form-control" name="winery" id="winery">
                                     </div>
@@ -230,8 +254,8 @@
 
                                 <!-- Image Upload Section (Max 5) -->
                                 <div class="mt-4">
-                                    <label class="form-label">Product Images (Max 5)</label>
-                                    <input type="file" name="product_images[]" id="product_images" class="form-control" multiple accept="image/*" onchange="previewImages(this)">
+                                    <label class="form-label">Upload Product Image</label>
+                                    <input type="file" name="product_image" id="product_image" class="form-control" multiple accept="image/*" onchange="previewImages(this)">
                                     <small class="text-muted">Allowed formats: jpeg, jpg, png, gif | Max size: 2MB</small>
                                     <div id="image-preview-container" class="row mt-2"></div>
 

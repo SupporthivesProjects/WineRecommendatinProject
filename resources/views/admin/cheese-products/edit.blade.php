@@ -91,7 +91,7 @@
                                         <div class="form-group mb-3">
                                             <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <span class="input-group-text">$</span>
+                                                <span class="input-group-text">₹</span>
                                                 <input type="number" name="price" id="price" step="0.01" min="0" 
                                                        class="form-control @error('price') is-invalid @enderror" 
                                                        value="{{ old('price', $product->price ?? '') }}" required>

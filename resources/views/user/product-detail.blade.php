@@ -7,7 +7,7 @@
         <!-- Start::page-header -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
             <div>
-                <h2 class="main-content-title fs-24 mb-1">Welcome To Products Board</h2>
+                <h2 class="main-content-title fs-24 mb-1">Welcome To Products Boards</h2>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Products</li>

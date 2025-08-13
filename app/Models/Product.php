@@ -18,6 +18,7 @@ class Product extends Model
         'wine_name',
         'type',
         'sp_mentions',
+        'method',
         'grape_variety',
         'varietal_blend',
         'vintage_year',

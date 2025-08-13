@@ -59,7 +59,7 @@
                                                 <td class="align-middle">{{ ucfirst($product->type) }}</td>
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
-                                                <td class="align-middle">${{ number_format($product->retail_price, 2) }}</td>
+                                                <td class="align-middle">₹&nbsp;{{ number_format($product->retail_price, 2) }}</td>
                                                 <td class="align-middle text-center">
                                                     <div class="form-check form-switch d-inline-block">
                                                         <input type="checkbox" class="form-check-input featured-toggle" 

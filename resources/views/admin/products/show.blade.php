@@ -28,24 +28,12 @@
                 </div>
                 <div class="card-body">
                     <!-- Product Images -->
-                    <h5 class="mb-3 text-dark">Product Images</h5>
-                    @if ($product->images && $product->images->count() > 0)
+                    <h5 class="mb-3 text-dark">Product Image</h5>
+                    @if ($product->image1 > 0)
                         <div class="row">
-                            @php
-                                $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                            @endphp
                             <div class="col-md-6 mb-3">
                                 <div class="border p-2 rounded bg-light">
-                                    <img id="main-product-image" src="{{ asset('storage/products/' . basename($primaryImage->image_path)) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="row g-2">
-                                    @foreach ($product->images as $image)
-                                        <div class="col-4">
-                                            <img src="{{ asset('storage/products/' . basename($image->image_path)) }}" class="img-thumbnail {{ $image->is_primary ? 'border border-3 border-primary' : '' }}" style="cursor:pointer;" onclick="updateMainImage('{{ asset('storage/products/' . basename($image->image_path)) }}')">
-                                        </div>
-                                    @endforeach
+                                    <img id="main-product-image" src="{{ asset('storage/' . $product->image1) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
                                 </div>
                             </div>
                         </div>
@@ -55,17 +43,6 @@
 
                     <!-- Additional Image Fields (image1 - image4) -->
                     @php $additionalImages = ['image1', 'image2', 'image3', 'image4']; @endphp
-                    <div class="row mt-4">
-                        @foreach ($additionalImages as $imgField)
-                            @if (!empty($product->$imgField))
-                                <div class="col-md-3 mb-3">
-                                    <div class="border p-2 rounded bg-light">
-                                        <img src="{{ asset('storage/products/' . $product->$imgField) }}" class="img-fluid rounded" alt="{{ $imgField }}">
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
 
                     <!-- Product Info Grid -->
                     <h5 class="mt-5 mb-3 text-dark">Product Information</h5>
