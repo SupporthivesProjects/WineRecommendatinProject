@@ -360,54 +360,73 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <h1 class="mb-4">Our Services</h1>
-                        <div class="container my-5">
-                        <!-- Wine Lovers & Consumers -->
-                        <section class="mb-5">
-                            <h1 class="mb-4 text-primary">🍷 For Wine Lovers & Consumers</h1>
-                            <ul class="list-group">
-                            <li class="list-group-item fs-6"><strong>Personalized Wine Recommendations:</strong> Let your palate lead the way. Our intelligent recommendation system matches you with wines tailored to your taste, mood, and dining preferences.</li>
-                            <li class="list-group-item fs-6"><strong>Browse Wines Across India:</strong> Access the most comprehensive collection of wines available in the Indian market — from globally renowned labels to exciting domestic finds, all in one place.</li>
-                            <li class="list-group-item fs-6"><strong>Wine & Food Pairings:</strong> Unlock harmony in every bite and sip with pairing suggestions that complement your cuisine — from comforting meals to indulgent occasions.</li>
-                            <li class="list-group-item fs-6"><strong>Wine & Cheese Pairings:</strong> Discover the delicate art of matching wines with fine cheeses, creating pairings that celebrate balance, contrast, and indulgence.</li>
-                            <li class="list-group-item fs-6"><strong>Tasting Notes & Flavor Profile Tracking:</strong> Rate wines, add personal notes, and build a unique flavor profile that evolves with you — helping us recommend bottles that align with your preferences.</li>
-                            <li class="list-group-item fs-6"><strong>A Complete Alcohol Discovery Platform – Coming Soon:</strong> Spirits, cocktails, and more, we're expanding to become your one-stop destination for all things alcohol in India.</li>
-                            </ul>
+                        <section class="container py-5">
+                            <!-- Section 1 -->
+                            <div class="row  mb-5">
+                                <div class="col-md-6 order-1 order-md-1">
+                                    <h1 class="mb-3 text-primary">🍷 For Wine Lovers & Consumers</h1>
+                                    <ul class="fs-6 fs-md-5">
+                                        <li><strong>Personalized Wine Recommendations:</strong> Let your palate lead the way. Our intelligent recommendation system matches you with wines tailored to your taste, mood, and dining preferences.</li>
+                                        <li><strong>Browse Wines Across India:</strong>Access the most comprehensive collection of wines available in the Indian market — from globally renowned labels to exciting domestic finds, all in one place.</li>
+                                        <li><strong>Wine & Food Pairings:</strong>Unlock harmony in every bite and sip with pairing suggestions that complement your cuisine — from comforting meals to indulgent occasions.</li>
+                                        <li><strong>Wine & Cheese Pairings:</strong>Discover the delicate art of matching wines with fine cheeses, creating pairings that celebrate balance, contrast, and indulgence.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 order-0 order-md-2">
+                                    <img src="/images/7662.jpg" class="img-fluid rounded shadow" alt="Wine Lovers">
+                                </div>
+                            </div>
+
+                            <!-- Section 2 -->
+                            <div class="row  mb-5">
+                                <div class="col-md-6 order-1 order-md-2">
+                                    <h1 class="mb-3 text-success">🏨 For Hospitality</h1>
+                                    <ul class="fs-6 fs-md-5">
+                                        <li><strong>Wine List Structuring:</strong>Design profitable, expressive wine menus aligned with your cuisine and guest profile.</li>
+                                        <li><strong>On-Demand Wine Support:</strong>Tap into TechSomm’s wine database and future Sommelier Support Hotline SMS service (Save Me Sommelier) for real-time assistance with selections, service, or pairings.</li>
+                                        <li><strong>Upcoming:</strong>Regional Wine Guides tailored to local palates and regional cuisine influences.</li>
+                                        <li><strong>Wine Concierge Services:</strong> Assist during events or peak service hours.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 order-0 order-md-1">
+                                    <img src="/images/hospitality.jpg" class="img-fluid rounded shadow" alt="Hospitality">
+                                </div>
+                            </div>
+
+                            <!-- Section 3 -->
+                            <div class="row  mb-5">
+                                <div class="col-md-6 order-1 order-md-1">
+                                    <h1 class="mb-3 text-warning">🏬 For Retail</h1>
+                                    <ul class="fs-6 fs-md-5">
+                                        <li><strong>Digital Wine Catalogue:</strong>Access a clean, importer-verified wine database to simplify inventory, staff training, and customer communication.</li>
+                                        <li><strong>Wine Discovery Tools for Staff & Shoppers:</strong>Let your customers explore wines through tasting notes, food pairing suggestions, and personal profile-building features.</li>
+                                        <li><strong>Upcoming:</strong> Regional style preference mapping for customer-centric curation.</li>
+                                        <li><strong>Wine Concierge:</strong>for premium clients and loyalty programs.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 order-0 order-md-2">
+                                    <img src="/images/retail.jpg" class="img-fluid rounded shadow" alt="Retail">
+                                </div>
+                            </div>
+
+                            <!-- Section 4 -->
+                            <div class="row  mb-5">
+                                <div class="col-md-6 order-1 order-md-2">
+                                <h1 class="mb-3 text-danger">🍾 For Beverage Industry Professionals</h1>
+                                    <ul class="fs-6 fs-md-5"    >
+                                        <li><strong>Importer & Distributor Portfolio Integration:</strong>Display your wine portfolio across TechSomm’s platform, directly to retail and hospitality buyers.</li>
+                                        <li><strong>Visibility & Reach:</strong>Make your wines searchable, comparable, and accessible to on-trade and off-trade professionals through our discovery tools.</li>
+                                        <li><strong>Promotion & Events Support:</strong>Collaborate on thematic tasting events, product launches, and educational experiences and services.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 order-0 order-md-1">
+                                    <img src="/images/professional.jpg" class="img-fluid rounded shadow" alt="Industry Professionals">
+                                </div>
+                            </div>
                         </section>
 
-                        <!-- Hospitality -->
-                        <section class="mb-5">
-                            <h1 class="mb-4 text-success">🏨 For Hospitality</h1>
-                            <ul class="list-group">
-                            <li class="list-group-item fs-6"><strong>Wine List Structuring:</strong> Design profitable, expressive wine menus aligned with your cuisine and guest profile.</li>
-                            <li class="list-group-item fs-6"><strong>On-Demand Wine Support:</strong> Tap into TechSomm’s wine database and future Sommelier Support Hotline SMS service (Save Me Sommelier) for real-time assistance with selections, service, or pairings.</li>
-                            <li class="list-group-item fs-6"><strong>Upcoming:</strong> Regional Wine Guides tailored to local palates and regional cuisine influences.</li>
-                            <li class="list-group-item fs-6"><strong>Wine Concierge Services:</strong> Assist during events or peak service hours.</li>
-                            </ul>
-                        </section>
 
-                        <!-- Retail -->
-                        <section class="mb-5">
-                            <h1 class="mb-4 text-warning">🏬 For Retail</h1>
-                            <ul class="list-group">
-                            <li class="list-group-item fs-6"><strong>Digital Wine Catalogue:</strong> Access a clean, importer-verified wine database to simplify inventory, staff training, and customer communication.</li>
-                            <li class="list-group-item fs-6"><strong>Wine Discovery Tools for Staff & Shoppers:</strong> Let your customers explore wines through tasting notes, food pairing suggestions, and personal profile-building features.</li>
-                            <li class="list-group-item fs-6"><strong>Upcoming:</strong> Regional style preference mapping for customer-centric curation.</li>
-                            <li class="list-group-item fs-6"><strong>Wine Concierge:</strong> For premium clients and loyalty programs.</li>
-                            </ul>
-                        </section>
 
-                        <!-- Beverage Industry Professionals -->
-                        <section>
-                            <h1 class="mb-4 text-danger">👨‍💼 For Beverage Industry Professionals</h1>
-                            <ul class="list-group">
-                            <li class="list-group-item fs-6"><strong>Importer & Distributor Portfolio Integration:</strong> Display your wine portfolio across TechSomm’s platform, directly to retail and hospitality buyers.</li>
-                            <li class="list-group-item fs-6"><strong>Visibility & Reach:</strong> Make your wines searchable, comparable, and accessible to on-trade and off-trade professionals through our discovery tools.</li>
-                            <li class="list-group-item fs-6"><strong>Promotion & Events Support:</strong> Collaborate on thematic tasting events, product launches, and educational experiences and services.</li>
-                            </ul>
-                        </section>
-
-                        </div>
-                        
                     </div>
                 </div>
             </section>
