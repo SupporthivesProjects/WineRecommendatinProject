@@ -628,97 +628,14 @@
             <!-- End:: Section-4 -->
 
             <!-- Start:: Section-5  Testimonials Section -->
-            <section class="section highlights" id="testimonials">
-                <div class="py-16 bg-white">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">What Our Users Say</h2>
-                        <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                            Discover how Wine Recommender has transformed the wine experience for our community.
-                        </p>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <!-- Testimonial 1 -->
-                            <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                                <div class="flex items-center mb-4">
-                                    <div
-                                        class="h-12 w-12 rounded-full bg-red-200 flex items-center justify-center text-red-700 font-bold text-xl">
-                                        JD
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-lg font-semibold text-gray-900">James Davis</h4>
-                                        <div class="flex text-yellow-400">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                            <!-- Repeat star SVGs 4 more times -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic">
-                                    "I used to spend hours researching wines before dinner parties. Wine Recommender has
-                                    saved me so
-                                    much time and introduced me to amazing wines I never would have discovered on my
-                                    own."
-                                </p>
-                            </div>
-
-                            <!-- Testimonial 2 -->
-                            <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                                <div class="flex items-center mb-4">
-                                    <div
-                                        class="h-12 w-12 rounded-full bg-red-200 flex items-center justify-center text-red-700 font-bold text-xl">
-                                        SL
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-lg font-semibold text-gray-900">Sarah Lee</h4>
-                                        <div class="flex text-yellow-400">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                            <!-- Repeat star SVGs 4 more times -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic">
-                                    "As a beginner in the world of wine, I was overwhelmed by all the choices. This app
-                                    has been my
-                                    personal sommelier, guiding me to wines that match my taste perfectly."
-                                </p>
-                            </div>
-
-                            <!-- Testimonial 3 -->
-                            <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                                <div class="flex items-center mb-4">
-                                    <div
-                                        class="h-12 w-12 rounded-full bg-red-200 flex items-center justify-center text-red-700 font-bold text-xl">
-                                        MR
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="text-lg font-semibold text-gray-900">Michael Rodriguez</h4>
-                                        <div class="flex text-yellow-400">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                viewBox="0 0 20 20" fill="currentColor">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                            </svg>
-                                            <!-- Repeat star SVGs 4 more times -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 italic">
-                                    "The food pairing suggestions are spot on! I've impressed my friends at dinner
-                                    parties with
-                                    perfect wine selections that complement every dish."
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            @php
+                // Fetch active testimonials ordered by sort_order
+                $testimonials = \App\Models\Testimonial::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get();
+            @endphp
+            
+            <x-testimonials :testimonials="$testimonials" />
             <!-- End:: Section-5 -->
 
             <!-- Start:: Section-4 -->
@@ -783,36 +700,69 @@
             <!-- End:: Section-6 -->
 
             <!-- Start:: Section-7 -->
-            <section class="section highlights" id="faq" style="padding:0px;">
-                <!-- Newsletter Section -->
+            <section class="section highlights" id="share-review" style="padding:0px;">
+                <!-- Share Review Section -->
                 <div class="py-16 bg-red-700">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="lg:flex lg:items-center lg:justify-between">
                             <div class="lg:w-1/2">
-                                <h2 class="text-3xl font-bold text-white mb-2">Join Our Wine Community</h2>
+                                <h2 class="text-3xl font-bold text-white mb-2">Share Your Experience</h2>
                                 <p class="text-red-100 mb-6 lg:mb-0">
-                                    Subscribe to our newsletter for exclusive wine recommendations, special offers, and
-                                    expert tips
-                                    on wine appreciation.
+                                    We value your feedback! Share your wine experience with our community. 
+                                    Your review helps others discover great wines.
                                 </p>
                             </div>
                             <div class="lg:w-1/2">
-                                <form class="sm:flex">
-                                    <label for="email-address" class="sr-only">Email address</label>
-                                    <input id="email-address" name="email" type="email" autocomplete="email"
-                                        required
-                                        class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
-                                        placeholder="Enter your email">
-                                    <div class="mt-3 sm:mt-0 sm:ml-3">
-                                        <button type="submit"
-                                            class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white">
-                                            Subscribe
+                                <form id="testimonial-form" class="space-y-4">
+                                    @csrf
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="name" class="sr-only">Your Name</label>
+                                            <input id="name" name="name" type="text" 
+                                                class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
+                                                placeholder="Your name (optional)">
+                                        </div>
+                                        <div>
+                                            <label for="email" class="sr-only">Email address</label>
+                                            <input id="email" name="email" type="email" 
+                                                class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
+                                                placeholder="Your email (optional)">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="review" class="sr-only">Your Review</label>
+                                        <textarea id="review" name="testimonial" rows="3" required
+                                            class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
+                                            placeholder="Share your thoughts about our wines..."></textarea>
+                                        <div id="review-error" class="text-red-200 text-sm mt-1 hidden">Please enter your review (at least 10 characters)</div>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="text-yellow-400 text-xl">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <button type="button" class="rating-star" data-rating="{{ $i }}">
+                                                        <i class="far fa-star"></i>
+                                                    </button>
+                                                @endfor
+                                            </div>
+                                            <input type="hidden" name="rating" id="rating" value="5">
+                                        </div>
+                                        <button type="submit" id="submit-review"
+                                            class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white">
+                                            <span class="inline-flex items-center">
+                                                <span id="submit-text">Submit Review</span>
+                                                <svg id="submit-spinner" class="hidden ml-2 h-5 w-5 animate-spin text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                            </span>
                                         </button>
                                     </div>
+                                    <div id="form-message" class="mt-2 text-sm text-red-200 hidden"></div>
                                 </form>
                                 <p class="mt-3 text-sm text-red-200">
-                                    We care about your data. Read our <a href="#"
-                                        class="text-white underline">Privacy Policy</a>.
+                                    Your email will not be published. Read our 
+                                    <a href="#" class="text-white underline">Privacy Policy</a>.
                                 </p>
                             </div>
                         </div>
@@ -973,8 +923,103 @@
         setInterval(changeBackground, 5000);
     </script>
 
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Rating stars functionality
+            const stars = document.querySelectorAll('.rating-star');
+            const ratingInput = document.getElementById('rating');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    ratingInput.value = rating;
+                    
+                    // Update star display
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.innerHTML = '<i class="fas fa-star"></i>';
+                            s.classList.add('text-yellow-400');
+                            s.classList.remove('text-gray-300');
+                        } else {
+                            s.innerHTML = '<i class="far fa-star"></i>';
+                            s.classList.add('text-gray-300');
+                            s.classList.remove('text-yellow-400');
+                        }
+                    });
+                });
+            });
 
+            // Initialize with 5 stars
+            if (stars.length > 0) {
+                stars[4].click();
+            }
+        });
+    </script>
+    @endpush
 
+    <script>
+        const form = document.getElementById('testimonial-form');
+        const reviewInput = document.getElementById('review');
+        const reviewError = document.getElementById('review-error');
+        const submitButton = document.getElementById('submit-review');
+        const submitText = document.getElementById('submit-text');
+        const submitSpinner = document.getElementById('submit-spinner');
+        const formMessage = document.getElementById('form-message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validate review input
+            if (reviewInput.value.trim().length < 10) {
+                reviewError.classList.remove('hidden');
+                return;
+            } else {
+                reviewError.classList.add('hidden');
+            }
+
+            // Show loading state
+            submitText.classList.add('hidden');
+            submitSpinner.classList.remove('hidden');
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('{{ route('testimonials.store') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        name: form.name.value,
+                        email: form.email.value,
+                        testimonial: form.testimonial.value,
+                        rating: form.rating.value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    formMessage.classList.remove('hidden');
+                    formMessage.innerText = 'Thank you for sharing your review!';
+                    form.reset();
+                } else {
+                    formMessage.classList.remove('hidden');
+                    formMessage.innerText = 'Error submitting review. Please try again.';
+                }
+            } catch (error) {
+                console.error(error);
+                formMessage.classList.remove('hidden');
+                formMessage.innerText = 'Error submitting review. Please try again.';
+            } finally {
+                // Hide loading state
+                submitText.classList.remove('hidden');
+                submitSpinner.classList.add('hidden');
+                submitButton.disabled = false;
+            }
+        });
+    </script>
 
 </body>
 
