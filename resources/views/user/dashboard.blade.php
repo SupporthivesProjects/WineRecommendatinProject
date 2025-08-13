@@ -626,7 +626,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Quick Pour</div>
-                                                    <img src="{{ asset('images/QuickPour2.png') }}" class="card-img-top" alt="...">
+                                                    <img src="{{ asset('images/QuickPour1.png') }}" class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title  mb-0">For when you need a wine—quick and right.!!</h5>
                                                     </div>
