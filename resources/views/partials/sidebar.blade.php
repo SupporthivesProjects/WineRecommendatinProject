@@ -1,4 +1,3 @@
-
 <style>
     /* Sidebar hover text color change */
     .side-menu__item:hover .side-menu__label {
@@ -49,6 +48,12 @@
                             <a href="{{ route('admin.cheese-products.index') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-box" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Cheese Products</span>
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.testimonials.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-message-square" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Testimonials</span>
                             </a>
                         </li>
                         <li class="slide">

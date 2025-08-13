@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
@@ -16,7 +17,17 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        $user = Auth::user();
+        
+        // Debug logging
+        Log::info('AdminMiddleware check', [
+            'is_authenticated' => Auth::check(),
+            'user_role' => $user ? $user->role : 'not_logged_in',
+            'path' => $request->path(),
+            'is_ajax' => $request->ajax()
+        ]);
+
+        if (Auth::check() && $user->role === 'admin') {
             return $next($request);
         }
 
