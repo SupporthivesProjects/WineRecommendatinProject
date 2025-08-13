@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CheeseProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -95,7 +96,7 @@ class CheeseProductController extends Controller
                 
         } catch (\Exception $e) {
             // Log the error for debugging
-            \Log::error('Error updating cheese product: ' . $e->getMessage());
+            Log::error('Error updating cheese product: ' . $e->getMessage());
             
             return back()->withInput()
                 ->with('error', 'Error updating product. Please try again.');
