@@ -446,55 +446,6 @@
                             </div>
                         </div>
                         <div class="row row-sm" id="products-container">
-                            {{-- @foreach ($products as $product)
-                                <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
-                                    data-vintage-year="{{ $product->vintage_year }}"
-                                    data-winery="{{ $product->winery }}"
-                                    data-retail-price="{{ $product->retail_price }}"
-                                    data-country="{{ $product->country }}">
-                                    <div class="card custom-card wine-card">
-                                        <!-- Image at the top -->
-                                        <div class="image-wrapper" style="position: relative;">
-                                            <img src="{{ asset('storage/products/' . $product->image1) }}"
-                                                class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
-
-                                            <!-- Featured badge on the image -->
-                                            @if ($product->is_featured == 1)
-                                                <span class="featured-badge">Featured</span>
-                                            @endif
-                                        </div>
-
-                                        <!-- Card body with product information -->
-                                        <div class="card-body">
-                                            <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h5>
-                                            @php
-                                                $type = strtolower($product->type);
-                                                $emoji = match ($type) {
-                                                    'red' => '🍷',
-                                                    'white' => '🥂',
-                                                    'sparkling' => '✨',
-                                                    'ros' => '🌸',
-                                                    'dessert' => '🍯',
-                                                    'bordeaux' => '🏰',
-                                                    default => '🍾',
-                                                };
-                                            @endphp
-                                            <p>
-                                                <strong>Type:</strong> {{ ucfirst($type) }}
-                                                @if ($emoji)
-                                                    <span style="font-size: 1.5em;">{{ $emoji }}</span>
-                                                @endif
-                                            </p>
-
-                                            <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
-                                            <a href="{{ route('user.productdetails', $product->id) }}"
-                                                class="btn btn-dark mt-2 rounded-0">
-                                                I want to try Now !!
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach --}}
                             @if (isset($products) && $products->count() > 0)
                                 @include('partials.product_cards', ['products' => $products])
                             @else

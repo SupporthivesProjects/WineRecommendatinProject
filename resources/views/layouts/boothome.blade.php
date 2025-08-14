@@ -565,13 +565,9 @@
                                                         alt="{{ $product->wine_name }}"
                                                         class="w-full h-60 object-cover">
                                                 @endif --}}
-                                                @php
-                                                    $primaryImage =
-                                                        $product->images->where('is_primary', true)->first() ??
-                                                        $product->images->first();
-                                                @endphp
+                                               
                                                 <div class="h-[250px] overflow-hidden">
-                                                    <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}"
+                                                    <img src="{{ asset('storage/' . $product->image1) }}"
                                                         class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                                                         alt="{{ $product->wine_name }}">
                                                 </div>
@@ -1186,3 +1182,5 @@
 </body>
 
 </html>
+
+
