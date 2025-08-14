@@ -75,7 +75,7 @@
         <div class="row g-4">
             <!-- Cheese Image -->
             <div class="col-lg-6">
-                <img src="{{ $cheese->image ? asset('storage/cheese-products/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
+                <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
                     alt="{{ $cheese->name }}" class="cheese-image">
             </div>
 
