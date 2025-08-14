@@ -568,7 +568,7 @@
                                                
                                                 <div class="h-[250px] overflow-hidden">
                                                     <img src="{{ asset('storage/' . $product->image1) }}"
-                                                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                                        class="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
                                                         alt="{{ $product->wine_name }}">
                                                 </div>
 
