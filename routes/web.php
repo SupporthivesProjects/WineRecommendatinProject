@@ -35,7 +35,13 @@ use Illuminate\Support\Facades\Log;
 */
 
 Route::get('/', function () {
-    return view('layouts.boothome');
+    // Get 5 random featured products
+    $featuredProducts = Product::where('admin_featured_product', true)
+        ->inRandomOrder()
+        ->take(5)
+        ->get();
+
+    return view('layouts.boothome', compact('featuredProducts'));
 })->name('home');
 
 Route::get('/welcome', function () {
@@ -75,6 +81,7 @@ Route::get('/dashboard', function () {
 
 // Public routes
 Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
+Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
@@ -91,7 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/cart', [UserDashboardController::class, 'getCart'])->name('user.cart.get');
     Route::post('/user/checkout', [UserDashboardController::class, 'checkout'])->name('user.checkout');
 
-    Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
+    
     Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
     Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
     Route::post('/submit-response', [UserDashboardController::class, 'storeResponse']);

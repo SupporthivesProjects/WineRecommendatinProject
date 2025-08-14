@@ -446,7 +446,7 @@
                             </div>
                         </div>
                         <div class="row row-sm" id="products-container">
-                            @foreach ($products as $product)
+                            {{-- @foreach ($products as $product)
                                 <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                     data-vintage-year="{{ $product->vintage_year }}"
                                     data-winery="{{ $product->winery }}"
@@ -499,14 +499,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                            {{-- @if (isset($products) && $products->count() > 0)
+                            @endforeach --}}
+                            @if (isset($products) && $products->count() > 0)
                                 @include('partials.product_cards', ['products' => $products])
                             @else
                                 <div class="col-12 text-center py-5">
                                     <p class="text-muted">No products found.</p>
                                 </div>
-                            @endif --}}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -514,7 +514,11 @@
 
 
                 @if (isset($products) && $products->hasPages())
-                    <div class="pagination-container"></div>
+                    <div class="pagination-container">
+                        @if(!request()->ajax())
+                            {{ $products->links() }}
+                        @endif
+                    </div>
                 @endif
 
 
@@ -530,8 +534,8 @@
     <script>
         // Add loading overlay HTML
         const loadingOverlay = `
-            <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 9999; display: flex; justify-content: center; align-items: center;">
-                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 9999; display: none; justify-content: center; align-items: center; margin: 0; padding: 0;">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
@@ -917,14 +921,7 @@
 
             // Initialize pagination on page load if there are products
             @if (isset($products) && $products->total() > 0)
-                updatePagination({
-                    current_page: {{ $products->currentPage() }},
-                    last_page: {{ $products->lastPage() }},
-                    next_page_url: '{{ $products->nextPageUrl() }}',
-                    prev_page_url: '{{ $products->previousPageUrl() }}',
-                    total: {{ $products->total() }},
-                    per_page: {{ $products->perPage() }}
-                });
+                updatePagination({!! $products->toJson() !!});
             @endif
         });
     </script>
