@@ -581,7 +581,7 @@
                                     </p>
                                     <a href="#"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
-                                        Explore this pairing
+                                        Coming Soon
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1"
                                             viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd"
@@ -604,7 +604,7 @@
                                         Explore how wine transforms food into an experience — from comforting 
                                         classics to gourmet cuisine, discover pairings that bring harmony, depth, and pleasure to the table.
                                     </p>
-                                    <a href="#"
+                                    <a href="{{ route('user.cheeses') }}"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
                                         Explore this pairing
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1"
@@ -709,7 +709,7 @@
                                 <h2 class="text-3xl font-bold text-white mb-2">Share Your Experience</h2>
                                 <p class="text-red-100 mb-6 lg:mb-0">
                                     We value your feedback! Share your wine experience with our community. 
-                                    Your review helps others discover great wines.
+                                    <br>Your review helps others discover great wines.
                                 </p>
                             </div>
                             <div class="lg:w-1/2">
