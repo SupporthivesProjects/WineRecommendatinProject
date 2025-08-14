@@ -39,19 +39,9 @@
                                         <div class="product-carousel">
                                             <div id="carousel" class="carousel slide" data-bs-ride="false">
                                                 <div class="carousel-inner">
-                                                    @php
-                                                        $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                                                    @endphp
-
-                                                    @if($primaryImage)
                                                         <div class="thumb my-2">
-                                                            <img src="{{ asset('storage/products/' . $primaryImage->image_path) }}" alt="Product Image">
+                                                            <img src="{{ asset('storage/' . $product->image1) }}" alt="Product Image">
                                                         </div>
-                                                    @else
-                                                        <div class="thumb my-2">
-                                                            <img src="{{ asset('images/default.jpg') }}" alt="Default Product Image">
-                                                        </div>
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
