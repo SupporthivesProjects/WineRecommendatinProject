@@ -455,12 +455,7 @@
                                     <div class="card custom-card wine-card">
                                         <!-- Image at the top -->
                                         <div class="image-wrapper" style="position: relative;">
-                                            @php
-                                                $primaryImage =
-                                                    $product->images->where('is_primary', true)->first() ??
-                                                    $product->images->first();
-                                            @endphp
-                                            <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}"
+                                            <img src="{{ asset('storage/products/' . $product->image1) }}"
                                                 class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                             <!-- Featured badge on the image -->
