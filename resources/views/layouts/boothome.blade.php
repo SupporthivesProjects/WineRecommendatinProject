@@ -48,6 +48,9 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/css/glide.theme.min.css">
+
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -62,7 +65,7 @@
         }
 
         .wine-bg {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             transition: background-image 1s ease-in-out, opacity 1s ease-in-out;
@@ -80,8 +83,7 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
-        .fonthover
-        {
+        .fonthover {
             white-space: nowrap;
             color: black;
             position: relative;
@@ -89,8 +91,8 @@
             line-height: 1;
             vertical-align: middle;
         }
-        .fonthover:hover
-        {
+
+        .fonthover:hover {
             white-space: nowrap;
             color: #7f2c2d;
             position: relative;
@@ -98,7 +100,76 @@
             line-height: 1;
             vertical-align: middle;
         }
+    </style>
+    <style>
+        /* Add these styles to your existing style tag */
+        .wine-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
+        .wine-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ensure text truncation works */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Ensure images maintain aspect ratio */
+        .card-img-container {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card-img-container:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Ensure consistent card height in the carousel */
+        .glide__slide {
+            height: auto;
+            padding: 0 10px;
+        }
+
+        /* Featured badge styling */
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #dc2626;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            z-index: 10;
+        }
     </style>
 
     <!-- Scripts -->
@@ -286,9 +357,11 @@
                                     autoplay>
                                 </lottie-player> -->
                                 <a href="#" class="header-logo">
-                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" class="desktop-logo">
-                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" class="desktop-white">
-                                </a> 
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                        class="desktop-logo">
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                        class="desktop-white">
+                                </a>
                             </div>
                         </div>
                         <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
@@ -406,7 +479,8 @@
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">How TechSomm Works</h2>
                         <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                            Advanced algorithms guided by sommelier insight curate wines that reflect your palate, your mood, and the magic of every occasion.
+                            Advanced algorithms guided by sommelier insight curate wines that reflect your palate, your
+                            mood, and the magic of every occasion.
                         </p>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -422,7 +496,8 @@
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">Create Your Profile</h3>
                                 <p class="text-gray-600">
-                                    Create your Profile, Get personal recommendations and Discover N Enjoy stay the same.
+                                    Create your Profile, Get personal recommendations and Discover N Enjoy stay the
+                                    same.
                                 </p>
                             </div>
 
@@ -455,7 +530,7 @@
                                 </div>
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">Discover & Enjoy</h3>
                                 <p class="text-gray-600">
-                                    Explore your recommendations, rate wines you try, add your personal tasting notes 
+                                    Explore your recommendations, rate wines you try, add your personal tasting notes
                                     for all the wines and refine your profile for even better suggestion and matches.
                                 </p>
                             </div>
@@ -468,88 +543,119 @@
             <!-- Start:: Section-3 Featured Wines Section-->
             <div class="py-16" id="featuredwines">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Browse Wines</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Featured Wines</h2>
                     <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                    Explore the full spectrum of wines available across India from global icons to homegrown favorites, 
-                    ready for your discovery.
+                        Handpicked selections from our sommeliers. Discover exceptional wines from around the world.
                     </p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Wine Card 1 -->
-                        <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
-                            <img src="https://images.unsplash.com/photo-1586370434639-0fe43b2d32e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-                                alt="Red Wine" class="w-full h-60 object-cover">
-                            <div class="p-6">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-xl font-bold text-gray-900">Château Margaux 2015</h3>
-                                    <span
-                                        class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Red</span>
-                                </div>
-                                <p class="text-gray-600 mb-4">A magnificent Bordeaux with notes of black currant,
-                                    violets, and
-                                    cedar. Elegant and powerful.</p>
-                                <div class="flex justify-between items-center">
-                                    <!-- <span class="text-gray-900 font-bold">$189.99</span> -->
-                                    <button
-                                        class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                        View Details
-                                    </button>
-                                </div>
+
+                    @if (isset($featuredProducts) && count($featuredProducts) > 0)
+                        <div class="glide featured-wines-carousel">
+                            <div class="glide__track" data-glide-el="track">
+                                <ul class="glide__slides">
+                                    @foreach ($featuredProducts as $product)
+                                        <li class="glide__slide">
+                                            <div
+                                                class="wine-card bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-[500px] relative">
+                                                {{-- @if ($product->image1)
+                                                    <img src="{{ asset('storage/' . $product->image1) }}"
+                                                        alt="{{ $product->wine_name }}"
+                                                        class="w-full h-60 object-cover">
+                                                @else
+                                                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                                        alt="{{ $product->wine_name }}"
+                                                        class="w-full h-60 object-cover">
+                                                @endif --}}
+                                                @php
+                                                    $primaryImage =
+                                                        $product->images->where('is_primary', true)->first() ??
+                                                        $product->images->first();
+                                                @endphp
+                                                <div class="h-[250px] overflow-hidden">
+                                                    <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}"
+                                                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                                        alt="{{ $product->wine_name }}">
+                                                </div>
+
+                                                <!-- Featured badge on the image -->
+                                                @if ($product->is_featured == 1)
+                                                    <span
+                                                        class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                                        Featured
+                                                    </span>
+                                                @endif
+                                                <div class="p-6 flex flex-col flex-grow">
+                                                    <div class="flex justify-between items-start mb-2">
+                                                        <h3 class="text-xl font-bold text-gray-900 line-clamp-2"
+                                                            title="{{ $product->wine_name }}">
+                                                            {{ $product->wine_name }}
+                                                        </h3>
+                                                        @if ($product->type)
+                                                            <span
+                                                                class="{{ strtolower($product->type) === 'red'
+                                                                    ? 'bg-red-100 text-red-800'
+                                                                    : (strtolower($product->type) === 'white'
+                                                                        ? 'bg-yellow-100 text-yellow-800'
+                                                                        : 'bg-blue-100 text-blue-800') }} text-xs font-medium px-2.5 py-0.5 rounded whitespace-nowrap ml-2">
+                                                                {{ $product->type }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                    @if ($product->winery)
+                                                        <p class="text-gray-600 font-medium mb-2 line-clamp-1"
+                                                            title="{{ $product->winery }}">
+                                                            {{ $product->winery }}
+                                                        </p>
+                                                    @endif
+                                                    @if ($product->tasting_notes)
+                                                        <p class="text-gray-600 mb-4 line-clamp-3 flex-grow"
+                                                            title="{{ $product->tasting_notes }}">
+                                                            {{ $product->tasting_notes }}
+                                                        </p>
+                                                    @endif
+                                                    <div class="mt-auto pt-4">
+                                                        <a href="{{ route('user.productdetails', $product->id) }}"
+                                                            class="block w-full text-center bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
+                                                            View Details
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="glide__arrows flex justify-center mt-6 space-x-4" data-glide-el="controls">
+                                <button
+                                    class="glide__arrow glide__arrow--left bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center"
+                                    data-glide-dir="<">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                <button
+                                    class="glide__arrow glide__arrow--right bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center"
+                                    data-glide-dir=">">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-
-                        <!-- Wine Card 2 -->
-                        <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
-                            <img src="https://images.unsplash.com/photo-1724949629465-fa0d083ad09c?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="White Wine" class="w-full h-60 object-cover">
-                            <div class="p-6">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-xl font-bold text-gray-900">Cloudy Bay Sauvignon Blanc</h3>
-                                    <span
-                                        class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">White</span>
-                                </div>
-                                <p class="text-gray-600 mb-4">Vibrant and crisp with intense flavors of passion fruit,
-                                    lime, and
-                                    fresh herbs from New Zealand.</p>
-                                <div class="flex justify-between items-center">
-                                    <!-- <span class="text-gray-900 font-bold">$34.99</span> -->
-                                    <button
-                                        class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                        View Details
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="text-center mt-12">
+                            <a href="{{ route('homeBrowseWines') }}"
+                                class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
+                                View All Wines
+                            </a>
                         </div>
-
-                        <!-- Wine Card 3 -->
-                        <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md">
-                            <img src="https://images.unsplash.com/photo-1700893417209-18dc88c989a0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="Sparkling Wine" class="w-full h-60 object-cover">
-                            <div class="p-6">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-xl font-bold text-gray-900">Dom Pérignon Vintage</h3>
-                                    <span
-                                        class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Sparkling</span>
-                                </div>
-                                <p class="text-gray-600 mb-4">Luxurious champagne with complex notes of almond,
-                                    powdered cocoa,
-                                    white fruit, and dried flowers.</p>
-                                <div class="flex justify-between items-center">
-                                    <!-- <span class="text-gray-900 font-bold">$219.99</span> -->
-                                    <button
-                                        class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                        View Details
-                                    </button>
-                                </div>
-                            </div>
+                    @else
+                        <div class="text-center py-12">
+                            <p class="text-gray-500">No featured wines available at the moment. Check back soon!</p>
                         </div>
-                    </div>
-
-                    <div class="text-center mt-12">
-                        <a href="{{ route('homeBrowseWines') }}"
-                            class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
-                            View All Wines
-                        </a>
-                    </div>
+                    @endif
                 </div>
             </div>
             <!-- End:: Section-3 -->
@@ -561,7 +667,8 @@
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Perfect Wine Pairings</h2>
                         <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-                            From elegant meals to indulgent cheese boards, explore pairings that bring out the best in every wine.
+                            From elegant meals to indulgent cheese boards, explore pairings that bring out the best in
+                            every wine.
                         </p>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -570,14 +677,15 @@
                                 <div class="md:w-1/2">
                                     <!-- <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
                                         alt="Steak" class="w-full h-full object-cover"> -->
-                                        <img src="{{ asset('images/WineandFood.jpg') }}"
-                                        alt="Steak" class="w-full h-full object-cover">
+                                    <img src="{{ asset('images/WineandFood.jpg') }}" alt="Steak"
+                                        class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
                                     <h3 class="text-xl font-bold text-gray-900 mb-2">Wine and food</h3>
                                     <p class="text-gray-600 mb-4">
-                                    Explore how wine transforms food into an experience from comforting classics to 
-                                    gourmet cuisine, discover pairings that bring harmony, depth, and pleasure to the table.
+                                        Explore how wine transforms food into an experience from comforting classics to
+                                        gourmet cuisine, discover pairings that bring harmony, depth, and pleasure to
+                                        the table.
                                     </p>
                                     <a href="#"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
@@ -595,14 +703,15 @@
                             <!-- Pairing 2 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="{{ asset('images/WineandCheese.jpg') }}"
-                                        alt="Seafood" class="w-full h-full object-cover">
+                                    <img src="{{ asset('images/WineandCheese.jpg') }}" alt="Seafood"
+                                        class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
                                     <h3 class="text-xl font-bold text-gray-900 mb-2">Wine and Cheese</h3>
                                     <p class="text-gray-600 mb-4">
-                                        Explore how wine transforms food into an experience — from comforting 
-                                        classics to gourmet cuisine, discover pairings that bring harmony, depth, and pleasure to the table.
+                                        Explore how wine transforms food into an experience — from comforting
+                                        classics to gourmet cuisine, discover pairings that bring harmony, depth, and
+                                        pleasure to the table.
                                     </p>
                                     <a href="#"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
@@ -630,11 +739,9 @@
             <!-- Start:: Section-5  Testimonials Section -->
             @php
                 // Fetch active testimonials ordered by sort_order
-                $testimonials = \App\Models\Testimonial::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->get();
+                $testimonials = \App\Models\Testimonial::where('is_active', true)->orderBy('sort_order')->get();
             @endphp
-            
+
             <x-testimonials :testimonials="$testimonials" />
             <!-- End:: Section-5 -->
 
@@ -673,15 +780,15 @@
                                             <h5 class="text-center mt-2 text-fixed-white">Six</h5>
                                         </div>
                                     </div>
-                                  </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </section>
             <!-- End:: Section-4 -->
 
-            
+
 
             <!-- Start:: Section-6 -->
             <section class="section section-bg" id="Moments">
@@ -708,7 +815,7 @@
                             <div class="lg:w-1/2">
                                 <h2 class="text-3xl font-bold text-white mb-2">Share Your Experience</h2>
                                 <p class="text-red-100 mb-6 lg:mb-0">
-                                    We value your feedback! Share your wine experience with our community. 
+                                    We value your feedback! Share your wine experience with our community.
                                     Your review helps others discover great wines.
                                 </p>
                             </div>
@@ -718,13 +825,13 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
                                             <label for="name" class="sr-only">Your Name</label>
-                                            <input id="name" name="name" type="text" 
+                                            <input id="name" name="name" type="text"
                                                 class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
                                                 placeholder="Your name (optional)">
                                         </div>
                                         <div>
                                             <label for="email" class="sr-only">Email address</label>
-                                            <input id="email" name="email" type="email" 
+                                            <input id="email" name="email" type="email"
                                                 class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
                                                 placeholder="Your email (optional)">
                                         </div>
@@ -734,13 +841,15 @@
                                         <textarea id="review" name="testimonial" rows="3" required
                                             class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
                                             placeholder="Share your thoughts about our wines..."></textarea>
-                                        <div id="review-error" class="text-red-200 text-sm mt-1 hidden">Please enter your review (at least 10 characters)</div>
+                                        <div id="review-error" class="text-red-200 text-sm mt-1 hidden">Please enter
+                                            your review (at least 10 characters)</div>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
                                             <div class="text-yellow-400 text-xl">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    <button type="button" class="rating-star" data-rating="{{ $i }}">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <button type="button" class="rating-star"
+                                                        data-rating="{{ $i }}">
                                                         <i class="far fa-star"></i>
                                                     </button>
                                                 @endfor
@@ -751,9 +860,15 @@
                                             class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white">
                                             <span class="inline-flex items-center">
                                                 <span id="submit-text">Submit Review</span>
-                                                <svg id="submit-spinner" class="hidden ml-2 h-5 w-5 animate-spin text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                <svg id="submit-spinner"
+                                                    class="hidden ml-2 h-5 w-5 animate-spin text-red-700"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                    </path>
                                                 </svg>
                                             </span>
                                         </button>
@@ -761,7 +876,7 @@
                                     <div id="form-message" class="mt-2 text-sm text-red-200 hidden"></div>
                                 </form>
                                 <p class="mt-3 text-sm text-red-200">
-                                    Your email will not be published. Read our 
+                                    Your email will not be published. Read our
                                     <a href="#" class="text-white underline">Privacy Policy</a>.
                                 </p>
                             </div>
@@ -789,6 +904,37 @@
         </svg>
     </a>
     <div id="responsive-overlay"></div>
+
+
+    <!-- Glide.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/glide.min.js"></script>
+
+    <script>
+        // Initialize Glide carousel if the element exists
+        document.addEventListener('DOMContentLoaded', function() {
+            const featuredCarousel = document.querySelector('.featured-wines-carousel');
+            if (featuredCarousel) {
+                new Glide(featuredCarousel, {
+                    type: 'carousel',
+                    perView: 3,
+                    gap: 24,
+                    autoplay: 5000,
+                    hoverpause: true,
+                    breakpoints: {
+                        1024: {
+                            perView: 2
+                        },
+                        768: {
+                            perView: 1
+                        }
+                    }
+                }).mount();
+            }
+        });
+    </script>
+
+    <!-- jQuery (required for other functionality) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Popper JS -->
     <script src="{{ asset('assets/libs/@popperjs/core/umd/popper.min.js') }}"></script>
@@ -851,10 +997,26 @@
         });
     </script>
 
+    <!-- Glide JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide"></script>
+    <script>
+        const glide = new Glide('.featured-wines-carousel', {
+            type: 'carousel',
+            perView: 3,
+            breakpoints: {
+                1024: {
+                    perView: 2
+                },
+                600: {
+                    perView: 1
+                }
+            }
+        });
+        glide.mount();
+    </script>
 
     <!-- jQuery (required for Owl Carousel) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -910,7 +1072,7 @@
 
             setTimeout(() => {
                 const nextImage =
-                `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('${images[index]}')`;
+                    `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('${images[index]}')`;
                 bg.style.backgroundImage = nextImage;
                 bg.style.opacity = 1;
                 index = (index + 1) % images.length;
@@ -924,38 +1086,38 @@
     </script>
 
     @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Rating stars functionality
-            const stars = document.querySelectorAll('.rating-star');
-            const ratingInput = document.getElementById('rating');
-            
-            stars.forEach(star => {
-                star.addEventListener('click', function() {
-                    const rating = this.getAttribute('data-rating');
-                    ratingInput.value = rating;
-                    
-                    // Update star display
-                    stars.forEach((s, index) => {
-                        if (index < rating) {
-                            s.innerHTML = '<i class="fas fa-star"></i>';
-                            s.classList.add('text-yellow-400');
-                            s.classList.remove('text-gray-300');
-                        } else {
-                            s.innerHTML = '<i class="far fa-star"></i>';
-                            s.classList.add('text-gray-300');
-                            s.classList.remove('text-yellow-400');
-                        }
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Rating stars functionality
+                const stars = document.querySelectorAll('.rating-star');
+                const ratingInput = document.getElementById('rating');
+
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = this.getAttribute('data-rating');
+                        ratingInput.value = rating;
+
+                        // Update star display
+                        stars.forEach((s, index) => {
+                            if (index < rating) {
+                                s.innerHTML = '<i class="fas fa-star"></i>';
+                                s.classList.add('text-yellow-400');
+                                s.classList.remove('text-gray-300');
+                            } else {
+                                s.innerHTML = '<i class="far fa-star"></i>';
+                                s.classList.add('text-gray-300');
+                                s.classList.remove('text-yellow-400');
+                            }
+                        });
                     });
                 });
-            });
 
-            // Initialize with 5 stars
-            if (stars.length > 0) {
-                stars[4].click();
-            }
-        });
-    </script>
+                // Initialize with 5 stars
+                if (stars.length > 0) {
+                    stars[4].click();
+                }
+            });
+        </script>
     @endpush
 
     <script>
