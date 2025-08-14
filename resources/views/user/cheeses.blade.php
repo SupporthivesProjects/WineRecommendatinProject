@@ -168,7 +168,7 @@
                         <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                             <div class="card cheese-card h-100">
                                 <div class="position-relative">
-                                    <img src="{{ $cheese->image ? asset('storage/cheeses/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
+                                    <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
                                          class="card-img-top" 
                                          alt="{{ $cheese->name }}"
                                          style="height: 200px; object-fit: cover;">
@@ -185,7 +185,7 @@
                                     </p>
                                     <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="h5 mb-0">${{ number_format($cheese->price, 2) }}</span>
+                                            <span class="h5 mb-0">₹&nbsp;{{ number_format($cheese->price, 2) }}</span>
                                             @if($isInStock)
                                                 <span class="badge bg-success">In Stock ({{ $quantity }})</span>
                                             @else
