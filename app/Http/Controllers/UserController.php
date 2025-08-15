@@ -188,6 +188,7 @@ class UserController extends Controller
             return $product;
         });
 
+        dd($products);
 
         return view('user.products', compact('products'));
     }
