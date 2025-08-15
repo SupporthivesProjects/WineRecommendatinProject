@@ -167,59 +167,30 @@ class UserController extends Controller
     public function products()
     {
         $store = Auth::user()->store;
-        dump('Step 1: Store', $store);
-    
+
+        // Fetch products linked to this store and eager load the 'images' relationship
         $storeProducts = DB::table('store_products')
-            ->where('store_id', $store->id ?? null)
+            ->where('store_id', $store->id)
             ->orderBy('is_featured', 'desc')
             ->get()
-            ->keyBy('product_id');
-        dump('Step 2: Store Products', $storeProducts);
-    
+            ->keyBy('product_id'); 
+
+        // Fetch the products with their images for the store products
         $productsQuery = Product::with('images')
             ->whereIn('id', $storeProducts->pluck('product_id'));
-        dump('Step 3: Products Query (raw results)', $productsQuery->get());
-    
+
+        // Apply pagination after applying map
         $products = $productsQuery->paginate(6);
-        dump('Step 4: Paginated Products', $products);
-    
+
+        // Map the 'is_featured' value from store_products to each product
         $products->getCollection()->transform(function ($product) use ($storeProducts) {
-            $product->is_featured = $storeProducts[$product->id]->is_featured ?? null;
+            $product->is_featured = $storeProducts[$product->id]->is_featured;
             return $product;
         });
-        dump('Step 5: Final Transformed Products', $products);
-    
+
+
         return view('user.products', compact('products'));
     }
-    
-
-    // public function products()
-    // {
-    //     $store = Auth::user()->store;
-
-    //     // Fetch products linked to this store and eager load the 'images' relationship
-    //     $storeProducts = DB::table('store_products')
-    //         ->where('store_id', $store->id)
-    //         ->orderBy('is_featured', 'desc')
-    //         ->get()
-    //         ->keyBy('product_id'); 
-
-    //     // Fetch the products with their images for the store products
-    //     $productsQuery = Product::with('images')
-    //         ->whereIn('id', $storeProducts->pluck('product_id'));
-
-    //     // Apply pagination after applying map
-    //     $products = $productsQuery->paginate(6);
-
-    //     // Map the 'is_featured' value from store_products to each product
-    //     $products->getCollection()->transform(function ($product) use ($storeProducts) {
-    //         $product->is_featured = $storeProducts[$product->id]->is_featured;
-    //         return $product;
-    //     });
-
-
-    //     return view('user.products', compact('products'));
-    // }
 
     public function matchedproducts($submissionId)
     {
