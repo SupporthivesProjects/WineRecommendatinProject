@@ -454,7 +454,7 @@
                                 <textarea class="form-control"></textarea>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-primary mt-3 mb-0" type="button">Post your review</button>
+                                <button class="btn btn-primary mt-3 mb-0" type="button">Post your notes</button>
                             </div>
                         </form>
                     </div>
@@ -467,7 +467,7 @@
                         <!-- Add Review Form -->
                         @auth
                             <div class="border-top px-4 pb-2 pt-4">
-                                <h5 class="mb-4">Leave a Review</h5>
+                                <h5 class="mb-4">Your Tasting Notes</h5>
 
                                 @if (session('success'))
                                     <div class="alert alert-success">{{ session('success') }}</div>
@@ -478,7 +478,7 @@
 
                                 @if ($hasUserReviewed = $product->reviews->where('user_id', auth()->id())->isNotEmpty())
                                     <div class="alert alert-info">
-                                        You have already reviewed this product.
+                                        You have already submitted a tasting note for this product.
                                     </div>
                                 @else
                                     <form action="{{ route('user.reviews.store') }}" method="POST" id="reviewForm">
@@ -508,7 +508,7 @@
                                         </div>
 
                                         <div class="form-group mb-4">
-                                            <label for="comment" class="form-label fw-medium">Your Review</label>
+                                            <label for="comment" class="form-label fw-medium">Your Note</label>
                                             <textarea class="form-control @error('comment') is-invalid @enderror" id="comment" name="comment" rows="4"
                                                 placeholder="Share your experience with this product..." required>{{ old('comment') }}</textarea>
                                             @error('comment')
@@ -518,7 +518,7 @@
 
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-primary px-4">
-                                                <i class="bx bx-send me-1"></i> Post Your Review
+                                                <i class="bx bx-send me-1"></i> Post Your Notes
                                             </button>
                                         </div>
                                     </form>
@@ -527,7 +527,7 @@
                         @else
                             <div class="border-top px-4 py-4 text-center">
                                 <p class="mb-0">Please <a href="{{ route('login') }}"
-                                        class="text-primary fw-medium">login</a> to write a review</p>
+                                        class="text-primary fw-medium">login</a> to submit a note.</p>
                             </div>
                         @endauth
 
