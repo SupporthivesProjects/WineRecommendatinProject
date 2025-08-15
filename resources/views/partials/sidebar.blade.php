@@ -57,6 +57,12 @@
                             </a>
                         </li>
                         <li class="slide">
+                            <a href="{{ route('admin.reviews.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-star" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Reviews</span>
+                            </a>
+                        </li>
+                        <li class="slide">
                             <a href="{{ route('admin.stores.index') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-shopping-cart" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Stores</span>

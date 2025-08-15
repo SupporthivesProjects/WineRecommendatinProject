@@ -78,4 +78,36 @@ class Product extends Model
     {
         return $this->hasOne(ProductImage::class)->where('is_primary', true);
     }
+
+    /**
+     * Get all reviews for the product.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get only approved reviews for the product.
+     */
+    public function approvedReviews()
+    {
+        return $this->reviews()->where('status', Review::STATUS_APPROVED);
+    }
+
+    /**
+     * Get the average rating of the product.
+     */
+    public function getAverageRatingAttribute()
+    {
+        return $this->approvedReviews()->avg('rating');
+    }
+
+    /**
+     * Get the total number of approved reviews.
+     */
+    public function getReviewCountAttribute()
+    {
+        return $this->approvedReviews()->count();
+    }
 }

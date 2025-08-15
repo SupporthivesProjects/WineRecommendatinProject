@@ -63,6 +63,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        // Eager load relationships
+        $product->load(['images', 'reviews.user']);
+        
         // Get similar products (same type and similar price range)
         $similarProducts = Product::where('id', '!=', $product->id)
             ->where('status', 'active')
@@ -71,11 +74,45 @@ class ProductController extends Controller
                 max(0, $product->retail_price * 0.7),
                 $product->retail_price * 1.3
             ])
+            ->with('primaryImage') // Eager load primary image
             ->inRandomOrder()
             ->limit(4)
             ->get();
 
-        return view('user.product-detail', compact('product', 'similarProducts'));
+        // Get approved reviews with user data
+        $reviews = $product->reviews()
+            ->with('user')
+            ->where('status', 'approved')
+            ->latest()
+            ->paginate(5, ['*'], 'reviews_page');
+
+        // Calculate average rating
+        $averageRating = $product->reviews()
+            ->where('status', 'approved')
+            ->avg('rating');
+
+        // Get total number of approved reviews
+        $totalReviews = $product->reviews()
+            ->where('status', 'approved')
+            ->count();
+
+        // Get rating distribution for the chart
+        $ratingDistribution = [];
+        for ($i = 5; $i >= 1; $i--) {
+            $ratingDistribution[$i] = $product->reviews()
+                ->where('status', 'approved')
+                ->where('rating', $i)
+                ->count();
+        }
+
+        return view('user.product-detail', [
+            'product' => $product,
+            'similarProducts' => $similarProducts,
+            'reviews' => $reviews,
+            'averageRating' => $averageRating ?? 0, // Default to 0 if no reviews
+            'totalReviews' => $totalReviews,
+            'ratingDistribution' => $ratingDistribution,
+        ]);
     }
 
     public function browse(Request $request)
