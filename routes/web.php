@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\IsFeaturedController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\QuestionnaireController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
@@ -81,7 +82,6 @@ Route::get('/dashboard', function () {
 
 // Public routes
 Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
-Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
@@ -98,7 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/cart', [UserDashboardController::class, 'getCart'])->name('user.cart.get');
     Route::post('/user/checkout', [UserDashboardController::class, 'checkout'])->name('user.checkout');
 
-    
+    Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
     Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
     Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
     Route::post('/submit-response', [UserDashboardController::class, 'storeResponse']);
@@ -142,6 +142,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         ->middleware(['auth', 'admin'])
         ->parameters(['testimonials' => 'testimonial']);
 
+    // Admin Review Management
+    Route::resource('reviews', \App\Http\Controllers\Admin\ReviewController::class)
+        ->middleware(['auth', 'admin'])
+        ->parameters(['reviews' => 'review']);
+
+    // Review status update route
+    Route::post('reviews/{review}/status/{status}', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
+        ->middleware(['auth', 'admin'])
+        ->name('admin.reviews.status');
     //Settings
     Route::resource('settings', SettingsController::class);
 
@@ -229,5 +238,14 @@ Route::middleware(['auth', 'main.manager'])->group(function () {
 // Cart routes
 Route::get('/cart', [CartController::class, 'index'])->name('user.cart');
 Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('user.cart.updateQuantity');
+
+// User Review Routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reviews', [\App\Http\Controllers\User\ReviewController::class, 'store'])->name('user.reviews.store');
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\User\ReviewController::class, 'destroy'])->name('user.reviews.destroy');
+});
+
+Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
+    ->name('admin.reviews.update-status');
 
 require __DIR__ . '/auth.php';

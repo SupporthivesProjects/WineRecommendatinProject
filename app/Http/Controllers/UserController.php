@@ -26,39 +26,39 @@ class UserController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        
+
         // Get active questionnaires appropriate for the user's expertise level
         $questionnaires = QuestionnaireTemplate::where('is_active', true)
-            ->when($user->expertise_level, function($query) use ($user) {
+            ->when($user->expertise_level, function ($query) use ($user) {
                 // If user is a beginner (first_sip), only show beginner questionnaires
                 if ($user->expertise_level == 'first_sip') {
                     return $query->where('level', 'first_sip');
                 }
-                
+
                 // If user is intermediate (savy_sipper), show beginner and intermediate questionnaires
                 if ($user->expertise_level == 'savy_sipper') {
                     return $query->whereIn('level', ['first_sip', 'savy_sipper']);
                 }
-                
+
                 // If user is advanced (pro), show all questionnaires
                 return $query;
             })
             ->orderBy('id', 'asc')
             ->get();
-        
+
         // Get recent recommendations for the user
         $recentRecommendations = [];
-        
+
         // Check if the user has completed any questionnaires
         $latestResponse = UserQuestionnaireResponse::where('user_id', $user->id)
             ->where('questionnaire_id', '!=', null)
             ->latest()
             ->first();
-            
+
         if ($latestResponse) {
             // Extract product IDs from the response if available
             $responseData = json_decode($latestResponse->responses, true);
-            
+
             if (isset($responseData['recommended_product_ids'])) {
                 $recentRecommendations = Product::whereIn('id', $responseData['recommended_product_ids'])
                     ->where('status', 'active')
@@ -68,22 +68,22 @@ class UserController extends Controller
                 // If no specific recommendations stored, get some based on preferences
                 if (isset($responseData['preferences'])) {
                     $preferences = $responseData['preferences'];
-                    
+
                     $query = Product::where('status', 'active');
-                    
+
                     // Apply basic filters based on preferences
                     if (!empty($preferences['wine_type'])) {
                         $query->where('type', $preferences['wine_type']);
                     }
-                    
+
                     $recentRecommendations = $query->inRandomOrder()->limit(6)->get();
                 }
             }
         }
-        
+
         return view('user.dashboard', compact('questionnaires', 'recentRecommendations'));
     }
-    
+
     /**
      * Display the user's profile.
      *
@@ -92,16 +92,16 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        
+
         // Get the user's questionnaire history
         $questionnaireHistory = UserQuestionnaireResponse::where('user_id', $user->id)
             ->with('questionnaire')
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         return view('user.profile', compact('user', 'questionnaireHistory'));
     }
-    
+
     /**
      * Update the user's profile.
      *
@@ -111,22 +111,22 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'wine_preferences' => 'nullable|array',
         ]);
-        
+
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-        
+
         if (isset($validated['wine_preferences'])) {
             $user->wine_preferences = json_encode($validated['wine_preferences']);
         }
-        
+
         $user->save();
-        
+
         return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
     }
 
@@ -160,10 +160,9 @@ class UserController extends Controller
 
     public function userquestionnaire()
     {
-        return view('user.userquestionnaire');    
-        
+        return view('user.userquestionnaire');
     }
-   
+
     public function products()
     {
         $store = Auth::user()->store;
@@ -173,7 +172,7 @@ class UserController extends Controller
             ->where('store_id', $store->id)
             ->orderBy('is_featured', 'desc')
             ->get()
-            ->keyBy('product_id'); 
+            ->keyBy('product_id');
 
         // Fetch the products with their images for the store products
         $productsQuery = Product::with('images')
@@ -201,7 +200,7 @@ class UserController extends Controller
         $products = session('matching_products', []);
         $cart = session('cart', []);
 
-    return view('user.matchedproducts', compact('products', 'cart'));
+        return view('user.matchedproducts', compact('products', 'cart'));
 
         // Pass the products to the view
         return view('user.matchedproducts', compact('products'));
@@ -210,13 +209,39 @@ class UserController extends Controller
 
     public function productDetails($id)
     {
-        // Fetch the current product with images
-        $product = Product::with('images')->findOrFail($id);
+        // Fetch the current product with images and reviews
+        $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
+
+        // Get approved reviews with user data
+        $reviews = $product->reviews()
+            ->with('user')
+            ->where('status', 'approved')
+            ->latest()
+            ->paginate(5, ['*'], 'reviews_page');
+
+        // Calculate average rating
+        $averageRating = $product->reviews()
+            ->where('status', 'approved')
+            ->avg('rating');
+
+        // Get total number of approved reviews
+        $totalReviews = $product->reviews()
+            ->where('status', 'approved')
+            ->count();
+
+        // Get rating distribution for the chart
+        $ratingDistribution = [];
+        for ($i = 5; $i >= 1; $i--) {
+            $ratingDistribution[$i] = $product->reviews()
+                ->where('status', 'approved')
+                ->where('rating', $i)
+                ->count();
+        }
 
         // Fetch 3 related products based on matching type or country, excluding the current product
         $relatedProducts = Product::with('images')
             ->where('id', '!=', $product->id)
-            ->where(function($query) use ($product) {
+            ->where(function ($query) use ($product) {
                 $query->where('type', $product->type)
                     ->orWhere('country', $product->country);
             })
@@ -224,21 +249,28 @@ class UserController extends Controller
             ->limit(3)
             ->get();
 
-            // If less than 3 related products, fetch random other products excluding current and already fetched
-            if ($relatedProducts->count() < 3) {
-                $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
-            
-                $additionalProducts = Product::with('images')
-                    ->whereNotIn('id', $excludeIds)
-                    ->inRandomOrder()
-                    ->limit(3 - $relatedProducts->count())
-                    ->get();
-            
-                // Merge additional products with related products
-                $relatedProducts = $relatedProducts->merge($additionalProducts);
-            }    
- 
-        return view('user.product-detail', compact('product', 'relatedProducts'));
+        // If less than 3 related products, fetch random other products excluding current and already fetched
+        if ($relatedProducts->count() < 3) {
+            $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
+
+            $additionalProducts = Product::with('images')
+                ->whereNotIn('id', $excludeIds)
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            // Merge additional products with related products
+            $relatedProducts = $relatedProducts->merge($additionalProducts);
+        }
+
+        return view('user.product-detail', [
+            'product' => $product,
+            'relatedProducts' => $relatedProducts,
+            'reviews' => $reviews,
+            'averageRating' => $averageRating ?? 0,
+            'totalReviews' => $totalReviews,
+            'ratingDistribution' => $ratingDistribution,
+        ]);
     }
 
 
@@ -286,7 +318,7 @@ class UserController extends Controller
                 'answer' => is_array($answerValue) ? json_encode($answerValue) : $answerValue,
                 'user_id' => auth()->id(),
                 'submission_id' => $submissionId,
-                'customerID' => $customerID, 
+                'customerID' => $customerID,
             ]);
         }
 
@@ -331,7 +363,7 @@ class UserController extends Controller
 
         // Get the current user's store
         $store = Auth::user()->store;
-        
+
         if (!$store) {
             Log::warning('User has no associated store');
             return collect(); // Return empty collection if no store
@@ -479,7 +511,7 @@ class UserController extends Controller
                             case 'question5': // Wine Type
                                 $q->orWhere('type', $value);
                                 break;
-        
+
                             case 'question5': // how bold would you like your wine to be
                                 $q->orWhere('body', $value);
                                 break;
@@ -510,52 +542,52 @@ class UserController extends Controller
     }
 
     public function addToCart(Request $request)
-{
-    $cart = session()->get('cart', []);
+    {
+        $cart = session()->get('cart', []);
 
-    $productId = $request->input('product_id');
-    $productName = $request->input('product_name');
-    $productPrice = $request->input('product_price');
+        $productId = $request->input('product_id');
+        $productName = $request->input('product_name');
+        $productPrice = $request->input('product_price');
 
-    // Check if product already in cart by id
-    $foundIndex = null;
-    foreach ($cart as $index => $item) {
-        if ($item['id'] == $productId) {
-            $foundIndex = $index;
-            break;
+        // Check if product already in cart by id
+        $foundIndex = null;
+        foreach ($cart as $index => $item) {
+            if ($item['id'] == $productId) {
+                $foundIndex = $index;
+                break;
+            }
         }
+
+        if ($foundIndex === null) {
+            // Add new product object
+            $cart[] = [
+                'id' => $productId,
+                'name' => $productName,
+                'retail_price' => $productPrice,
+                'quantity' => 1  // Optional: add quantity if needed
+            ];
+        } else {
+            // Optionally increase quantity or ignore duplicates
+            $cart[$foundIndex]['quantity']++;
+        }
+
+        session(['cart' => $cart]);
+
+        return response()->json(['success' => true]);
     }
 
-    if ($foundIndex === null) {
-        // Add new product object
-        $cart[] = [
-            'id' => $productId,
-            'name' => $productName,
-            'retail_price' => $productPrice,
-            'quantity' => 1  // Optional: add quantity if needed
-        ];
-    } else {
-        // Optionally increase quantity or ignore duplicates
-        $cart[$foundIndex]['quantity']++;
+
+    public function removeFromCart(Request $request)
+    {
+        $cart = session()->get('cart', []);
+        $productId = $request->input('product_id');
+
+        $cart = array_filter($cart, fn($item) => $item['id'] != $productId);
+
+        session(['cart' => array_values($cart)]);
+
+        return response()->json(['success' => true]);
     }
-
-    session(['cart' => $cart]);
-
-    return response()->json(['success' => true]);
-}
-
-
-public function removeFromCart(Request $request)
-{
-    $cart = session()->get('cart', []);
-    $productId = $request->input('product_id');
-
-    $cart = array_filter($cart, fn($item) => $item['id'] != $productId);
-
-    session(['cart' => array_values($cart)]);
-
-    return response()->json(['success' => true]);
-}
 
 
     public function getCart()
@@ -567,38 +599,38 @@ public function removeFromCart(Request $request)
         return response()->json(['cart' => $cart]);
     }
 
-   
-    
+
+
 
     public function checkout(Request $request)
     {
         $submissionId = $request->submission_id;
         $userId = auth()->id(); // Securely fetch user ID from session/auth
-    
+
         Log::info('Checkout started for submission_id: ' . $submissionId);
         Log::info('Checkout started for user_id: ' . $userId);
-    
+
         $cart = Session::get('cart', []);
         Log::info('Cart contents: ', $cart);
-    
+
         if (empty($cart)) {
             Log::warning('Cart is empty.');
             return response()->json(['success' => false, 'message' => 'Cart is empty.']);
         }
-    
+
         $responses = QuestionResponse::where('submission_id', $submissionId)->get();
         Log::info('Fetched responses count: ' . $responses->count());
-    
+
         if ($responses->isEmpty()) {
             Log::warning('Invalid submission ID: no responses found.');
             return response()->json(['success' => false, 'message' => 'Invalid submission ID.']);
         }
-    
+
         $username = $email = $phone = 'N/A';
-    
+
         foreach ($responses as $response) {
             Log::info("Processing response: question_key={$response->question_key}, answer={$response->answer}");
-    
+
             if ($response->question_key === 'question1') {
                 $username = $response->answer;
                 Log::info("Username set to: $username");
@@ -610,27 +642,23 @@ public function removeFromCart(Request $request)
                 Log::info("Phone set to: $phone");
             }
         }
-    
+
         // Save the checkout
         $checkout = new CartCheckout();
-        $checkout->store_manager_id = $userId; 
+        $checkout->store_manager_id = $userId;
         $checkout->username = $username;
         $checkout->email = $email;
         $checkout->phone = $phone;
         $checkout->submission_id = $submissionId;
         $checkout->products = json_encode($cart);
-    
+
         $saved = $checkout->save();
         Log::info('Checkout saved: ' . ($saved ? 'yes' : 'no'));
-    
+
         // Clear cart
         Session::forget('cart');
         Log::info('Cart cleared from session.');
-    
+
         return response()->json(['success' => true]);
     }
-    
-
-
-
 }

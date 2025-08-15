@@ -365,7 +365,8 @@
                         <div class="row mb-4">
                             <div class="col-12 mb-3">
                                 <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <button class="btn btn-outline-dark filter-btn active" data-filter="all">All Wines</button>
+                                    <button class="btn btn-outline-dark filter-btn active" data-filter="all">All
+                                        Wines</button>
                                     <button class="btn btn-outline-dark filter-btn" data-filter="featured">
                                         <i class="fas fa-star"></i> Featured Wines
                                     </button>
@@ -461,7 +462,7 @@
 
                 @if (isset($products) && $products->hasPages())
                     <div class="pagination-container">
-                        @if(!request()->ajax())
+                        @if (!request()->ajax())
                             {{ $products->links() }}
                         @endif
                     </div>
@@ -768,7 +769,7 @@
                                 // Fallback to simple pagination update if full pagination data isn't available
                                 $('.pagination-container').html(
                                     `<div class="d-flex justify-content-center my-4">${response.links}</div>`
-                                    );
+                                );
                             }
 
                             // Update URL without page reload
@@ -799,7 +800,7 @@
                         });
 
                         let errorMessage =
-                        'An error occurred while loading products. Please try again.';
+                            'An error occurred while loading products. Please try again.';
                         try {
                             const response = JSON.parse(xhr.responseText);
                             errorMessage = response.message || errorMessage;
@@ -869,6 +870,29 @@
             @if (isset($products) && $products->total() > 0)
                 updatePagination({!! $products->toJson() !!});
             @endif
+        });
+
+
+        // Toggle vintage year filter visibility
+        $(document).on('click', '.toggle-vintage-year-filter', function() {
+            const $button = $(this);
+            const $moreContent = $button.siblings('.vintage-year-filter-more');
+            const moreText = $button.data('more-text');
+            const lessText = $button.data('less-text');
+
+            $moreContent.toggleClass('d-none');
+            $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
+        });
+
+        // Toggle winery filter visibility
+        $(document).on('click', '.toggle-winery-filter', function() {
+            const $button = $(this);
+            const $moreContent = $button.siblings('.winery-filter-more');
+            const moreText = $button.data('more-text');
+            const lessText = $button.data('less-text');
+
+            $moreContent.toggleClass('d-none');
+            $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
     </script>
 @endpush
