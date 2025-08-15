@@ -23,10 +23,10 @@
                                     <div class="col-lg-2 col-sm-6 col-md-4 reveal revealleft position-relative ">
                                         
                                         <ul class="mb-5 mb-lg-0 ps-0">
-                                            <li><a href="contacts.html">Contact US</a></li>
+                                            <li><a href="{{ route('contact') }}">Contact US</a></li>
                                             <li><a href="{{ route('about') }}">About Us</a></li>
                                             <li><a href="{{ route('services') }}">Services</a></li>
-                                            <li><a href="{{ route('careers') }}">Careers @ TechSomm </a></li>
+                                            <li><a href="{{ route('contact' }}">Careers @ TechSomm </a></li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-4 col-sm-12 col-md-4 reveal revealleft">
