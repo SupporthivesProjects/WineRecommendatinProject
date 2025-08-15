@@ -667,12 +667,7 @@
                                         <div class="card custom-card wine-card">
                                             <!-- Image -->
                                             <div class="image-wrapper" style="position: relative;">
-                                                @php
-                                                    $primaryImage =
-                                                        $product->images->where('is_primary', true)->first() ??
-                                                        $product->images->first();
-                                                @endphp
-                                                <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}"
+                                                <img src="{{ asset('storage/' . $product->image1) }}"
                                                     class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                 @if ($product->is_featured == 1)
