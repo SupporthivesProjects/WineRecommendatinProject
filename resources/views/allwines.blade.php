@@ -353,7 +353,7 @@
                         <div class="filter-group">
                             <h4 class="fw-bold mb-4">Retail Price</h4>
                             <p>
-                                <span id="price-range-label">$<span id="price-min"></span> - $<span
+                                <span id="price-range-label">₹&nbsp;<span id="price-min"></span> - ₹&nbsp;<span
                                         id="max-price"></span></span>
                             </p>
                             <div id="price-slider" style="margin-top: 10px;"></div>
