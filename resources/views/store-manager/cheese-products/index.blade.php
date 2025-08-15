@@ -70,7 +70,7 @@
                                                     <span>{{ $product->name }}</span>
                                                 </td>
                                                 <td>{{ Str::limit($product->description, 50) }}</td>
-                                                <td>${{ number_format($product->price, 2) }}</td>
+                                                <td>&#8377;&nbsp;{{ number_format($product->price, 2) }}</td>
                                                 <td>
                                                     @if(isset($product->store_quantity))
                                                         {{ $product->store_quantity }}

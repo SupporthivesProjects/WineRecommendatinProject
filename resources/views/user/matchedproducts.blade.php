@@ -115,7 +115,7 @@
 @endpush
 
     <!-- Transparent Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar scrolled">
         <div class="container">
             <a class="navbar-brand text-white" href="#">
                 <lottie-player 
@@ -143,14 +143,14 @@
         </div>
     </nav>
 
-    <section class="hero-section">
+    <!-- <section class="hero-section">
         <div class="hero-text">
         <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
         <p class="text-white">Curated selections for every occasion</p>
         </div>
-    </section>
+    </section> -->
 
-<div class="" id="matchedproducts">
+<div class="pt-5" id="matchedproducts">
     <div class="container my-5">
          <!-- Start::row-6 -->
             <div class="row">
@@ -356,15 +356,15 @@
     });
 </script>
 <script>
-  window.addEventListener("scroll", function () {
-    const navbar = document.getElementById("mainNavbar");
-    if (window.scrollY > 50) 
-    {
-        navbar.classList.add("scrolled"); 
-    } else {
-        navbar.classList.remove("scrolled");
-    }
-  });
+//   window.addEventListener("scroll", function () {
+//     const navbar = document.getElementById("mainNavbar");
+//     if (window.scrollY > 50) 
+//     {
+//         navbar.classList.add("scrolled"); 
+//     } else {
+//         navbar.classList.remove("scrolled");
+//     }
+//   });
 </script>
 
 <script>

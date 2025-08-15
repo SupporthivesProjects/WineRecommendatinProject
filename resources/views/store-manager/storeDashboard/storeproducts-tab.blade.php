@@ -69,10 +69,7 @@
                                                 <tr>
                                                     <td>#{{ $product->id }}</td>
                                                     <td class="d-flex align-items-center">
-                                                        @php
-                                                            $image = $product->images->first();
-                                                        @endphp
-                                                        <img src="{{ $image ? asset('storage/products/' . $image->image_path) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
+                                                        <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
                                                         <span class="my-auto text-truncate">{{ $product->wine_name }}</span>
                                                         <a href="{{ route('store-manager.singleproduct', $product->id) }}" class="ms-2" title="View Product">
                                                             <i class="bi bi-box-arrow-up-right"></i>
@@ -117,46 +114,78 @@
         <!-- End::Content -->
 
         <!-- Pagination Code Starts -->
-            @if ($allProducts->hasPages())
-                <div class="d-flex justify-content-center my-4">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination mb-0">
-                            {{-- Previous Page Link --}}
-                            @if ($allProducts->onFirstPage())
-                                <li class="page-item disabled">
-                                    <span class="page-link"><i class="bi bi-caret-left"></i></span>
-                                </li>
-                            @else
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $allProducts->previousPageUrl() }}" rel="prev">
-                                        <i class="bi bi-caret-left"></i>
-                                    </a>
-                                </li>
-                            @endif
+        @if ($allProducts->hasPages())
+    <div class="d-flex justify-content-center my-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination mb-0">
 
-                            {{-- Page Number Links --}}
-                            @foreach ($allProducts->getUrlRange(1, $allProducts->lastPage()) as $page => $url)
-                                <li class="page-item {{ $allProducts->currentPage() == $page ? 'active' : '' }}">
-                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                </li>
-                            @endforeach
+                {{-- Previous Page Link --}}
+                @if ($allProducts->onFirstPage())
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="bi bi-caret-left"></i></span>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $allProducts->previousPageUrl() }}" rel="prev">
+                            <i class="bi bi-caret-left"></i>
+                        </a>
+                    </li>
+                @endif
 
-                            {{-- Next Page Link --}}
-                            @if ($allProducts->hasMorePages())
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $allProducts->nextPageUrl() }}" rel="next">
-                                        <i class="bi bi-caret-right"></i>
-                                    </a>
-                                </li>
-                            @else
-                                <li class="page-item disabled">
-                                    <span class="page-link"><i class="bi bi-caret-right"></i></span>
-                                </li>
-                            @endif
-                        </ul>
-                    </nav>
-                </div>
-            @endif
+                @php
+                    $current = $allProducts->currentPage();
+                    $last = $allProducts->lastPage();
+                    $start = max(2, $current - 1); // start window (excluding 1)
+                    $end = min($last - 1, $current + 1); // end window (excluding last)
+                @endphp
+
+                {{-- First Page --}}
+                <li class="page-item {{ $current == 1 ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $allProducts->url(1) }}">1</a>
+                </li>
+
+                {{-- Ellipsis before window --}}
+                @if ($start > 2)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+
+                {{-- Page window --}}
+                @for ($i = $start; $i <= $end; $i++)
+                    <li class="page-item {{ $current == $i ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $allProducts->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+
+                {{-- Ellipsis after window --}}
+                @if ($end < $last - 1)
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                @endif
+
+                {{-- Last Page --}}
+                @if ($last > 1)
+                    <li class="page-item {{ $current == $last ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $allProducts->url($last) }}">{{ $last }}</a>
+                    </li>
+                @endif
+
+                {{-- Next Page Link --}}
+                @if ($allProducts->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $allProducts->nextPageUrl() }}" rel="next">
+                            <i class="bi bi-caret-right"></i>
+                        </a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="bi bi-caret-right"></i></span>
+                    </li>
+                @endif
+
+            </ul>
+        </nav>
+    </div>
+@endif
+
         <!-- Pagination Code ends -->
     </div>
 </div>

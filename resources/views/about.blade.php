@@ -380,7 +380,7 @@
                             bottle to gift, TechSomm helps you make confident, delicious choices.</p>
                         <p class="text-gray-600 fs-5">And we’re just getting started. Coming soon: Regional Wine Guides, 
                             the SMS (Save Me Sommelier) hotline, and Wine Concierge Services to support every moment 
-                            of your wine life — from quiet evenings to grand celebrations.</p>
+                            of your wine life from quiet evenings to grand celebrations.</p>
                         <p class="text-gray-600 fs-5">So whether you're a casual drinker, a curious enthusiast, 
                             or a seasoned connoisseur TechSomm is your partner in pleasure, discovery and all things 
                             wines. Let your wine journey begin, beautifully.</p>

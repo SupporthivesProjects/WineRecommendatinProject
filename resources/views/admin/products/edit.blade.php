@@ -658,9 +658,9 @@
                                         </div>
 
                                         <div class="form-group mb-4">
-                                            <label for="retail_price" class="form-label">Retail Price ($) <span class="text-danger">*</span></label>
+                                            <label for="retail_price" class="form-label">Retail Price (₹) <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <span class="input-group-text">$</span>
+                                                <span class="input-group-text">₹</span>
                                                 <input type="number" name="retail_price" id="retail_price"
                                                     class="form-control @error('retail_price') is-invalid @enderror"
                                                     value="{{ old('retail_price', $product->retail_price) }}" step="0.01" min="0" required>
@@ -688,64 +688,12 @@
                                     <h3 class="text-lg font-medium text-gray-900 mb-4">Product Images</h3>
 
                                     <!-- Current Images -->
-                                    @if ($product->images && $product->images->count() > 0)
+                                    @if ($product->image1)
                                         <div class="mb-6">
-                                            <label class="block text-gray-700 text-sm font-bold mb-2">Current
-                                                Images</label>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2">Current Image</label>
                                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                                @foreach ($product->images as $image)
-                                                    <div class="relative group">
-                                                        <img src="{{ asset('storage/products/' . $image->image_path) }}"
-                                                            alt="Product image"
-                                                            class="w-full h-32 object-cover rounded border {{ $image->is_primary ? 'border-indigo-500 border-2' : 'border-gray-200' }}">
-
-                                                        <div
-                                                            class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded">
-                                                            <div class="flex space-x-2">
-                                                                <!-- Set as primary button -->
-                                                                <button type="button"
-                                                                    onclick="setPrimaryImage({{ $image->id }})"
-                                                                    class="bg-indigo-600 text-white p-1 rounded hover:bg-indigo-700 {{ $image->is_primary ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                                                    {{ $image->is_primary ? 'disabled' : '' }}>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="h-5 w-5" viewBox="0 0 20 20"
-                                                                        fill="currentColor">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                </button>
-
-                                                                <!-- Delete button -->
-                                                                <button type="button"
-                                                                    onclick="toggleImageDelete({{ $image->id }})"
-                                                                    class="bg-red-600 text-white p-1 rounded hover:bg-red-700">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="h-5 w-5" viewBox="0 0 20 20"
-                                                                        fill="currentColor">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                                            clip-rule="evenodd" />
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Primary badge -->
-                                                        @if ($image->is_primary)
-                                                            <div
-                                                                class="absolute top-0 left-0 bg-indigo-600 text-white text-xs px-2 py-1 rounded-br">
-                                                                Primary
-                                                            </div>
-                                                        @endif
-
-                                                        <!-- Delete indicator -->
-                                                        <div id="delete-badge-{{ $image->id }}"
-                                                            class="absolute top-0 right-0 bg-red-600 text-white text-xs px-2 py-1 rounded-bl hidden">
-                                                            Delete
-                                                        </div>
-                                                    </div>
-                                                @endforeach
+                                                <img src="{{ asset('storage/' . $product->image1) }}" alt="Product image"
+                                                            class="w-full h-32 object-cover rounded border">
                                             </div>
                                         </div>
                                     @else
@@ -776,7 +724,7 @@
                                                     <label for="product_images"
                                                         class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
                                                         <span>Upload files</span>
-                                                        <input id="product_images" name="product_images[]" type="file"
+                                                        <input id="product_images" name="product_image_replace" type="file"
                                                             class="sr-only" multiple accept="image/*"
                                                             onchange="previewNewImages(this)">
                                                     </label>

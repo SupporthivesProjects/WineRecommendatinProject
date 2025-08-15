@@ -75,7 +75,7 @@
         <div class="row g-4">
             <!-- Cheese Image -->
             <div class="col-lg-6">
-                <img src="{{ $cheese->image ? asset('storage/cheeses/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
+                <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
                     alt="{{ $cheese->name }}" class="cheese-image">
             </div>
 
@@ -85,7 +85,7 @@
                     <h1 class="mb-3">{{ $cheese->name }}</h1>
 
                     <div class="d-flex align-items-center mb-3">
-                        <h3 class="mb-0 me-3">${{ number_format($cheese->price, 2) }}</h3>
+                        <h3 class="mb-0 me-3">₹&nbsp;{{ number_format($cheese->price, 2) }}</h3>
                         @php
                             $totalQuantity = $cheese->stores->sum('pivot.quantity');
                             $inStock = $totalQuantity > 0;
@@ -149,16 +149,9 @@
                         @foreach ($pairedWines as $wine)
                             <div class="col-md-3 mb-4">
                                 <div class="card h-100">
-                                    @if ($wine->primaryImage)
-                                        <img src="{{ asset('storage/products/' . $wine->primaryImage->image_path) }}"
+                                        <img src="{{ asset('storage/' . $wine->image1) }}"
                                             class="card-img-top" alt="{{ $wine->wine_name }}"
                                             style="height: 200px; object-fit: cover;">
-                                    @else
-                                        <div class="bg-light d-flex align-items-center justify-content-center"
-                                            style="height: 200px;">
-                                            <i class="fe fe-wine text-muted" style="font-size: 3rem;"></i>
-                                        </div>
-                                    @endif
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $wine->wine_name }}</h5>
                                         <p class="card-text text-muted small">

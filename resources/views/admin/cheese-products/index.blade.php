@@ -76,7 +76,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="align-middle">{{ $product->name }}</td>
-                                                <td class="align-middle">${{ number_format($product->price, 2) }}</td>
+                                                <td class="align-middle">₹&nbsp;{{ number_format($product->price, 2) }}</td>
                                                 <td class="align-middle">
                                                     <span class="badge rounded-pill border border-{{ $product->is_active ? 'success' : 'danger' }} text-{{ $product->is_active ? 'success' : 'danger' }} py-1 px-3">
                                                         {{ $product->is_active ? 'Active' : 'Inactive' }}

@@ -50,6 +50,7 @@ class ProductController extends Controller
 
         // Get products with pagination
         $products = $query->orderBy('id', 'desc')->paginate(12);
+        
 
         return view('user.products', compact('products', 'types', 'countries'));
     }

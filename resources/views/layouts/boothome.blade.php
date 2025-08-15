@@ -170,6 +170,10 @@
             border-radius: 9999px;
             z-index: 10;
         }
+
+        
+
+
     </style>
 
     <!-- Scripts -->
@@ -565,14 +569,10 @@
                                                         alt="{{ $product->wine_name }}"
                                                         class="w-full h-60 object-cover">
                                                 @endif --}}
-                                                @php
-                                                    $primaryImage =
-                                                        $product->images->where('is_primary', true)->first() ??
-                                                        $product->images->first();
-                                                @endphp
+                                               
                                                 <div class="h-[250px] overflow-hidden">
-                                                    <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}"
-                                                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                                    <img src="{{ asset('storage/' . $product->image1) }}"
+                                                        class="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
                                                         alt="{{ $product->wine_name }}">
                                                 </div>
 
@@ -689,7 +689,7 @@
                                     </p>
                                     <a href="#"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
-                                        Explore this pairing
+                                        Coming Soon
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1"
                                             viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd"
@@ -713,7 +713,7 @@
                                         classics to gourmet cuisine, discover pairings that bring harmony, depth, and
                                         pleasure to the table.
                                     </p>
-                                    <a href="#"
+                                    <a href="{{ route('user.cheeses') }}"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
                                         Explore this pairing
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1"
@@ -815,8 +815,8 @@
                             <div class="lg:w-1/2">
                                 <h2 class="text-3xl font-bold text-white mb-2">Share Your Experience</h2>
                                 <p class="text-red-100 mb-6 lg:mb-0">
-                                    We value your feedback! Share your wine experience with our community.
-                                    Your review helps others discover great wines.
+                                    We value your feedback! Share your wine experience with our community. 
+                                    <br>Your review helps others discover great wines.
                                 </p>
                             </div>
                             <div class="lg:w-1/2">
@@ -897,7 +897,7 @@
 
     <!-- Back to Top Button -->
     <a href="#home"
-        class="fixed bottom-6 right-6 bg-red-700 hover:bg-red-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300">
+        class="fixed bottom-6 right-6 bg-red-700 hover:bg-red-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300" style="z-index:10">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
             stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -1186,3 +1186,5 @@
 </body>
 
 </html>
+
+
