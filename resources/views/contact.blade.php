@@ -4,7 +4,7 @@
     @push('styles')
         <style>
             .contact-hero {
-                background-image: url('{{ asset('images/Browsewines3.jpg') }}');
+                background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
                 height: 60vh;
                 display: flex;
                 align-items: center;
