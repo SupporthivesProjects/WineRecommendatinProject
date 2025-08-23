@@ -1,0 +1,6 @@
+tasks:
+  - init: composer install && npm install && cp .env.example .env && php artisan key:generate
+    command: php artisan serve --host=0.0.0.0 --port=8000
+ports:
+  - port: 8000
+    onOpen: open-preview
