@@ -226,10 +226,20 @@ Width
 
 .section-4-5-middle-parallax {
   background-image: url(/images/BrowseWines3.jpg);
+  background-size: cover;
   height: 60vh;
   position: relative;
   margin-bottom: 0;
   background-attachment: fixed;
+}
+.section-4-5-middle-parallax::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
 }
 
 /* Sidemenu Layout Syles */
