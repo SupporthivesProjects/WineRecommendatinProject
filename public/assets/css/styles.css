@@ -224,6 +224,14 @@ Width
   --black-9:	rgba(255,255,255,0.9);
 }
 
+.section-4-5-middle-parallax {
+  background-image: url(/images/BrowseWines3.jpg);
+  height: 60vh;
+  position: relative;
+  margin-bottom: 0;
+  background-attachment: fixed;
+}
+
 /* Sidemenu Layout Syles */
 @media (max-width: 991.98px) {
   .sidemenu-layout-styles {
