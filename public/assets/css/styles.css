@@ -16831,13 +16831,13 @@ a.tag-addon:hover {
     margin: 0 auto;
   }
   [data-nav-layout=horizontal] .horizontal-logo {
-    padding: 0.85rem 0;
+    padding: 0;
     display: block;
   }
 }
 @media (min-width: 992px) and (min-width: 992px) {
   [data-nav-layout=horizontal] .horizontal-logo .header-logo img {
-    height: 4rem;
+    height: 90px;
     line-height: 4rem;
   }
   [data-nav-layout=horizontal] .horizontal-logo .header-logo .desktop-logo {
