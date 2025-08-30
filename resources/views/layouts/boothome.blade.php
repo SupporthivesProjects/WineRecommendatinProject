@@ -736,6 +736,9 @@
             </section>
             <!-- End:: Section-4 -->
 
+            <section class="section-4-5-middle-parallax">
+            </section>
+
             <!-- Start:: Section-5  Testimonials Section -->
             @php
                 // Fetch active testimonials ordered by sort_order
