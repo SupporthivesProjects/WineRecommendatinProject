@@ -362,9 +362,9 @@
                                 </lottie-player> -->
                                 <a href="#" class="header-logo">
                                     <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                        class="desktop-logo">
+                                        class="desktop-logo" id="header_logo_desktop">
                                     <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                        class="desktop-white" id="header_logo_desktop">
+                                        class="desktop-white">
                                 </a>
                             </div>
                         </div>
