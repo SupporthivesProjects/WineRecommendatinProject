@@ -234,12 +234,12 @@
                     <div class="header-element align-items-center">
                         <!-- Start::header-link|switcher-icon -->
                         <div class="btn-list d-lg-none d-block">
-                            <a href="signup.html" class="btn btn-primary-light">
+                            <!-- <a href="signup.html" class="btn btn-primary-light">
                                 New User
                             </a>
                             <a href="signin.html" class="btn btn-primary-light">
                                 Login
-                            </a>
+                            </a> -->
                         </div>
                         <!-- End::header-link|switcher-icon -->
                     </div>
@@ -294,28 +294,28 @@
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item">
+                                <a href="{{ route('home') }}#featuredwines" class="side-menu__item">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item">
+                                <a href="{{ route('home') }}#pairing" class="side-menu__item">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item">
+                                <a href="{{ route('home') }}#testimonials" class="side-menu__item">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item">
+                                <a href="{{ route('home') }}#Moments" class="side-menu__item">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
@@ -329,9 +329,9 @@
                             </svg></div>
                         <div class="d-lg-flex d-none">
                             <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
+                                <!-- <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
                                     New User
-                                </a>
+                                </a> -->
                                 <a href="{{ route('login') }}" class="btn btn-wave btn-info">
                                     Login
                                 </a>
@@ -517,6 +517,7 @@
             toastr.error("{{ session('error') }}");
         @endif
     </script>
+    
 </body>
 
 </html>

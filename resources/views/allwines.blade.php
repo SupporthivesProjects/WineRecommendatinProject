@@ -235,6 +235,24 @@
                 /* spacing between options */
                 white-space: nowrap;
             }
+
+            .scrollable-filter {
+                max-height: 200px; /* adjust as you like */
+                overflow-y: auto;
+                padding-right: 6px; /* to prevent scrollbar overlap */
+            }
+
+            /* optional: make scrollbar nicer */
+            .scrollable-filter::-webkit-scrollbar {
+                width: 6px;
+            }
+            .scrollable-filter::-webkit-scrollbar-thumb {
+                background: #ccc;
+                border-radius: 3px;
+            }
+
+
+
         </style>
     @endpush
 
@@ -276,7 +294,7 @@
                         <!-- Vintage Year Filter -->
                         <div class="filter-group">
                             <h4 class="fw-bold mb-4">Vintage Year</h4>
-                            <div class="vintage-year-filter-container">
+                            <div class="vintage-year-filter-container ">
                                 @foreach ($vintageYears->take(6) as $year)
                                     @if ($year)
                                         <div class="form-check">

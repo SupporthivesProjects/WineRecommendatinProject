@@ -275,7 +275,7 @@
                                 fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
                             </svg></div>
-                        <ul class="main-menu">
+                            <ul class="main-menu">
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a class="side-menu__item" href="{{ route('home') }}">
@@ -293,28 +293,28 @@
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item">
+                                <a href="{{ route('home') }}#featuredwines" class="side-menu__item">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item">
+                                <a href="{{ route('home') }}#pairing" class="side-menu__item">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item">
+                                <a href="{{ route('home') }}#testimonials" class="side-menu__item">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item">
+                                <a href="{{ route('home') }}#Moments" class="side-menu__item">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
@@ -328,9 +328,9 @@
                             </svg></div>
                         <div class="d-lg-flex d-none">
                             <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
+                                <!-- <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
                                     New User
-                                </a>
+                                </a> -->
                                 <a href="{{ route('login') }}" class="btn btn-wave btn-info">
                                     Login
                                 </a>

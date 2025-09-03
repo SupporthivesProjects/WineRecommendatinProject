@@ -299,18 +299,47 @@ function reveal() {
     }
 }
 reveal();
+
+
 const pageLink = document.querySelectorAll(".side-menu__item");
+
 pageLink.forEach((elem) => {
-    if (elem != 'javascript:void(0);' && elem !== "#") {
-        elem.addEventListener("click", (e) => {
+    elem.addEventListener("click", (e) => {
+        const href = elem.getAttribute("href");
+
+        // If it's an in-page anchor (starts with "#")
+        if (href && href.startsWith("#")) {
             e.preventDefault();
-            document.querySelector(elem.getAttribute("href"))?.scrollIntoView({
-                behavior: "smooth",
-                offsetTop: 1 - 60,
-            });
-        });
-    }
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: "smooth"
+                });
+            }
+        }
+        // If it's not an anchor (like "/"), let the browser navigate normally
+    });
 });
+
+
+
+// const pageLink = document.querySelectorAll(".side-menu__item");
+// pageLink.forEach((elem) => {
+//     if (elem != 'javascript:void(0);' && elem !== "#") {
+//         elem.addEventListener("click", (e) => {
+//             e.preventDefault();
+//             document.querySelector(elem.getAttribute("href"))?.scrollIntoView({
+//                 behavior: "smooth",
+//                 offsetTop: 1 - 60,
+//             });
+//         });
+//     }
+// });
+
+
+
+
+
 // section menu active
 function onScroll(event) {
     const sections = document.querySelectorAll(".side-menu__item");
