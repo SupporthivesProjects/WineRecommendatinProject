@@ -60,7 +60,7 @@
 
                                         <div class="text-start mt-5 ms-0">
                                             @if (Route::has('password.request'))
-                                                <div class="mb-1"><a href="{{ route('password.request') }}">Forgot password?</a></div>
+                                                <!-- <div class="mb-1"><a href="{{ route('password.request') }}">Forgot password?</a></div> -->
                                             @endif
                                             <!-- <div>Don't have an account? <a href="{{ route('register') }}">Register Here</a></div> -->
                                         </div>

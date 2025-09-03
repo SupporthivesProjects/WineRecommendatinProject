@@ -233,12 +233,12 @@
                     <div class="header-element align-items-center">
                         <!-- Start::header-link|switcher-icon -->
                         <div class="btn-list d-lg-none d-block">
-                            <a href="signup.html" class="btn btn-primary-light">
+                            <!-- <a href="signup.html" class="btn btn-primary-light">
                                 New User
-                            </a>
-                            <a href="signin.html" class="btn btn-primary-light">
+                            </a> -->
+                            <!-- <a href="signin.html" class="btn btn-primary-light">
                                 Login
-                            </a>
+                            </a> -->
                         </div>
                         <!-- End::header-link|switcher-icon -->
                     </div>

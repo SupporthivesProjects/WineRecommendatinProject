@@ -328,12 +328,12 @@
                     <div class="header-element align-items-center">
                         <!-- Start::header-link|switcher-icon -->
                         <div class="btn-list d-lg-none d-block">
-                            <a href="signup.html" class="btn btn-primary-light">
+                            <!-- <a href="signup.html" class="btn btn-primary-light">
                                 New User
                             </a>
                             <a href="signin.html" class="btn btn-primary-light">
                                 Login
-                            </a>
+                            </a> -->
                         </div>
                         <!-- End::header-link|switcher-icon -->
                     </div>
@@ -431,9 +431,9 @@
                             </svg></div>
                         <div class="d-lg-flex d-none">
                             <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
+                                <!-- <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
                                     New User
-                                </a>
+                                </a> -->
                                 <a href="{{ route('login') }}" class="btn btn-wave btn-info">
                                     Login
                                 </a>

@@ -119,24 +119,24 @@
                 
 
                 <!-- Start::header-element -->
-                <div class="header-element header-fullscreen  d-xl-flex d-none">
-                    <!-- Start::header-link -->
+                <!-- <div class="header-element header-fullscreen  d-xl-flex d-none">
+                
                     <a onclick="openFullscreen();" href="javascript:void(0);" class="header-link">
                         <i class="fe fe-maximize full-screen-open header-link-icon"></i>
                         <i class="fe fe-minimize full-screen-close header-link-icon d-none"></i>
                     </a>
-                    <!-- End::header-link -->
-                </div>
+                
+                </div> -->
                 <!-- End::header-element -->
 
             
             
                 <!-- Start::header-element -->
-                <div class="header-element right-sidebar d-xl-flex d-none">
+                <!-- <div class="header-element right-sidebar d-xl-flex d-none">
                     <a href="javascript:void(0);" class="header-link right-sidebar" data-bs-toggle="offcanvas" data-bs-target="#right-sidebar-canvas">
                         <i class="fe fe-align-right header-icons header-link-icon"></i>
                     </a>
-                </div>
+                </div> -->
                 <!-- End::header-element -->
 
 
@@ -187,9 +187,9 @@
                 <!-- Start::header-element -->
                 <div class="header-element">
                     <!-- Start::header-link|switcher-icon -->
-                    <a href="javascript:void(0);" class="header-link switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
+                    <!-- <a href="javascript:void(0);" class="header-link switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
                         <i class="fe fe-settings header-link-icon"></i>
-                    </a>
+                    </a> -->
                     <!-- End::header-link|switcher-icon -->
                 </div>
                 <!-- End::header-element -->
