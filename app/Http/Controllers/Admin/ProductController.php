@@ -171,7 +171,7 @@ class ProductController extends Controller
             'ageing_potential' => 'nullable|string|max:255',
             'cheese_pairing' => 'nullable|array',
             'importer_info' => 'nullable|string|max:255',
-            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Single image
+            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:2048', // Single image
             'wine_story' => 'nullable|string',
             'country' => 'nullable|string|max:255',
             'tasting_notes' => 'nullable|string',
@@ -435,7 +435,7 @@ class ProductController extends Controller
         'ageing_potential' => 'nullable|string|max:255',
         'cheese_pairing' => 'nullable|array',
         'importer_info' => 'nullable|string|max:255',
-        'product_image_replace' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'product_image_replace' => 'nullable|image|mimes:jpeg,png,webp,jpg,gif|max:2048',
         'wine_story' => 'nullable|string',
         'country' => 'nullable|string|max:255',
         'tasting_notes' => 'nullable|string',
