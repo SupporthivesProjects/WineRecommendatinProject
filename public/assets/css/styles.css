@@ -16857,6 +16857,7 @@ a.tag-addon:hover {
   [data-nav-layout=horizontal] .horizontal-logo .header-logo img {
     height: 90px;
     line-height: 4rem;
+    transition: height 0.3s ease-in-out;
   }
   [data-nav-layout=horizontal] .horizontal-logo .header-logo .desktop-logo {
     display: block;

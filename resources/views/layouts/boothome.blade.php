@@ -364,7 +364,7 @@
                                     <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                         class="desktop-logo">
                                     <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                        class="desktop-white">
+                                        class="desktop-white" id="header_logo_desktop">
                                 </a>
                             </div>
                         </div>
@@ -1184,6 +1184,22 @@
                 submitButton.disabled = false;
             }
         });
+    </script>
+
+    <script>
+        document.addEventListener("scroll", () => {
+            const logo = document.getElementById("header_logo_desktop");
+            const section2 = document.querySelector("#HIW"); // change to your section 2 id
+
+            const section2Top = section2.offsetTop;
+
+            if (window.scrollY >= section2Top) {
+                logo.style.height = "55px"; // shrink
+            } else {
+                logo.style.height = "90px"; // expand back
+            }
+        });
+
     </script>
 
 </body>
