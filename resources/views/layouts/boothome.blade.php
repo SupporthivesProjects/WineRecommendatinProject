@@ -57,6 +57,13 @@
 
     <!-- Custom Styles -->
     <style>
+
+    #header_logo_desktop {
+            height: 90px; /* default */
+            transition: height 0.4s ease; /* smooth animation */
+        }
+
+
         footer {
             margin-left: 150px;
             /* same as your sidebar width */
