@@ -1193,11 +1193,19 @@
 
             const section2Top = section2.offsetTop;
 
-            if (window.scrollY >= section2Top) {
+            // if (window.scrollY >= section2Top) {
+            //     logo.style.height = "55px"; // shrink
+            // } else {
+            //     logo.style.height = "90px"; // expand back
+            // }
+
+            if (window.scrollY >= 300) {
                 logo.style.height = "55px"; // shrink
             } else {
                 logo.style.height = "90px"; // expand back
             }
+
+
         });
 
     </script>
