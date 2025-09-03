@@ -369,7 +369,7 @@ class QuestionnaireController extends Controller
     public function getQuestions($id)
     {
         try {
-            $questions = Question::where('template_id', $id)->orderBy('question_order', 'asc')->get()->map(function ($q) {
+            $questions = Question::where('template_id', $id)->where('status', 1)->orderBy('question_order', 'asc')->get()->map(function ($q) {
                 $options = [];
 
                 for ($i = 1; $i <= 15; $i++) {
