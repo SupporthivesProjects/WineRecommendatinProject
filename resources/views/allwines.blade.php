@@ -509,8 +509,40 @@
     <script>
         // Add loading overlay HTML
         const loadingOverlay = `
-            <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 9999; display: none; justify-content: center; align-items: center; margin: 0; padding: 0;">
-                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" role="status">
+            <style>
+                @keyframes spin {
+                    0% { transform: translate(-50%, -50%) rotate(0deg); }
+                    100% { transform: translate(-50%, -50%) rotate(360deg); }
+                }
+                #loading-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(255, 255, 255, 0.8);
+                    z-index: 9999;
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0;
+                    padding: 0;
+                }
+                .spinner-border {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 3rem;
+                    height: 3rem;
+                    border: 0.25em solid currentColor;
+                    border-right-color: transparent;
+                    border-radius: 50%;
+                    animation: 0.75s linear infinite spin;
+                    color: #8b0000; /* Wine red color to match your theme */
+                }
+            </style>
+            <div id="loading-overlay">
+                <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
