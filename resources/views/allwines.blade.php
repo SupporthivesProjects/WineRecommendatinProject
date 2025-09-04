@@ -382,12 +382,22 @@
                         <!-- Type and Country filters at top -->
                         <div class="row mb-4">
                             <div class="col-12 mb-3">
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <button class="btn btn-outline-dark filter-btn active" data-filter="all">All
-                                        Wines</button>
-                                    <button class="btn btn-outline-dark filter-btn" data-filter="featured">
-                                        <i class="fas fa-star"></i> Featured Wines
-                                    </button>
+                                <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-outline-dark filter-btn active" data-filter="all">All
+                                            Wines</button>
+                                        <button class="btn btn-outline-dark filter-btn" data-filter="featured">
+                                            <i class="fas fa-star"></i> Featured Wines
+                                        </button>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <div class="input-group">
+                                            <input type="text" id="search-input" class="form-control" placeholder="Search wines..." style="border: black 1px solid;border-radius: 4px 0px 0px 4px;">
+                                            <button class="btn btn-outline-secondary" type="button" id="search-button">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
@@ -499,8 +509,40 @@
     <script>
         // Add loading overlay HTML
         const loadingOverlay = `
-            <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7); z-index: 9999; display: none; justify-content: center; align-items: center; margin: 0; padding: 0;">
-                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" role="status">
+            <style>
+                @keyframes spin {
+                    0% { transform: translate(-50%, -50%) rotate(0deg); }
+                    100% { transform: translate(-50%, -50%) rotate(360deg); }
+                }
+                #loading-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(255, 255, 255, 0.8);
+                    z-index: 9999;
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0;
+                    padding: 0;
+                }
+                .spinner-border {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 3rem;
+                    height: 3rem;
+                    border: 0.25em solid currentColor;
+                    border-right-color: transparent;
+                    border-radius: 50%;
+                    animation: 0.75s linear infinite spin;
+                    color: #8b0000; /* Wine red color to match your theme */
+                }
+            </style>
+            <div id="loading-overlay">
+                <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
@@ -764,6 +806,12 @@
                     formData['max_price'] = priceRange[1];
                 }
 
+                // Add search term if exists
+                const searchTerm = $('#search-input').val().trim();
+                if (searchTerm) {
+                    formData['search'] = searchTerm;
+                }
+
                 // Add page number
                 formData['page'] = page;
 
@@ -833,6 +881,31 @@
                 });
             }
 
+            // Handle search input and button
+            let searchTimeout;
+            
+            // Function to handle search
+            function performSearch() {
+                const searchTerm = $('#search-input').val().trim();
+                loadProducts(1); // Reset to first page when searching
+            }
+
+            // Search button click handler
+            $('#search-button').on('click', function() {
+                performSearch();
+            });
+
+            // Search on Enter key press
+            $('#search-input').on('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                } else {
+                    // Debounce the search to avoid too many requests
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(performSearch, 500);
+                }
+            });
+
             // Handle filter button clicks
             $('.filter-btn').on('click', function() {
                 $('.filter-btn').removeClass('active');
@@ -852,6 +925,11 @@
                     key === 'min_price' ||
                     key === 'max_price'
                 );
+
+                // Set search input from URL if exists
+                if (urlParams.has('search')) {
+                    $('#search-input').val(urlParams.get('search'));
+                }
 
                 if (hasFilters) {
                     // Set checkboxes based on URL parameters

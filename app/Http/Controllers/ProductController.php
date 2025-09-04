@@ -166,6 +166,18 @@ class ProductController extends Controller
 
     protected function applyFilters($query, $request)
     {
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = '%' . $request->search . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('wine_name', 'LIKE', $searchTerm)
+                  ->orWhere('winery', 'LIKE', $searchTerm)
+                  ->orWhere('grape_variety', 'LIKE', $searchTerm)
+                  ->orWhere('wine_sub_region', 'LIKE', $searchTerm)
+                  ->orWhere('country', 'LIKE', $searchTerm);
+            });
+        }
+
         // Filter by type
         if ($request->has('type') && !empty($request->type)) {
             $types = is_array($request->type) ? $request->type : [$request->type];

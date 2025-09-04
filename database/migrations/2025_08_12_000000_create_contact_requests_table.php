@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contact_requests', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->string('phone');
-            $table->text('message');
-            $table->boolean('terms_accepted')->default(false);
-            $table->string('ip_address', 45)->nullable();
-            $table->timestamps();
-        });
+        // Schema::create('contact_requests', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->string('email');
+        //     $table->string('phone');
+        //     $table->text('message');
+        //     $table->boolean('terms_accepted')->default(false);
+        //     $table->string('ip_address', 45)->nullable();
+        //     $table->timestamps();
+        // });
     }
 
     /**
