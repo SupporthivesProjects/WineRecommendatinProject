@@ -1,0 +1,105 @@
+/* Testimonials Section */
+#testimonials-carousel {
+    position: relative;
+    padding: 0 3rem;
+}
+
+#testimonials-carousel .splide__track {
+    overflow: visible;
+}
+
+#testimonials-carousel .splide__arrow {
+    background: white;
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+#testimonials-carousel .splide__arrow:hover {
+    background: #f3f4f6;
+    transform: scale(1.1);
+}
+
+#testimonials-carousel .splide__arrow--prev {
+    left: -2.5rem;
+}
+
+#testimonials-carousel .splide__arrow--next {
+    right: -2.5rem;
+}
+
+#testimonials-carousel .splide__pagination {
+    bottom: -2.5rem;
+}
+
+#testimonials-carousel .splide__pagination__page {
+    background: #d1d5db;
+    opacity: 0.7;
+    width: 10px;
+    height: 10px;
+    margin: 0 4px;
+    transition: all 0.3s ease;
+}
+
+#testimonials-carousel .splide__pagination__page.is-active {
+    background: #ef4444;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.testimonial-initials {
+    background: #fecaca;
+    color: #b91c1c;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+/* Star Rating */
+.rating-stars {
+    color: #f59e0b;
+    letter-spacing: 2px;
+}
+
+.rating-stars .mdi-star {
+    margin-right: 2px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #testimonials-carousel {
+        padding: 0 1.5rem;
+    }
+    
+    #testimonials-carousel .splide__arrow {
+        width: 32px;
+        height: 32px;
+    }
+    
+    #testimonials-carousel .splide__arrow--prev {
+        left: -1.5rem;
+    }
+    
+    #testimonials-carousel .splide__arrow--next {
+        right: -1.5rem;
+    }
+    
+    .testimonial-card {
+        margin-bottom: 1.5rem;
+    }
+}

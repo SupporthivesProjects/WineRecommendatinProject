@@ -382,12 +382,22 @@
                         <!-- Type and Country filters at top -->
                         <div class="row mb-4">
                             <div class="col-12 mb-3">
-                                <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <button class="btn btn-outline-dark filter-btn active" data-filter="all">All
-                                        Wines</button>
-                                    <button class="btn btn-outline-dark filter-btn" data-filter="featured">
-                                        <i class="fas fa-star"></i> Featured Wines
-                                    </button>
+                                <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-outline-dark filter-btn active" data-filter="all">All
+                                            Wines</button>
+                                        <button class="btn btn-outline-dark filter-btn" data-filter="featured">
+                                            <i class="fas fa-star"></i> Featured Wines
+                                        </button>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <div class="input-group">
+                                            <input type="text" id="search-input" class="form-control" placeholder="Search wines..." style="border: black 1px solid;border-radius: 4px 0px 0px 4px;">
+                                            <button class="btn btn-outline-secondary" type="button" id="search-button">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
@@ -764,6 +774,12 @@
                     formData['max_price'] = priceRange[1];
                 }
 
+                // Add search term if exists
+                const searchTerm = $('#search-input').val().trim();
+                if (searchTerm) {
+                    formData['search'] = searchTerm;
+                }
+
                 // Add page number
                 formData['page'] = page;
 
@@ -833,6 +849,31 @@
                 });
             }
 
+            // Handle search input and button
+            let searchTimeout;
+            
+            // Function to handle search
+            function performSearch() {
+                const searchTerm = $('#search-input').val().trim();
+                loadProducts(1); // Reset to first page when searching
+            }
+
+            // Search button click handler
+            $('#search-button').on('click', function() {
+                performSearch();
+            });
+
+            // Search on Enter key press
+            $('#search-input').on('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                } else {
+                    // Debounce the search to avoid too many requests
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(performSearch, 500);
+                }
+            });
+
             // Handle filter button clicks
             $('.filter-btn').on('click', function() {
                 $('.filter-btn').removeClass('active');
@@ -852,6 +893,11 @@
                     key === 'min_price' ||
                     key === 'max_price'
                 );
+
+                // Set search input from URL if exists
+                if (urlParams.has('search')) {
+                    $('#search-input').val(urlParams.get('search'));
+                }
 
                 if (hasFilters) {
                     // Set checkboxes based on URL parameters
