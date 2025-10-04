@@ -4,7 +4,9 @@ document.querySelector('.sidemenu-toggle').addEventListener('click', function() 
 });
 
 document.querySelector('.sidemenu-toggle-close').addEventListener('click', function() {
-  document.getElementById('responsive-overlay').classList.remove('.active')
+  let html = document.querySelector('html');
+  html.setAttribute('data-toggled', 'close');
+  document.querySelector("#responsive-overlay").classList.remove("active");
   const sidebar = document.querySelector('.sidebar');
   sidebar.classList.toggle('show');
 });
