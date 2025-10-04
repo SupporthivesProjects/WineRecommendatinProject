@@ -397,13 +397,13 @@
             <div class="container p-0">
                 <a href="javascript:void(0);" class="sidemenu-toggle-close" data-bs-toggle="sidebar">
                     <span class="open-toggle">
-                        <i class="eva-close-outline fs-20"></i>
+                        <p class="fs-20">X</p>
                     </span>
                 </a>
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
                     <!-- Start::nav -->
-                    <nav class="main-menu-container nav nav-pills sub-open">
+                    <nav class="main-menu-container nav nav-pills sub-open justify-content-end">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
                                 <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
@@ -425,49 +425,49 @@
                         <ul class="main-menu">
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a class="side-menu__item-new" href="#home">
+                                <a class="side-menu__item" href="#home">
                                     <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#HIW" class="side-menu__item-new">
+                                <a href="#HIW" class="side-menu__item">
                                     <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item-new">
+                                <a href="#featuredwines" class="side-menu__item">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item-new">
+                                <a href="#pairing" class="side-menu__item">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item-new">
+                                <a href="#testimonials" class="side-menu__item">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item-new">
+                                <a href="#Moments" class="side-menu__item">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="{{ route('contact') }}" class="side-menu__item-new">
+                                <a href="{{ route('contact') }}" class="side-menu__item">
                                     <span class="">Contact Us</span>
                                 </a>
                             </li>
