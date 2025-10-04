@@ -806,7 +806,11 @@
                     <h2 class="text-3xl font-bold mb-8 text-center">Wine Moments</h2>
 
                     <div class="owl-carousel owl-theme">
-                        @foreach (['https://media.istockphoto.com/id/1182488944/photo/just-one-more-chapter.webp?a=1&b=1&s=612x612&w=0&k=20&c=Bda3jU5w-qMIuGX9ZFpymDsaDj9kRMhVSrZMB7Nf1mg=', 'https://media.istockphoto.com/id/526246287/photo/meat-wine-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=65c7kZ0paj831ILgFNjnIDMCvRwQszn3qzVjpaYAORo=', 'https://media.istockphoto.com/id/626154424/photo/pouring-red-wine.webp?a=1&b=1&s=612x612&w=0&k=20&c=4QA15zbQxUHbGKMT67hl_VZcIrfpIZ4t5RaYE77Jja8=', 'https://media.istockphoto.com/id/626154424/photo/pouring-red-wine.webp?a=1&b=1&s=612x612&w=0&k=20&c=4QA15zbQxUHbGKMT67hl_VZcIrfpIZ4t5RaYE77Jja8=', 'https://media.istockphoto.com/id/476976729/photo/wine-tasting-at-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=jpLOBX57Z9r91cb2yFOUkl27pa3kn4d6K9yvPctrLug='] as $image)
+                        @foreach (['https://media.istockphoto.com/id/1182488944/photo/just-one-more-chapter.webp?a=1&b=1&s=612x612&w=0&k=20&c=Bda3jU5w-qMIuGX9ZFpymDsaDj9kRMhVSrZMB7Nf1mg=', 
+                                    'https://media.istockphoto.com/id/526246287/photo/meat-wine-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=65c7kZ0paj831ILgFNjnIDMCvRwQszn3qzVjpaYAORo=', 
+                                    'https://media.istockphoto.com/id/626154424/photo/pouring-red-wine.webp?a=1&b=1&s=612x612&w=0&k=20&c=4QA15zbQxUHbGKMT67hl_VZcIrfpIZ4t5RaYE77Jja8=', 
+                                    
+                                    'https://media.istockphoto.com/id/476976729/photo/wine-tasting-at-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=jpLOBX57Z9r91cb2yFOUkl27pa3kn4d6K9yvPctrLug='] as $image)
                             <div class="bg-white rounded-lg overflow-hidden shadow-md">
                                 <img src="{{ $image }}" alt="Wine image" class="w-full h-64 object-cover">
                             </div>

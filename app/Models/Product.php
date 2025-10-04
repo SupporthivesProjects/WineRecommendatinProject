@@ -52,6 +52,7 @@ class Product extends Model
         'image2',
         'image3',
         'image4',
+        'categories',
         'wine_story',
         'country',
         'tasting_notes',

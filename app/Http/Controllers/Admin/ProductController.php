@@ -176,6 +176,8 @@ class ProductController extends Controller
             'country' => 'nullable|string|max:255',
             'tasting_notes' => 'nullable|string',
             'status' => 'required|in:active,inactive',
+            'categories' => 'required|string|max:255',
+
         ]);
 
         if ($validator->fails()) {
@@ -207,6 +209,14 @@ class ProductController extends Controller
         }
 
         Log::debug('Product data to be saved', ['product_data' => $productData]);
+
+        \DB::listen(function ($query) {
+            Log::debug('Executed query', [
+                'sql' => $query->sql,
+                'bindings' => $query->bindings,
+                'time' => $query->time
+            ]);
+        });
 
         // Create product
         $product = Product::create($productData);

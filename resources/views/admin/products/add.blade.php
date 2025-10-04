@@ -69,11 +69,11 @@
                                    
                                     <div class="col-md-6">
                                         <label for="wine_name" class="form-label">Wine Name</label>
-                                        <input type="text" class="form-control" name="wine_name" id="wine_name" required>
+                                        <input type="text" class="form-control" name="wine_name" id="wine_name" required placeholder="Enter Name(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="type" class="form-label">Type</label>
-                                        <select class="form-select" name="type" id="type">
+                                        <select class="form-select" name="type" id="type" >
                                             <option value="">Select Type</option>
                                             <option value="red">Red Wine</option>
                                             <option value="white">White Wine</option>
@@ -108,124 +108,124 @@
 
                                     <div class="col-md-6">
                                         <label for="winery" class="form-label">Winery</label>
-                                        <input type="text" class="form-control" name="winery" id="winery">
+                                        <input type="text" class="form-control" name="winery" id="winery" placeholder="Enter winery(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="grape_variety" class="form-label">Grape Variety</label>
-                                        <input type="text" class="form-control" name="grape_variety" id="grape_variety">
+                                        <input type="text" class="form-control" name="grape_variety" id="grape_variety" placeholder="Enter Grape variety(text)">
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="varietal_blend" class="form-label">Varietal Blend</label>
-                                        <input type="text" class="form-control" name="varietal_blend" id="varietal_blend">
+                                        <input type="text" class="form-control" name="varietal_blend" id="varietal_blend" placeholder="Enter Varietal Blend(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="vintage_year" class="form-label">Vintage Year</label>
-                                        <input type="text" class="form-control" name="vintage_year" id="vintage_year">
+                                        <input type="text" class="form-control" name="vintage_year" id="vintage_year" placeholder="Enter Vintage year(number)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="country" class="form-label">Country</label>
-                                        <input type="text" class="form-control" name="country" id="country">
+                                        <input type="text" class="form-control" name="country" id="country" placeholder="Enter country name (text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="region" class="form-label">Region</label>
-                                        <input type="text" class="form-control" name="region" id="region">
+                                        <input type="text" class="form-control" name="region" id="region" placeholder="Enter Region (text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="wine_sub_region" class="form-label">Sub Region</label>
-                                        <input type="text" class="form-control" name="wine_sub_region" id="wine_sub_region">
+                                        <input type="text" class="form-control" name="wine_sub_region" id="wine_sub_region" placeholder="Enter Sub Region (text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="designation" class="form-label">Designation</label>
-                                        <input type="text" class="form-control" name="designation" id="designation">
+                                        <input type="text" class="form-control" name="designation" id="designation" placeholder="Enter Description (text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="alcohol_vol" class="form-label">Alcohol Volume</label>
-                                        <input type="text" class="form-control" name="alcohol_vol" id="alcohol_vol">
+                                        <input type="text" class="form-control" name="alcohol_vol" id="alcohol_vol" placeholder="Enter Alcohol Volume(number)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="residual_sugar" class="form-label">Residual Sugar</label>
-                                        <input type="text" class="form-control" name="residual_sugar" id="residual_sugar">
+                                        <input type="text" class="form-control" name="residual_sugar" id="residual_sugar" placeholder="Enter Residual Sugar(number)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="nature" class="form-label">Nature</label>
-                                        <input type="text" class="form-control" name="nature" id="nature">
+                                        <input type="text" class="form-control" name="nature" id="nature" placeholder="Enter nature(text)"> 
                                     </div>
                                     <div class="col-md-6">
                                         <label for="acidity" class="form-label">Acidity</label>
-                                        <input type="text" class="form-control" name="acidity" id="acidity">
+                                        <input type="text" class="form-control" name="acidity" id="acidity" placeholder="Enter Actidity(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="tannin_level" class="form-label">Tannin Level</label>
-                                        <input type="text" class="form-control" name="tannin_level" id="tannin_level">
+                                        <input type="text" class="form-control" name="tannin_level" id="tannin_level" placeholder="Enter tanin level(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="body" class="form-label">Body</label>
-                                        <input type="text" class="form-control" name="body" id="body">
+                                        <input type="text" class="form-control" name="body" id="body" placeholder="Enter body(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="aging" class="form-label">Aging</label>
-                                        <input type="text" class="form-control" name="aging" id="aging">
+                                        <input type="text" class="form-control" name="aging" id="aging" placeholder="Enter Aging(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="barrel_type" class="form-label">Barrel Type</label>
-                                        <input type="text" class="form-control" name="barrel_type" id="barrel_type">
+                                        <input type="text" class="form-control" name="barrel_type" id="barrel_type" placeholder="Enter Barrel type(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="time_spent_aging" class="form-label">Time Spent Aging</label>
-                                        <input type="text" class="form-control" name="time_spent_aging" id="time_spent_aging">
+                                        <input type="text" class="form-control" name="time_spent_aging" id="time_spent_aging" placeholder="Enter Aging time(Eg:<3 months">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="closure_type" class="form-label">Closure Type</label>
-                                        <input type="text" class="form-control" name="closure_type" id="closure_type">
+                                        <input type="text" class="form-control" name="closure_type" id="closure_type" placeholder="Enter Closure type (text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="aroma" class="form-label">Aroma</label>
-                                        <textarea class="form-control" name="aroma" id="aroma" rows="2"></textarea>
+                                        <textarea class="form-control" name="aroma" id="aroma" rows="2" placeholder="Enter Aroma(Comma separated names)"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="palate" class="form-label">Palate</label>
-                                        <textarea class="form-control" name="palate" id="palate" rows="2"></textarea>
+                                        <textarea class="form-control" name="palate" id="palate" rows="2" placeholder="Enter palate(Comma separated names"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="finish" class="form-label">Finish</label>
-                                        <textarea class="form-control" name="finish" id="finish" rows="2"></textarea>
+                                        <textarea class="form-control" name="finish" id="finish" rows="2" placeholder="Enter Finish(text)"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="sweetness_level" class="form-label">Sweetness Level</label>
-                                        <input type="text" class="form-control" name="sweetness_level" id="sweetness_level">
+                                        <input type="text" class="form-control" name="sweetness_level" id="sweetness_level" placeholder="Enter Sweetness(number)"> 
                                     </div>
                                     <div class="col-md-6">
                                         <label for="glass_ware" class="form-label">Glass Ware</label>
-                                        <input type="text" class="form-control" name="glass_ware" id="glass_ware">
+                                        <input type="text" class="form-control" name="glass_ware" id="glass_ware" placeholder="Enter Glassware(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="retail_price" class="form-label">Retail Price</label>
-                                        <input type="number" class="form-control" name="retail_price" id="retail_price" step="0.01">
+                                        <input type="number" class="form-control" name="retail_price" id="retail_price" step="0.01" placeholder="Enter Retail Price(number)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="discounts" class="form-label">Discounts</label>
-                                        <input type="text" class="form-control" name="discounts" id="discounts">
+                                        <input type="text" class="form-control" name="discounts" id="discounts" placeholder="Enter Discount(number)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="optimal_drinking" class="form-label">Optimal Drinking</label>
-                                        <input type="text" class="form-control" name="optimal_drinking" id="optimal_drinking">
+                                        <input type="text" class="form-control" name="optimal_drinking" id="optimal_drinking" placeholder="Enter Value(Eg: 1-2 years)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="style" class="form-label">Style</label>
-                                        <input type="text" class="form-control" name="style" id="style">
+                                        <input type="text" class="form-control" name="style" id="style" placeholder="Enter Style(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="decanting_time" class="form-label">Decanting Time</label>
-                                        <input type="text" class="form-control" name="decanting_time" id="decanting_time">
+                                        <input type="text" class="form-control" name="decanting_time" id="decanting_time" placeholder="Enter Time(3-5 years)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="ageing_potential" class="form-label">Ageing Potential</label>
-                                        <input type="text" class="form-control" name="ageing_potential" id="ageing_potential">
+                                        <input type="text" class="form-control" name="ageing_potential" id="ageing_potential" placeholder="Enter Ageing(3-5 years)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="cheese_pairing" class="form-label">Cheese Pairing</label>
-                                        <select class="form-select select2" name="cheese_pairing[]" id="cheese_pairing" multiple>
+                                        <select class="form-select select2" name="cheese_pairing[]" id="cheese_pairing" multiple placeholder="Enter pairing(comma separated values)>
                                             @foreach(\App\Models\CheeseProduct::all() as $cheese)
                                                 <option value="{{ $cheese->name }}">{{ $cheese->name }}</option>
                                             @endforeach
@@ -233,15 +233,15 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="importer_info" class="form-label">Importer Info</label>
-                                        <input type="text" class="form-control" name="importer_info" id="importer_info">
+                                        <input type="text" class="form-control" name="importer_info" id="importer_info" placeholder="Enter name(text)">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="wine_story" class="form-label">Wine Story</label>
-                                        <textarea class="form-control" name="wine_story" id="wine_story" rows="2"></textarea>
+                                        <textarea class="form-control" name="wine_story" id="wine_story" rows="2" placeholder="Enter Story(text)"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="tasting_notes" class="form-label">Tasting Notes</label>
-                                        <textarea class="form-control" name="tasting_notes" id="tasting_notes" rows="2"></textarea>
+                                        <textarea class="form-control" name="tasting_notes" id="tasting_notes" rows="2" placeholder="Enter Notes(text)"></textarea>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="status">Status</label>
@@ -262,6 +262,17 @@
                                     <div class="mt-3 d-none" id="primary-image-selection">
                                         <label for="primary_image" class="form-label">Select Primary Image</label>
                                         <select name="primary_image" id="primary_image" class="form-select"></select>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select class="form-select" name="categories" id="categories" required>
+                                            <option value="">Select Category</option>
+                                            <option value="Gifting">Gifting</option>
+                                            <option value="Wine and Cheese">Wine and Cheese</option>
+                                            <option value="Everyday sipping">Everyday sipping</option>
+                                        </select>
                                     </div>
                                 </div>
 
