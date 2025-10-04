@@ -352,7 +352,10 @@ Width
 @media (max-width: 991.98px) {
   [data-toggled=close] .app-sidebar {
     transition: all 300ms ease;
-    transform: translateX(-15rem);
+    position: fixed;
+    right: -15rem;
+    left: unset;
+    /* transform: translateX(-15rem); */
   }
   [data-toggled=close] .app-header {
     padding-inline-start: 0rem;
@@ -369,7 +372,10 @@ Width
 @media (max-width: 991.98px) {
   [data-toggled=open] .app-sidebar {
     transition: all 300ms ease;
-    transform: translateX(0rem);
+    /* transform: translateX(0rem); */
+    position: fixed;
+    right: 0px;
+    left: unset;
   }
   [data-toggled=open] .app-header {
     padding-inline-start: 0rem;
