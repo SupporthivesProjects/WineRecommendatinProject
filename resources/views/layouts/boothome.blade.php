@@ -341,6 +341,17 @@
         <!-- Start::app-sidebar -->
         <aside class="app-sidebar sticky" id="sidebar" style="background-color:white;">
             <div class="container p-0">
+
+                <div class="header-element">
+                    <!-- Start::header-link -->
+                    <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
+                        <span class="open-toggle">
+                            <i class="ri-menu-3-line fs-20"></i>
+                        </span>
+                    </a>
+                    <!-- End::header-link -->
+                </div>
+
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
                     <!-- Start::nav -->
