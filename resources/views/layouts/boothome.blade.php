@@ -397,7 +397,7 @@
             <div class="container p-0">
                 <a href="javascript:void(0);" class="sidemenu-toggle-close" data-bs-toggle="sidebar">
                     <span class="open-toggle">
-                        <i class="maki-cross fs-20"></i>
+                        <i class="eva-close-outline fs-20"></i>
                     </span>
                 </a>
                 <!-- Start::main-sidebar -->
@@ -425,49 +425,49 @@
                         <ul class="main-menu">
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a class="side-menu__item" href="#home">
+                                <a class="side-menu__item-new" href="#home">
                                     <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#HIW" class="side-menu__item">
+                                <a href="#HIW" class="side-menu__item-new">
                                     <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item">
+                                <a href="#featuredwines" class="side-menu__item-new">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item">
+                                <a href="#pairing" class="side-menu__item-new">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item">
+                                <a href="#testimonials" class="side-menu__item-new">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item">
+                                <a href="#Moments" class="side-menu__item-new">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="{{ route('contact') }}" class="">
+                                <a href="{{ route('contact') }}" class="side-menu__item-new">
                                     <span class="">Contact Us</span>
                                 </a>
                             </li>
