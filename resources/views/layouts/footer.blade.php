@@ -66,8 +66,8 @@
                     </div>
                 </div>
             </div>
-            <footer class="main-footer px-0 text-center">
-                <div class="container">
+            <footer class="main-footer px-0 text-center pt-0">
+                <div class="container pt-0">
                     <div class="row text-center">
                         <div class="col-md-12 col-sm-12">
                             Copyright © <span id="year"></span> <a href="javascript:void(0)">Supporthives</a>.
