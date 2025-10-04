@@ -383,7 +383,7 @@
         <!-- /app-header -->
 
         <!-- Start::app-sidebar -->
-        <aside class="app-sidebar" id="sidebar-new" style="background-color:white;position: absolute;right: 0px;left: unset;">
+        <aside class="app-sidebar sidebar-new right" id="sidebar-new" style="background-color:white;">
             <div class="container p-0">
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
