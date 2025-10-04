@@ -342,18 +342,19 @@
         <aside class="app-sidebar sticky" id="sidebar" style="background-color:white;">
             <div class="container p-0">
 
-                <div class="header-element">
-                    <!-- Start::header-link -->
-                    <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
-                        <span class="open-toggle">
-                            <i class="ri-menu-3-line fs-20"></i>
-                        </span>
-                    </a>
-                    <!-- End::header-link -->
-                </div>
+                
 
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
+                    <div class="header-element p-3">
+                        <!-- Start::header-link -->
+                        <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
+                            <span class="open-toggle">
+                                <i class="ri-menu-3-line fs-20"></i>
+                            </span>
+                        </a>
+                        <!-- End::header-link -->
+                    </div>
                     <!-- Start::nav -->
                     <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
