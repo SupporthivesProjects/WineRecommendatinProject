@@ -313,7 +313,11 @@
                         </div>
                     </div>
                     <!-- End::header-element -->
+                </div>
+                <!-- End::header-content-left -->
 
+                <!-- Start::header-content-right -->
+                <div class="header-content-right">
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <!-- Start::header-link -->
@@ -325,12 +329,6 @@
                         <!-- End::header-link -->
                     </div>
                     <!-- End::header-element -->
-
-                </div>
-                <!-- End::header-content-left -->
-
-                <!-- Start::header-content-right -->
-                <div class="header-content-right">
                     <!-- Start::header-element -->
                     <div class="header-element align-items-center">
                         <!-- Start::header-link|switcher-icon -->
