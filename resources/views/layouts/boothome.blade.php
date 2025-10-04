@@ -63,7 +63,6 @@
             transition: height 0.4s ease; /* smooth animation */
         }
 
-        
 
         /* footer {
             margin-left: 150px;
@@ -179,46 +178,6 @@
 
         
 
-
-    </style>
-
-    <style>
-        /* Default sidebar (left) */
-        .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 260px;
-        height: 100%;
-        background: #fff;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        }
-
-        /* When active/open */
-        .sidebar.show {
-        transform: translateX(0);
-        }
-
-        /* --- Make it open from the right --- */
-        .sidebar.right {
-        left: auto;
-        right: 0;
-        transform: translateX(100%);
-        }
-        .sidebar.right.show {
-        transform: translateX(0);
-        }
-
-        .sidemenu-toggle-close {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            padding-top: 21px;
-            padding-bottom: 21px;
-            padding-right: 16px;
-        }
 
     </style>
 
@@ -352,11 +311,7 @@
                         </div>
                     </div>
                     <!-- End::header-element -->
-                </div>
-                <!-- End::header-content-left -->
 
-                <!-- Start::header-content-right -->
-                <div class="header-content-right">
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <!-- Start::header-link -->
@@ -368,6 +323,12 @@
                         <!-- End::header-link -->
                     </div>
                     <!-- End::header-element -->
+
+                </div>
+                <!-- End::header-content-left -->
+
+                <!-- Start::header-content-right -->
+                <div class="header-content-right">
                     <!-- Start::header-element -->
                     <div class="header-element align-items-center">
                         <!-- Start::header-link|switcher-icon -->
@@ -392,19 +353,12 @@
         <!-- /app-header -->
 
         <!-- Start::app-sidebar -->
-        <aside class="app-sidebar sidebar right" id="sidebar" style="background-color:white;">
+        <aside class="app-sidebar sticky" id="sidebar" style="background-color:white;">
             <div class="container p-0">
-                <a href="javascript:void(0);" class="sidemenu-toggle-close" data-bs-toggle="sidebar">
-                    <span class="open-toggle">
-                        <p class="fs-20">
-                            <svg width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z"/></svg>
-                        </p>
-                    </span>
-                </a>
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
                     <!-- Start::nav -->
-                    <nav class="main-menu-container nav nav-pills sub-open justify-content-end">
+                    <nav class="main-menu-container nav nav-pills sub-open">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
                                 <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
@@ -426,50 +380,50 @@
                         <ul class="main-menu">
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a class="side-menu__item d-flex justify-content-end p-3" href="#home">
+                                <a class="side-menu__item" href="#home">
                                     <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#HIW" class="side-menu__item d-flex justify-content-end p-3">
+                                <a href="#HIW" class="side-menu__item">
                                     <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item d-flex justify-content-end p-3">
+                                <a href="#featuredwines" class="side-menu__item">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item d-flex justify-content-end p-3">
+                                <a href="#pairing" class="side-menu__item">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item d-flex justify-content-end p-3">
+                                <a href="#testimonials" class="side-menu__item">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item d-flex justify-content-end p-3">
+                                <a href="#Moments" class="side-menu__item">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="{{ route('contact') }}" class="side-menu__item d-flex justify-content-end p-3">
-                                    <span class="fonthover">Contact Us</span>
+                                <a href="{{ route('contact') }}" class="">
+                                    <span class="">Contact Us</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
@@ -1023,9 +977,6 @@
 
     <!-- Sticky JS -->
     <script src="{{ asset('assets/js/sticky.js') }}"></script>
-
-    <!-- Custom Script -->
-    <script src="{{ asset('assets/js/custom-script.js') }}"></script>
 
 
     <!-- Optional JavaScript for enhanced functionality -->
