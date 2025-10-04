@@ -183,6 +183,36 @@
 
     </style>
 
+    <style>
+        /* Default sidebar (left) */
+        .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        height: 100%;
+        background: #fff;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        }
+
+        /* When active/open */
+        .sidebar.show {
+        transform: translateX(0);
+        }
+
+        /* --- Make it open from the right --- */
+        .sidebar.right {
+        left: auto;
+        right: 0;
+        transform: translateX(100%);
+        }
+        .sidebar.right.show {
+        transform: translateX(0);
+        }
+
+    </style>
+
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
@@ -321,7 +351,7 @@
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <!-- Start::header-link -->
-                        <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
+                        <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar-new">
                             <span class="open-toggle">
                                 <i class="ri-menu-3-line fs-20"></i>
                             </span>
@@ -353,7 +383,7 @@
         <!-- /app-header -->
 
         <!-- Start::app-sidebar -->
-        <aside class="app-sidebar" id="sidebar" style="background-color:white;position: absolute;right: 0px;left: unset;">
+        <aside class="app-sidebar" id="sidebar-new" style="background-color:white;position: absolute;right: 0px;left: unset;">
             <div class="container p-0">
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
@@ -977,6 +1007,9 @@
 
     <!-- Sticky JS -->
     <script src="{{ asset('assets/js/sticky.js') }}"></script>
+
+    <!-- Custom Script -->
+    <script src="{{ asset('assets/js/custom-script.js') }}"></script>
 
 
     <!-- Optional JavaScript for enhanced functionality -->
