@@ -353,7 +353,7 @@
         <!-- /app-header -->
 
         <!-- Start::app-sidebar -->
-        <aside class="app-sidebar sticky" id="sidebar" style="background-color:white;">
+        <aside class="app-sidebar" id="sidebar" style="background-color:white;position: absolute;right: 0px;left: unset;">
             <div class="container p-0">
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar">
