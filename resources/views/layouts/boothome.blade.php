@@ -397,7 +397,9 @@
             <div class="container p-0">
                 <a href="javascript:void(0);" class="sidemenu-toggle-close" data-bs-toggle="sidebar">
                     <span class="open-toggle">
-                        <p class="fs-20">X</p>
+                        <p class="fs-20">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z"/></svg>
+                        </p>
                     </span>
                 </a>
                 <!-- Start::main-sidebar -->
@@ -425,49 +427,49 @@
                         <ul class="main-menu">
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a class="side-menu__item d-flex justify-content-end" href="#home">
+                                <a class="side-menu__item d-flex justify-content-end p-3" href="#home">
                                     <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#HIW" class="side-menu__item d-flex justify-content-end">
+                                <a href="#HIW" class="side-menu__item d-flex justify-content-end p-3">
                                     <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item d-flex justify-content-end">
+                                <a href="#featuredwines" class="side-menu__item d-flex justify-content-end p-3">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item d-flex justify-content-end">
+                                <a href="#pairing" class="side-menu__item d-flex justify-content-end p-3">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item d-flex justify-content-end">
+                                <a href="#testimonials" class="side-menu__item d-flex justify-content-end p-3">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item d-flex justify-content-end">
+                                <a href="#Moments" class="side-menu__item d-flex justify-content-end p-3">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="{{ route('contact') }}" class="side-menu__item d-flex justify-content-end">
+                                <a href="{{ route('contact') }}" class="side-menu__item d-flex justify-content-end p-3">
                                     <span class="fonthover">Contact Us</span>
                                 </a>
                             </li>
