@@ -344,7 +344,7 @@
 
                 <div class="header-element">
                     <!-- Start::header-link -->
-                    <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
+                    <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
                         <span class="open-toggle">
                             <i class="ri-menu-3-line fs-20"></i>
                         </span>
