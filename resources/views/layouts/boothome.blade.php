@@ -211,6 +211,16 @@
         transform: translateX(0);
         }
 
+        .sidemenu-toggle-close {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            padding-right: 16px;
+        }
+
     </style>
 
     <!-- Scripts -->
@@ -385,9 +395,9 @@
         <!-- Start::app-sidebar -->
         <aside class="app-sidebar sidebar right" id="sidebar" style="background-color:white;">
             <div class="container p-0">
-                <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
+                <a href="javascript:void(0);" class="sidemenu-toggle-close" data-bs-toggle="sidebar">
                     <span class="open-toggle">
-                        <i class="ri-menu-3-line fs-20"></i>
+                        <i class="maki-cross fs-20"></i>
                     </span>
                 </a>
                 <!-- Start::main-sidebar -->
