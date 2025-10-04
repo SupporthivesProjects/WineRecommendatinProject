@@ -378,50 +378,50 @@
                         <ul class="main-menu" style="margin-left:auto!important;">
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a class="side-menu__item" href="#home">
+                                <a class="side-menu__item p-3" href="#home">
                                     <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#HIW" class="side-menu__item">
+                                <a href="#HIW" class="side-menu__item p-3">
                                     <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item">
+                                <a href="#featuredwines" class="side-menu__item p-3">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item">
+                                <a href="#pairing" class="side-menu__item p-3">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item">
+                                <a href="#testimonials" class="side-menu__item p-3">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item">
+                                <a href="#Moments" class="side-menu__item p-3">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="{{ route('contact') }}" class="">
-                                    <span class="">Contact Us</span>
+                                <a href="{{ route('contact') }}" class="side-menu__item p-3">
+                                    <span class="fonthover">Contact Us</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
