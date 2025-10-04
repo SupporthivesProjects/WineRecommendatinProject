@@ -216,8 +216,8 @@
             flex-direction: row;
             justify-content: flex-end;
             align-items: center;
-            padding-top: 16px;
-            padding-bottom: 16px;
+            padding-top: 21px;
+            padding-bottom: 21px;
             padding-right: 16px;
         }
 
