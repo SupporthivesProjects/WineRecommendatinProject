@@ -181,6 +181,15 @@
 
     </style>
 
+    <style>
+
+        @media only screen and (max-width: 600px) {
+            .mobo-content-end {
+                justify-content: end;
+            }
+        }
+    </style>
+
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
@@ -346,7 +355,7 @@
 
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar pt-0">
-                    <div class="header-element p-3">
+                    <div class="header-element p-3 d-flex justify-content-end">
                         <!-- Start::header-link -->
                         <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
                             <span class="open-toggle">
@@ -356,7 +365,7 @@
                         <!-- End::header-link -->
                     </div>
                     <!-- Start::nav -->
-                    <nav class="main-menu-container nav nav-pills sub-open">
+                    <nav class="main-menu-container nav nav-pills sub-open mobo-content-end">
                         <div class="landing-logo-container">
                             <div class="horizontal-logo">
                                 <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
