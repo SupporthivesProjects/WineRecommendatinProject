@@ -183,10 +183,26 @@
 
     <style>
 
+        .mobile_none {
+            display: block;
+        }
+        .desktop_none {
+            display: none;
+        }
+
+
         @media only screen and (max-width: 600px) {
+            .mobile_none {
+                display: none;
+            }
+            .desktop_none {
+                display: block;
+            }
+
             .mobo-content-end {
                 justify-content: end;
             }
+
         }
     </style>
 
@@ -355,14 +371,16 @@
 
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar pt-0">
-                    <div class="header-element p-3 d-flex justify-content-end">
-                        <!-- Start::header-link -->
-                        <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
-                            <span class="open-toggle">
-                                <i class="ri-menu-3-line fs-20"></i>
-                            </span>
-                        </a>
-                        <!-- End::header-link -->
+                    <div class="mobile_none">
+                        <div class="header-element p-3 d-flex justify-content-end">
+                            <!-- Start::header-link -->
+                            <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
+                                <span class="open-toggle">
+                                    <i class="ri-menu-3-line fs-20"></i>
+                                </span>
+                            </a>
+                            <!-- End::header-link -->
+                        </div>
                     </div>
                     <!-- Start::nav -->
                     <nav class="main-menu-container nav nav-pills sub-open mobo-content-end">
