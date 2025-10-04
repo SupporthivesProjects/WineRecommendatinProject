@@ -375,52 +375,52 @@
                                 fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
                             </svg></div>
-                        <ul class="main-menu" style="margin-left:auto!important;">
+                        <ul class="main-menu justify-content-end" style="margin-left:auto!important;">
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a class="side-menu__item p-3" href="#home">
+                                <a class="side-menu__item p-3 justify-content-end" href="#home">
                                     <span class="fonthover">Home</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#HIW" class="side-menu__item p-3">
+                                <a href="#HIW" class="side-menu__item p-3 justify-content-end">
                                     <span class="fonthover">How It Works</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item p-3">
+                                <a href="#featuredwines" class="side-menu__item p-3 justify-content-end">
                                     <span class="fonthover">Browse Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#pairing" class="side-menu__item p-3">
+                                <a href="#pairing" class="side-menu__item p-3 justify-content-end">
                                     <span class="fonthover">Pairing Wines</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#testimonials" class="side-menu__item p-3">
+                                <a href="#testimonials" class="side-menu__item p-3 justify-content-end">
                                     <span class="fonthover">What our users say</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="#Moments" class="side-menu__item p-3">
+                                <a href="#Moments" class="side-menu__item p-3 justify-content-end">
                                     <span class="fonthover">Moments</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
                             <!-- Start::slide -->
                             <li class="slide">
-                                <a href="{{ route('contact') }}" class="side-menu__item p-3">
+                                <a href="{{ route('contact') }}" class="side-menu__item p-3 justify-content-end">
                                     <span class="fonthover">Contact Us</span>
                                 </a>
                             </li>
