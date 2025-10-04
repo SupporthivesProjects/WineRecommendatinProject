@@ -345,7 +345,7 @@
                 
 
                 <!-- Start::main-sidebar -->
-                <div class="main-sidebar">
+                <div class="main-sidebar pt-0">
                     <div class="header-element p-3">
                         <!-- Start::header-link -->
                         <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
@@ -375,7 +375,7 @@
                                 fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
                                 <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
                             </svg></div>
-                        <ul class="main-menu">
+                        <ul class="main-menu" style="margin-left:auto!important;">
                             <!-- Start::slide -->
                             <li class="slide">
                                 <a class="side-menu__item" href="#home">
