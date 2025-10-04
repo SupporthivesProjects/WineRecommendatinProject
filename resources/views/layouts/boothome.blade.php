@@ -371,7 +371,7 @@
 
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar pt-0">
-                    <div class="mobile_none">
+                    <div class="desktop_none">
                         <div class="header-element p-3 d-flex justify-content-end">
                             <!-- Start::header-link -->
                             <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
