@@ -312,6 +312,13 @@
                     </div>
                     <!-- End::header-element -->
 
+
+                </div>
+                <!-- End::header-content-left -->
+
+                <!-- Start::header-content-right -->
+                <div class="header-content-right">
+                   
                     <!-- Start::header-element -->
                     <div class="header-element">
                         <!-- Start::header-link -->
@@ -323,27 +330,6 @@
                         <!-- End::header-link -->
                     </div>
                     <!-- End::header-element -->
-
-                </div>
-                <!-- End::header-content-left -->
-
-                <!-- Start::header-content-right -->
-                <div class="header-content-right">
-                    <!-- Start::header-element -->
-                    <div class="header-element align-items-center">
-                        <!-- Start::header-link|switcher-icon -->
-                        <div class="btn-list d-lg-none d-block">
-                            <!-- <a href="signup.html" class="btn btn-primary-light">
-                                New User
-                            </a>
-                            <a href="signin.html" class="btn btn-primary-light">
-                                Login
-                            </a> -->
-                        </div>
-                        <!-- End::header-link|switcher-icon -->
-                    </div>
-                    <!-- End::header-element -->
-
                 </div>
                 <!-- End::header-content-right -->
 
@@ -977,6 +963,9 @@
 
     <!-- Sticky JS -->
     <script src="{{ asset('assets/js/sticky.js') }}"></script>
+
+    <!-- Sticky JS -->
+    <script src="{{ asset('assets/js/custom-script.js') }}"></script>
 
 
     <!-- Optional JavaScript for enhanced functionality -->
