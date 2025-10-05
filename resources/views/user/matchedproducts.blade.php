@@ -137,7 +137,7 @@
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                     <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View Cart</a></li>
+                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View CartView Cart (<span id="cart-count">{{ count($cart ?? []) }}</span>)</a></li>
                 </ul>
             </div>
         </div>
@@ -418,6 +418,27 @@
                             });
                         }
                     }
+
+                    // ✅ Update the cart count dynamically
+                    const cartCountElement = document.getElementById('cart-count');
+                    if (cartCountElement) {
+                        let currentCount = parseInt(cartCountElement.textContent) || 0;
+
+                        if (isInCart) {
+                            // Product removed
+                            currentCount = Math.max(0, currentCount - 1);
+                        } else {
+                            // Product added
+                            currentCount += 1;
+                        }
+
+                        cartCountElement.textContent = currentCount;
+                    }
+
+
+
+
+
                 })
                 .catch(() => {
                     toastr.error('Something went wrong!', 'Error', {
