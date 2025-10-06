@@ -279,9 +279,7 @@
                                     
                                     <!-- View all responses button and compact filter -->
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="{{ route('admin.questionnaire.responses') }}" class="btn btn-sm btn-outline-primary btn-outline">View all responses</a>
-                                        
-                                        <!-- Compact Date Filter for Sales Chart -->
+                                        <!-- <a href="{{ route('admin.questionnaire.responses') }}" class="btn btn-sm btn-outline-primary btn-outline">View all responses</a> -->
                                         <div class="compact-date-filter">
                                             <form method="GET" action="{{ route('main-manager.dashboard') }}" class="d-flex align-items-center gap-1">
                                                 @if(request('store_id'))
