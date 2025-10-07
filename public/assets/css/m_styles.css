@@ -38,6 +38,9 @@
 .hero-subtitle {
   text-align: center;
 }
+.carousel_indicators_div {
+    margin-bottom: 60px;
+}
 .carousel_indicators_div button {
     /* background: rgba(255, 255, 255, 0.7) !important; */
     border-radius: 50%;
