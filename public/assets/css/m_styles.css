@@ -49,16 +49,16 @@
   text-align: center;
 }
 .carousel_indicators_div button {
-    background: rgba(255, 255, 255, 0.7) !important;
+    /* background: rgba(255, 255, 255, 0.7) !important; */
     border-radius: 50%;
-    width: 50px !important;
-    height: 50px !important;
+    width: 15px !important;
+    height: 15px !important;
     border: 0px !important;
 }
 .carousel_indicators_div button.active {
-    background: #b91c1c !important;
+    /* background: #b91c1c !important; */
     border-radius: 50%;
-    width: 50px !important;
-    height: 50px !important;
+    width: 15px !important;
+    height: 15px !important;
     border: 0px !important;
 }

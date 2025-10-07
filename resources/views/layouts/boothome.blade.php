@@ -532,8 +532,7 @@
                 </div>
             <!-- main hero new close -->
             <!-- Start:: Section-1 Hero Section STARTS -->
-            <div class="wine-bg min-h-screen flex flex-col" id="landing-bg">
-                <!-- Hero Content -->
+            <!-- <div class="wine-bg min-h-screen flex flex-col" id="landing-bg">
                 <div class="flex-grow flex items-center justify-center">
                     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
@@ -554,7 +553,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- HERO SECTION ENDS -->
             <!-- End:: Section-1 -->
 
