@@ -484,7 +484,7 @@
             <!-- main hero new -->
             <div class="container-fluid p-0 hero-main">
 
-                <div class="hero-content-div">
+                <div class="max-w-5xl mx-auto hero-content-div">
                     <h1 class="hero-title">Discover Your Perfect Wine</h1>
                     <p class="hero-subtitle">
                     Our intelligent recommendation system helps you find the perfect wine for any occasion,
@@ -504,7 +504,7 @@
                 </div>
 
                 <div id="carouselExampleIndicators" class="carousel slide">
-                    <div class="carousel-indicators">
+                    <div class="carousel-indicators carousel_indicators_div">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
