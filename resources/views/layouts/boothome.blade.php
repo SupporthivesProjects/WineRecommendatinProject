@@ -485,8 +485,8 @@
             <div class="container-fluid p-0 hero-main">
 
                 <div class="max-w-5xl mx-auto hero-content-div">
-                     <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
-                        <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
+                     <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 hero-title">Discover Your Perfect Wine</h1>
+                        <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto hero-subtitle">
                             Our intelligent recommendation system helps you find the perfect wine for any occasion,
                             based on
                             your taste preferences and food pairings...
