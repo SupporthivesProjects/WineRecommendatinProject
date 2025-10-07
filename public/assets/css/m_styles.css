@@ -33,19 +33,9 @@
   transform: translate(-50%, -50%);
 }
 .hero-title {
-  color: white;
-  font-size: 35px;
-  margin-bottom: 24px;
-  font-weight: 700;
-  font-family: "Segoe UI";
   text-align: center;
 }
 .hero-subtitle {
-  color: white;
-  font-size: 20px;
-  margin-bottom: 40px;
-  font-weight: 400;
-  font-family: "Segoe UI";
   text-align: center;
 }
 .carousel_indicators_div button {
