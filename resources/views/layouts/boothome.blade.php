@@ -510,13 +510,13 @@
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
                     <div class="carousel-inner">
-                    <div class="carousel-bg carousel-item active">
+                    <div class="carousel-bg carousel-item active" data-bs-interval="5000">
 
                     </div>
-                    <div class="carousel-bg carousel-item">
+                    <div class="carousel-bg carousel-item" data-bs-interval="5000">
 
                     </div>
-                    <div class="carousel-bg carousel-item">
+                    <div class="carousel-bg carousel-item" data-bs-interval="5000">
 
                     </div>
                     </div>
