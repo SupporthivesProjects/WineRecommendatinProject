@@ -14,7 +14,6 @@ class StoreManagerCheeseProductController extends Controller
     {
         try {
             $store = Store::where('manager_id', Auth::id())->firstOrFail();
-
             
             // Get all active cheese products with their inventory status and quantity
             $cheeseProducts = CheeseProduct::where('is_active', true)
