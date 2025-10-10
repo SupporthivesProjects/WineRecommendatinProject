@@ -18,6 +18,7 @@
     <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Style Css -->
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/m_styles.css') }}" rel="stylesheet">
     <!-- Icons Css -->
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
     <!-- Node Waves Css -->
@@ -479,9 +480,59 @@
 
         <!-- Start::app-content -->
         <div class="main-content landing-main" id="home">
+
+            <!-- main hero new -->
+            <div class="container-fluid p-0 hero-main">
+
+                <div class="max-w-5xl mx-auto hero-content-div">
+                     <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 hero-title">Discover Your Perfect Wine</h1>
+                        <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto hero-subtitle">
+                            Our intelligent recommendation system helps you find the perfect wine for any occasion,
+                            based on
+                            your taste preferences and food pairings...
+                        </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                                            <a href="#featuredwines"
+                                                class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
+                                                Explore Wines
+                                            </a>
+                                            <a href="#HIW"
+                                                class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
+                                                How It Works
+                                            </a>
+                                        </div>
+                </div>
+
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators carousel_indicators_div">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                    <div class="carousel-bg carousel-item active" data-bs-interval="5000">
+
+                    </div>
+                    <div class="carousel-bg carousel-item" data-bs-interval="5000">
+
+                    </div>
+                    <div class="carousel-bg carousel-item" data-bs-interval="5000">
+
+                    </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                </div>
+            <!-- main hero new close -->
             <!-- Start:: Section-1 Hero Section STARTS -->
-            <div class="wine-bg min-h-screen flex flex-col" id="landing-bg">
-                <!-- Hero Content -->
+            <!-- <div class="wine-bg min-h-screen flex flex-col" id="landing-bg">
                 <div class="flex-grow flex items-center justify-center">
                     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
@@ -502,7 +553,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- HERO SECTION ENDS -->
             <!-- End:: Section-1 -->
 
