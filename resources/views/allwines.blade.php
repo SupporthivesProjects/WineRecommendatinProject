@@ -566,12 +566,12 @@
 
         <div class="form-check form-check-inline">
             <input class="form-check-input wine-method-filter" type="checkbox"
-                value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
-
+                value="{{ $method }}" id="method-inline-{{ $method }}">
             <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
                 <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
             </label>
         </div>
+
             @endforeach
         </div>
 
@@ -911,8 +911,9 @@
                     methods.push($(this).val());
                 });
                 if (methods.length > 0) {
-                    formData['Method'] = methods; // Matches your DB column
+                    formData['Method'] = methods; // Matches your DB column name exactly
                 }
+
 
 
 
@@ -1047,60 +1048,57 @@
                 );
 
                 // Set search input from URL if exists
-                if (urlParams.has('search')) {
-                    $('#search-input').val(urlParams.get('search'));
-                }
-                if (hasFilters) {
-                            // Set checkboxes based on URL parameters
-                            urlParams.forEach((value, key) => {
-                                if (key.endsWith('[]')) {
-                                    const name = key.replace('[]', '');
-                                    if(name === 'type') {
-                                        const checkboxes = document.querySelectorAll(
-                                            `input.wine-type-filter[value="${value}"]`
-                                        );
-                                        checkboxes.forEach(cb => cb.checked = true);
-                                    } else if(name === 'vintage_year') {
-                                        const checkboxes = document.querySelectorAll(
-                                            `input.wine-vintage-year-filter[value="${value}"]`
-                                        );
-                                        checkboxes.forEach(cb => cb.checked = true);
-                                    } else if(name === 'winery') {
-                                        const checkboxes = document.querySelectorAll(
-                                            `input.wine-winery-filter[value="${value}"]`
-                                        );
-                                        checkboxes.forEach(cb => cb.checked = true);
-                                    } else if(name === 'country') {
-                                        const checkboxes = document.querySelectorAll(
-                                            `input.wine-country-filter[value="${value}"]`
-                                        );
-                                        checkboxes.forEach(cb => cb.checked = true);
-                                    } else if(name.toLowerCase() === 'method') { // <-- Method filter
-                                        const checkboxes = document.querySelectorAll(
-                                            `input.wine-method-filter[value="${value}"]`
-                                        );
-                                        checkboxes.forEach(cb => cb.checked = true);
-                                    }
-                                } else if (key === 'min_price' || key === 'max_price') {
-                                    // Handle price range
-                                    if ($("#price-slider").length) {
-                                        const currentValues = $("#price-slider").slider("values");
-                                        if (key === 'min_price') {
-                                            currentValues[0] = parseInt(value) || 0;
-                                            $("#price-min").text(currentValues[0]);
-                                        } else {
-                                            currentValues[1] = parseInt(value) || 1000;
-                                            $("#max-price").text(currentValues[1]);
-                                        }
-                                        $("#price-slider").slider("values", currentValues);
-                                    }
-                                }
-                            });
+                // Set search input if present in URL
+if (urlParams.has('search')) {
+    $('#search-input').val(urlParams.get('search'));
+}
 
-                            // Load products with filters
-                            loadProducts();
-                        }
+if (hasFilters) {
+    // Set checkboxes based on URL parameters
+    urlParams.forEach((value, key) => {
+        if (key.endsWith('[]')) {
+            const name = key.replace('[]', '');
+            let checkboxes = [];
+
+            switch (name.toLowerCase()) {
+                case 'type':
+                    checkboxes = document.querySelectorAll(`input.wine-type-filter[value="${value}"]`);
+                    break;
+                case 'vintage_year':
+                    checkboxes = document.querySelectorAll(`input.wine-vintage-year-filter[value="${value}"]`);
+                    break;
+                case 'winery':
+                    checkboxes = document.querySelectorAll(`input.wine-winery-filter[value="${value}"]`);
+                    break;
+                case 'country':
+                    checkboxes = document.querySelectorAll(`input.wine-country-filter[value="${value}"]`);
+                    break;
+                case 'method': // Method filter
+                    checkboxes = document.querySelectorAll(`input.wine-method-filter[value="${value}"]`);
+                    break;
             }
+
+            checkboxes.forEach(cb => cb.checked = true);
+        } else if (key === 'min_price' || key === 'max_price') {
+            // Handle price range
+            if ($("#price-slider").length) {
+                const currentValues = $("#price-slider").slider("values");
+                if (key === 'min_price') {
+                    currentValues[0] = parseInt(value) || 0;
+                    $("#price-min").text(currentValues[0]);
+                } else {
+                    currentValues[1] = parseInt(value) || 1000;
+                    $("#max-price").text(currentValues[1]);
+                }
+                $("#price-slider").slider("values", currentValues);
+            }
+        }
+    });
+
+    // Load products with filters
+    loadProducts();
+} }
+
 
             // Initialize pagination on page load if there are products
             @if (isset($products) && $products->total() > 0)
@@ -1186,13 +1184,14 @@
             $moreContent.toggleClass('d-none');
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
-        // Toggle checkbox manually for hidden inputs
-        $(document).on('click', '.filter-checkbox', function() {
-            const input = $(this).prev('input[type="checkbox"]');
-            if(input.length) {
-                input.prop('checked', !input.prop('checked')).trigger('change');
-            }
-        });
+        // Toggle checkbox manually if you want to keep them hidden
+            $(document).on('click', '.filter-checkbox', function() {
+                const input = $(this).prev('input.wine-method-filter');
+                if (input.length) {
+                    input.prop('checked', !input.prop('checked')).trigger('change');
+                }
+            });
+
 
     </script>
 @endpush
