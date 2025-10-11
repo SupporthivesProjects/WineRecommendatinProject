@@ -367,7 +367,7 @@
                             @endif
                         </div>--}}
                         <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Countrys</h4>
+                            <h4 class="fw-bold mb-4">Country</h4>
 
                             @php
                                 $countries = $allProducts->pluck('country')->filter()->unique()->sort();
@@ -506,7 +506,7 @@
                                 @endforeach
 
                             </div>
-                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                            {{-- <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                 <h4 class="fw-bold mb-3">Country</h4>
                                 @php
                                     $countries = $allProducts->pluck('country')->unique()->sort();
@@ -541,7 +541,42 @@
                                     </div>
                                 @endforeach
 
+                            </div> --}}
+                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                                <h4 class="fw-bold mb-3">Method</h4>
+                                @php
+                                    // Get unique methods from products, sorted alphabetically
+                                    $methods = $allProducts->pluck('method')->unique()->sort();
+
+                                    // Define emojis or icons for each method
+                                    $methodIcons = [
+                                        'still' => '🍷',
+                                        'semi sparkling' => '🥂',
+                                        'sparkling' => '🍾',
+                                    ];
+
+                                    // Filter only the three valid methods
+                                    $validMethods = ['still', 'semi sparkling', 'sparkling'];
+                                    $filteredMethods = $methods->filter(fn($method) => in_array(strtolower($method), $validMethods));
+                                @endphp
+
+                                @foreach ($filteredMethods as $method)
+                                    @php
+                                        $lowerMethod = strtolower($method);
+                                        $icon = $methodIcons[$lowerMethod] ?? '🍇';
+                                    @endphp
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input wine-method-filter" type="checkbox"
+                                            value="{{ $lowerMethod }}" id="method-inline-{{ $lowerMethod }}" style="display: none;">
+
+                                        <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $lowerMethod }}">
+                                            <span class="emoji">{{ $icon }}</span> {{ ucfirst($method) }}
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
+
                         </div>
                         <div class="row row-sm" id="products-container">
                             @if (isset($products) && $products->count() > 0)
