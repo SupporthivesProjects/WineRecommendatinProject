@@ -126,6 +126,7 @@ class ProductController extends Controller
             $wineries = $allProducts->pluck('winery')->unique()->sort()->values();
             $types = $allProducts->pluck('type')->unique()->sort()->values();
             $countries = $allProducts->pluck('country')->unique()->sort()->values();
+            $methods = $allProducts->pluck('Method')->unique()->sort()->values();
 
             // Apply filters
             $query = $this->applyFilters($query, $request);
@@ -150,7 +151,7 @@ class ProductController extends Controller
                 ]);
             }
 
-            return view('allwines', compact('products', 'allProducts', 'vintageYears', 'wineries', 'types', 'countries'));
+            return view('allwines', compact('products', 'allProducts', 'vintageYears', 'wineries', 'types', 'countries', 'methods'));
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
@@ -201,6 +202,12 @@ class ProductController extends Controller
             $countries = is_array($request->country) ? $request->country : [$request->country];
             $query->whereIn('country', $countries);
         }
+
+        // Filter by Method
+            if ($request->has('Method') && !empty($request->Method)) {
+                $methods = is_array($request->Method) ? $request->Method : [$request->Method];
+                $query->whereIn('Method', $methods);
+            }
 
         // Filter by price range
         $minPrice = $request->input('min_price');
@@ -253,6 +260,13 @@ class ProductController extends Controller
                 $countries = is_array($request->country) ? $request->country : [$request->country];
                 $query->whereIn('country', $countries);
             }
+
+                        // Apply Method filter
+            if ($request->has('Method') && !empty($request->Method)) {
+                $methods = is_array($request->Method) ? $request->Method : [$request->Method];
+                $query->whereIn('Method', $methods);
+            }
+
 
             // Apply price range filter
             if ($request->has('min_price') && is_numeric($request->min_price)) {
