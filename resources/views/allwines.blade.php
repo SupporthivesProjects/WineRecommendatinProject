@@ -331,7 +331,7 @@
 
                         <!-- Winery Filter -->
                         <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Winery</h4>
+                            <h4 class="fw-bold mb-4">Country</h4>
                             <div class="winery-filter-container">
                                 @foreach ($wineries->take(6) as $winery)
                                     @if ($winery)
