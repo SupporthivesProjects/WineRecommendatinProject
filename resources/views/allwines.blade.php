@@ -546,7 +546,7 @@
                                 <h4 class="fw-bold mb-3">Method</h4>
                                 @php
                                     // Get unique methods from products, sorted alphabetically
-                                    $methods = $allProducts->pluck('method')->unique()->sort();
+                                    $methods = $allProducts->pluck('Method')->unique()->sort();
 
                                     // Define emojis or icons for each method
                                     $methodIcons = [
@@ -557,12 +557,12 @@
 
                                     // Filter only the three valid methods
                                     $validMethods = ['still', 'semi sparkling', 'sparkling'];
-                                    $filteredMethods = $methods->filter(fn($method) => in_array(strtolower($method), $validMethods));
+                                    $filteredMethods = $methods->filter(fn($Method) => in_array(strtolower($Method), $validMethods));
                                 @endphp
 
-                                @foreach ($filteredMethods as $method)
+                                @foreach ($filteredMethods as $Method)
                                     @php
-                                        $lowerMethod = strtolower($method);
+                                        $lowerMethod = strtolower($Method);
                                         $icon = $methodIcons[$lowerMethod] ?? '🍇';
                                     @endphp
 
@@ -571,7 +571,7 @@
                                             value="{{ $lowerMethod }}" id="method-inline-{{ $lowerMethod }}" style="display: none;">
 
                                         <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $lowerMethod }}">
-                                            <span class="emoji">{{ $icon }}</span> {{ ucfirst($method) }}
+                                            <span class="emoji">{{ $icon }}</span> {{ ucfirst($Method) }}
                                         </label>
                                     </div>
                                 @endforeach
