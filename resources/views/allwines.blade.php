@@ -562,7 +562,7 @@
                                                 };
                                             @endphp
 
-                                            @if (in_array($lowerMethod, ['still', 'semi sparkling', 'sparkling']))
+                                            @if (in_array($lowerMethod, ['Still', 'Semi Sparkling', 'Sparkling']))
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input wine-method-filter" type="checkbox"
                                                         value="{{ $lowerMethod }}" id="method-inline-{{ $lowerMethod }}"
