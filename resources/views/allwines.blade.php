@@ -911,8 +911,9 @@
                     methods.push($(this).val());
                 });
                 if (methods.length > 0) {
-                    formData['Method'] = methods;
+                    formData['Method'] = methods; // Matches your DB column
                 }
+
 
 
 
@@ -1074,7 +1075,7 @@
                                             `input.wine-country-filter[value="${value}"]`
                                         );
                                         checkboxes.forEach(cb => cb.checked = true);
-                                    } else if(name === 'Method') { // <-- Method filter
+                                    } else if(name.toLowerCase() === 'method') { // <-- Method filter
                                         const checkboxes = document.querySelectorAll(
                                             `input.wine-method-filter[value="${value}"]`
                                         );
@@ -1185,5 +1186,13 @@
             $moreContent.toggleClass('d-none');
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
+        // Toggle checkbox manually for hidden inputs
+        $(document).on('click', '.filter-checkbox', function() {
+            const input = $(this).prev('input[type="checkbox"]');
+            if(input.length) {
+                input.prop('checked', !input.prop('checked')).trigger('change');
+            }
+        });
+
     </script>
 @endpush
