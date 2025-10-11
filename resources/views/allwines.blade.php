@@ -575,7 +575,7 @@
                             </div>
 
 
-
+{{-- adding up --}}
 
                         </div>
                         <div class="row row-sm" id="products-container">
@@ -1026,7 +1026,7 @@
                     key === 'vintage_year[]' ||
                     key === 'winery[]' ||
                     key === 'country[]' ||
-                    key === 'Method[]' ||
+                    key === 'method[]' ||
                     key === 'min_price' ||
                     key === 'max_price'
                 );
