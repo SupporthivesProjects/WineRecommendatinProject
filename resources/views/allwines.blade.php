@@ -543,40 +543,38 @@
 
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                    <h4 class="fw-bold mb-3">Method</h4>
+                                <h4 class="fw-bold mb-3">Method</h4>
+                                @php
+                                    // Fetch unique Method values from products table and filter only allowed ones
+                                    $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+                                    $methods = $allProducts->pluck('Method')->filter()->unique()->sort()->map(fn($m) => strtolower(trim($m)))->filter(fn($m) => in_array($m, $allowedMethods));
+                                @endphp
+
+                                <!-- Method Filter -->
+                                @foreach ($methods as $method)
                                     @php
-                                        // Fetch and clean up unique methods from the 'Method' column
-                                        $methods = $allProducts->pluck('Method')->filter()->unique()->sort();
+                                        $emoji = match ($method) {
+                                            'still' => '🍷',
+                                            'semi sparkling' => '🥂',
+                                            'sparkling' => '🍾',
+                                            default => '🌍',
+                                        };
                                     @endphp
 
-                                    <!-- Method Filter -->
-                                    @foreach ($methods as $method)
-                                        @if ($method)
-                                            @php
-                                                $lowerMethod = strtolower(trim($method));
-                                                $emoji = match ($lowerMethod) {
-                                                    'still' => '🍷',
-                                                    'semi sparkling' => '🥂',
-                                                    'sparkling' => '🍾',
-                                                    default => '🌍',
-                                                };
-                                            @endphp
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input wine-method-filter" type="checkbox"
+                                            value="{{ $method }}" id="method-inline-{{ $method }}"
+                                            style="display: none;">
 
-                                            @if (in_array($lowerMethod, ['Still', 'Semi Sparkling', 'Sparkling']))
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input wine-method-filter" type="checkbox"
-                                                        value="{{ $lowerMethod }}" id="method-inline-{{ $lowerMethod }}"
-                                                        style="display: none;">
+                                        <label class="form-check-label fs-15 filter-checkbox"
+                                            for="method-inline-{{ $method }}">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
 
-                                                    <label class="form-check-label fs-15 filter-checkbox"
-                                                        for="method-inline-{{ $lowerMethod }}">
-                                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                                    </label>
-                                                </div>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                </div>
+
 
 
                         </div>
