@@ -543,37 +543,39 @@
 
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                    <h4 class="fw-bold mb-3">Method</h4>
-                                    @php
-                                        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-                                        $methods = $allProducts->pluck('Method')
-                                            ->filter()
-                                            ->unique()
-                                            ->sort()
-                                            ->map(fn($m) => strtolower(trim($m)))
-                                            ->filter(fn($m) => in_array($m, $allowedMethods));
-                                    @endphp
+    <h4 class="fw-bold mb-3">Method</h4>
+    @php
+        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+        $methods = $allProducts->pluck('Method')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->map(fn($m) => strtolower(trim($m)))
+            ->filter(fn($m) => in_array($m, $allowedMethods));
+    @endphp
 
-                                    <div class="d-flex flex-wrap gap-2">
-                                        @foreach ($methods as $method)
-                                            @php
-                                                $emoji = match ($method) {
-                                                    'still' => '🍷',
-                                                    'semi sparkling' => '🥂',
-                                                    'sparkling' => '🍾',
-                                                    default => '🌍',
-                                                };
-                                            @endphp
+    @foreach ($methods as $method)
+        @php
+            $emoji = match ($method) {
+                'still' => '🍷',
+                'semi sparkling' => '🥂',
+                'sparkling' => '🍾',
+                default => '🌍',
+            };
+        @endphp
 
-                                            <span class="filter-btn wine-method-filter" 
-                                                data-filter="method" 
-                                                data-value="{{ $method }}"
-                                                style="cursor: pointer;">
-                                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                            </span>
-                                        @endforeach
-                                    </div>
-                                </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input wine-method-filter" type="checkbox"
+                value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
+
+            <label class="form-check-label fs-15 filter-checkbox"
+                for="method-inline-{{ $method }}">
+                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+            </label>
+        </div>
+    @endforeach
+</div>
+
 
 
 {{-- adding up --}}
@@ -903,18 +905,15 @@
                 if (countries.length > 0) {
                     formData['country'] = countries;
                 }
-            
-                
-                // Get selected method(s) from badges
-                // Get selected method(s) from badges
+              
+                // Get all checked method checkboxes
                 const methods = [];
-                $('.wine-method-filter.active').each(function() {
-                    methods.push($(this).data('value'));
+                $('.wine-method-filter:checked').each(function() {
+                    methods.push($(this).val());
                 });
                 if (methods.length > 0) {
-                    formData['Method'] = methods; // use 'Method' to match controller filter
+                    formData['Method'] = methods;
                 }
-
 
 
                 // Get price range from slider if it exists
@@ -1049,36 +1048,56 @@
                 if (urlParams.has('search')) {
                     $('#search-input').val(urlParams.get('search'));
                 }
-
                 if (hasFilters) {
-                    // Set checkboxes based on URL parameters
-                    urlParams.forEach((value, key) => {
-                        if (key.endsWith('[]')) {
-                            // Handle array parameters (checkboxes)
-                            const checkboxes = document.querySelectorAll(
-                                `input[name="${key}"][value="${value}"]`);
-                            checkboxes.forEach(checkbox => {
-                                checkbox.checked = true;
-                            });
-                        } else if (key === 'min_price' || key === 'max_price') {
-                            // Handle price range
-                            if ($("#price-slider").length) {
-                                const currentValues = $("#price-slider").slider("values");
-                                if (key === 'min_price') {
-                                    currentValues[0] = parseInt(value) || 0;
-                                    $("#price-min").text(currentValues[0]);
-                                } else {
-                                    currentValues[1] = parseInt(value) || 1000;
-                                    $("#max-price").text(currentValues[1]);
+                            // Set checkboxes based on URL parameters
+                            urlParams.forEach((value, key) => {
+                                if (key.endsWith('[]')) {
+                                    const name = key.replace('[]', '');
+                                    if(name === 'type') {
+                                        const checkboxes = document.querySelectorAll(
+                                            `input.wine-type-filter[value="${value}"]`
+                                        );
+                                        checkboxes.forEach(cb => cb.checked = true);
+                                    } else if(name === 'vintage_year') {
+                                        const checkboxes = document.querySelectorAll(
+                                            `input.wine-vintage-year-filter[value="${value}"]`
+                                        );
+                                        checkboxes.forEach(cb => cb.checked = true);
+                                    } else if(name === 'winery') {
+                                        const checkboxes = document.querySelectorAll(
+                                            `input.wine-winery-filter[value="${value}"]`
+                                        );
+                                        checkboxes.forEach(cb => cb.checked = true);
+                                    } else if(name === 'country') {
+                                        const checkboxes = document.querySelectorAll(
+                                            `input.wine-country-filter[value="${value}"]`
+                                        );
+                                        checkboxes.forEach(cb => cb.checked = true);
+                                    } else if(name === 'Method') { // <-- Method filter
+                                        const checkboxes = document.querySelectorAll(
+                                            `input.wine-method-filter[value="${value}"]`
+                                        );
+                                        checkboxes.forEach(cb => cb.checked = true);
+                                    }
+                                } else if (key === 'min_price' || key === 'max_price') {
+                                    // Handle price range
+                                    if ($("#price-slider").length) {
+                                        const currentValues = $("#price-slider").slider("values");
+                                        if (key === 'min_price') {
+                                            currentValues[0] = parseInt(value) || 0;
+                                            $("#price-min").text(currentValues[0]);
+                                        } else {
+                                            currentValues[1] = parseInt(value) || 1000;
+                                            $("#max-price").text(currentValues[1]);
+                                        }
+                                        $("#price-slider").slider("values", currentValues);
+                                    }
                                 }
-                                $("#price-slider").slider("values", currentValues);
-                            }
-                        }
-                    });
+                            });
 
-                    // Load products with filters
-                    loadProducts();
-                }
+                            // Load products with filters
+                            loadProducts();
+                        }
             }
 
             // Initialize pagination on page load if there are products
@@ -1086,6 +1105,50 @@
                 updatePagination({!! $products->toJson() !!});
             @endif
         });
+
+        //         if (hasFilters) {
+        //             // Set checkboxes based on URL parameters
+        //             urlParams.forEach((value, key) => {
+        //                 if (key.endsWith('[]')) {
+        //                     // Handle array parameters (checkboxes)
+        //                     // const checkboxes = document.querySelectorAll(
+        //                     //     `input[name="${key}"][value="${value}"]`);
+        //                     // checkboxes.forEach(checkbox => {
+        //                     //     checkbox.checked = true;
+        //                     // });
+        //                     const name = key.replace('[]', '');
+        //                     if(name === 'Method') {
+        //                         const checkboxes = document.querySelectorAll(
+        //                             `input.wine-method-filter[value="${value}"]`
+        //                         );
+        //                         checkboxes.forEach(cb => cb.checked = true);
+        //                     });
+        //                 } else if (key === 'min_price' || key === 'max_price') {
+        //                     // Handle price range
+        //                     if ($("#price-slider").length) {
+        //                         const currentValues = $("#price-slider").slider("values");
+        //                         if (key === 'min_price') {
+        //                             currentValues[0] = parseInt(value) || 0;
+        //                             $("#price-min").text(currentValues[0]);
+        //                         } else {
+        //                             currentValues[1] = parseInt(value) || 1000;
+        //                             $("#max-price").text(currentValues[1]);
+        //                         }
+        //                         $("#price-slider").slider("values", currentValues);
+        //                     }
+        //                 }
+        //             });
+
+        //             // Load products with filters
+        //             loadProducts();
+        //         }
+        //     }
+
+        //     // Initialize pagination on page load if there are products
+        //     @if (isset($products) && $products->total() > 0)
+        //         updatePagination({!! $products->toJson() !!});
+        //     @endif
+        // });
 
 
         // Toggle vintage year filter visibility
@@ -1121,12 +1184,5 @@
             $moreContent.toggleClass('d-none');
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
-
-        // Handle Method filter clicks (same as Type)
-        $(document).on('click', '.wine-method-filter', function() {
-            $(this).toggleClass('active'); // toggle selected
-            loadProducts(1); // reload products
-        });
-
     </script>
 @endpush
