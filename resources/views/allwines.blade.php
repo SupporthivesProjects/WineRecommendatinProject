@@ -543,39 +543,41 @@
 
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                <h4 class="fw-bold mb-3">Method</h4>
-                                @php
-                                    // Get unique methods from products, sorted alphabetically
-                                    $methods = $allProducts->pluck('Method')->unique()->sort();
-
-                                    // Define emojis or icons for each method
-                                    $methodIcons = [
-                                        'still' => '🍷',
-                                        'semi sparkling' => '🥂',
-                                        'sparkling' => '🍾',
-                                    ];
-
-                                    // Filter only the three valid methods
-                                    $validMethods = ['still', 'semi sparkling', 'sparkling'];
-                                    $filteredMethods = $methods->filter(fn($Method) => in_array(strtolower($Method), $validMethods));
-                                @endphp
-
-                                @foreach ($filteredMethods as $Method)
+                                    <h4 class="fw-bold mb-3">Method</h4>
                                     @php
-                                        $lowerMethod = strtolower($Method);
-                                        $icon = $methodIcons[$lowerMethod] ?? '🍇';
+                                        // Fetch and clean up unique methods from the 'Method' column
+                                        $methods = $allProducts->pluck('Method')->filter()->unique()->sort();
                                     @endphp
 
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-method-filter" type="checkbox"
-                                            value="{{ $lowerMethod }}" id="method-inline-{{ $lowerMethod }}" style="display: none;">
+                                    <!-- Method Filter -->
+                                    @foreach ($methods as $method)
+                                        @if ($method)
+                                            @php
+                                                $lowerMethod = strtolower(trim($method));
+                                                $emoji = match ($lowerMethod) {
+                                                    'still' => '🍷',
+                                                    'semi sparkling' => '🥂',
+                                                    'sparkling' => '🍾',
+                                                    default => '🌍',
+                                                };
+                                            @endphp
 
-                                        <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $lowerMethod }}">
-                                            <span class="emoji">{{ $icon }}</span> {{ ucfirst($Method) }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
+                                            @if (in_array($lowerMethod, ['still', 'semi sparkling', 'sparkling']))
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input wine-method-filter" type="checkbox"
+                                                        value="{{ $lowerMethod }}" id="method-inline-{{ $lowerMethod }}"
+                                                        style="display: none;">
+
+                                                    <label class="form-check-label fs-15 filter-checkbox"
+                                                        for="method-inline-{{ $lowerMethod }}">
+                                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                                    </label>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </div>
+
 
                         </div>
                         <div class="row row-sm" id="products-container">
@@ -1026,7 +1028,7 @@
                     key === 'vintage_year[]' ||
                     key === 'winery[]' ||
                     key === 'country[]' ||
-                    key === 'method[]' ||
+                    key === 'Method[]' ||
                     key === 'min_price' ||
                     key === 'max_price'
                 );
