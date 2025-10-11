@@ -367,7 +367,7 @@
                             @endif
                         </div>--}}
                         <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Country</h4>
+                            <h4 class="fw-bold mb-4">Countrys</h4>
 
                             @php
                                 $countries = $allProducts->pluck('country')->filter()->unique()->sort();
@@ -1053,6 +1053,18 @@
         $(document).on('click', '.toggle-winery-filter', function() {
             const $button = $(this);
             const $moreContent = $button.siblings('.winery-filter-more');
+            const moreText = $button.data('more-text');
+            const lessText = $button.data('less-text');
+
+            $moreContent.toggleClass('d-none');
+            $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
+        });
+
+        // Toggle country filter visibility (newly added)
+
+        $(document).on('click', '.toggle-country-filter', function() {
+            const $button = $(this);
+            const $moreContent = $button.siblings('.country-filter-more');
             const moreText = $button.data('more-text');
             const lessText = $button.data('less-text');
 
