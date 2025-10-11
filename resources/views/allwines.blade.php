@@ -543,37 +543,38 @@
 
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                <h4 class="fw-bold mb-3">Method</h4>
-                                @php
-                                    $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-                                    $methods = $allProducts->pluck('Method')
-                                        ->filter()
-                                        ->unique()
-                                        ->sort()
-                                        ->map(fn($m) => strtolower(trim($m)))
-                                        ->filter(fn($m) => in_array($m, $allowedMethods));
-                                @endphp
+                                    <h4 class="fw-bold mb-3">Method</h4>
+                                    @php
+                                        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+                                        $methods = $allProducts->pluck('Method')
+                                            ->filter()
+                                            ->unique()
+                                            ->sort()
+                                            ->map(fn($m) => strtolower(trim($m)))
+                                            ->filter(fn($m) => in_array($m, $allowedMethods));
+                                    @endphp
 
-                                <div class="method-filters d-flex flex-wrap gap-2">
-                                    @foreach ($methods as $method)
-                                        @php
-                                            $emoji = match ($method) {
-                                                'still' => '🍷',
-                                                'semi sparkling' => '🥂',
-                                                'sparkling' => '🍾',
-                                                default => '🌍',
-                                            };
-                                        @endphp
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach ($methods as $method)
+                                            @php
+                                                $emoji = match ($method) {
+                                                    'still' => '🍷',
+                                                    'semi sparkling' => '🥂',
+                                                    'sparkling' => '🍾',
+                                                    default => '🌍',
+                                                };
+                                            @endphp
 
-                                        <span class="filter-btn wine-method-filter badge bg-light text-dark"
-                                            data-filter="method"
-                                            data-value="{{ $method }}"
-                                            style="cursor: pointer;">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                        </span>
-                                    @endforeach
+                                            <span class="filter-btn wine-method-filter" 
+                                                data-filter="method" 
+                                                data-value="{{ $method }}"
+                                                style="cursor: pointer;">
+                                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                            </span>
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
+
 
 {{-- adding up --}}
 
@@ -905,12 +906,13 @@
             
                 
                 // Get selected method(s) from badges
+                // Get selected method(s) from badges
                 const methods = [];
                 $('.wine-method-filter.active').each(function() {
                     methods.push($(this).data('value'));
                 });
                 if (methods.length > 0) {
-                    formData['Method'] = methods; // note: matches controller filter name 'Method'
+                    formData['Method'] = methods; // use 'Method' to match controller filter
                 }
 
 
@@ -1119,5 +1121,12 @@
             $moreContent.toggleClass('d-none');
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
+
+        // Handle Method filter clicks (same as Type)
+        $(document).on('click', '.wine-method-filter', function() {
+            $(this).toggleClass('active'); // toggle selected
+            loadProducts(1); // reload products
+        });
+
     </script>
 @endpush
