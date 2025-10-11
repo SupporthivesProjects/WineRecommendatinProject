@@ -206,8 +206,9 @@ class ProductController extends Controller
         // Filter by Method
         if ($request->has('method') && !empty($request->method)) {
             $methods = is_array($request->method) ? $request->method : [$request->method];
-            $query->whereIn('Method', $methods);
+            $query->whereIn('Method', $methods); // DB column stays 'Method'
         }
+
 
 
         // Filter by price range

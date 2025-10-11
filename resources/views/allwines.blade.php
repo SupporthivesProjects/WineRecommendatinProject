@@ -542,36 +542,32 @@
                                 @endforeach
 
                             </div> --}}
-                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                            <div class="col-12 col-lg-6 mb-3 filter-group">
                                 <h4 class="fw-bold mb-3">Method</h4>
                                 @php
-                                    // Fetch unique Method values from products table and filter only allowed ones
                                     $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-                                    $methods = $allProducts->pluck('Method')->filter()->unique()->sort()->map(fn($m) => strtolower(trim($m)))->filter(fn($m) => in_array($m, $allowedMethods));
+                                    $methods = $allProducts->pluck('Method')
+                                        ->filter()
+                                        ->unique()
+                                        ->sort()
+                                        ->map(fn($m) => strtolower(trim($m)))
+                                        ->filter(fn($m) => in_array($m, $allowedMethods));
                                 @endphp
 
-                                <!-- Method Filter -->
-                                @foreach ($methods as $method)
-                                    @php
-                                        $emoji = match ($method) {
-                                            'still' => '🍷',
-                                            'semi sparkling' => '🥂',
-                                            'sparkling' => '🍾',
-                                            default => '🌍',
-                                        };
-                                    @endphp
-
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-method-filter" type="checkbox"
-                                          name="method[]" value="{{ $method }}" id="method-inline-{{ $method }}">
-
-
-                                        <label class="form-check-label fs-15 filter-checkbox"
-                                            for="method-inline-{{ $method }}">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                        </label>
-                                    </div>
-                                @endforeach
+                                <select class="form-select wine-method-select" name="method">
+                                    <option value="">Select Method</option>
+                                    @foreach ($methods as $method)
+                                        @php
+                                            $emoji = match ($method) {
+                                                'still' => '🍷',
+                                                'semi sparkling' => '🥂',
+                                                'sparkling' => '🍾',
+                                                default => '🌍',
+                                            };
+                                        @endphp
+                                        <option value="{{ $method }}">{{ $emoji }} {{ ucfirst($method) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
 
@@ -902,13 +898,11 @@
                 if (countries.length > 0) {
                     formData['country'] = countries;
                 }
-                 // Get all clicked method
-                const methods = [];
-                $('.wine-method-filter:checked').each(function() {
-                    methods.push($(this).val());
-                });
-                if (methods.length > 0) {
-                    formData['method'] = methods;
+                // Get selected method from dropdown
+                const selectedMethod = $('.wine-method-select').val();
+                if (selectedMethod)
+                 {
+                    formData['method'] = selectedMethod; // lowercase 'method' matches controller
                 }
 
                 // Get price range from slider if it exists
