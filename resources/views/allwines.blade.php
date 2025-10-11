@@ -1026,6 +1026,7 @@
                     key === 'vintage_year[]' ||
                     key === 'winery[]' ||
                     key === 'country[]' ||
+                    key === 'method[]' ||
                     key === 'min_price' ||
                     key === 'max_price'
                 );
