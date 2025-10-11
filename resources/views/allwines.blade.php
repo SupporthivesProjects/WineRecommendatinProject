@@ -542,7 +542,7 @@
                                 @endforeach
 
                             </div> --}}
-                            <div class="col-12 col-lg-6 mb-3 filter-group">
+                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                 <h4 class="fw-bold mb-3">Method</h4>
                                 @php
                                     $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
@@ -554,8 +554,7 @@
                                         ->filter(fn($m) => in_array($m, $allowedMethods));
                                 @endphp
 
-                                <select class="form-select wine-method-select" name="method">
-                                    <option value="">Select Method</option>
+                                <div class="method-filters d-flex flex-wrap gap-2">
                                     @foreach ($methods as $method)
                                         @php
                                             $emoji = match ($method) {
@@ -565,11 +564,16 @@
                                                 default => '🌍',
                                             };
                                         @endphp
-                                        <option value="{{ $method }}">{{ $emoji }} {{ ucfirst($method) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
 
+                                        <span class="filter-btn wine-method-filter badge bg-light text-dark"
+                                            data-filter="method"
+                                            data-value="{{ $method }}"
+                                            style="cursor: pointer;">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
 
 {{-- adding up --}}
 
@@ -898,12 +902,18 @@
                 if (countries.length > 0) {
                     formData['country'] = countries;
                 }
-                // Get selected method from dropdown
-                const selectedMethod = $('.wine-method-select').val();
-                if (selectedMethod)
-                 {
-                    formData['method'] = selectedMethod; // lowercase 'method' matches controller
+            
+                
+                // Get selected method(s) from badges
+                const methods = [];
+                $('.wine-method-filter.active').each(function() {
+                    methods.push($(this).data('value'));
+                });
+                if (methods.length > 0) {
+                    formData['Method'] = methods; // note: matches controller filter name 'Method'
                 }
+
+
 
                 // Get price range from slider if it exists
                 if ($("#price-slider").length) {
