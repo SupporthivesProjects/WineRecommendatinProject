@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile',
+        'username',
         'role',
         'status',
         'store_id',

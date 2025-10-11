@@ -22,6 +22,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Log;
 
 /*
@@ -244,6 +245,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/reviews', [\App\Http\Controllers\User\ReviewController::class, 'store'])->name('user.reviews.store');
     Route::delete('/reviews/{review}', [\App\Http\Controllers\User\ReviewController::class, 'destroy'])->name('user.reviews.destroy');
 });
+// User Profile Creation Routes
+Route::get('/profile/create', [UserProfileController::class, 'create'])->name('user.profile.create');
+Route::post('/profile/store', [UserProfileController::class, 'store'])->name('user.profile.store');
+
+// Show user profile
+Route::get('/profile', [UserProfileController::class, 'show'])->name('user.profile.show');
+
 
 Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
     ->name('admin.reviews.update-status');
