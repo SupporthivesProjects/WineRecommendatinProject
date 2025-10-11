@@ -330,7 +330,7 @@
                         </div>
 
                         <!-- Winery Filter -->
-                        <div class="filter-group">
+                        {{--<div class="filter-group">
                             <h4 class="fw-bold mb-4">Country</h4>
                             <div class="winery-filter-container">
                                 @foreach ($wineries->take(6) as $winery)
@@ -365,7 +365,76 @@
                                     Show More
                                 </button>
                             @endif
+                        </div>--}}
+                        <div class="filter-group">
+                            <h4 class="fw-bold mb-4">Country</h4>
+
+                            @php
+                                $countries = $allProducts->pluck('country')->filter()->unique()->sort();
+                            @endphp
+
+                            <div class="country-filter-container">
+                                @foreach ($countries->take(6) as $country)
+                                    @php
+                                        $lowerCountry = strtolower($country);
+                                        $emoji = match ($lowerCountry) {
+                                            'france' => '🇫🇷',
+                                            'italy' => '🇮🇹',
+                                            'spain' => '🇪🇸',
+                                            'australia' => '🇦🇺',
+                                            'united states' => '🇺🇸',
+                                            'germany' => '🇩🇪',
+                                            'new zealand' => '🇳🇿',
+                                            'bulgaria' => '🇧🇬',
+                                            default => '🌍',
+                                        };
+                                    @endphp
+
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-country-filter" type="checkbox"
+                                            value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                        <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if ($countries->count() > 6)
+                                <div class="country-filter-more d-none">
+                                    @foreach ($countries->skip(6) as $country)
+                                        @php
+                                            $lowerCountry = strtolower($country);
+                                            $emoji = match ($lowerCountry) {
+                                                'france' => '🇫🇷',
+                                                'italy' => '🇮🇹',
+                                                'spain' => '🇪🇸',
+                                                'australia' => '🇦🇺',
+                                                'united states' => '🇺🇸',
+                                                'germany' => '🇩🇪',
+                                                'new zealand' => '🇳🇿',
+                                                'bulgaria' => '🇧🇬',
+                                                default => '🌍',
+                                            };
+                                        @endphp
+
+                                        <div class="form-check">
+                                            <input class="form-check-input wine-country-filter" type="checkbox"
+                                                value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                            <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-country-filter"
+                                    data-more-text="Show More" data-less-text="Show Less">
+                                    Show More
+                                </button>
+                            @endif
                         </div>
+
 
                         <!-- Retail Price Slider -->
                         <div class="filter-group">
