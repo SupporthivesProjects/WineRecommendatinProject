@@ -204,10 +204,11 @@ class ProductController extends Controller
         }
 
         // Filter by Method
-            if ($request->has('Method') && !empty($request->Method)) {
-                $methods = is_array($request->Method) ? $request->Method : [$request->Method];
-                $query->whereIn('Method', $methods);
-            }
+        if ($request->has('method') && !empty($request->method)) {
+            $methods = is_array($request->method) ? $request->method : [$request->method];
+            $query->whereIn('Method', $methods);
+        }
+
 
         // Filter by price range
         $minPrice = $request->input('min_price');
@@ -261,7 +262,7 @@ class ProductController extends Controller
                 $query->whereIn('country', $countries);
             }
 
-                        // Apply Method filter
+                        // Apply Method filtera
             if ($request->has('Method') && !empty($request->Method)) {
                 $methods = is_array($request->Method) ? $request->Method : [$request->Method];
                 $query->whereIn('Method', $methods);

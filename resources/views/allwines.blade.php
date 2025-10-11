@@ -563,8 +563,8 @@
 
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input wine-method-filter" type="checkbox"
-                                            value="{{ $method }}" id="method-inline-{{ $method }}"
-                                            style="display: none;">
+                                          name="method[]" value="{{ $method }}" id="method-inline-{{ $method }}">
+
 
                                         <label class="form-check-label fs-15 filter-checkbox"
                                             for="method-inline-{{ $method }}">
@@ -901,6 +901,14 @@
                 });
                 if (countries.length > 0) {
                     formData['country'] = countries;
+                }
+                 // Get all clicked method
+                const methods = [];
+                $('.wine-method-filter:checked').each(function() {
+                    methods.push($(this).val());
+                });
+                if (methods.length > 0) {
+                    formData['method'] = methods;
                 }
 
                 // Get price range from slider if it exists
