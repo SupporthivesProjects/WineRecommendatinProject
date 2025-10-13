@@ -557,7 +557,7 @@
 
                                 @foreach ($methods as $method)
                                     @php
-                                        $method = strtolower($Method);
+                                        $method = strtolower($method);
                                         $emoji = match ($method) {
                                             'still' => '🍷',
                                             'semi sparkling' => '🥂',
