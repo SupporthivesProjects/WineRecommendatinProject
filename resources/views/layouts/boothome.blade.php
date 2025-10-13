@@ -452,6 +452,11 @@
                                     <span class="fonthover">Contact Us</span>
                                 </a>
                             </li>
+                            <li class="slide">
+                                <a href="{{ route('login') }}" class="btn btn-wave btn-info">
+                                    Login
+                                </a>
+                            </li>
                             <!-- End::slide -->
 
                         </ul>
