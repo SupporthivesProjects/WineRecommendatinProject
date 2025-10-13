@@ -600,7 +600,7 @@
         @endphp
 
         <!-- Hidden checkbox -->
-        <input type="checkbox" class="wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
+        <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
 
         <!-- Button instead of label -->
         <button type="button" 
