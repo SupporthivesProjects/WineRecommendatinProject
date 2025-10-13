@@ -10,7 +10,8 @@
                         <div class="mt-5 pt-4 p-2 position-absolute text-center" >
                             <div class="clearfix"></div>
                             <!-- Center the image with mx-auto -->
-                            <img src="{{ asset('assets/images/svgs/user.svg') }}" class="ht-100 mb-0 mx-auto" alt="user">
+                            <!-- <img src="{{ asset('assets/images/svgs/user.svg') }}" class="ht-100 mb-0 mx-auto" alt="user"> -->
+                            <img src="{{ asset('images/logoredwhite.jpg') }}" class="ht-100 mb-0 mx-auto" alt="user">
                             <h5 class="my-4 font-bold">Welcome Back !</h5>
                             <span class="text-white-6 fs-13 mb-5 mt-xl-0">Signup to create, discover and connect with the global community</span>
                         </div>
