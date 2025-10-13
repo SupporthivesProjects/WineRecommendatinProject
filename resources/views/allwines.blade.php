@@ -544,7 +544,7 @@
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                 <h4 class="fw-bold mb-3">Method</h4>
-                                @php
+                                {{-- @php
                                     $methods = $allProducts->pluck('Method')->unique()->sort();
                                     // $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
                                     // $methods = $allProducts->pluck('Method')
@@ -555,7 +555,7 @@
                                     //     ->filter(fn($m) => in_array($m, $allowedMethods));
                                 @endphp
 
-                                @foreach ($Methods as $method)
+                                @foreach ($methods as $method)
                                     @php
                                         $method = strtolower($method);
                                         $emoji = match ($method) {
@@ -564,7 +564,26 @@
                                             'sparkling' => '🍾',
                                             default => '🌍',
                                         };
+                                    @endphp --}}
+                                    @php
+                                        // Collect unique, sorted methods from your products
+                                        $methods = $allProducts->pluck('Method')
+                                            ->filter()
+                                            ->unique()
+                                            ->sort()
+                                            ->values();
                                     @endphp
+
+                                    @foreach ($methods as $method)
+                                        @php
+                                            $method = strtolower(trim($method));
+                                            $emoji = match ($method) {
+                                                'still' => '🍷',
+                                                'semi sparkling' => '🥂',
+                                                'sparkling' => '🍾',
+                                                default => '🌍',
+                                            };
+                                        @endphp
 
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input wine-method-filter" type="checkbox"
@@ -1186,12 +1205,18 @@ if (hasFilters) {
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
         // Toggle checkbox manually if you want to keep them hidden
-            $(document).on('click', '.filter-checkbox', function() {
-                const input = $(this).prev('input.wine-method-filter');
-                if (input.length) {
-                    input.prop('checked', !input.prop('checked')).trigger('change');
-                }
-            });
+           // $(document).on('click', '.filter-checkbox', function() {
+            //    const input = $(this).prev('input.wine-method-filter');
+               // if (input.length) {
+              //      input.prop('checked', !input.prop('checked')).trigger('change');
+             //   }
+           // });
+        $(document).on('click', '.wine-method-filter + label', function () {
+            const checkbox = $(this).prev('input[type=checkbox]');
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            loadProducts(); // your AJAX function
+        });
+
 
 
     </script>
