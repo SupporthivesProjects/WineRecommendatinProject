@@ -696,7 +696,10 @@
             }
 
             // Handle all filter changes with debouncing
-            $('input[type="checkbox"], select').on('change', debounce(loadProducts, 300));
+          //  $('input[type="checkbox"], select').on('change', debounce(loadProducts, 300));
+          const debouncedLoad = debounce(() => loadProducts(1), 300);
+            $('input[type="checkbox"], select').on('change', debouncedLoad);
+
 
             // Function to update pagination
             function updatePagination(paginationData) {
