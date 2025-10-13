@@ -542,7 +542,7 @@
                                 @endforeach
 
                             </div> --}}
-                            {{-- <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                 <h4 class="fw-bold mb-3">Method</h4>
                                 @php
                                     $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
@@ -573,49 +573,9 @@
                                         </label>
                                     </div>
                                 @endforeach
-                            </div> --}}
-
-                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                            <h4 class="fw-bold mb-3">Method</h4>
-                            @php
-                                $methods = $allProducts->pluck('Method')
-                                    ->filter()
-                                    ->unique()
-                                    ->sort()
-                                    ->values();
-                            @endphp
-
-                            @foreach ($methods as $method)
-                                @php
-                                $method = strtolower(trim($method));
-                                $emoji = match ($method) {
-                                    'still' => '🍷',
-                                    'semi sparkling' => '🥂',
-                                    'sparkling' => '🍾',
-                                    default => '🌍',
-                                };
-                                @endphp
-
-                                <div class="form-check form-check-inline">
-                                <input
-                                    class="form-check-input wine-method-filter"
-                                    type="checkbox"
-                                    value="{{ $method }}"
-                                    id="method-inline-{{ Str::slug($method) }}"
-                                    style="display:none"
-                                >
-                                <label
-                                    class="form-check-label fs-15 filter-checkbox"
-                                    for="method-inline-{{ Str::slug($method) }}"
-                                >
-                                    <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                </label>
-                                </div>
-                            @endforeach
                             </div>
 
-
-
+                            
 
 {{-- adding up --}}
 
@@ -1224,20 +1184,15 @@ if (hasFilters) {
             $moreContent.toggleClass('d-none');
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
-        // Toggle checkbox manually if you want to keep them hidden
-        //    $(document).on('click', '.filter-checkbox', function() {
-        //        const input = $(this).prev('input.wine-method-filter');
-        //        if (input.length) {
-        //            input.prop('checked', !input.prop('checked')).trigger('change');
-        //        }
-        //    });
+        //Toggle checkbox manually if you want to keep them hidden
+           $(document).on('click', '.filter-checkbox', function() {
+               const input = $(this).prev('input.wine-method-filter');
+               if (input.length) {
+                   input.prop('checked', !input.prop('checked')).trigger('change');
+               }
+           });
        
-        $(document).on('click', '.wine-method-filter + label', function () {
-            const checkbox = $(this).prev('input[type=checkbox]');
-            checkbox.prop('checked', !checkbox.prop('checked'));
-            loadProducts(); // your existing filter/AJAX function
-            });
-
+    
 
 
 
