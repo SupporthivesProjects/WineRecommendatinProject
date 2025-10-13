@@ -508,7 +508,7 @@
                                 autoplay>
                             </lottie-player>
                         </a>
-                        <button class="navbar-toggler mr-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <button class="navbar-toggler me-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
