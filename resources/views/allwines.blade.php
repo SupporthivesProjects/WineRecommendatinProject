@@ -251,6 +251,22 @@
                 border-radius: 3px;
             }
 
+            /* visually hide checkbox but keep it functional and focusable */
+            .visually-hidden-checkbox {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0 0 0 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+            opacity: 0 !important;
+            left: -9999px !important; /* ensure not visible */
+            }
+
+
 
 
         </style>
@@ -566,8 +582,8 @@
                                     @endphp
 
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-method-filter" type="checkbox"
-                                            value="{{ $method }}" id="method-inline-{{ $method }}" style="display:none" >
+                                        <input class="form-check-input wine-method-filter visually-hidden-checkbox" type="checkbox"
+                                            value="{{ $method }}" id="method-inline-{{ $method }}"  >
                                         <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
                                             <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
                                         </label>
@@ -696,10 +712,7 @@
             }
 
             // Handle all filter changes with debouncing
-          //  $('input[type="checkbox"], select').on('change', debounce(loadProducts, 300));
-          const debouncedLoad = debounce(() => loadProducts(1), 300);
-            $('input[type="checkbox"], select').on('change', debouncedLoad);
-
+            $('input[type="checkbox"], select').on('change', debounce(loadProducts, 300));
 
             // Function to update pagination
             function updatePagination(paginationData) {
