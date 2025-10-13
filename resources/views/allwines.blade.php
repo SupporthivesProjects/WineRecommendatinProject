@@ -543,37 +543,43 @@
 
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-    <h4 class="fw-bold mb-3">Method</h4>
-    @php
-        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-        $methods = $allProducts->pluck('Method')
-            ->filter()
-            ->unique()
-            ->sort()
-            ->map(fn($m) => strtolower(trim($m)))
-            ->filter(fn($m) => in_array($m, $allowedMethods));
-    @endphp
+                                <h4 class="fw-bold mb-3">Method</h4>
+                                @php
+                                    $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+                                    $methods = $allProducts->pluck('Method')
+                                        ->filter()
+                                        ->unique()
+                                        ->sort()
+                                        ->map(fn($m) => strtolower(trim($m)))
+                                        ->filter(fn($m) => in_array($m, $allowedMethods));
+                                @endphp
 
-    @foreach ($methods as $method)
-        @php
-            $emoji = match ($method) {
-                'still' => '🍷',
-                'semi sparkling' => '🥂',
-                'sparkling' => '🍾',
-                default => '🌍',
-            };
-        @endphp
+                                @foreach ($methods as $method)
+                                    @php
+                                        $emoji = match ($method) {
+                                            'still' => '🍷',
+                                            'semi sparkling' => '🥂',
+                                            'sparkling' => '🍾',
+                                            default => '🌍',
+                                        };
+                                    @endphp
 
-        <div class="form-check form-check-inline">
-            <input class="form-check-input wine-method-filter" type="checkbox"
-                value="{{ $method }}" id="method-inline-{{ $method }}">
-            <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
-                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-            </label>
-        </div>
+                                    {{-- <div class="form-check form-check-inline">
+                                        <input class="form-check-input wine-method-filter" type="checkbox"
+                                            value="{{ $method }}" id="method-inline-{{ $method }}">
+                                        <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                        </label>
+                                    </div> --}}
+                                    <span class="filter-btn wine-method-filter badge bg-light text-dark"
+                                        data-filter="Method"
+                                        data-value="{{ $method }}"
+                                        style="cursor: pointer;">
+                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                    </span>
 
-            @endforeach
-        </div>
+                                        @endforeach
+                                    </div>
 
 
 
