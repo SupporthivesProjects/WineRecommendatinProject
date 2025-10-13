@@ -217,7 +217,7 @@
         }
 
         #mainNavbar {
-            z-index: 999;
+            z-index: 999!important;
             background-color: transparent;
             position:fixed; 
             padding: 20px 0;
