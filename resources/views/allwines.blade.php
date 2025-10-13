@@ -567,7 +567,7 @@
 
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input wine-method-filter" type="checkbox"
-                                            value="{{ $method }}" id="method-inline-{{ $method }}" >
+                                            value="{{ $method }}" id="method-inline-{{ $method }}" style="display:none" >
                                         <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
                                             <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
                                         </label>
