@@ -452,9 +452,9 @@
                                     <span class="fonthover">Contact Us</span>
                                 </a>
                             </li>
-                            <li class="slide">
-                                <a href="{{ route('login') }}" class="btn btn-wave btn-info">
-                                    Login
+                            <li class="slide desktop_none">
+                                <a href="{{ route('login') }}" class="side-menu__item p-3 justify-content-end">
+                                    <span class="fonthover">Login</span>
                                 </a>
                             </li>
                             <!-- End::slide -->
