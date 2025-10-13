@@ -581,7 +581,6 @@
                                     @php
                                         $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
                                         $methods = $allProducts->pluck('Method')
-                                            ->filter()
                                             ->unique()
                                             ->sort()
                                             ->map(fn($m) => strtolower(trim($m)))
