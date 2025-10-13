@@ -251,22 +251,7 @@
                 border-radius: 3px;
             }
 
-            /* visually hide checkbox but keep it functional and focusable */
-            .visually-hidden-checkbox {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0 0 0 0) !important;
-            white-space: nowrap !important;
-            border: 0 !important;
-            opacity: 0 !important;
-            left: -9999px !important; /* ensure not visible */
-            }
-
-
+        
 
 
         </style>
@@ -558,7 +543,7 @@
                                 @endforeach
 
                             </div> --}}
-                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                            {{-- <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                 <h4 class="fw-bold mb-3">Method</h4>
                                 @php
                                     $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
@@ -582,14 +567,49 @@
                                     @endphp
 
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-method-filter visually-hidden-checkbox" type="checkbox"
+                                        <input class="form-check-input wine-method-filter" type="checkbox"
                                             value="{{ $method }}" id="method-inline-{{ $method }}"  >
                                         <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
                                             <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
                                         </label>
                                     </div>
                                 @endforeach
-                            </div>
+                            </div> --}}
+                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+    <h4 class="fw-bold mb-3">Method</h4>
+
+    @php
+        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+        $methods = $allProducts->pluck('Method')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->map(fn($m) => strtolower(trim($m)))
+            ->filter(fn($m) => in_array($m, $allowedMethods));
+    @endphp
+
+    @foreach ($methods as $method)
+        @php
+            $method = strtolower($method);
+            $emoji = match ($method) {
+                'still' => '🍷',
+                'semi sparkling' => '🥂',
+                'sparkling' => '🍾',
+                default => '🌍',
+            };
+        @endphp
+
+        <!-- Hidden checkbox -->
+        <input type="checkbox" class="wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
+
+        <!-- Button instead of label -->
+        <button type="button" 
+                class="btn btn-outline-dark method-filter-btn me-2 mb-2" 
+                data-method="{{ $method }}">
+            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+        </button>
+    @endforeach
+</div>
 
                             
 
@@ -1207,8 +1227,18 @@ if (hasFilters) {
                    input.prop('checked', !input.prop('checked')).trigger('change');
                }
            });
-       
-    
+      // When user clicks the button instead of checkbox
+$(document).on('click', '.method-filter-btn', function () {
+    const method = $(this).data('method');
+    const checkbox = $(`.wine-method-filter[value="${method}"]`);
+
+    // Toggle checked state
+    const isChecked = !checkbox.prop('checked');
+    checkbox.prop('checked', isChecked).trigger('change');
+
+    // Toggle button active state visually
+    $(this).toggleClass('active', isChecked);
+});
 
 
 
