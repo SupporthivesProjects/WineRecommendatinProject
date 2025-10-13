@@ -576,42 +576,43 @@
                                 @endforeach
                             </div> --}}
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-    <h4 class="fw-bold mb-3">Method</h4>
+                                    <h4 class="fw-bold mb-3">Method</h4>
 
-    @php
-        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-        $methods = $allProducts->pluck('Method')
-            ->filter()
-            ->unique()
-            ->sort()
-            ->map(fn($m) => strtolower(trim($m)))
-            ->filter(fn($m) => in_array($m, $allowedMethods));
-    @endphp
+                                    @php
+                                        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+                                        $methods = $allProducts->pluck('Method')
+                                            ->filter()
+                                            ->unique()
+                                            ->sort()
+                                            ->map(fn($m) => strtolower(trim($m)))
+                                            ->filter(fn($m) => in_array($m, $allowedMethods))
+                                            ->values();
+                                    @endphp
 
-    @foreach ($methods as $method)
-        @php
-            $method = strtolower($method);
-            $emoji = match ($method) {
-                'still' => '🍷',
-                'semi sparkling' => '🥂',
-                'sparkling' => '🍾',
-                default => '🌍',
-            };
-        @endphp
+                                    @foreach ($methods as $method)
+                                        @php
+                                            $method = strtolower($method);
+                                            $emoji = match ($method) {
+                                                'still' => '🍷',
+                                                'semi sparkling' => '🥂',
+                                                'sparkling' => '🍾',
+                                                default => '🌍',
+                                            };
+                                        @endphp
 
-        <!-- Hidden checkbox -->
-        <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
+                                        <!-- Hidden checkbox -->
+                                        <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
 
-        <!-- Button instead of label -->
-        <button type="button" 
-                class="form-check-label fs-15 filter-checkbox" 
-                data-method="{{ $method }}">
-            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-        </button>
-    @endforeach
-</div>
+                                        <!-- Button instead of label -->
+                                        <button type="button" 
+                                                class="form-check-label fs-15 filter-checkbox" 
+                                                data-method="{{ $method }}">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                        </button>
+                                    @endforeach
+                                </div>
 
-                            
+                                                            
 
 {{-- adding up --}}
 
