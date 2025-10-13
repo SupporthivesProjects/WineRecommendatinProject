@@ -8,19 +8,17 @@
   if (!navbar) {
     console.log("Sidebar element not found, skipping sticky function.");
     return; // Exit the function if the element doesn't exist
-  } else {
-    var sticky = navbar.offsetTop;
-    function stickyFn() {
-      if (window.scrollY >= 75) {
-        navbar.classList.add("sticky-pin")
-      } else {
-        navbar.classList.remove("sticky-pin");
-      }
-    }
-    window.addEventListener('scroll', stickyFn);
-    window.addEventListener('DOMContentLoaded', stickyFn);
   }
-  
-  
+
+  var sticky = navbar.offsetTop;
+  function stickyFn() {
+    if (window.scrollY >= 75) {
+      navbar.classList.add("sticky-pin")
+    } else {
+      navbar.classList.remove("sticky-pin");
+    }
+  }
+  window.addEventListener('scroll', stickyFn);
+  window.addEventListener('DOMContentLoaded', stickyFn);
 })();
 
