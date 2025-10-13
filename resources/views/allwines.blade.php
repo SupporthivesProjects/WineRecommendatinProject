@@ -1225,17 +1225,13 @@ if (hasFilters) {
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
         // Toggle checkbox manually if you want to keep them hidden
-           // $(document).on('click', '.filter-checkbox', function() {
-            //    const input = $(this).prev('input.wine-method-filter');
-               // if (input.length) {
-              //      input.prop('checked', !input.prop('checked')).trigger('change');
-             //   }
-           // });
-        $(document).on('click', '.wine-method-filter + label', function () {
-            const checkbox = $(this).prev('input[type=checkbox]');
-            checkbox.prop('checked', !checkbox.prop('checked'));
-            loadProducts(); // your AJAX function
-        });
+           $(document).on('click', '.filter-checkbox', function() {
+               const input = $(this).prev('input.wine-method-filter');
+               if (input.length) {
+                   input.prop('checked', !input.prop('checked')).trigger('change');
+               }
+           });
+       
 
 
 
