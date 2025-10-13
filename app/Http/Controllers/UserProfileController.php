@@ -16,7 +16,7 @@ class UserProfileController extends Controller
     $user = Auth::user();
 
     // Pass user data to a Blade view
-    return view('user.profile', compact('user'));
+    return view('user.userprofile', compact('user'));
 }
 
 }

@@ -179,8 +179,6 @@
                          aria-labelledby="mainHeaderProfile">
                          <Li>
                              <div class="header-navheading border-bottom">
-                                 {{-- <h6 class="main-notification-title">{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h6>
-                                <p class="main-notification-text mb-0">Super Admin</p> --}}
                                  <h6 class="main-notification-title">
                                      {{ Auth::check() ? Auth::user()->first_name . ' ' . Auth::user()->last_name : 'Guest' }}
                                  </h6>
@@ -191,8 +189,11 @@
                          </Li>
                          {{-- <li><a class="dropdown-item d-flex border-bottom" href="route('profile.edit')"><i class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li> --}}
 
-                         <li><a class="dropdown-item d-flex border-bottom" href="{{ route('user.profile.show') }}"><i
-                                     class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li>
+                         <li><a class="dropdown-item d-flex border-bottom" href="{{ route('user.userprofile.show') }}"><i
+                                     class="fe fe-user fs-16 align-middle me-2"></i>User Profile</a></li>
+                                     
+                        <li><a class="dropdown-item d-flex border-bottom" href="{{ route('user.storeprofile.show') }}"><i
+                                     class="fe fe-user fs-16 align-middle me-2"></i>Store Profile</a></li>
 
                          <li>
                              <form method="POST" action="{{ route('logout') }}" id="logout-form">
@@ -204,10 +205,6 @@
                                  </a>
                              </form>
                          </li>
-
-
-
-
                      </ul>
                  </div>
                  <!-- End::header-element -->
