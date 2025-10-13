@@ -49,8 +49,6 @@
                                             <button type="button" class="btn btn-icon rounded-pill"><i
                                                     class="fs-14 fe fe-facebook"></i></button>
                                             <button type="button" class="btn btn-icon rounded-pill"><i
-                                                    class="fs-14 fe fe-github"></i></button>
-                                            <button type="button" class="btn btn-icon rounded-pill"><i
                                                     class="fs-14 fe fe-twitter"></i></button>
                                             <button type="button" class="btn btn-icon rounded-pill"><i
                                                     class="fs-14 fe fe-instagram"></i></button>
