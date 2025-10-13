@@ -555,7 +555,7 @@
                                     //     ->filter(fn($m) => in_array($m, $allowedMethods));
                                 @endphp
 
-                                @foreach ($methods as $method)
+                                @foreach ($Methods as $method)
                                     @php
                                         $method = strtolower($method);
                                         $emoji = match ($method) {
