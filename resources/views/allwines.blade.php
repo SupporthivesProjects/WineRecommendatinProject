@@ -604,7 +604,7 @@
 
         <!-- Button instead of label -->
         <button type="button" 
-                class="btn btn-outline-dark method-filter-btn me-2 mb-2" 
+                class="form-check-label fs-15 filter-checkbox" 
                 data-method="{{ $method }}">
             <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
         </button>
