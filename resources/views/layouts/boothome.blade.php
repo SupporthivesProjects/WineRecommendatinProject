@@ -60,7 +60,7 @@
     <style>
 
     #header_logo_desktop {
-            height: 90px; /* default */
+            height: 70px; /* default */
             transition: height 0.4s ease; /* smooth animation */
         }
 
@@ -1293,9 +1293,9 @@
             // }
 
             if (window.scrollY >= 300) {
-                logo.style.height = "55px"; // shrink
+                logo.style.height = "45px"; // shrink
             } else {
-                logo.style.height = "90px"; // expand back
+                logo.style.height = "70px"; // expand back
             }
 
 
