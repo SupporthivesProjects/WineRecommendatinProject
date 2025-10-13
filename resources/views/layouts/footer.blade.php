@@ -6,6 +6,8 @@
                             <div class="top-footer">
                                 <div class="row">
                                     <div class="col-lg-4 col-sm-12 col-md-12 reveal revealleft position-relative">
+                                        <a href="index.html"><img loading="lazy" alt="" class="logo mb-3"
+                                                src="{{ asset('images/logoblackred_new.png') }}" style="width:180px;"></a>
                                         <h4>Wine Recommender</h4>
                                         <p class="mb-5 my-2  mb-lg-2">Discover Your perfect wine match with our intelligent recommendation system.
                                         </p>
@@ -31,8 +33,8 @@
                                     </div>
                                     <div class="col-lg-4 col-sm-12 col-md-4 reveal revealleft">
                                         <div class="">
-                                            <a href="index.html"><img loading="lazy" alt="" class="logo mb-3"
-                                                src="{{ asset('images/logoblackred.png') }}" style="width:100px;"></a>
+                                            <!-- <a href="index.html"><img loading="lazy" alt="" class="logo mb-3"
+                                                src="{{ asset('images/logoblackred.png') }}" style="width:100px;"></a> -->
                                             <p></p>
                                             <div class="form-group">
                                                 <div class="input-group">
