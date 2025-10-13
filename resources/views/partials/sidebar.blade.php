@@ -14,6 +14,7 @@
     <aside class="app-sidebar sticky" id="sidebar">
         <!-- Start::main-sidebar-header -->
         <div class="main-sidebar-header">
+            <img src="{{ asset('images/logofullwhite.png') }}" class="mx-auto">
             <a href="#" class="header-logo">
                 <h6 class="text-white">Welcome ! {{ Auth::user()->first_name }}</h6>
             </a>
