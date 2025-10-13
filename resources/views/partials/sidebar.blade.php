@@ -14,10 +14,12 @@
     <aside class="app-sidebar sticky" id="sidebar">
         <!-- Start::main-sidebar-header -->
         <div class="main-sidebar-header">
-            <img src="{{ asset('images/logofullwhite.png') }}" class="mx-auto">
-            <a href="#" class="header-logo">
-                <h6 class="text-white">Welcome ! {{ Auth::user()->first_name }}</h6>
-            </a>
+            <div style="display: flex;flex-direction: column;justify-content: flex-start;align-items: center;gap: 16px;">
+                <img src="{{ asset('images/logofullwhite.png') }}" style="max-width: 90px;" class="mx-auto">
+                <a href="#" class="header-logo">
+                    <h6 class="text-white">Welcome ! {{ Auth::user()->first_name }}</h6>
+                </a>
+            </div>
         </div>
         <!-- End::main-sidebar-header -->
 
