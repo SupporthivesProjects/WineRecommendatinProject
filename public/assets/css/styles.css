@@ -16861,7 +16861,7 @@ a.tag-addon:hover {
 }
 @media (min-width: 992px) and (min-width: 992px) {
   [data-nav-layout=horizontal] .horizontal-logo .header-logo img {
-    height: 90px;
+    height: 70px;
     line-height: 4rem;
     transition: height 0.3s ease-in-out;
   }
