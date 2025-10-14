@@ -234,6 +234,8 @@
                 margin-right: 1rem;
                 /* spacing between options */
                 white-space: nowrap;
+                 overflow: visible !important;
+                max-height: none !important;
             }
 
             .scrollable-filter {
@@ -587,8 +589,9 @@
                                             ->filter(fn($m) => in_array($m, $allowedMethods))
                                             ->values();
                                     @endphp
-
+                                    
                                     @foreach ($methods as $method)
+                                    
                                         @php
                                             $method = strtolower($method);
                                             $emoji = match ($method) {
