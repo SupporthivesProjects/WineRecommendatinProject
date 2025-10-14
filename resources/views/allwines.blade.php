@@ -509,74 +509,7 @@
                                 @endforeach
 
                             </div>
-                            {{-- <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                <h4 class="fw-bold mb-3">Country</h4>
-                                @php
-                                    $countries = $allProducts->pluck('country')->unique()->sort();
-                                @endphp
-
-                                @foreach ($countries as $country)
-                                    @php
-                                        $lowerCountry = strtolower($country);
-                                        $emoji = match ($lowerCountry) {
-                                            'france' => '🇫🇷',
-                                            'italy' => '🇮🇹',
-                                            'spain' => '🇪🇸',
-                                            'australia' => '🇦🇺',
-                                            'united states' => '🇺🇸',
-                                            'germany' => '🇩🇪',
-                                            'new zealand' => '🇳🇿',
-                                            'bulgaria' => '🇧🇬',
-                                            default => '🌍',
-                                        };
-
-                                    @endphp
-
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-country-filter" type="checkbox"
-                                            value="{{ $lowerCountry }}" id="country-inline-{{ $lowerCountry }}"
-                                            style="display: none;">
-
-                                        <label class="form-check-label fs-15 filter-checkbox"
-                                            for="country-inline-{{ $lowerCountry }}">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
-                                        </label>
-                                    </div>
-                                @endforeach
-
-                            </div> --}}
-                            {{-- <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                <h4 class="fw-bold mb-3">Method</h4>
-                                @php
-                                    $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-                                    $methods = $allProducts->pluck('Method')
-                                        ->filter()
-                                        ->unique()
-                                        ->sort()
-                                        ->map(fn($m) => strtolower(trim($m)))
-                                        ->filter(fn($m) => in_array($m, $allowedMethods));
-                                @endphp
-
-                                @foreach ($methods as $method)
-                                    @php
-                                        $method = strtolower($method);
-                                        $emoji = match ($method) {
-                                            'still' => '🍷',
-                                            'semi sparkling' => '🥂',
-                                            'sparkling' => '🍾',
-                                            default => '🌍',
-                                        };
-                                    @endphp
-
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-method-filter" type="checkbox"
-                                            value="{{ $method }}" id="method-inline-{{ $method }}"  >
-                                        <label class="form-check-label fs-15 filter-checkbox" for="method-inline-{{ $method }}">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div> --}}
+                            
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                     <h4 class="fw-bold mb-3">Method</h4>
 
