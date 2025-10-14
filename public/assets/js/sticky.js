@@ -26,12 +26,15 @@ function smallLogoByMehul() {
   let image = document.getElementById('dash-logo');
   let admin_name = document.getElementById('admin-name');
 
-  if (image.style.maxWidth = '90px') {
-    console.log('hello', image);
-    
-    
+  let condition1 = image.style.maxWidth = '90px';
+  let condition2 = admin_name.classList.contains('d-none')
+
+  if (condition1 && !condition2) {
+    image.style.maxWidth = '55px';
+    admin_name.classList.add('d-none')
   } else {
-     console.log('hi', image);
+    image.style.maxWidth = '90px';
+    admin_name.classList.remove('d-none')
   }
 
 }
