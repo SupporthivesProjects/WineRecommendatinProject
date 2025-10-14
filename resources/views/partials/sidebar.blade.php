@@ -13,10 +13,10 @@
     <!-- Start::app-sidebar -->
     <aside class="app-sidebar sticky" id="sidebar">
         <!-- Start::main-sidebar-header -->
-        <div class="main-sidebar-header">
+        <div class="main-sidebar-header" style="position: unset;">
             <div style="display: flex;flex-direction: column;justify-content: flex-start;align-items: center;gap: 16px;">
-                <img src="{{ asset('images/logofullwhite.png') }}" style="max-width: 90px;" class="mx-auto">
-                <a href="#" class="header-logo">
+                <img id="dash-logo" src="{{ asset('images/logofullwhite.png') }}" style="max-width: 90px;" class="mx-auto">
+                <a href="#" class="header-logo" id="admin-name">
                     <h6 class="text-white">Welcome ! {{ Auth::user()->first_name }}</h6>
                 </a>
             </div>
@@ -24,7 +24,7 @@
         <!-- End::main-sidebar-header -->
 
         <!-- Start::main-sidebar -->
-        <div class="main-sidebar" id="sidebar-scroll">
+        <div class="main-sidebar mt-0" id="sidebar-scroll">
             <nav class="main-menu-container nav nav-pills flex-column sub-open">
                 <div class="slide-left" id="slide-left">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">

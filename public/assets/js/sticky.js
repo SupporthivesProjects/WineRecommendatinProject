@@ -22,3 +22,16 @@
   window.addEventListener('DOMContentLoaded', stickyFn);
 })();
 
+function smallLogoByMehul() {
+  let image = document.getElementById('dash-logo');
+  let admin_name = document.getElementById('admin-name');
+
+  if (image.style.maxWidth = '90px') {
+    console.log('hello', image);
+    
+    
+  } else {
+     console.log('hi', image);
+  }
+
+}
