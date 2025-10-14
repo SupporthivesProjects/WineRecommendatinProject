@@ -27,14 +27,13 @@ function smallLogoByMehul() {
   let admin_name = document.getElementById('admin-name');
 
   let condition1 = image.style.maxWidth = '90px';
-  let condition2 = admin_name.classList.contains('d-none')
+  let condition2 = admin_name.style.opacity = '0';
 
   if (condition1 && !condition2) {
     image.style.maxWidth = '55px';
-    admin_name.classList.add('d-none')
+    admin_name.style.opacity = '0';
   } else {
     image.style.maxWidth = '90px';
-    admin_name.classList.remove('d-none')
+    admin_name.style.opacity = '1';
   }
-
 }
