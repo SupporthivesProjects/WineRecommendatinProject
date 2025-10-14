@@ -15,8 +15,8 @@
         <!-- Start::main-sidebar-header -->
         <div class="main-sidebar-header" style="position: unset;transition: all 1s ease;">
             <div style="display: flex;flex-direction: column;justify-content: flex-start;align-items: center;gap: 16px;">
-                <img id="dash-logo" src="{{ asset('images/logofullwhite.png') }}" style="max-width: 90px;transition: max-width 0.1s ease;" class="mx-auto">
-                <a href="#" class="header-logo" id="admin-name" style="opacity: 1;transition: opacity 0.1s ease;">
+                <img id="dash-logo" src="{{ asset('images/logofullwhite.png') }}" style="max-width: 90px;transition: max-width 1s ease;" class="mx-auto">
+                <a href="#" class="header-logo" id="admin-name" style="opacity: 1;transition: opacity 1s ease;">
                     <h6 class="text-white">Welcome ! {{ Auth::user()->first_name }}</h6>
                 </a>
             </div>
