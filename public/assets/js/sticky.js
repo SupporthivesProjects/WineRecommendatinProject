@@ -28,8 +28,9 @@ function smallLogoByMehul() {
 
   let condition1 = image.style.maxWidth = '90px';
   let condition2 = admin_name.style.opacity = '0';
-
-  if (condition1 && !condition2) {
+  console.log("hello");
+  
+  if (condition1) {
     image.style.maxWidth = '55px';
     admin_name.style.opacity = '0';
   } else {
