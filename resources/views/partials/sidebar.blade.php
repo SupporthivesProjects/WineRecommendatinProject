@@ -77,7 +77,7 @@
                         <li class="slide">
                             <a href="{{ route('admin.main_manager') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-users" style="color:var(--primary-color);"></i>
-                                <span class="side-menu__label">Main Manager</span>
+                                <span class="side-menu__label">Store Parent</span>
                             </a>
                         </li>
                         <li class="slide">
