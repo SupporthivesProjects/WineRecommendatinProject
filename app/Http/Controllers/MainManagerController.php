@@ -23,6 +23,24 @@ class MainManagerController extends Controller
         return view('mainManager.index', compact('mainManagers'));
     }
 
+    public function approveContactNumber($storeId)
+    {
+        $store = Store::findOrFail($storeId);
+
+        if ($store->new_contact_number && $store->contact_status == 'pending') {
+            $store->contact_number = $store->new_contact_number;
+            $store->contact_status = 'approved';
+            $store->new_contact_number = null;
+            $store->save();
+
+            return redirect()->back()->with('success', 'Contact number approved and updated successfully.');
+        }
+
+        return redirect()->back()->with('error', 'No new number request found.');
+    }
+
+
+
     //store manager 
     public function store(Request $request)
     {
@@ -64,7 +82,7 @@ class MainManagerController extends Controller
             ->with('success', 'User created successfully.');
     }
 
-    
+
     public function dashboard(Request $request)
     {
         $managerId = Auth::id();
@@ -86,11 +104,11 @@ class MainManagerController extends Controller
         }
 
         // Get date range from request or set defaults
-        $startDate = $request->input('start_date') 
+        $startDate = $request->input('start_date')
             ? Carbon::parse($request->input('start_date'))->startOfDay()
             : Carbon::now()->subDays(7)->startOfDay();
-            
-        $endDate = $request->input('end_date') 
+
+        $endDate = $request->input('end_date')
             ? Carbon::parse($request->input('end_date'))->endOfDay()
             : Carbon::now()->endOfDay();
 
@@ -221,13 +239,10 @@ class MainManagerController extends Controller
 
         // Fetch stores for this manager with required fields only
         $stores = Store::where('manager_id', $managerId)
-            ->select('id','store_name', 'contact_number', 'email', 'business_type', 'address')
+            ->select('id', 'store_name', 'contact_number', 'email', 'business_type', 'address', 'new_contact_number', 'contact_status')
             ->get();
 
-        // Pass to view
-        return view('mainManager.allStores', [
-            'stores' => $stores,
-        ]);
+        return view('mainManager.allStores', compact('stores'));
     }
 
     public function getStoreDetails($storeId)
@@ -235,9 +250,9 @@ class MainManagerController extends Controller
         $managerId = Auth::id();
 
         $store = Store::where('id', $storeId)
-                    ->where('manager_id', $managerId)
-                    ->firstOrFail();
-    
+            ->where('manager_id', $managerId)
+            ->firstOrFail();
+
 
         // All products for the store
         $products = DB::table('store_products')
@@ -245,7 +260,7 @@ class MainManagerController extends Controller
             ->where('store_products.store_id', $storeId)
             ->select('products.*')
             ->get();
-        
+
         // Featured products
         $featuredProducts = DB::table('store_products')
             ->join('products', 'store_products.product_id', '=', 'products.id')
@@ -253,8 +268,7 @@ class MainManagerController extends Controller
             ->where('store_products.is_featured', 1)
             ->select('products.*')
             ->get();
-        
-        
+
 
         $userIds = User::where('store_id', $storeId)
             ->where('role', 'user')
@@ -264,7 +278,7 @@ class MainManagerController extends Controller
         $sales = DB::table('cart_checkouts')
             ->whereIn('store_manager_id', $userIds)
             ->get(['products', 'created_at']);
-        
+
 
         $salesData = [];
 
@@ -286,11 +300,11 @@ class MainManagerController extends Controller
 
         $storeManagers = User::where('store_id', $storeId)
             ->where('role', 'store_manager')
-            ->get(['id', 'first_name', 'email','mobile']);
+            ->get(['id', 'first_name', 'email', 'mobile']);
 
 
-        
-        
+
+
         return view('mainManager.store_details', [
             'store' => $store,
             'products' => $products,
@@ -299,10 +313,4 @@ class MainManagerController extends Controller
             'storeManagers' => $storeManagers,
         ]);
     }
-
-
-
-
-    
-
 }
