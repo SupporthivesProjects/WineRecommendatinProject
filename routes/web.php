@@ -271,6 +271,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('main-manager.all-stores');
 });
 
+// Update Password
+Route::post('/profile/update-password', [UserProfileController::class, 'updatePassword'])
+    ->name('profile.update.password');
 
 Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
     ->name('admin.reviews.update-status');
