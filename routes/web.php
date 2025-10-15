@@ -254,6 +254,7 @@ Route::get('/user/profile', [UserProfileController::class, 'show'])->name('user.
 
 // Show Store profile
 Route::get('/profile', [StoreProfileController::class, 'show'])->name('user.storeprofile.show');
+Route::get('/store-tab-profile', [StoreProfileController::class, 'storeTab'])->name('user.store-tab-profile.show');
 
 // Update Contact Number (Form Submission)
 Route::post('/store/update-contact', [StoreProfileController::class, 'updateContactNumber'])
