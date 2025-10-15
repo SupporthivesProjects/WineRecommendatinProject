@@ -47,11 +47,10 @@
                                     @endif
                                 </div>
 
-                                {{-- <div>
+                                <div>
                                     <h4 class="mb-1">{{ $user->first_name }} {{ $user->last_name }}</h4>
-                                    <span class="badge bg-danger text-white">Not Verified</span>
                                     <p class="text-muted mb-0">{{ $user->email }}</p>
-                                </div> --}}
+                                </div>
                             </div>
 
                             <!-- Edit Profile Fields (Display Only) -->
@@ -100,9 +99,7 @@
                                     <h5 class="mb-3">Account Information</h5>
                                     <p class="mb-2"><strong>Member since:</strong> {{ $user->created_at->format('F d, Y') }}</p>
                                     <p class="mb-2"><strong>Last updated:</strong> {{ $user->updated_at->format('F d, Y h:i A') }}</p>
-                                    <small class="text-muted d-block mt-3">
-                                        Your profile information is used to personalize your experience on the platform.
-                                    </small>
+                                    
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,8 @@
      <header class="app-header">
          <!-- Start::main-header-container -->
          <div class="main-header-container container-fluid">
+             
+
 
              <!-- Start::header-content-left -->
              <div class="header-content-left">
@@ -114,6 +116,20 @@
              <!-- Start::header-content-right -->
              <div class="header-content-right">
 
+                 <!-- Notification Bell -->
+                 <div class="header-element me-3 position-relative">
+                     <a href="{{ route('main-manager.all-stores') }}" class="header-link ">
+                         <i class="fe fe-bell fs-18"></i>
+                         @if (isset($pendingRequests) && $pendingRequests > 0)
+                             <span
+                                 class="badge bg-danger rounded-circle position-absolute" 
+                                 style="top: 14px; right: -5px;">
+                                 {{ $pendingRequests }}
+                             </span>
+                         @endif
+                     </a>
+                 </div>
+
                  <!-- Start::header-element -->
                  <div class="header-element header-theme-mode">
                      <!-- Start::header-link|layout-setting -->
@@ -187,14 +203,19 @@
 
                              </div>
                          </Li>
-                         {{-- <li><a class="dropdown-item d-flex border-bottom" href="route('profile.edit')"><i class="fe fe-user fs-16 align-middle me-2"></i>Profile</a></li> --}}
 
-                         <li><a class="dropdown-item d-flex border-bottom" href="{{ route('user.userprofile.show') }}"><i
+                         <li><a class="dropdown-item d-flex border-bottom"
+                                 href="{{ route('user.userprofile.show') }}"><i
                                      class="fe fe-user fs-16 align-middle me-2"></i>User Profile</a></li>
-                                     
-                        <li><a class="dropdown-item d-flex border-bottom" href="{{ route('user.storeprofile.show') }}"><i
-                                     class="fe fe-user fs-16 align-middle me-2"></i>Store Profile</a></li>
-
+                         {{-- Show Store Profile only for Store Manager --}}
+                         @if (Auth::check() && Auth::user()->role === 'store_manager')
+                             <li>
+                                 <a class="dropdown-item d-flex border-bottom"
+                                     href="{{ route('user.storeprofile.show') }}">
+                                     <i class="fe fe-user fs-16 align-middle me-2"></i>Store Profile
+                                 </a>
+                             </li>
+                         @endif
                          <li>
                              <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                  @csrf

@@ -2,12 +2,12 @@
 
 @section('admindashboardcontent')
     @push('styles')
-    <style>
-        .dataTables_filter input[type="search"] {
-            width: 300px !important; 
-            margin-bottom: 20px;
-        }
-    </style>
+        <style>
+            .dataTables_filter input[type="search"] {
+                width: 300px !important;
+                margin-bottom: 20px;
+            }
+        </style>
     @endpush
 
     <!-- Products Section -->
@@ -23,7 +23,7 @@
                     </ol>
                 </div>
                 <div class="d-flex">
-                <a href="{{ route('main-manager.dashboard') }}" class="btn btn-wave btn-secondary my-2 btn-icon-text">
+                    <a href="{{ route('main-manager.dashboard') }}" class="btn btn-wave btn-secondary my-2 btn-icon-text">
                         <i class="fe fe-arrow-left me-2"></i> Back to List
                     </a>
                 </div>
@@ -35,6 +35,20 @@
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-body">
+                            @if (session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            @endif
+
+                            @if (session('error'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            @endif
+
                             <!-- Table -->
                             <div class="table-responsive">
                                 <table id="file-export" class="table table-bordered" style="width:100%">
@@ -52,15 +66,51 @@
                                     <tbody>
                                         @forelse ($stores as $index => $store)
                                             <tr>
-                                                <td class="align-middle">{{ $index + 1 }}</td>
+                                                <td class="align-middle">{{ $index + 1 }}
+                                                     @if ($store->new_contact_number && $store->contact_status == 'pending')
+                                                        <i class="fe fe-alert-circle text-danger ms-2" title="New number pending approval"></i>
+                                                    @endif
+                                                </td>
+
                                                 <td class="align-middle">{{ $store->store_name }}</td>
+
                                                 <td class="align-middle">{{ ucfirst($store->business_type) }}</td>
-                                                <td class="align-middle">{{ $store->contact_number }}</td>
+
+                                                <td class="align-middle">
+                                                    {{ $store->contact_number }}
+
+                                                    @if ($store->new_contact_number)
+                                                        <br>
+                                                        <small class="text-muted d-block">
+                                                            New Request: <strong>{{ $store->new_contact_number }}</strong>
+                                                            <span
+                                                                class="badge bg-warning text-dark">{{ ucfirst($store->contact_status) }}</span>
+                                                        </small>
+
+                                                        <form action="{{ route('manager.approve.contact', $store->id) }}"
+                                                            method="POST" class="mt-1">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-success">
+                                                                Approve
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </td>
+
                                                 <td class="align-middle">{{ $store->email }}</td>
                                                 <td class="align-middle">${{ $store->address }}</td>
                                                 <td class="align-middle">
-                                                    <!-- <a href="#" class="text-primary">View</a> -->
-                                                    <a href="{{ route('manager.store.details', ['storeId' => $store->id]) }}" class="text-primary">View</a>
+                                                    <a href="{{ route('manager.store.details', ['storeId' => $store->id]) }}"
+                                                        class="text-primary">View</a>
+                                                    @if ($store->new_contact_number && $store->status == 'pending')
+                                                        <form action="{{ route('manager.approve.contact', $store->id) }}"
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm btn-success ms-2">
+                                                                Approve
+                                                            </button>
+                                                        </form>
+                                                    @endif
 
                                                 </td>
                                             </tr>
@@ -70,6 +120,7 @@
                                             </tr>
                                         @endforelse
                                     </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -83,8 +134,4 @@
 @endsection
 
 @push('scripts')
-    
-
 @endpush
-
-
