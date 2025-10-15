@@ -275,6 +275,105 @@
             </div>
         </div>
     </nav> --}}
+    <html lang="en" dir="ltr" data-nav-layout="horizontal" data-nav-style="menu-click" data-menu-position="fixed"
+    data-theme-mode="light">
+    <head>
+
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> Wine Recommender</title>
+    <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('images/wine_store_favicon.ico') }}" type="image/x-icon">
+    <!-- Bootstrap Css -->
+    <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Style Css -->
+    <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet">
+    <!-- Icons Css -->
+    <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
+    <!-- Node Waves Css -->
+    <link href="{{ asset('assets/libs/node-waves/waves.min.css') }}" rel="stylesheet">
+    <!-- SwiperJS Css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}">
+    <!-- Color Picker Css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/@simonwep/pickr/themes/nano.min.css') }}">
+    <!-- Choices Css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}">
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+    <!-- OLD LINKS START -->
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+
+    <!-- Owl Carousel links -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <style>
+      
+      .hero-section 
+      {
+            background: 
+                linear-gradient(rgba(128, 128, 0, 0.4), rgba(128, 128, 0, 0.4)), 
+                url('/images/Corksabout.jpg') center/cover no-repeat;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+        }
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 40vh;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <!-- Scripts -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    <!-- OLD LINKS END -->
+    <script>
+        if (localStorage.spruhalandingdarktheme) {
+            document.querySelector("html").setAttribute("data-theme-mode", "dark")
+        }
+        if (localStorage.spruhalandingrtl) {
+            document.querySelector("html").setAttribute("dir", "rtl")
+            document.querySelector("#style")?.setAttribute("href",
+                "{{ asset('assets/libs/bootstrap/css/bootstrap.rtl.min.css') }}");
+        }
+    </script>
+
+
+</head>
     <!-- app-header -->
         <header class="app-header">
             <!-- Start::main-header-container -->
