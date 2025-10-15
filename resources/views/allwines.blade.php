@@ -926,6 +926,7 @@
             </div>
         </div>
     </section>
+    </html>
 
 @endsection
 @push('scripts')
