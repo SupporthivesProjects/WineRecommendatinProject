@@ -1,4 +1,5 @@
 @extends('layouts.bootdashboard')
+@section('content')
 @php
     use Illuminate\Support\Str;
 @endphp
@@ -258,32 +259,9 @@
 
         </style>
     @endpush
-     <!-- Start:: Section-1 Hero Section STARTS -->
-                <div class="wine-bg min-h-screen flex flex-col">
-                    <!-- Hero Content -->
-                    <div class="flex-grow flex items-center justify-center">
-                        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Discover Your Perfect Wine</h1>
-                            <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
-                                Our intelligent recommendation system helps you find the perfect wine for any occasion, based on
-                                your taste preferences and food pairings...
-                            </p>
-                            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                                <a href="#explore"
-                                    class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
-                                    Explore Wines
-                                </a>
-                                <a href="#HIW"
-                                    class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
-                                    How It Works
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- HERO SECTION ENDS -->
+
     <!-- Transparent Navbar -->
-    {{-- <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
         <div class="container d-flex align-items-center">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -297,7 +275,7 @@
 
             </div>
         </div>
-    </nav> --}}
+    </nav>
     <!-- header section -->
     <section class="parallax-container">
         <div class="parallax-bg"></div>
