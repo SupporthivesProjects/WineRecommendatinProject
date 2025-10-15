@@ -136,48 +136,31 @@
 @endpush
 
 
-<!-- ✅ HEADER SECTION (copied from boothome) -->
-<div class="main-content landing-main" id="home">
-    <div class="wine-bg min-h-screen flex flex-col">
-        <!-- Navbar -->
-        <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
-            <div class="container d-flex align-items-center">
-                <a class="navbar-brand text-white fw-bold" href="{{ route('home') }}">WineReco</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
-                        <li class="nav-item"><a href="#products" class="nav-link">Explore Wines</a></li>
-                        <li class="nav-item"><a href="#HIW" class="nav-link">How It Works</a></li>
-                    </ul>
-                </div>
-            </div>
+<header style="background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 80px;">
+        <div>
+            <img src="{{ asset('assets/images/logo.png') }}" alt="WineReco Logo" style="height: 60px;">
+        </div>
+
+        <nav>
+            <ul style="display: flex; list-style: none; gap: 40px; margin: 0; padding: 0;">
+                <li><a href="/" style="text-decoration: none; color: black; font-weight: 500;">Home</a></li>
+                <li><a href="/how-it-works" style="text-decoration: none; color: black; font-weight: 500;">How It Works</a></li>
+                <li><a href="/browse-wines" style="text-decoration: none; color: black; font-weight: 500;">Browse Wines</a></li>
+                <li><a href="/pairing-wines" style="text-decoration: none; color: black; font-weight: 500;">Pairing Wines</a></li>
+                <li><a href="/testimonials" style="text-decoration: none; color: black; font-weight: 500;">What our users say</a></li>
+                <li><a href="/moments" style="text-decoration: none; color: black; font-weight: 500;">Moments</a></li>
+                <li><a href="/contact" style="text-decoration: none; color: black; font-weight: 500;">Contact Us</a></li>
+            </ul>
         </nav>
 
-        <!-- Hero Text -->
-        <div class="flex-grow flex items-center justify-center text-center px-4">
-            <div class="max-w-5xl mx-auto">
-                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Explore Our Finest Wines</h1>
-                <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
-                    Curated selections for every occasion, crafted to your taste and mood.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#products"
-                       class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
-                        Browse Wines
-                    </a>
-                    <a href="#HIW"
-                       class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
-                        How It Works
-                    </a>
-                </div>
-            </div>
+        <div>
+            <a href="/login" style="background: #1eb7ff; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">Login</a>
         </div>
     </div>
-</div>
+</header>
 
+@include('layouts.header') <!-- header comes first -->
 
 <!-- ✅ FILTERS + PRODUCTS SECTION -->
 <section class="filters-and-cards" id="products">
