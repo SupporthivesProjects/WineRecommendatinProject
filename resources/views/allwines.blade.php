@@ -6,15 +6,12 @@
 @section('admindashboardcontent')
     @push('styles')
         <style>
-            html,
-            body {
-
+            html, body {
                 overflow-x: hidden;
             }
 
             #mystyle {
                 font-family: 'Cinzel Decorative', serif;
-
             }
 
             .featured-badge {
@@ -28,7 +25,6 @@
                 top: 10px;
                 right: 10px;
                 z-index: 10;
-
             }
 
             .hero-section {
@@ -58,7 +54,6 @@
 
             .wine-card:hover {
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-                /* Floating effect */
                 transform: translateY(-4px);
             }
 
@@ -80,7 +75,6 @@
 
             .form-check-input:checked {
                 background-color: #8b0000;
-                /* Deep wine red */
                 border-color: #8b0000;
             }
 
@@ -93,7 +87,6 @@
                 box-shadow: 0 0 0 0.1rem rgba(139, 0, 0, 0.25);
             }
 
-
             .transparent-navbar {
                 background: transparent;
                 position: fixed;
@@ -104,7 +97,6 @@
             }
 
             .navbar-dark .nav-link {
-                /* color: #a50908!important; */
                 font-size: 15px !important;
             }
 
@@ -128,7 +120,6 @@
                 left: 0;
                 right: 0;
                 height: 150%;
-                /* Make it larger so we can scroll it */
                 z-index: -1;
                 transform: translateY(0);
                 transition: transform 0.1s linear;
@@ -138,12 +129,10 @@
                 position: relative;
                 z-index: 1;
                 color: white;
-                text-align: center;
-                padding-top: 30vh;
                 text-align: right;
+                padding-top: 30vh;
                 width: 100%;
                 padding-right: 5%;
-
             }
 
             .filters-and-cards {
@@ -152,32 +141,10 @@
                 min-height: 100vh;
             }
 
-            #price-slider .ui-slider-tick-mark {
-                position: absolute;
-                height: 10px;
-                width: 1px;
-                background: #000;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-
-            #price-slider {
-                position: relative;
-            }
-
-            #price-slider .tick-label {
-                position: absolute;
-                top: 20px;
-                font-size: 12px;
-                transform: translateX(-50%);
-            }
-
-
             .ui-slider-range {
                 background-color: red !important;
             }
 
-            /* Slider handles */
             .ui-slider-horizontal .ui-slider-handle {
                 width: 20px;
                 height: 20px;
@@ -194,8 +161,6 @@
                 background-color: #0b5ed7 !important;
             }
 
-
-            /* Style the label like a button/tag */
             .filter-checkbox {
                 cursor: pointer;
                 display: inline-flex;
@@ -209,14 +174,12 @@
                 margin-right: 8px;
             }
 
-            /* Highlight selected (checked) checkbox label */
-            input[type="checkbox"].form-check-input:checked+.filter-checkbox {
+            input[type="checkbox"].form-check-input:checked + .filter-checkbox {
                 background-color: rgba(165, 9, 8, 0.7);
                 color: white;
                 border-color: white;
             }
 
-            /* Emoji styling */
             .emoji {
                 font-size: 1.4em;
                 line-height: 1;
@@ -226,28 +189,26 @@
                 overflow-x: auto;
                 white-space: nowrap;
                 -webkit-overflow-scrolling: touch;
-                /* Smooth scroll on mobile */
             }
 
             .wine-type-scroll .form-check {
                 display: inline-block;
                 margin-right: 1rem;
-                /* spacing between options */
                 white-space: nowrap;
-                 overflow: visible !important;
+                overflow: visible !important;
                 max-height: none !important;
             }
 
             .scrollable-filter {
-                max-height: 200px; /* adjust as you like */
+                max-height: 200px;
                 overflow-y: auto;
-                padding-right: 6px; /* to prevent scrollbar overlap */
+                padding-right: 6px;
             }
 
-            /* optional: make scrollbar nicer */
             .scrollable-filter::-webkit-scrollbar {
                 width: 6px;
             }
+
             .scrollable-filter::-webkit-scrollbar-thumb {
                 background: #ccc;
                 border-radius: 3px;
@@ -258,131 +219,93 @@
             }
 
             .app-header .nav-link:hover {
-                color: #0b5ed7; /* Blue hover */
+                color: #0b5ed7;
             }
 
             .app-header {
-                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             }
-
-
-
         </style>
     @endpush
 
-    <!-- Transparent Navbar -->
-    {{-- <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
-        <div class="container d-flex align-items-center">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-between w-100" id="navbarNav">
-                <!-- Nav links (left aligned) -->
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
+    <!-- Header -->
+    <header class="app-header sticky-top" style="background-color: white; border-bottom: 1px solid #ddd;">
+        <div class="container d-flex align-items-center justify-content-between py-2">
+            <!-- Left: Nav Links -->
+            <nav class="d-flex align-items-center">
+                <ul class="nav mb-0">
+                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
+                    <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
+                    <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
+                    <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
+                    <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
+                    <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
                 </ul>
+            </nav>
 
+            <!-- Right: Login + Logo -->
+            <div class="d-flex align-items-center">
+                <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold me-3 px-4 py-2" style="border-radius: 30px;">Login</a>
+                <a href="{{ route('home') }}" class="d-flex align-items-center">
+                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 45px;">
+                </a>
             </div>
         </div>
-    </nav> --}}
-    <!-- New Header Section -->
-<header class="app-header sticky-top" style="background-color: white; border-bottom: 1px solid #ddd;">
-    <div class="container d-flex align-items-center justify-content-between py-2">
-        
-        <!-- Left: Navigation Links -->
-        <nav class="d-flex align-items-center">
-            <ul class="nav mb-0">
-                <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a>
-                </li>
-            </ul>
-        </nav>
+    </header>
 
-        <!-- Right: Logo and Login Button -->
-        <div class="d-flex align-items-center">
-            <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold me-3 px-4 py-2" style="border-radius: 30px;">
-                Login
-            </a>
-            <a href="{{ route('home') }}" class="d-flex align-items-center">
-                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 45px;">
-            </a>
-        </div>
-
-    </div>
-</header>
-
-    <!-- header section -->
+    <!-- Hero Section -->
     <section class="parallax-container">
         <div class="parallax-bg"></div>
         <div class="hero-text my-3">
             <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
             <p>Curated selections for every occasion</p>
-            <a type="button" class="btn btn-dark" href="#products">
-                Explore
-            </a>
+            <a type="button" class="btn btn-dark" href="#products">Explore</a>
         </div>
     </section>
-    <!-- section 2 of scrolling cards -->
+
+    <!-- Filters & Cards Section -->
     <section class="filters-and-cards" id="products">
-        <div class="">
-            <div class="container my-5">
-                <!-- Start::row-6 -->
-                <div class="row g-2">
-                    <!-- Filter sidebar -->
-                    <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
-                        <!-- Vintage Year Filter -->
-                        <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Vintage Year</h4>
-                            <div class="vintage-year-filter-container ">
-                                @foreach ($vintageYears->take(6) as $year)
+        <div class="container my-5">
+            <div class="row g-2">
+                <!-- Filter Sidebar -->
+                <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
+                    <!-- Vintage Year Filter -->
+                    <div class="filter-group">
+                        <h4 class="fw-bold mb-4">Vintage Year</h4>
+
+                        <div class="vintage-year-filter-container">
+                            @foreach ($vintageYears->take(6) as $year)
+                                @if ($year)
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
+                                        <label class="form-check-label" for="vintage-year-{{ $year }}">{{ $year }}</label>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+
+                        @if ($vintageYears->count() > 6)
+                            <div class="vintage-year-filter-more d-none">
+                                @foreach ($vintageYears->skip(6) as $year)
                                     @if ($year)
                                         <div class="form-check">
-                                            <input class="form-check-input wine-vintage-year-filter" type="checkbox"
-                                                value="{{ $year }}" id="vintage-year-{{ $year }}">
-                                            <label class="form-check-label" for="vintage-year-{{ $year }}">
-                                                {{ $year }}
-                                            </label>
+                                            <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
+                                            <label class="form-check-label" for="vintage-year-{{ $year }}">{{ $year }}</label>
                                         </div>
                                     @endif
                                 @endforeach
                             </div>
+                            <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-vintage-year-filter" data-more-text="Show More" data-less-text="Show Less">
+                                Show More
+                            </button>
+                        @endif
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    
 
-                            @if ($vintageYears->count() > 6)
-                                <div class="vintage-year-filter-more d-none">
-                                    @foreach ($vintageYears->skip(6) as $year)
-                                        @if ($year)
-                                            <div class="form-check">
-                                                <input class="form-check-input wine-vintage-year-filter" type="checkbox"
-                                                    value="{{ $year }}" id="vintage-year-{{ $year }}">
-                                                <label class="form-check-label" for="vintage-year-{{ $year }}">
-                                                    {{ $year }}
-                                                </label>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-vintage-year-filter"
-                                    data-more-text="Show More" data-less-text="Show Less">
-                                    Show More
-                                </button>
-                            @endif
-                        </div>
+
 
                         <!-- Winery Filter -->
                         {{--<div class="filter-group">
