@@ -253,14 +253,25 @@
                 border-radius: 3px;
             }
 
-        
+            .app-header .nav-link {
+                transition: color 0.3s ease;
+            }
+
+            .app-header .nav-link:hover {
+                color: #0b5ed7; /* Blue hover */
+            }
+
+            .app-header {
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            }
+
 
 
         </style>
     @endpush
 
     <!-- Transparent Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
+    {{-- <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
         <div class="container d-flex align-items-center">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -274,7 +285,48 @@
 
             </div>
         </div>
-    </nav>
+    </nav> --}}
+    <!-- New Header Section -->
+<header class="app-header sticky-top" style="background-color: white; border-bottom: 1px solid #ddd;">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+        
+        <!-- Left: Navigation Links -->
+        <nav class="d-flex align-items-center">
+            <ul class="nav mb-0">
+                <li class="nav-item">
+                    <a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Right: Logo and Login Button -->
+        <div class="d-flex align-items-center">
+            <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold me-3 px-4 py-2" style="border-radius: 30px;">
+                Login
+            </a>
+            <a href="{{ route('home') }}" class="d-flex align-items-center">
+                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 45px;">
+            </a>
+        </div>
+
+    </div>
+</header>
+
     <!-- header section -->
     <section class="parallax-container">
         <div class="parallax-bg"></div>
