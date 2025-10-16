@@ -16,20 +16,6 @@ class StoreProfileController extends Controller
         // Pass the store data to the view
         return view('user.storeprofile', compact('store'));
     }
-    public function storeTab()
-    {
-        $storeId = Auth::user()->store_id;
-        if (is_null($storeId)) {
-            return view('partials.storeprofile-content')->with('error', 'Store ID is not assigned to your account.');
-        }
-        $store = Store::find($storeId);
-        if (!$store) {
-            return view('partials.storeprofile-content')->with('error', 'The store associated with your account could not be found.');
-        }
-        return view('partials.storeprofile-content', compact('store'));
-    }
-
-
 
     public function updateContactNumber(Request $request)
     {
