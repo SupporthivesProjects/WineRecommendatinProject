@@ -95,14 +95,8 @@
                                             <label class="form-label"><strong>Phone Number</strong></label>
                                             <p class="form-control">{{ $user->mobile }}</p>
                                         </div>
-
                                         <div class="mb-3">
-                                            <label class="form-label"><strong>Username</strong></label>
-                                            <p class="form-control">{{ $user->username }}</p>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label"><strong></strong></label>
+                                            <label class="form-label"><strong>Password</strong></label>
                                             <p class="form-control">*********</p>
                                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                                 data-bs-target="#passwordFields" aria-expanded="false"
