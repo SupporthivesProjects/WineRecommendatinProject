@@ -96,7 +96,7 @@
     .scrollable-filter::-webkit-scrollbar { width: 6px; }
     .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
 
-    .app-header .nav-link { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: color 0.3s ease; }
+    .app-header .nav-link { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: color 0.3s ease; color: black; font-size: 14px; font-weight: 500!important; }
     .app-header .nav-link:hover { color: #0b5ed7; }
 
     .app-header { 
@@ -124,8 +124,8 @@
 @endpush
 
 <!-- Header -->
-<header class="app-header" style="background-color: white;border-bottom: 1px solid #ddd;height: 80px;position: fixed;top: 0;left: 0;right: 0;z-index: 1000;padding-left: 120px;">
-  <div class="container-fluid d-flex align-items-center justify-content-between" style="height: 100%;">
+<header class="app-header p-0" style="background-color: white;border-bottom: 1px solid #ddd;height: 80px;">
+  <div class="container d-flex align-items-center justify-content-between" style="height: 100%;">
     
     <!-- Left: Logo -->
     <div class="d-flex align-items-center" style="flex: 0 0 auto;">
@@ -137,12 +137,12 @@
     <!-- Center: Navigation -->
     <nav class="flex-grow-1 d-flex justify-content-center">
       <ul class="nav mb-0">
-        <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}" class="nav-link  fw-semibold px-3">Home</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link  fw-semibold px-3">How It Works</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link  fw-semibold px-3">Browse Wines</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link  fw-semibold px-3">Pairing Wines</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link  fw-semibold px-3">What Our Users Say</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link  fw-semibold px-3">Moments in Between</a></li>
       </ul>
     </nav>
 
@@ -159,7 +159,14 @@
 <!-- Hero Section -->
 <section class="parallax-container">
     <div class="parallax-bg"></div>
-    <div class="hero-text my-3">
+    <div class="hero-text my-3" style="
+    text-align: right;
+    max-width: 390px;
+    color: white;
+    position: absolute;
+    right: 95px;
+    top: 50%;
+    transform: translateY(-50%);">
         <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
         <p>Curated selections for every occasion</p>
         <a type="button" class="btn btn-dark" href="#products">Explore</a>
