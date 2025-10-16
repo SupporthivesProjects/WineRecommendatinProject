@@ -124,29 +124,37 @@
 @endpush
 
 <!-- Header -->
-<header class="app-header" style="background-color: white; border-bottom: 1px solid #ddd; height: 80px; overflow-x: auto; white-space: nowrap; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
-    <div class="container d-flex align-items-center justify-content-between py-3">
-        <!-- Left: Logo -->
-        <a href="{{ route('home') }}" class="d-flex align-items-center">
-            <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 50px;">
-        </a>
-
-        <!-- Right: Navigation + Login -->
-        <div class="d-flex align-items-center">
-            <nav class="d-none d-md-block">
-                <ul class="nav mb-0">
-                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
-                </ul>
-            </nav>
-            <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold ms-3 px-4 py-2" style="border-radius: 30px;">Login</a>
-        </div>
+<header class="app-header" style="background-color: white;border-bottom: 1px solid #ddd;height: 80px;position: fixed;top: 0;left: 0;right: 0;z-index: 1000;padding-left: 120px;">
+  <div class="container-fluid d-flex align-items-center justify-content-between" style="height: 100%;">
+    
+    <!-- Left: Logo -->
+    <div class="d-flex align-items-center" style="flex: 0 0 auto;">
+      <a href="{{ route('home') }}">
+        <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 80px;width: 80px;">
+      </a>
     </div>
+
+    <!-- Center: Navigation -->
+    <nav class="flex-grow-1 d-flex justify-content-center">
+      <ul class="nav mb-0">
+        <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
+        <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right: Login Button -->
+    <div class="d-flex align-items-center" style="flex: 0 0 auto;">
+      <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold px-4 py-2" 
+         style="border-radius: 6px;">Login</a>
+    </div>
+
+  </div>
 </header>
+
 
 <!-- Hero Section -->
 <section class="parallax-container">
