@@ -5,6 +5,7 @@ namespace App\Http\Controllers\StoreManager;
 use App\Http\Controllers\Controller;
 use App\Models\CheeseProduct;
 use App\Models\Store;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,8 +14,10 @@ class StoreManagerCheeseProductController extends Controller
     public function index()
     {
         try {
-            $store = Store::where('manager_id', Auth::id())->firstOrFail();
-            
+            //$store = Store::where('manager_id', Auth::id())->firstOrFail();
+            $store = User::where('store_id', Auth::id())->firstOrFail();
+
+
             // Get all active cheese products with their inventory status and quantity
             $cheeseProducts = CheeseProduct::where('is_active', true)
                 ->with(['stores' => function($query) use ($store) {
