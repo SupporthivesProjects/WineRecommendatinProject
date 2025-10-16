@@ -7,7 +7,12 @@
 @push('styles')
 <style>
     html, body { overflow-x: hidden; }
+
+    /* Add padding-top so content doesn't hide behind fixed header */
+    body { padding-top: 80px; }
+
     #mystyle { font-family: 'Cinzel Decorative', serif; }
+
     .featured-badge {
         background-color: rgba(165, 9, 8, 0.7);
         color: white;
@@ -20,6 +25,7 @@
         right: 10px;
         z-index: 10;
     }
+
     .hero-section {
         height: 100vh;
         background-image: url('{{ asset('images/Browsewines3.jpg') }}');
@@ -33,25 +39,86 @@
         position: relative;
         z-index: 1;
     }
+
     .hero-text h1 { font-size: 3rem; margin-bottom: 1rem; }
+
     .wine-card {
         border-radius: 0 !important;
         transition: box-shadow 0.3s ease, transform 0.3s ease;
         box-shadow: none;
     }
+
     .wine-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(-4px); }
+
     .filter-group { margin-bottom: 2rem; }
-    .filter-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+
     .form-check { margin-bottom: 0.75rem; }
+
     .form-check-input:checked { background-color: #8b0000; border-color: #8b0000; }
+
     .form-check-label { font-size: 0.95rem; color: #444; }
+
     .form-check-input:focus { box-shadow: 0 0 0 0.1rem rgba(139, 0, 0, 0.25); }
-    .transparent-navbar {
-        background: transparent; position: fixed; top: 20px; width: 101%;
-        z-index: 10; padding: 20px 0;
+
+    .filter-checkbox {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        user-select: none;
+        transition: background-color 0.3s, border-color 0.3s;
+        margin-right: 8px;
     }
-    .navbar-dark .nav-link { font-size: 15px !important; }
-    .scrolled { background-color: rgba(0, 0, 0, 0.7) !important; border-radius: 0px; }
+
+    input[type="checkbox"].form-check-input:checked + .filter-checkbox {
+        background-color: rgba(165, 9, 8, 0.7);
+        color: white;
+        border-color: white;
+    }
+
+    .emoji { font-size: 1.4em; line-height: 1; }
+
+    .wine-type-scroll { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+
+    .wine-type-scroll .form-check {
+        display: inline-block;
+        margin-right: 1rem;
+        white-space: nowrap;
+        overflow: visible !important;
+        max-height: none !important;
+    }
+
+    .scrollable-filter { max-height: 200px; overflow-y: auto; padding-right: 6px; }
+
+    .scrollable-filter::-webkit-scrollbar { width: 6px; }
+    .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+    .app-header .nav-link { transition: color 0.3s ease; }
+    .app-header .nav-link:hover { color: #0b5ed7; }
+
+    .app-header { 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: white;
+        border-bottom: 1px solid #ddd;
+        height: 80px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .filters-and-cards {
+        background: #fff;
+        padding: 100px 20px;
+        min-height: 100vh;
+    }
+
     .parallax-container { position: relative; height: 70vh; overflow: hidden; }
     .parallax-bg {
         background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
@@ -63,58 +130,12 @@
         transform: translateY(0);
         transition: transform 0.1s linear;
     }
-    .hero-text {
-        position: relative; z-index: 1; color: white;
-        text-align: right; padding-top: 30vh;
-        width: 100%; padding-right: 5%;
-    }
-    .filters-and-cards {
-        background: #fff;
-        padding: 100px 20px;
-        min-height: 100vh;
-    }
-    .ui-slider-range { background-color: red !important; }
-    .ui-slider-horizontal .ui-slider-handle {
-        width: 20px; height: 20px; border-radius: 50%;
-        border: none; background-color: #dc3545 !important;
-        top: -0.4em; cursor: pointer;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.2s ease;
-    }
-    .ui-slider-horizontal .ui-slider-handle:hover { background-color: #0b5ed7 !important; }
-    .filter-checkbox {
-        cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
-        padding: 6px 12px; border: 1px solid #ccc; border-radius: 20px;
-        user-select: none; transition: background-color 0.3s, border-color 0.3s;
-        margin-right: 8px;
-    }
-    input[type="checkbox"].form-check-input:checked + .filter-checkbox {
-        background-color: rgba(165, 9, 8, 0.7);
-        color: white; border-color: white;
-    }
-    .emoji { font-size: 1.4em; line-height: 1; }
-    .wine-type-scroll {
-        overflow-x: auto; white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
-    .wine-type-scroll .form-check {
-        display: inline-block; margin-right: 1rem;
-        white-space: nowrap; overflow: visible !important;
-        max-height: none !important;
-    }
-    .scrollable-filter { max-height: 200px; overflow-y: auto; padding-right: 6px; }
-    .scrollable-filter::-webkit-scrollbar { width: 6px; }
-    .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-    .app-header .nav-link { transition: color 0.3s ease; }
-    .app-header .nav-link:hover { color: #0b5ed7; }
-    .app-header { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
 </style>
 @endpush
 
 <!-- Header -->
-<header class="app-header" style="background-color: white; border-bottom: 1px solid #ddd; margin-top: 10px;">
+<header class="app-header">
     <div class="container d-flex align-items-center justify-content-between py-3">
-
         <!-- Left: Logo -->
         <a href="{{ route('home') }}" class="d-flex align-items-center">
             <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 50px;">
@@ -147,15 +168,14 @@
     </div>
 </section>
 
+
 <!-- Filters & Cards Section -->
 <section class="filters-and-cards" id="products">
     <div class="container my-5">
         <div class="row g-2">
-            
-            <!-- Sidebar Filters -->
+            <!-- Filter Sidebar -->
             <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
-
-                <!-- Vintage Year -->
+                <!-- Vintage Year Filter -->
                 <div class="filter-group">
                     <h4 class="fw-bold mb-4">Vintage Year</h4>
                     <div class="vintage-year-filter-container">
@@ -173,13 +193,15 @@
                             @foreach ($vintageYears->skip(6) as $year)
                                 @if ($year)
                                     <div class="form-check">
-                                        <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-skip-{{ $year }}">
-                                        <label class="form-check-label" for="vintage-year-skip-{{ $year }}">{{ $year }}</label>
+                                        <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
+                                        <label class="form-check-label" for="vintage-year-{{ $year }}">{{ $year }}</label>
                                     </div>
                                 @endif
                             @endforeach
                         </div>
-                        <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-vintage-year-filter">Show More</button>
+                        <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-vintage-year-filter" data-more-text="Show More" data-less-text="Show Less">
+                            Show More
+                        </button>
                     @endif
                 </div>
 
@@ -201,7 +223,9 @@
                             @endphp
                             <div class="form-check">
                                 <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
-                                <label class="form-check-label" for="country-{{ Str::slug($country) }}"><span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}</label>
+                                <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                    <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                </label>
                             </div>
                         @endforeach
                     </div>
@@ -217,19 +241,25 @@
                                     };
                                 @endphp
                                 <div class="form-check">
-                                    <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $lowerCountry }}" id="country-skip-{{ Str::slug($country) }}">
-                                    <label class="form-check-label" for="country-skip-{{ Str::slug($country) }}"><span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}</label>
+                                    <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                    <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                    </label>
                                 </div>
                             @endforeach
                         </div>
-                        <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-country-filter">Show More</button>
+                        <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-country-filter" data-more-text="Show More" data-less-text="Show Less">
+                            Show More
+                        </button>
                     @endif
                 </div>
 
-                <!-- Retail Price -->
+                <!-- Retail Price Slider -->
                 <div class="filter-group">
                     <h4 class="fw-bold mb-4">Retail Price</h4>
-                    <p><span id="price-range-label">₹ <span id="price-min"></span> - ₹ <span id="max-price"></span></span></p>
+                    <p>
+                        <span id="price-range-label">₹ <span id="price-min"></span> - ₹ <span id="max-price"></span></span>
+                    </p>
                     <div id="price-slider" style="margin-top: 10px;"></div>
                 </div>
             </div>
@@ -252,7 +282,7 @@
                         </div>
                     </div>
 
-                    <!-- Types -->
+                    <!-- Type & Method Filters -->
                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                         <h4 class="fw-bold mb-3">Types</h4>
                         @php
@@ -269,13 +299,14 @@
                                 @endphp
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input wine-type-filter" type="checkbox" value="{{ $lowerType }}" id="type-inline-{{ $lowerType }}" style="display:none;">
-                                    <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}"><span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}</label>
+                                    <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
+                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
+                                    </label>
                                 </div>
                             @endif
                         @endforeach
                     </div>
 
-                    <!-- Method -->
                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                         <h4 class="fw-bold mb-3">Method</h4>
                         @php
@@ -293,12 +324,14 @@
                                 };
                             @endphp
                             <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display:none;">
-                            <button type="button" class="form-check-label fs-15 filter-checkbox" data-method="{{ $method }}"><span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}</button>
+                            <button type="button" class="form-check-label fs-15 filter-checkbox" data-method="{{ $method }}">
+                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                            </button>
                         @endforeach
                     </div>
                 </div>
 
-                <!-- Product Cards -->
+                <!-- Products Container -->
                 <div class="row row-sm" id="products-container">
                     @if (isset($products) && $products->count() > 0)
                         @include('partials.product_cards', ['products' => $products])
@@ -322,6 +355,7 @@
     </div>
 </section>
 @endsection
+
 
 @push('scripts')
     <script>
