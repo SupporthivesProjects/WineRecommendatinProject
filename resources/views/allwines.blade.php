@@ -96,7 +96,7 @@
     .scrollable-filter::-webkit-scrollbar { width: 6px; }
     .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
 
-    .app-header .nav-link { transition: color 0.3s ease; }
+    .app-header .nav-link { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: color 0.3s ease; }
     .app-header .nav-link:hover { color: #0b5ed7; }
 
     .app-header { 
