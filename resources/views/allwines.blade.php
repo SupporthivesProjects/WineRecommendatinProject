@@ -4,277 +4,169 @@
 @endphp
 
 @section('admindashboardcontent')
-    @push('styles')
-        <style>
-            html, body {
-                overflow-x: hidden;
-            }
+@push('styles')
+<style>
+    html, body { overflow-x: hidden; }
+    #mystyle { font-family: 'Cinzel Decorative', serif; }
+    .featured-badge {
+        background-color: rgba(165, 9, 8, 0.7);
+        color: white;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+    .hero-section {
+        height: 100vh;
+        background-image: url('{{ asset('images/Browsewines3.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        position: relative;
+        z-index: 1;
+    }
+    .hero-text h1 { font-size: 3rem; margin-bottom: 1rem; }
+    .wine-card {
+        border-radius: 0 !important;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        box-shadow: none;
+    }
+    .wine-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(-4px); }
+    .filter-group { margin-bottom: 2rem; }
+    .filter-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+    .form-check { margin-bottom: 0.75rem; }
+    .form-check-input:checked { background-color: #8b0000; border-color: #8b0000; }
+    .form-check-label { font-size: 0.95rem; color: #444; }
+    .form-check-input:focus { box-shadow: 0 0 0 0.1rem rgba(139, 0, 0, 0.25); }
+    .transparent-navbar {
+        background: transparent; position: fixed; top: 20px; width: 101%;
+        z-index: 10; padding: 20px 0;
+    }
+    .navbar-dark .nav-link { font-size: 15px !important; }
+    .scrolled { background-color: rgba(0, 0, 0, 0.7) !important; border-radius: 0px; }
+    .parallax-container { position: relative; height: 70vh; overflow: hidden; }
+    .parallax-bg {
+        background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 150%; z-index: -1;
+        transform: translateY(0);
+        transition: transform 0.1s linear;
+    }
+    .hero-text {
+        position: relative; z-index: 1; color: white;
+        text-align: right; padding-top: 30vh;
+        width: 100%; padding-right: 5%;
+    }
+    .filters-and-cards {
+        background: #fff;
+        padding: 100px 20px;
+        min-height: 100vh;
+    }
+    .ui-slider-range { background-color: red !important; }
+    .ui-slider-horizontal .ui-slider-handle {
+        width: 20px; height: 20px; border-radius: 50%;
+        border: none; background-color: #dc3545 !important;
+        top: -0.4em; cursor: pointer;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.2s ease;
+    }
+    .ui-slider-horizontal .ui-slider-handle:hover { background-color: #0b5ed7 !important; }
+    .filter-checkbox {
+        cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 12px; border: 1px solid #ccc; border-radius: 20px;
+        user-select: none; transition: background-color 0.3s, border-color 0.3s;
+        margin-right: 8px;
+    }
+    input[type="checkbox"].form-check-input:checked + .filter-checkbox {
+        background-color: rgba(165, 9, 8, 0.7);
+        color: white; border-color: white;
+    }
+    .emoji { font-size: 1.4em; line-height: 1; }
+    .wine-type-scroll {
+        overflow-x: auto; white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    .wine-type-scroll .form-check {
+        display: inline-block; margin-right: 1rem;
+        white-space: nowrap; overflow: visible !important;
+        max-height: none !important;
+    }
+    .scrollable-filter { max-height: 200px; overflow-y: auto; padding-right: 6px; }
+    .scrollable-filter::-webkit-scrollbar { width: 6px; }
+    .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    .app-header .nav-link { transition: color 0.3s ease; }
+    .app-header .nav-link:hover { color: #0b5ed7; }
+    .app-header { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
+</style>
+@endpush
 
-            #mystyle {
-                font-family: 'Cinzel Decorative', serif;
-            }
-
-            .featured-badge {
-                background-color: rgba(165, 9, 8, 0.7);
-                color: white;
-                padding: 5px 10px;
-                font-size: 12px;
-                font-weight: bold;
-                text-transform: uppercase;
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                z-index: 10;
-            }
-
-            .hero-section {
-                height: 100vh;
-                background-image: url('{{ asset('images/Browsewines3.jpg') }}');
-                background-size: cover;
-                background-position: center;
-                background-attachment: fixed;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: white;
-                position: relative;
-                z-index: 1;
-            }
-
-            .hero-text h1 {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-            }
-
-            .wine-card {
-                border-radius: 0 !important;
-                transition: box-shadow 0.3s ease, transform 0.3s ease;
-                box-shadow: none;
-            }
-
-            .wine-card:hover {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-                transform: translateY(-4px);
-            }
-
-            .filter-group {
-                margin-bottom: 2rem;
-            }
-
-            .filter-title {
-                font-size: 1.25rem;
-                font-weight: 600;
-                margin-bottom: 1rem;
-                border-bottom: 1px solid #ddd;
-                padding-bottom: 0.5rem;
-            }
-
-            .form-check {
-                margin-bottom: 0.75rem;
-            }
-
-            .form-check-input:checked {
-                background-color: #8b0000;
-                border-color: #8b0000;
-            }
-
-            .form-check-label {
-                font-size: 0.95rem;
-                color: #444;
-            }
-
-            .form-check-input:focus {
-                box-shadow: 0 0 0 0.1rem rgba(139, 0, 0, 0.25);
-            }
-
-            .transparent-navbar {
-                background: transparent;
-                position: fixed;
-                top: 20px;
-                width: 101%;
-                z-index: 10;
-                padding: 20px 0;
-            }
-
-            .navbar-dark .nav-link {
-                font-size: 15px !important;
-            }
-
-            .scrolled {
-                background-color: rgba(0, 0, 0, 0.7) !important;
-                border-radius: 0px;
-            }
-
-            .parallax-container {
-                position: relative;
-                height: 70vh;
-                overflow: hidden;
-            }
-
-            .parallax-bg {
-                background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
-                background-size: cover;
-                background-position: center;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 150%;
-                z-index: -1;
-                transform: translateY(0);
-                transition: transform 0.1s linear;
-            }
-
-            .hero-text {
-                position: relative;
-                z-index: 1;
-                color: white;
-                text-align: right;
-                padding-top: 30vh;
-                width: 100%;
-                padding-right: 5%;
-            }
-
-            .filters-and-cards {
-                background: #fff;
-                padding: 100px 20px;
-                min-height: 100vh;
-            }
-
-            .ui-slider-range {
-                background-color: red !important;
-            }
-
-            .ui-slider-horizontal .ui-slider-handle {
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                border: none;
-                background-color: #dc3545 !important;
-                top: -0.4em;
-                cursor: pointer;
-                box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-                transition: background-color 0.2s ease;
-            }
-
-            .ui-slider-horizontal .ui-slider-handle:hover {
-                background-color: #0b5ed7 !important;
-            }
-
-            .filter-checkbox {
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-radius: 20px;
-                user-select: none;
-                transition: background-color 0.3s, border-color 0.3s;
-                margin-right: 8px;
-            }
-
-            input[type="checkbox"].form-check-input:checked + .filter-checkbox {
-                background-color: rgba(165, 9, 8, 0.7);
-                color: white;
-                border-color: white;
-            }
-
-            .emoji {
-                font-size: 1.4em;
-                line-height: 1;
-            }
-
-            .wine-type-scroll {
-                overflow-x: auto;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .wine-type-scroll .form-check {
-                display: inline-block;
-                margin-right: 1rem;
-                white-space: nowrap;
-                overflow: visible !important;
-                max-height: none !important;
-            }
-
-            .scrollable-filter {
-                max-height: 200px;
-                overflow-y: auto;
-                padding-right: 6px;
-            }
-
-            .scrollable-filter::-webkit-scrollbar {
-                width: 6px;
-            }
-
-            .scrollable-filter::-webkit-scrollbar-thumb {
-                background: #ccc;
-                border-radius: 3px;
-            }
-
-            .app-header .nav-link {
-                transition: color 0.3s ease;
-            }
-
-            .app-header .nav-link:hover {
-                color: #0b5ed7;
-            }
-
-            .app-header {
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            }
-        </style>
-    @endpush
-
-    <!-- Header -->
-    <header class="app-header sticky-top" style="background-color: white; border-bottom: 1px solid #ddd;">
-        <div class="container d-flex align-items-center justify-content-between py-2">
-            <!-- Left: Nav Links -->
-            <nav class="d-flex align-items-center">
-                <ul class="nav mb-0">
-                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
-                    <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
-                </ul>
-            </nav>
-
-            <!-- Right: Login + Logo -->
-            <div class="d-flex align-items-center">
-                <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold me-3 px-4 py-2" style="border-radius: 30px;">Login</a>
-                <a href="{{ route('home') }}" class="d-flex align-items-center">
-                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 45px;">
-                </a>
-            </div>
+<!-- Header -->
+<header class="app-header sticky-top" style="background-color: white; border-bottom: 1px solid #ddd;">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+        <nav class="d-flex align-items-center">
+            <ul class="nav mb-0">
+                <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
+            </ul>
+        </nav>
+        <div class="d-flex align-items-center">
+            <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold me-3 px-4 py-2" style="border-radius: 30px;">Login</a>
+            <a href="{{ route('home') }}" class="d-flex align-items-center">
+                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 45px;">
+            </a>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Hero Section -->
-    <section class="parallax-container">
-        <div class="parallax-bg"></div>
-        <div class="hero-text my-3">
-            <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
-            <p>Curated selections for every occasion</p>
-            <a type="button" class="btn btn-dark" href="#products">Explore</a>
-        </div>
-    </section>
+<!-- Hero Section -->
+<section class="parallax-container">
+    <div class="parallax-bg"></div>
+    <div class="hero-text my-3">
+        <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
+        <p>Curated selections for every occasion</p>
+        <a type="button" class="btn btn-dark" href="#products">Explore</a>
+    </div>
+</section>
 
-    <!-- Filters & Cards Section -->
-    <section class="filters-and-cards" id="products">
-        <div class="container my-5">
-            <div class="row g-2">
-                <!-- Filter Sidebar -->
-                <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
-                    <!-- Vintage Year Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Vintage Year</h4>
+<!-- Filters & Cards Section -->
+<section class="filters-and-cards" id="products">
+    <div class="container my-5">
+        <div class="row g-2">
+            <!-- Filter Sidebar -->
+            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
 
-                        <div class="vintage-year-filter-container">
-                            @foreach ($vintageYears->take(6) as $year)
+                <!-- Vintage Year Filter -->
+                <div class="filter-group">
+                    <h4 class="fw-bold mb-4">Vintage Year</h4>
+                    <div class="vintage-year-filter-container">
+                        @foreach ($vintageYears->take(6) as $year)
+                            @if ($year)
+                                <div class="form-check">
+                                    <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
+                                    <label class="form-check-label" for="vintage-year-{{ $year }}">{{ $year }}</label>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    @if ($vintageYears->count() > 6)
+                        <div class="vintage-year-filter-more d-none">
+                            @foreach ($vintageYears->skip(6) as $year)
                                 @if ($year)
                                     <div class="form-check">
                                         <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
@@ -283,264 +175,156 @@
                                 @endif
                             @endforeach
                         </div>
+                        <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-vintage-year-filter" data-more-text="Show More" data-less-text="Show Less">
+                            Show More
+                        </button>
+                    @endif
+                </div>
 
-                        @if ($vintageYears->count() > 6)
-                            <div class="vintage-year-filter-more d-none">
-                                @foreach ($vintageYears->skip(6) as $year)
-                                    @if ($year)
-                                        <div class="form-check">
-                                            <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
-                                            <label class="form-check-label" for="vintage-year-{{ $year }}">{{ $year }}</label>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                            <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-vintage-year-filter" data-more-text="Show More" data-less-text="Show Less">
-                                Show More
-                            </button>
-                        @endif
-                    </div>
-                </div> <!-- end col -->
-            </div> <!-- end row -->
-        </div> <!-- end container -->
-    
-
-
-
-                        <!-- Winery Filter -->
-                        {{--<div class="filter-group">
-                            <h4 class="fw-bold mb-4">Country</h4>
-                            <div class="winery-filter-container">
-                                @foreach ($wineries->take(6) as $winery)
-                                    @if ($winery)
-                                        <div class="form-check">
-                                            <input class="form-check-input wine-winery-filter" type="checkbox"
-                                                value="{{ $winery }}" id="winery-{{ Str::slug($winery) }}">
-                                            <label class="form-check-label" for="winery-{{ Str::slug($winery) }}">
-                                                {{ ucfirst($winery) }} 🍷
-                                            </label>
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-
-                            @if ($wineries->count() > 6)
-                                <div class="winery-filter-more d-none">
-                                    @foreach ($wineries->skip(6) as $winery)
-                                        @if ($winery)
-                                            <div class="form-check">
-                                                <input class="form-check-input wine-winery-filter" type="checkbox"
-                                                    value="{{ $winery }}" id="winery-{{ Str::slug($winery) }}">
-                                                <label class="form-check-label" for="winery-{{ Str::slug($winery) }}">
-                                                    {{ ucfirst($winery) }} 🍷
-                                                </label>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-winery-filter"
-                                    data-more-text="Show More" data-less-text="Show Less">
-                                    Show More
-                                </button>
-                            @endif
-                        </div>--}}
-                        <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Country</h4>
-
+                <!-- Country Filter -->
+                <div class="filter-group">
+                    <h4 class="fw-bold mb-4">Country</h4>
+                    @php
+                        $countries = $allProducts->pluck('country')->filter()->unique()->sort();
+                    @endphp
+                    <div class="country-filter-container">
+                        @foreach ($countries->take(6) as $country)
                             @php
-                                $countries = $allProducts->pluck('country')->filter()->unique()->sort();
+                                $lowerCountry = strtolower($country);
+                                $emoji = match ($lowerCountry) {
+                                    'france' => '🇫🇷', 'italy' => '🇮🇹', 'spain' => '🇪🇸', 'australia' => '🇦🇺',
+                                    'united states' => '🇺🇸', 'germany' => '🇩🇪', 'new zealand' => '🇳🇿', 'bulgaria' => '🇧🇬',
+                                    default => '🌍',
+                                };
                             @endphp
-
-                            <div class="country-filter-container">
-                                @foreach ($countries->take(6) as $country)
-                                    @php
-                                        $lowerCountry = strtolower($country);
-                                        $emoji = match ($lowerCountry) {
-                                            'france' => '🇫🇷',
-                                            'italy' => '🇮🇹',
-                                            'spain' => '🇪🇸',
-                                            'australia' => '🇦🇺',
-                                            'united states' => '🇺🇸',
-                                            'germany' => '🇩🇪',
-                                            'new zealand' => '🇳🇿',
-                                            'bulgaria' => '🇧🇬',
-                                            default => '🌍',
-                                        };
-                                    @endphp
-
-                                    <div class="form-check">
-                                        <input class="form-check-input wine-country-filter" type="checkbox"
-                                            value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
-                                        <label class="form-check-label" for="country-{{ Str::slug($country) }}">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
-                                        </label>
-                                    </div>
-                                @endforeach
+                            <div class="form-check">
+                                <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                    <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                </label>
                             </div>
-
-                            @if ($countries->count() > 6)
-                                <div class="country-filter-more d-none">
-                                    @foreach ($countries->skip(6) as $country)
-                                        @php
-                                            $lowerCountry = strtolower($country);
-                                            $emoji = match ($lowerCountry) {
-                                                'france' => '🇫🇷',
-                                                'italy' => '🇮🇹',
-                                                'spain' => '🇪🇸',
-                                                'australia' => '🇦🇺',
-                                                'united states' => '🇺🇸',
-                                                'germany' => '🇩🇪',
-                                                'new zealand' => '🇳🇿',
-                                                'bulgaria' => '🇧🇬',
-                                                default => '🌍',
-                                            };
-                                        @endphp
-
-                                        <div class="form-check">
-                                            <input class="form-check-input wine-country-filter" type="checkbox"
-                                                value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
-                                            <label class="form-check-label" for="country-{{ Str::slug($country) }}">
-                                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                        @endforeach
+                    </div>
+                    @if ($countries->count() > 6)
+                        <div class="country-filter-more d-none">
+                            @foreach ($countries->skip(6) as $country)
+                                @php
+                                    $lowerCountry = strtolower($country);
+                                    $emoji = match ($lowerCountry) {
+                                        'france' => '🇫🇷', 'italy' => '🇮🇹', 'spain' => '🇪🇸', 'australia' => '🇦🇺',
+                                        'united states' => '🇺🇸', 'germany' => '🇩🇪', 'new zealand' => '🇳🇿', 'bulgaria' => '🇧🇬',
+                                        default => '🌍',
+                                    };
+                                @endphp
+                                <div class="form-check">
+                                    <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                    <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                    </label>
                                 </div>
-
-                                <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-country-filter"
-                                    data-more-text="Show More" data-less-text="Show Less">
-                                    Show More
-                                </button>
-                            @endif
+                            @endforeach
                         </div>
+                        <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-country-filter" data-more-text="Show More" data-less-text="Show Less">
+                            Show More
+                        </button>
+                    @endif
+                </div>
 
+                <!-- Retail Price Slider -->
+                <div class="filter-group">
+                    <h4 class="fw-bold mb-4">Retail Price</h4>
+                    <p>
+                        <span id="price-range-label">₹ <span id="price-min"></span> - ₹ <span id="max-price"></span></span>
+                    </p>
+                    <div id="price-slider" style="margin-top: 10px;"></div>
+                </div>
 
-                        <!-- Retail Price Slider -->
-                        <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Retail Price</h4>
-                            <p>
-                                <span id="price-range-label">₹&nbsp;<span id="price-min"></span> - ₹&nbsp;<span
-                                        id="max-price"></span></span>
-                            </p>
-                            <div id="price-slider" style="margin-top: 10px;"></div>
+            </div> <!-- /col-md-3 -->
+
+            <!-- Products Grid -->
+            <div class="col-12 col-md-9 rounded rounded-2 p-3">
+                <div class="row mb-4">
+                    <div class="col-12 mb-3">
+                        <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-outline-dark filter-btn active" data-filter="all">All Wines</button>
+                                <button class="btn btn-outline-dark filter-btn" data-filter="featured">
+                                    <i class="fas fa-star"></i> Featured Wines
+                                </button>
+                            </div>
+                            <div class="ms-auto">
+                                <div class="input-group">
+                                    <input type="text" id="search-input" class="form-control" placeholder="Search wines..." style="border: black 1px solid;border-radius: 4px 0 0 4px;">
+                                    <button class="btn btn-outline-secondary" type="button" id="search-button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <!-- Products grid -->
-                    <div class="col-12 col-md-9  rounded rounded-2 p-3">
-                        <!-- Type and Country filters at top -->
-                        <div class="row mb-4">
-                            <div class="col-12 mb-3">
-                                <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <button class="btn btn-outline-dark filter-btn active" data-filter="all">All
-                                            Wines</button>
-                                        <button class="btn btn-outline-dark filter-btn" data-filter="featured">
-                                            <i class="fas fa-star"></i> Featured Wines
-                                        </button>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <div class="input-group">
-                                            <input type="text" id="search-input" class="form-control" placeholder="Search wines..." style="border: black 1px solid;border-radius: 4px 0px 0px 4px;">
-                                            <button class="btn btn-outline-secondary" type="button" id="search-button">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                <h4 class="fw-bold mb-3">Types</h4>
+
+                    <!-- Type Filter -->
+                    <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                        <h4 class="fw-bold mb-3">Types</h4>
+                        @php
+                            $types = $allProducts->pluck('type')->unique()->sort();
+                        @endphp
+                        @foreach ($types as $type)
+                            @if ($type)
                                 @php
-                                    $types = $allProducts->pluck('type')->unique()->sort();
+                                    $lowerType = strtolower($type);
+                                    $emoji = match ($lowerType) {
+                                        'red' => '🍷', 'white' => '🥂', 'sparkling' => '✨', 'ros' => '🌸', 'dessert' => '🍯', 'bordeaux' => '🏰',
+                                        default => '🍾',
+                                    };
                                 @endphp
-
-                                <!-- Types Filter -->
-                                @foreach ($types as $type)
-                                    @if ($type)
-                                        <!-- Only show if type is not null/empty -->
-                                        @php
-                                            $lowerType = strtolower($type);
-                                            $emoji = match ($lowerType) {
-                                                'red' => '🍷',
-                                                'white' => '🥂',
-                                                'sparkling' => '✨',
-                                                'ros' => '🌸',
-                                                'dessert' => '🍯',
-                                                'bordeaux' => '🏰',
-                                                default => '🍾',
-                                            };
-                                        @endphp
-
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input wine-type-filter" type="checkbox"
-                                                value="{{ $lowerType }}" id="type-inline-{{ $lowerType }}"
-                                                style="display: none;">
-
-                                            <label class="form-check-label fs-15 filter-checkbox"
-                                                for="type-inline-{{ $lowerType }}">
-                                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
-                                            </label>
-                                        </div>
-                                    @endif
-                                @endforeach
-
-                            </div>
-                            
-                            <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                    <h4 class="fw-bold mb-3">Method</h4>
-
-                                    @php
-                                        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
-                                        $methods = $allProducts->pluck('Method')
-                                            ->unique()
-                                            ->sort()
-                                            ->map(fn($m) => strtolower(trim($m)))
-                                            ->filter(fn($m) => in_array($m, $allowedMethods))
-                                            ->values();
-                                    @endphp
-                                    
-                                    @foreach ($methods as $method)
-                                    
-                                        @php
-                                            $method = strtolower($method);
-                                            $emoji = match ($method) {
-                                                'still' => '🍷',
-                                                'semi sparkling' => '🥂',
-                                                'sparkling' => '🍾',
-                                                default => '🌍',
-                                            };
-                                        @endphp
-
-                                        <!-- Hidden checkbox -->
-                                        <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
-
-                                        <!-- Button instead of label -->
-                                        <button type="button" 
-                                                class="form-check-label fs-15 filter-checkbox" 
-                                                data-method="{{ $method }}">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
-                                        </button>
-                                    @endforeach
-                                </div>
-
-                                                            
-
-{{-- adding up --}}
-
-                        </div>
-                        <div class="row row-sm" id="products-container">
-                            @if (isset($products) && $products->count() > 0)
-                                @include('partials.product_cards', ['products' => $products])
-                            @else
-                                <div class="col-12 text-center py-5">
-                                    <p class="text-muted">No products found.</p>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input wine-type-filter" type="checkbox" value="{{ $lowerType }}" id="type-inline-{{ $lowerType }}" style="display:none;">
+                                    <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
+                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
+                                    </label>
                                 </div>
                             @endif
-                        </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Method Filter -->
+                    <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                        <h4 class="fw-bold mb-3">Method</h4>
+                        @php
+                            $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+                            $methods = $allProducts->pluck('Method')->unique()->sort()
+                                ->map(fn($m) => strtolower(trim($m)))
+                                ->filter(fn($m) => in_array($m, $allowedMethods))
+                                ->values();
+                        @endphp
+                        @foreach ($methods as $method)
+                            @php
+                                $emoji = match ($method) {
+                                    'still' => '🍷', 'semi sparkling' => '🥂', 'sparkling' => '🍾',
+                                    default => '🌍',
+                                };
+                            @endphp
+                            <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display:none;">
+                            <button type="button" class="form-check-label fs-15 filter-checkbox" data-method="{{ $method }}">
+                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                            </button>
+                        @endforeach
                     </div>
                 </div>
-                <!-- End::row-6 -->
 
+                <!-- Products Container -->
+                <div class="row row-sm" id="products-container">
+                    @if (isset($products) && $products->count() > 0)
+                        @include('partials.product_cards', ['products' => $products])
+                    @else
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted">No products found.</p>
+                        </div>
+                    @endif
+                </div>
 
+                <!-- Pagination -->
                 @if (isset($products) && $products->hasPages())
                     <div class="pagination-container">
                         @if (!request()->ajax())
@@ -548,16 +332,12 @@
                         @endif
                     </div>
                 @endif
-
-
-
-
-
-            </div>
-        </div>
-    </section>
-
+            </div> <!-- /col-md-9 -->
+        </div> <!-- /row -->
+    </div> <!-- /container -->
+</section>
 @endsection
+
 @push('scripts')
     <script>
         // Add loading overlay HTML
