@@ -8,7 +8,7 @@
 <style>
     html, body { overflow-x: hidden; }
 
-    /* Add padding-top so content doesn't hide behind fixed header */
+    /* Add padding to body so content doesn't hide under fixed header */
     body { padding-top: 80px; }
 
     #mystyle { font-family: 'Cinzel Decorative', serif; }
@@ -100,17 +100,7 @@
     .app-header .nav-link:hover { color: #0b5ed7; }
 
     .app-header { 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background-color: white;
-        border-bottom: 1px solid #ddd;
-        height: 80px;
-        overflow-x: auto;
-        white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
     }
 
     .filters-and-cards {
@@ -134,7 +124,7 @@
 @endpush
 
 <!-- Header -->
-<header class="app-header">
+<header class="app-header" style="background-color: white; border-bottom: 1px solid #ddd; height: 80px; overflow-x: auto; white-space: nowrap; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;">
     <div class="container d-flex align-items-center justify-content-between py-3">
         <!-- Left: Logo -->
         <a href="{{ route('home') }}" class="d-flex align-items-center">
@@ -167,7 +157,6 @@
         <a type="button" class="btn btn-dark" href="#products">Explore</a>
     </div>
 </section>
-
 
 <!-- Filters & Cards Section -->
 <section class="filters-and-cards" id="products">
