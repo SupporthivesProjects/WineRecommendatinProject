@@ -234,6 +234,8 @@
                 margin-right: 1rem;
                 /* spacing between options */
                 white-space: nowrap;
+                 overflow: visible !important;
+                max-height: none !important;
             }
 
             .scrollable-filter {
@@ -251,6 +253,7 @@
                 border-radius: 3px;
             }
 
+        
 
 
         </style>
@@ -330,8 +333,8 @@
                         </div>
 
                         <!-- Winery Filter -->
-                        <div class="filter-group">
-                            <h4 class="fw-bold mb-4">Winery</h4>
+                        {{--<div class="filter-group">
+                            <h4 class="fw-bold mb-4">Country</h4>
                             <div class="winery-filter-container">
                                 @foreach ($wineries->take(6) as $winery)
                                     @if ($winery)
@@ -365,7 +368,76 @@
                                     Show More
                                 </button>
                             @endif
+                        </div>--}}
+                        <div class="filter-group">
+                            <h4 class="fw-bold mb-4">Country</h4>
+
+                            @php
+                                $countries = $allProducts->pluck('country')->filter()->unique()->sort();
+                            @endphp
+
+                            <div class="country-filter-container">
+                                @foreach ($countries->take(6) as $country)
+                                    @php
+                                        $lowerCountry = strtolower($country);
+                                        $emoji = match ($lowerCountry) {
+                                            'france' => '🇫🇷',
+                                            'italy' => '🇮🇹',
+                                            'spain' => '🇪🇸',
+                                            'australia' => '🇦🇺',
+                                            'united states' => '🇺🇸',
+                                            'germany' => '🇩🇪',
+                                            'new zealand' => '🇳🇿',
+                                            'bulgaria' => '🇧🇬',
+                                            default => '🌍',
+                                        };
+                                    @endphp
+
+                                    <div class="form-check">
+                                        <input class="form-check-input wine-country-filter" type="checkbox"
+                                            value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                        <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if ($countries->count() > 6)
+                                <div class="country-filter-more d-none">
+                                    @foreach ($countries->skip(6) as $country)
+                                        @php
+                                            $lowerCountry = strtolower($country);
+                                            $emoji = match ($lowerCountry) {
+                                                'france' => '🇫🇷',
+                                                'italy' => '🇮🇹',
+                                                'spain' => '🇪🇸',
+                                                'australia' => '🇦🇺',
+                                                'united states' => '🇺🇸',
+                                                'germany' => '🇩🇪',
+                                                'new zealand' => '🇳🇿',
+                                                'bulgaria' => '🇧🇬',
+                                                default => '🌍',
+                                            };
+                                        @endphp
+
+                                        <div class="form-check">
+                                            <input class="form-check-input wine-country-filter" type="checkbox"
+                                                value="{{ $lowerCountry }}" id="country-{{ Str::slug($country) }}">
+                                            <label class="form-check-label" for="country-{{ Str::slug($country) }}">
+                                                <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <button type="button" class="btn btn-sm btn-link p-0 mt-2 toggle-country-filter"
+                                    data-more-text="Show More" data-less-text="Show Less">
+                                    Show More
+                                </button>
+                            @endif
                         </div>
+
 
                         <!-- Retail Price Slider -->
                         <div class="filter-group">
@@ -437,42 +509,48 @@
                                 @endforeach
 
                             </div>
+                            
                             <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
-                                <h4 class="fw-bold mb-3">Country</h4>
-                                @php
-                                    $countries = $allProducts->pluck('country')->unique()->sort();
-                                @endphp
+                                    <h4 class="fw-bold mb-3">Method</h4>
 
-                                @foreach ($countries as $country)
                                     @php
-                                        $lowerCountry = strtolower($country);
-                                        $emoji = match ($lowerCountry) {
-                                            'france' => '🇫🇷',
-                                            'italy' => '🇮🇹',
-                                            'spain' => '🇪🇸',
-                                            'australia' => '🇦🇺',
-                                            'united states' => '🇺🇸',
-                                            'germany' => '🇩🇪',
-                                            'new zealand' => '🇳🇿',
-                                            'bulgaria' => '🇧🇬',
-                                            default => '🌍',
-                                        };
-
+                                        $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+                                        $methods = $allProducts->pluck('Method')
+                                            ->unique()
+                                            ->sort()
+                                            ->map(fn($m) => strtolower(trim($m)))
+                                            ->filter(fn($m) => in_array($m, $allowedMethods))
+                                            ->values();
                                     @endphp
+                                    
+                                    @foreach ($methods as $method)
+                                    
+                                        @php
+                                            $method = strtolower($method);
+                                            $emoji = match ($method) {
+                                                'still' => '🍷',
+                                                'semi sparkling' => '🥂',
+                                                'sparkling' => '🍾',
+                                                default => '🌍',
+                                            };
+                                        @endphp
 
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input wine-country-filter" type="checkbox"
-                                            value="{{ $lowerCountry }}" id="country-inline-{{ $lowerCountry }}"
-                                            style="display: none;">
+                                        <!-- Hidden checkbox -->
+                                        <input type="checkbox" class="form-check-input wine-method-filter" value="{{ $method }}" id="method-inline-{{ $method }}" style="display: none;">
 
-                                        <label class="form-check-label fs-15 filter-checkbox"
-                                            for="country-inline-{{ $lowerCountry }}">
-                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
-                                        </label>
-                                    </div>
-                                @endforeach
+                                        <!-- Button instead of label -->
+                                        <button type="button" 
+                                                class="form-check-label fs-15 filter-checkbox" 
+                                                data-method="{{ $method }}">
+                                            <span class="emoji">{{ $emoji }}</span> {{ ucfirst($method) }}
+                                        </button>
+                                    @endforeach
+                                </div>
 
-                            </div>
+                                                            
+
+{{-- adding up --}}
+
                         </div>
                         <div class="row row-sm" id="products-container">
                             @if (isset($products) && $products->count() > 0)
@@ -798,6 +876,20 @@
                 if (countries.length > 0) {
                     formData['country'] = countries;
                 }
+              
+                // Get all checked method checkboxes
+                const methods = [];
+                $('.wine-method-filter:checked').each(function() {
+                    methods.push($(this).val());
+                });
+                if (methods.length > 0) {
+                    formData['Method'] = methods; // Matches your DB column name exactly
+                }
+
+
+
+
+
 
                 // Get price range from slider if it exists
                 if ($("#price-slider").length) {
@@ -922,51 +1014,113 @@
                     key === 'vintage_year[]' ||
                     key === 'winery[]' ||
                     key === 'country[]' ||
+                    key === 'method[]' ||
                     key === 'min_price' ||
                     key === 'max_price'
                 );
 
                 // Set search input from URL if exists
-                if (urlParams.has('search')) {
-                    $('#search-input').val(urlParams.get('search'));
-                }
+                // Set search input if present in URL
+if (urlParams.has('search')) {
+    $('#search-input').val(urlParams.get('search'));
+}
 
-                if (hasFilters) {
-                    // Set checkboxes based on URL parameters
-                    urlParams.forEach((value, key) => {
-                        if (key.endsWith('[]')) {
-                            // Handle array parameters (checkboxes)
-                            const checkboxes = document.querySelectorAll(
-                                `input[name="${key}"][value="${value}"]`);
-                            checkboxes.forEach(checkbox => {
-                                checkbox.checked = true;
-                            });
-                        } else if (key === 'min_price' || key === 'max_price') {
-                            // Handle price range
-                            if ($("#price-slider").length) {
-                                const currentValues = $("#price-slider").slider("values");
-                                if (key === 'min_price') {
-                                    currentValues[0] = parseInt(value) || 0;
-                                    $("#price-min").text(currentValues[0]);
-                                } else {
-                                    currentValues[1] = parseInt(value) || 1000;
-                                    $("#max-price").text(currentValues[1]);
-                                }
-                                $("#price-slider").slider("values", currentValues);
-                            }
-                        }
-                    });
+if (hasFilters) {
+    // Set checkboxes based on URL parameters
+    urlParams.forEach((value, key) => {
+        if (key.endsWith('[]')) {
+            const name = key.replace('[]', '');
+            let checkboxes = [];
 
-                    // Load products with filters
-                    loadProducts();
-                }
+            switch (name.toLowerCase()) {
+                case 'type':
+                    checkboxes = document.querySelectorAll(`input.wine-type-filter[value="${value}"]`);
+                    break;
+                case 'vintage_year':
+                    checkboxes = document.querySelectorAll(`input.wine-vintage-year-filter[value="${value}"]`);
+                    break;
+                case 'winery':
+                    checkboxes = document.querySelectorAll(`input.wine-winery-filter[value="${value}"]`);
+                    break;
+                case 'country':
+                    checkboxes = document.querySelectorAll(`input.wine-country-filter[value="${value}"]`);
+                    break;
+                case 'method': // Method filter
+                    checkboxes = document.querySelectorAll(`input.wine-method-filter[value="${value}"]`);
+                    break;
             }
+
+            checkboxes.forEach(cb => cb.checked = true);
+        } else if (key === 'min_price' || key === 'max_price') {
+            // Handle price range
+            if ($("#price-slider").length) {
+                const currentValues = $("#price-slider").slider("values");
+                if (key === 'min_price') {
+                    currentValues[0] = parseInt(value) || 0;
+                    $("#price-min").text(currentValues[0]);
+                } else {
+                    currentValues[1] = parseInt(value) || 1000;
+                    $("#max-price").text(currentValues[1]);
+                }
+                $("#price-slider").slider("values", currentValues);
+            }
+        }
+    });
+
+    // Load products with filters
+    loadProducts();
+} }
+
 
             // Initialize pagination on page load if there are products
             @if (isset($products) && $products->total() > 0)
                 updatePagination({!! $products->toJson() !!});
             @endif
         });
+
+        //         if (hasFilters) {
+        //             // Set checkboxes based on URL parameters
+        //             urlParams.forEach((value, key) => {
+        //                 if (key.endsWith('[]')) {
+        //                     // Handle array parameters (checkboxes)
+        //                     // const checkboxes = document.querySelectorAll(
+        //                     //     `input[name="${key}"][value="${value}"]`);
+        //                     // checkboxes.forEach(checkbox => {
+        //                     //     checkbox.checked = true;
+        //                     // });
+        //                     const name = key.replace('[]', '');
+        //                     if(name === 'Method') {
+        //                         const checkboxes = document.querySelectorAll(
+        //                             `input.wine-method-filter[value="${value}"]`
+        //                         );
+        //                         checkboxes.forEach(cb => cb.checked = true);
+        //                     });
+        //                 } else if (key === 'min_price' || key === 'max_price') {
+        //                     // Handle price range
+        //                     if ($("#price-slider").length) {
+        //                         const currentValues = $("#price-slider").slider("values");
+        //                         if (key === 'min_price') {
+        //                             currentValues[0] = parseInt(value) || 0;
+        //                             $("#price-min").text(currentValues[0]);
+        //                         } else {
+        //                             currentValues[1] = parseInt(value) || 1000;
+        //                             $("#max-price").text(currentValues[1]);
+        //                         }
+        //                         $("#price-slider").slider("values", currentValues);
+        //                     }
+        //                 }
+        //             });
+
+        //             // Load products with filters
+        //             loadProducts();
+        //         }
+        //     }
+
+        //     // Initialize pagination on page load if there are products
+        //     @if (isset($products) && $products->total() > 0)
+        //         updatePagination({!! $products->toJson() !!});
+        //     @endif
+        // });
 
 
         // Toggle vintage year filter visibility
@@ -990,5 +1144,39 @@
             $moreContent.toggleClass('d-none');
             $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
         });
+
+        // Toggle country filter visibility (newly added)
+
+        $(document).on('click', '.toggle-country-filter', function() {
+            const $button = $(this);
+            const $moreContent = $button.siblings('.country-filter-more');
+            const moreText = $button.data('more-text');
+            const lessText = $button.data('less-text');
+
+            $moreContent.toggleClass('d-none');
+            $button.text($moreContent.hasClass('d-none') ? moreText : lessText);
+        });
+        //Toggle checkbox manually if you want to keep them hidden
+           $(document).on('click', '.filter-checkbox', function() {
+               const input = $(this).prev('input.wine-method-filter');
+               if (input.length) {
+                   input.prop('checked', !input.prop('checked')).trigger('change');
+               }
+           });
+      // When user clicks the button instead of checkbox
+$(document).on('click', '.method-filter-btn', function () {
+    const method = $(this).data('method');
+    const checkbox = $(`.wine-method-filter[value="${method}"]`);
+
+    // Toggle checked state
+    const isChecked = !checkbox.prop('checked');
+    checkbox.prop('checked', isChecked).trigger('change');
+
+    // Toggle button active state visually
+    $(this).toggleClass('active', isChecked);
+});
+
+
+
     </script>
 @endpush
