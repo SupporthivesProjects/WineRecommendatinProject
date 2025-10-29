@@ -55,10 +55,10 @@
                                         <tr>
                                             <th>Product</th>
                                             <th>Description</th>
-                                            <th>Price</th>
-                                            <th>Quantity in Store</th>
-                                            <th>Status</th>
-                                            <th>Available</th>
+                                            <!-- <th>Price</th>
+                                            <th>Quantity in Store</th> -->
+                                            <!-- <th>Status</th> -->
+                                            <!-- <th>Available</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -70,29 +70,29 @@
                                                     <span>{{ $product->name }}</span>
                                                 </td>
                                                 <td>{{ Str::limit($product->description, 50) }}</td>
-                                                <td>&#8377;&nbsp;{{ number_format($product->price, 2) }}</td>
+                                                <!-- <td>&#8377;&nbsp;{{ number_format($product->price, 2) }}</td>
                                                 <td>
                                                     @if(isset($product->store_quantity))
                                                         {{ $product->store_quantity }}
                                                     @else
                                                         0
                                                     @endif
-                                                </td>
-                                                <td>
+                                                </td> -->
+                                                <!-- <td>
                                                     @if($product->is_available_in_store)
                                                         <span class="badge rounded-pill bg-success">In Stock</span>
                                                     @else
                                                         <span class="badge rounded-pill bg-secondary">Out of Stock</span>
                                                     @endif
-                                                </td>
-                                                <td>
+                                                </td> -->
+                                                <!-- <td>
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input available-checkbox" 
                                                                type="checkbox" 
                                                                data-product-id="{{ $product->id }}"
                                                                {{ $product->is_available_in_store ? 'checked' : '' }}>
                                                     </div>
-                                                </td>
+                                                </td> -->
                                                 <td>
 
                                                 </td>
@@ -164,6 +164,7 @@
                     loadingSpinner.className = 'spinner-border spinner-border-sm ms-2';
                     this.disabled = true;
                     this.parentNode.appendChild(loadingSpinner);
+
 
                     // If unchecking 'available' and 'featured' is checked, show warning and revert
                     const featuredCheckbox = document.querySelector(`.featured-checkbox[data-product-id="${productId}"]`);

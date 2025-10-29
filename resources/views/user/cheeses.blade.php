@@ -185,7 +185,7 @@
                                     </p>
                                     <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="h5 mb-0">₹&nbsp;{{ number_format($cheese->price, 2) }}</span>
+                                            <!-- <span class="h5 mb-0">₹&nbsp;{{ number_format($cheese->price, 2) }}</span> -->
                                             @if($isInStock)
                                                 <span class="badge bg-success">In Stock ({{ $quantity }})</span>
                                             @else
@@ -198,7 +198,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    @if($storeInfo)
+                                    <!-- @if($storeInfo)
                                         <div class="store-info bg-light p-2 rounded mt-3 small">
                                             <div class="d-flex align-items-center">
                                                 <i class="fe fe-map-pin me-2"></i>
@@ -208,7 +208,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                    @endif -->
                                 </div>
                             </div>
                         </div>

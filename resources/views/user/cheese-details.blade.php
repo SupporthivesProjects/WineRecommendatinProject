@@ -85,7 +85,7 @@
                     <h1 class="mb-3">{{ $cheese->name }}</h1>
 
                     <div class="d-flex align-items-center mb-3">
-                        <h3 class="mb-0 me-3">₹&nbsp;{{ number_format($cheese->price, 2) }}</h3>
+                        <!-- <h3 class="mb-0 me-3">₹&nbsp;{{ number_format($cheese->price, 2) }}</h3> -->
                         @php
                             $totalQuantity = $cheese->stores->sum('pivot.quantity');
                             $inStock = $totalQuantity > 0;
@@ -102,7 +102,7 @@
                         <p>{{ $cheese->pairing_notes ?? 'Perfect with a variety of wines and accompaniments.' }}</p>
                     </div>
 
-                    @if ($inStock)
+                    <!-- @if ($inStock)
                         <div class="mb-4">
                             <h5>Available At</h5>
                             <ul class="store-list">
@@ -121,7 +121,7 @@
                                 @endforeach
                             </ul>
                         </div>
-                    @endif
+                    @endif -->
 
                     <!-- <div class="d-flex gap-2">
                         <button class="btn {{ in_array($cheese->id, $cart) ? 'btn-dark' : 'btn-light' }} add-to-cart"

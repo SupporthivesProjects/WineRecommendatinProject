@@ -132,7 +132,7 @@
                  <div class="header-element header-theme-mode">
                      <!-- Start::header-link|layout-setting -->
                      <a href="javascript:void(0);" class="header-link layout-setting">
-                         <span class="light-layout">
+                         <span class="light-layout" >
                              <!-- Start::header-link-icon -->
                              <i class="fe fe-moon header-link-icon lh-2"></i>
                              <!-- End::header-link-icon -->
