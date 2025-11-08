@@ -194,7 +194,10 @@
                          <Li>
                              <div class="header-navheading border-bottom">
                                  <h6 class="main-notification-title">
-                                     {{ Auth::check() ? Auth::user()->first_name . ' ' . Auth::user()->last_name : 'Guest' }}
+                                {{ Auth::check() 
+                                    ? ucfirst(Auth::user()->first_name) . ' ' . ucfirst(Auth::user()->last_name) 
+                                    : 'Guest' 
+                                }}
                                  </h6>
                                  <p class="main-notification-text mb-0">
                                      {{ Auth::check() ? Auth::user()->username : '' }}</p>

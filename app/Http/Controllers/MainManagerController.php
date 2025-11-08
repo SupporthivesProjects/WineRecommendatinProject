@@ -52,6 +52,7 @@ class MainManagerController extends Controller
             'mobile' => ['required', 'string', 'max:20'],
             'role' => ['required', 'in:store_manager,customer,main_manager'],
             'status' => ['required', 'in:active,inactive'],
+            'group_name' => ['required', 'string', 'max:50'],
         ]);
 
         if ($validator->fails()) {
@@ -76,6 +77,7 @@ class MainManagerController extends Controller
             'mobile' => $request->mobile,
             'role' => $request->role,
             'status' => $request->status,
+            'group_name' => $request->group_name,
         ]);
 
         return redirect()->route('admin.main_manager')

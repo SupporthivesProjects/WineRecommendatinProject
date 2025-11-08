@@ -4,17 +4,40 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Store;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class StoreProfileController extends Controller
 {
     public function show()
     {
-        // Get the currently logged-in user's associated store
-        $store = Store::findOrFail(Auth::user()->store_id);
+        try {
+            $user = Auth::user();
 
-        // Pass the store data to the view
-        return view('user.storeprofile', compact('store'));
+            if (!$user || !$user->store_id) {
+                throw new \Exception('Authenticated user has no associated store.');
+            }
+
+            // get store and manager
+            $store = Store::findOrFail($user->store_id);
+            $manager = User::findOrFail($store->manager_id);
+
+            // pass both to view
+            return view('user.storeprofile', compact('store', 'manager'));
+
+        } catch (\Throwable $e) {
+            Log::error('Error fetching store/manager for storeprofile: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'user_id' => Auth::id() ?? null,
+            ]);
+
+            // Option A: show friendly message and redirect back
+            return redirect()->back()->with('error', 'Unable to load store profile. Please try again later.');
+
+            // Option B (if you prefer a 404):
+            // abort(404, 'Store or manager not found.');
+        }
     }
 
     public function updateContactNumber(Request $request)

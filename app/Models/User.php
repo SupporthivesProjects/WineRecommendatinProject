@@ -26,6 +26,7 @@ class User extends Authenticatable
         'role',
         'status',
         'store_id',
+        'group_name',
     ];
 
     const ROLE_ADMIN = 'admin';

@@ -142,12 +142,10 @@
                             <div class="col-md-4 mt-4 mt-md-0">
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="mb-3">Account Information</h5>
-                                        <p class="mb-2"><strong>Manager ID:</strong> {{ $store->manager_id }}</p>
-                                        <p class="mb-2"><strong>Created At:</strong>
-                                            {{ $store->created_at->format('F d, Y') }}</p>
-                                        <p class="mb-2"><strong>Last Updated:</strong>
-                                            {{ $store->updated_at->format('F d, Y h:i A') }}</p>
+                                        <h5 class="mb-3">Store Parent</h5>
+                                        <p class="mb-2"><strong>Manager Name:</strong> {{ $manager->first_name. " ". $manager->last_name }}</p>
+                                        <p class="mb-2"><strong>Contact :</strong> {{ $manager->mobile }}</p>
+                                        <p class="mb-2"><strong>Email :</strong> {{ $manager->email }}</p>
                                     </div>
                                 </div>
                             </div>
