@@ -470,7 +470,7 @@
                 "Yes": "Yes",
                 "No": "No",
                 "SKIP": "SKIP",
-                "Fruit Wine": "fruit",
+                "Fruit Wine": "Fruit",
                 "Still": "Still",
                 "Sparkling": "Sparkling_champagne",
                 "Sparkling/Champagne": "Sparkling_champagne",
