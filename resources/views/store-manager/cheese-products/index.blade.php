@@ -56,9 +56,9 @@
                                             <th>Product</th>
                                             <th>Description</th>
                                             <!-- <th>Price</th>
-                                            <th>Quantity in Store</th> -->
-                                            <!-- <th>Status</th> -->
-                                            <!-- <th>Available</th> -->
+                                            <th>Quantity in Store</th> 
+                                            <th>Status</th> 
+                                            <th>Available</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -70,14 +70,14 @@
                                                     <span>{{ $product->name }}</span>
                                                 </td>
                                                 <td>{{ Str::limit($product->description, 50) }}</td>
-                                                <!-- <td>&#8377;&nbsp;{{ number_format($product->price, 2) }}</td>
-                                                <td>
+                                                <!-- <td>&#8377;&nbsp;{{ number_format($product->price, 2) }}</td> -->
+                                                <!-- <td>
                                                     @if(isset($product->store_quantity))
                                                         {{ $product->store_quantity }}
                                                     @else
                                                         0
                                                     @endif
-                                                </td> -->
+                                                </td>  -->
                                                 <!-- <td>
                                                     @if($product->is_available_in_store)
                                                         <span class="badge rounded-pill bg-success">In Stock</span>
@@ -93,9 +93,6 @@
                                                                {{ $product->is_available_in_store ? 'checked' : '' }}>
                                                     </div>
                                                 </td> -->
-                                                <td>
-
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -11,39 +11,53 @@ use Illuminate\Support\Facades\Auth;
 
 class StoreManagerCheeseProductController extends Controller
 {
+
     public function index()
     {
         try {
-            //$store = Store::where('manager_id', Auth::id())->firstOrFail();
-            $store = User::where('store_id', Auth::id())->firstOrFail();
+            // Step 1: Get the logged-in user and their store ID
+            $user = Auth::user();
 
+            if (!$user || !$user->store_id) {
+                throw new \Exception('Authenticated user has no associated store.');
+            }
 
-            // Get all active cheese products with their inventory status and quantity
+            $storeId = $user->store_id;
+
+            // Step 2: Get all active cheese products joined with store inventory
             $cheeseProducts = CheeseProduct::where('is_active', true)
-                ->with(['stores' => function($query) use ($store) {
-                    $query->where('store_id', $store->id);
-                }])
-                ->leftJoin('store_inventory', function($join) use ($store) {
+                ->leftJoin('store_inventory', function($join) use ($storeId) {
                     $join->on('cheese_products.id', '=', 'store_inventory.cheese_product_id')
-                         ->where('store_inventory.store_id', '=', $store->id);
+                        ->where('store_inventory.store_id', '=', $storeId);
                 })
                 ->select(
                     'cheese_products.*',
                     'store_inventory.quantity as store_quantity',
                     'store_inventory.is_available as is_available_in_store'
                 )
-                ->orderBy('is_available_in_store', 'desc') // Available products first
-                ->orderBy('name')
+                ->orderBy('is_available_in_store', 'desc')
+                ->orderBy('cheese_products.name')
                 ->paginate(10);
 
+            // Step 3: Return view
             return view('store-manager.cheese-products.index', [
                 'cheeseProducts' => $cheeseProducts,
-                'store' => $store
+                'storeId' => $storeId,
             ]);
-            
-        } catch (\Exception $e) {
-            \Log::error('Error fetching cheese products: ' . $e->getMessage());
-            return back()->with('error', 'Failed to load cheese products. Please try again.');
+
+        } catch (\Throwable $e) {
+            // Log the full error with message, line, and file for debugging
+            Log::error('Error loading cheese products list: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // Option 1: Show a friendly error message to the user
+            return redirect()->back()->with('error', 'Unable to load cheese products. Please try again later.');
+
+            // Option 2 (optional): for debugging only
+            // dd($e->getMessage());
         }
     }
 
@@ -52,43 +66,61 @@ class StoreManagerCheeseProductController extends Controller
         try {
             $request->validate([
                 'product_id' => 'required|exists:cheese_products,id',
-                'status' => 'required|in:active,inactive'
+                'status' => 'required|in:active,inactive',
             ]);
 
-            $store = Store::where('manager_id', Auth::id())->firstOrFail();
+            $user = Auth::user();
+
+            // Check if the logged-in user is associated with a store
+            if (!$user || !$user->store_id) {
+                throw new \Exception('No store assigned to this user.');
+            }
+
+            // Get the store using the user's store_id
+            $store = Store::findOrFail($user->store_id);
             $productId = $request->input('product_id');
             $status = $request->input('status') === 'active';
 
+            // Check if the product already exists in the store's pivot table
             if ($store->cheeseProducts()->where('cheese_products.id', $productId)->exists()) {
-                // Update existing
+                // Update existing pivot
                 $store->cheeseProducts()->updateExistingPivot($productId, [
                     'is_available' => $status,
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             } else {
-                // Create new with default quantity 10
+                // Create new pivot record with default quantity
                 $store->cheeseProducts()->attach($productId, [
                     'quantity' => 10,
                     'is_available' => $status,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             }
 
             return response()->json([
                 'success' => true,
                 'message' => 'Product status updated successfully',
-                'is_active' => $status
+                'is_active' => $status,
             ]);
 
-        } catch (\Exception $e) {
-            \Log::error('Error updating cheese product status: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            \Log::error('Error updating cheese product status: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'user_id' => Auth::id(),
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update product status: ' . $e->getMessage()
+                'message' => 'Failed to update product status: ' . $e->getMessage(),
             ], 500);
         }
     }
+
+
+
+    
 
     public function updateFeatured(Request $request)
     {
