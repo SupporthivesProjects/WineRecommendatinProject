@@ -297,14 +297,20 @@
                                 @php
                                     $lowerType = strtolower($type);
                                     $emoji = match ($lowerType) {
-                                        'red' => '🍷', 'white' => '🥂', 'sparkling' => '✨', 'ros' => '🌸', 'dessert' => '🍯', 'bordeaux' => '🏰',
-                                        default => '🍾',
+                                        'red' => '🍷', 
+                                        'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
+                                        'sparkling' => '✨', 
+                                        'ros' => '🌸', 'dessert' => 
+                                        '🍯', 
+                                        'bordeaux' => '🏰',
+                                         default => '🍾',
                                     };
                                 @endphp
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input wine-type-filter" type="checkbox" value="{{ $lowerType }}" id="type-inline-{{ $lowerType }}" style="display:none;">
                                     <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
-                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
+                                        <span class="emoji">{!! $emoji !!}
+                                        </span> {{ ucfirst($type) }}
                                     </label>
                                 </div>
                             @endif

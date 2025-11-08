@@ -342,7 +342,7 @@
                                                 $lowerType = strtolower($type);
                                                 $emoji = match($lowerType) {
                                                     'red' => '🍷',
-                                                    'white' => '🥂',
+                                                    'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
                                                     'sparkling' => '✨',
                                                     default => ''
                                                 };
@@ -357,7 +357,7 @@
                                                     style="display: none;">
                                                 
                                                 <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
-                                                    <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
+                                                    <span class="emoji">{!! $emoji !!}</span> {{ ucfirst($type) }}
                                                 </label>
                                             </div>
                                         @endforeach
