@@ -293,8 +293,10 @@
         }
 
         .option-box:hover {
-            background-color: transparent !important;
-            border-color: rgb(98,89,202) !important; /* or any static color */
+            /* background-color: transparent !important; */
+            background-color: #FFDF00 !important;
+            /* border-color: rgb(98,89,202) !important; or any static color */
+            border-color: #FFDF00;
             color: inherit !important;
         }
 
@@ -532,6 +534,7 @@
                 "Merlot": "Merlot",
                 "Syrah/Shiraz": "SyrahShiraz",
                 "Refreshingly Young (1-3 years)": "RefreshinglyYoung",
+                "Refreshingly Young (1-2 years)": "RefreshinglyYoung",
                 "Fairly Young (3-5 years)": "FairlyYoung",
                 "Slightly Aged (5-7 years)": "SlightlyAged",
                 "Aged (>7 years)": "Aged",
@@ -539,7 +542,7 @@
                 "Earthy, Moldy, Petroleum, Sulfur, Minerality": "EarthyMoldyPetroleumSulfurMinerality",
                 "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "Yeasty",
                 "Herbaceous, Vegetative": "HerbaceousVegetative",
-                "Surprise Me": "SurpriseMe",
+                "SurpriseMe": "SurpriseMe",
                 "Fortified": "Fortified",
                 "Varietal": "Varietal",
                 "Blends": "Blends",
@@ -547,7 +550,7 @@
                 "Regional Hero Grapes": "RegionalHeroGrapes",
                 "Domestic Indian": "DomesticIndian",
                 "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "OldWorld",
-                "New World (USA, Chile, Australia, Argentina)": "NewWorld",
+                "New World (USA, Chile, Australia, Argentina,)": "NewWorld",
                 "Brut": "Brut",
                 "Dry": "Dry",
                 "Off-Dry": "OffDry",

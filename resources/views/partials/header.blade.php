@@ -134,7 +134,7 @@
                      <a href="javascript:void(0);" class="header-link layout-setting">
                          <span class="light-layout" >
                              <!-- Start::header-link-icon -->
-                             <i class="fe fe-moon header-link-icon lh-2"></i>
+                             <!-- <i class="fe fe-moon header-link-icon lh-2"></i> -->
                              <!-- End::header-link-icon -->
                          </span>
                          <span class="dark-layout">
