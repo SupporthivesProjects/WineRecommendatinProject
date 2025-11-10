@@ -214,7 +214,7 @@
                             <div class="form-check">
                                 <input class="form-check-input wine-retail-price-filter" type="checkbox" value="{{ $price }}" id="retail-price-{{ $price }}">
                                 <label class="form-check-label" for="retail-price-{{ $price }}">
-                                    ${{ number_format($price, 2) }}
+                                ₹{{ number_format($price, 2) }}
                                 </label>
                             </div>
                         @endforeach
