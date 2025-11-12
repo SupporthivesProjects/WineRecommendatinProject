@@ -391,139 +391,179 @@ class UserController extends Controller
                 switch ($templateId) {
                     case '1':
                         switch ($key) {
-                            case 'question4': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-                            // case 'question2': // Cork yes or no
-                            //     $q->orWhere('sweetness_level', $value);
-                            //     break;
-                            case 'question6': // wine sweet or dry
-                                $q->orWhere('nature', $value);
-                                break;
-                            case 'question7': // flavour
+                            case 'question4': // type
                                 if (is_array($value)) {
                                     foreach ($value as $aroma) {
-                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                        $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
-                            case 'question8': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
+                            case 'question5': // closure_type
+                                $q->orWhere('closure_type', $value);
                                 break;
-                            case 'question9': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
+                            case 'question6': // nature
+                                $q->orWhere('nature', $value);
+                                break;    
+                            case 'question8': // body
+                                if (is_array($value)) {
+                                    foreach ($value as $body) {
+                                        $q->orWhere('body', 'like', "%$body%");
+                                    }
+                                }
                                 break;
-                            case 'question10': // how old 
-                                $q->orWhere('aging', $value);
+                            case 'question9': // style
+                                $q->orWhere('style', $value);
                                 break;
-                            case 'question11': // Region
-                                $q->orWhere('country', $value);
+                            case 'question11': // country
+                                if (is_array($value)) {
+                                    foreach ($value as $country) {
+                                        $q->orWhere('country', 'like', "%$country%");
+                                    }
+                                }
                                 break;
-                            case 'question12': // Price
-                                $q->orWhere('retail_price', '<=', $value);
+                            case 'question12': // categories
+                                if (is_array($value)) {
+                                    foreach ($value as $category) {
+                                        $q->orWhere('categories', 'like', "%$category%");
+                                    }
+                                }
                                 break;
-                            case 'question13': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
+                            case 'question13': // price
+                                $q->orWhere('retail_price', 'like', "%$value%");
                                 break;
                         }
                         break;
 
                     case '2':
                         switch ($key) {
-                            case 'question4': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-                            // case 'question2': // Cork yes or no
-                            //     $q->orWhere('sweetness_level', $value);
-                            //     break;
-                            case 'question5': // wine sweet or dry
-                                $q->orWhere('nature', $value);
-                                break;
-                            case 'question10': // flavour
+                            case 'question4': // type
                                 if (is_array($value)) {
                                     foreach ($value as $aroma) {
-                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                        $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
-                            case 'question2': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
+                            case 'question5': // nature
+                                $q->orWhere('nature', $value);
                                 break;
-                            case 'question1': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
+                            case 'question6': // country
+                                if (is_array($value)) {
+                                    foreach ($value as $country) {
+                                        $q->orWhere('country', 'like', "%$country%");
+                                    }
+                                }
                                 break;
-                            case 'question7': // how old 
-                                $q->orWhere('aging', $value);
+                            case 'question7': // sub regions
+                                if (is_array($value)) {
+                                    foreach ($value as $subregion) {
+                                        $q->orWhere('wine_sub_region', 'like', "%$subregion%");
+                                    }
+                                }
                                 break;
-                            case 'question6': // Region
-                                $q->orWhere('country', $value);
+                            case 'question8': // grape variety
+                                if (is_array($value)) {
+                                    foreach ($value as $grapevariety) {
+                                        $q->orWhere('grape_variety', 'like', "%$grapevariety%");
+                                    }
+                                }
                                 break;
-                            case 'question12': // Price
-                                $q->orWhere('retail_price', '<=', $value);
+                            case 'question9': // preferred wine age
+                                if (is_array($value)) {
+                                    foreach ($value as $preferredwineage) {
+                                        $q->orWhere('optimal_drinking', 'like', "%$preferredwineage%");
+                                    }
+                                }
                                 break;
-                            case 'question11': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
+                            case 'question10': // aroma
+                                $q->orWhere('aroma', 'like', "%$value%");
+                                break;
+                            case 'question11': // categories
+                                if (is_array($value)) {
+                                    foreach ($value as $catoegry) {
+                                        $q->orWhere('categories', 'like', "%$cateogry%");
+                                    }
+                                }
+                                break;
+                            case 'question12': // retail price
+                                $q->orWhere('retail_price', 'like', "%$value%");
                                 break;
                         }
                         break;
 
                     case '3':
                         switch ($key) {
-                            case 'question4': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-                            // case 'question2': // Cork yes or no
-                            //     $q->orWhere('sweetness_level', $value);
-                            //     break;
-                            case 'question5': // wine sweet or dry
-                                $q->orWhere('nature', $value);
-                                break;
-                            case 'question5': // flavour
+                            case 'question5': // type
                                 if (is_array($value)) {
                                     foreach ($value as $aroma) {
-                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                        $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
-                            case 'question10': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
+                            case 'question6': // varietal blend
+                                $q->orWhere('varietal_blend', $value);
                                 break;
-                            case 'question6': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
+                            case 'question7': // grape variety
+                                $q->orWhere('grape_variety', $value);
                                 break;
-                            case 'question10': // how old 
-                                $q->orWhere('aging', $value);
-                                break;
-                            case 'question8': // Region
+                            case 'question8': // country
                                 $q->orWhere('country', $value);
                                 break;
-                            case 'question14': // Price
-                                $q->orWhere('retail_price', '<=', $value);
+                            case 'question9': // country
+                                $q->orWhere('country', $value);
                                 break;
-                            case 'question111': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
+                            case 'question10': // country
+                                $q->orWhere('nature', $value);
+                                break;
+                            case 'question11': // preferred wine age
+                                if (is_array($value)) {
+                                    foreach ($value as $preferredwineage) {
+                                        $q->orWhere('optimal_drinking', 'like', "%$preferredwineage%");
+                                    }
+                                }
+                                break;
+                            case 'question12': // preferred wine age
+                                if (is_array($value)) {
+                                    foreach ($value as $acidity) {
+                                        $q->orWhere('acidity', 'like', "%$acidity%")
+                                        ->orWhere('tanin_level', 'like', "%$acidity%")
+                                        ->orWhere('body', 'like', "%$acidity%");
+
+                                    }
+                                }
+                                break;
+                            case 'question14': // style
+                                if (is_array($value)) {
+                                    foreach ($value as $style) {
+                                        $q->orWhere('style', 'like', "%$style%");
+                                    }
+                                }
+                                break;
+                            case 'question15': // price
+                                $q->orWhere('retail_price', 'like', "%$value%");
                                 break;
                         }
                         break;
 
                     case '4':
                         switch ($key) {
-                            case 'question5': // Wine Type
-                                $q->orWhere('type', $value);
+                            case 'question4': // Occasion
+                                $q->orWhere('categories', 'like', "%$value%");
                                 break;
-
-                            case 'question5': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
+                            case 'question5': // type
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('type', 'like', "%$aroma%");
+                                    }
+                                }
                                 break;
-                            case 'question6': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
+                            case 'question6': // style
+                                if (is_array($value)) {
+                                    foreach ($value as $style) {
+                                        $q->orWhere('style', 'like', "%$style%");
+                                    }
+                                }
                                 break;
-                            case 'question7': // Price
-                                $q->orWhere('retail_price', '<=', $value);
-                                break;
-                            case 'question10': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
-                                break;
+                            
                         }
                         break;
 
