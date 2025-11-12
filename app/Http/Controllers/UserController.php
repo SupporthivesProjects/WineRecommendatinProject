@@ -393,7 +393,8 @@ class UserController extends Controller
                         switch ($key) {
                             case 'question4': // type
                                 if (is_array($value)) {
-                                    foreach ($value as $aroma) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $aroma) {
                                         $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
@@ -406,7 +407,8 @@ class UserController extends Controller
                                 break;    
                             case 'question8': // body
                                 if (is_array($value)) {
-                                    foreach ($value as $body) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $body) {
                                         $q->orWhere('body', 'like', "%$body%");
                                     }
                                 }
@@ -416,14 +418,16 @@ class UserController extends Controller
                                 break;
                             case 'question11': // country
                                 if (is_array($value)) {
-                                    foreach ($value as $country) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $country) {
                                         $q->orWhere('country', 'like', "%$country%");
                                     }
                                 }
                                 break;
                             case 'question12': // categories
                                 if (is_array($value)) {
-                                    foreach ($value as $category) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $category) {
                                         $q->orWhere('categories', 'like', "%$category%");
                                     }
                                 }
@@ -438,7 +442,8 @@ class UserController extends Controller
                         switch ($key) {
                             case 'question4': // type
                                 if (is_array($value)) {
-                                    foreach ($value as $aroma) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $aroma) {
                                         $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
@@ -448,28 +453,32 @@ class UserController extends Controller
                                 break;
                             case 'question6': // country
                                 if (is_array($value)) {
-                                    foreach ($value as $country) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $country) {
                                         $q->orWhere('country', 'like', "%$country%");
                                     }
                                 }
                                 break;
                             case 'question7': // sub regions
                                 if (is_array($value)) {
-                                    foreach ($value as $subregion) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $subregion) {
                                         $q->orWhere('wine_sub_region', 'like', "%$subregion%");
                                     }
                                 }
                                 break;
                             case 'question8': // grape variety
                                 if (is_array($value)) {
-                                    foreach ($value as $grapevariety) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $grapevariety) {
                                         $q->orWhere('grape_variety', 'like', "%$grapevariety%");
                                     }
                                 }
                                 break;
                             case 'question9': // preferred wine age
                                 if (is_array($value)) {
-                                    foreach ($value as $preferredwineage) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $preferredwineage) {
                                         $q->orWhere('optimal_drinking', 'like', "%$preferredwineage%");
                                     }
                                 }
@@ -479,8 +488,9 @@ class UserController extends Controller
                                 break;
                             case 'question11': // categories
                                 if (is_array($value)) {
-                                    foreach ($value as $catoegry) {
-                                        $q->orWhere('categories', 'like', "%$cateogry%");
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $category) {
+                                        $q->orWhere('categories', 'like', "%$category%");
                                     }
                                 }
                                 break;
@@ -494,7 +504,8 @@ class UserController extends Controller
                         switch ($key) {
                             case 'question5': // type
                                 if (is_array($value)) {
-                                    foreach ($value as $aroma) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $aroma) {
                                         $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
@@ -511,19 +522,21 @@ class UserController extends Controller
                             case 'question9': // country
                                 $q->orWhere('country', $value);
                                 break;
-                            case 'question10': // country
+                            case 'question10': // nature
                                 $q->orWhere('nature', $value);
                                 break;
                             case 'question11': // preferred wine age
                                 if (is_array($value)) {
-                                    foreach ($value as $preferredwineage) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $preferredwineage) {
                                         $q->orWhere('optimal_drinking', 'like', "%$preferredwineage%");
                                     }
                                 }
                                 break;
                             case 'question12': // preferred wine age
                                 if (is_array($value)) {
-                                    foreach ($value as $acidity) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $acidity) {
                                         $q->orWhere('acidity', 'like', "%$acidity%")
                                         ->orWhere('tanin_level', 'like', "%$acidity%")
                                         ->orWhere('body', 'like', "%$acidity%");
@@ -533,7 +546,8 @@ class UserController extends Controller
                                 break;
                             case 'question14': // style
                                 if (is_array($value)) {
-                                    foreach ($value as $style) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $style) {
                                         $q->orWhere('style', 'like', "%$style%");
                                     }
                                 }
@@ -551,14 +565,16 @@ class UserController extends Controller
                                 break;
                             case 'question5': // type
                                 if (is_array($value)) {
-                                    foreach ($value as $aroma) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $aroma) {
                                         $q->orWhere('type', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
                             case 'question6': // style
                                 if (is_array($value)) {
-                                    foreach ($value as $style) {
+                                    $values = is_array($value) ? $value : [$value];
+                                    foreach ($values as $style) {
                                         $q->orWhere('style', 'like', "%$style%");
                                     }
                                 }
