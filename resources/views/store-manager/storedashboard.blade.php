@@ -225,7 +225,7 @@
                                                                 <span class="{{ $textClasses[$type] ?? 'text-muted' }}"><b>{{ ucfirst($type) }} Wine</b></span>
                                                         </td>
                                                         <td class="align-middle">{{ $product->winery }}</td>
-                                                        <td class="align-middle">₹ {{ number_format($product->retail_price, 2) }}</td>
+                                                        <td class="align-middle">₹{{ number_format($product->retail_price, 2) }}</td>
                                                         <td class="align-middle">
                                                         <span class="badge rounded-pill border border-{{ $product->status === 'active' ? 'success' : 'danger' }} text-{{ $product->status === 'active' ? 'success' : 'danger' }} py-1 px-3">
                                                             {{ ucfirst($product->status) }}
