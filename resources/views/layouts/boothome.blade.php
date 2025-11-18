@@ -646,16 +646,6 @@
                                         <li class="glide__slide">
                                             <div
                                                 class="wine-card bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-[500px] relative">
-                                                {{-- @if ($product->image1)
-                                                    <img src="{{ asset('storage/' . $product->image1) }}"
-                                                        alt="{{ $product->wine_name }}"
-                                                        class="w-full h-60 object-cover">
-                                                @else
-                                                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                                                        alt="{{ $product->wine_name }}"
-                                                        class="w-full h-60 object-cover">
-                                                @endif --}}
-                                               
                                                 <div class="h-[250px] overflow-hidden">
                                                     <img src="{{ asset('storage/' . $product->image1) }}"
                                                         class="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
@@ -686,7 +676,7 @@
                                                             </span>
                                                         @endif
                                                     </div>
-                                                    @if ($product->winery)
+                                                    <!-- @if ($product->winery)
                                                         <p class="text-gray-600 font-medium mb-2 line-clamp-1"
                                                             title="{{ $product->winery }}">
                                                             {{ $product->winery }}
@@ -697,7 +687,7 @@
                                                             title="{{ $product->tasting_notes }}">
                                                             {{ $product->tasting_notes }}
                                                         </p>
-                                                    @endif
+                                                    @endif -->
                                                     <div class="mt-auto pt-4">
                                                         <a href="{{ route('user.productdetails', $product->id) }}"
                                                             class="block w-full text-center bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">

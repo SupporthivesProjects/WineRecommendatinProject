@@ -11,7 +11,7 @@
                             <div class="clearfix"></div>
                             <!-- Center the image with mx-auto -->
                             <!-- <img src="{{ asset('assets/images/svgs/user.svg') }}" class="ht-100 mb-0 mx-auto" alt="user"> -->
-                            <img src="{{ asset('images/logofullwhite.png') }}" class="ht-100 mb-0 mx-auto" alt="user">
+                            <img src="{{ asset('images/logofullwhite.png') }}" class="img-fluid mb-0 mx-auto" style="max-width:200px;" alt="user">
                             <h5 class="my-4 font-bold">Welcome Back !</h5>
                             <span class="text-white-6 fs-13 mb-5 mt-xl-0">Signup to create, discover and connect with the global community</span>
                         </div>
