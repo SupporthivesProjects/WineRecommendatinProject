@@ -831,9 +831,14 @@
                                 <div class="mt-4">
                                         <div class="mt-2">
                                             @if ($product->image1)
-                                                <p class="mb-1 fw-bold">Current Image:</p>
+                                            <p class="mb-1 fw-bold">Current Image:</p>
                                                 <img src="{{ asset('storage/' . $product->image1) }}" alt="Product image"
                                                     class="img-thumbnail" style="width:150px; height:150px; object-fit:cover;">
+                                            @else
+                                            <p class="mb-1 fw-bold">Current Image:</p>
+                                                <img src="{{ asset('storage/default.jpg' ) }}" alt="Product image"
+                                                    class="img-thumbnail" style="width:150px; height:150px; object-fit:cover;">
+
                                             @endif
                                         </div>
                                 </div>
