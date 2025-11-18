@@ -829,26 +829,41 @@
 
                                 <!-- Image Upload Section -->
                                 <div class="mt-4">
-                                    <label class="form-label">Upload Product Image</label>
-                                    <input type="file" name="product_image" id="product_image" class="form-control"
-                                        multiple accept="image/*" onchange="previewImages(this)">
-                                    <small class="text-muted">Allowed formats: jpeg, jpg, png, gif | Max size: 2MB</small>
-
-                                    <div class="mt-2">
-                                        @if ($product->image1)
-                                            <p class="mb-1 fw-bold">Current Image:</p>
-                                            <img src="{{ asset('storage/' . $product->image1) }}" alt="Product image"
-                                                class="img-thumbnail" style="width:150px; height:150px; object-fit:cover;">
-                                        @endif
-                                    </div>
-
-                                    <div id="image-preview-container" class="row mt-2"></div>
-
-                                    <div class="mt-3 d-none" id="primary-image-selection">
-                                        <label for="primary_image" class="form-label">Select Primary Image</label>
-                                        <select name="primary_image" id="primary_image" class="form-select"></select>
-                                    </div>
+                                        <div class="mt-2">
+                                            @if ($product->image1)
+                                                <p class="mb-1 fw-bold">Current Image:</p>
+                                                <img src="{{ asset('storage/' . $product->image1) }}" alt="Product image"
+                                                    class="img-thumbnail" style="width:150px; height:150px; object-fit:cover;">
+                                            @endif
+                                        </div>
                                 </div>
+                                <div class="mb-6">
+                                        <label class="block text-gray-700 text-sm font-bold mb-2"
+                                            for="product_images">Upload New Images</label>
+                                        <div
+                                            class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                            <div class="space-y-1 text-center">
+                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor"
+                                                    fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                    <path
+                                                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                                        stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                <div class="flex text-sm text-gray-600">
+                                                    <label for="product_images"
+                                                        class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
+                                                        <span>Upload files</span>
+                                                        <input id="product_images" name="product_image_replace" type="file"
+                                                            class="sr-only" multiple accept="image/*"
+                                                            onchange="previewNewImages(this)">
+                                                    </label>
+                                                    <p class="pl-1">or drag and drop</p>
+                                                </div>
+                                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 <div class="row g-3 mt-3">
                                     <div class="col-md-6">
