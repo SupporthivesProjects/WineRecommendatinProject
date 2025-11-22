@@ -859,9 +859,14 @@
                                                     <label for="product_images"
                                                         class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
                                                         <span>Upload files</span>
-                                                        <input id="product_images" name="product_image_replace" type="file"
-                                                            class="sr-only" multiple accept="image/*"
-                                                            onchange="previewNewImages(this)">
+                                                        <div id="image-preview" class="mt-4"></div> 
+                                                        <input id="product_images" 
+                                                            name="product_image_replace" 
+                                                            type="file"
+                                                            class="sr-only"
+                                                            multiple 
+                                                            accept="image/*"
+                                                            onchange="previewImages(this)">
                                                     </label>
                                                     <p class="pl-1">or drag and drop</p>
                                                 </div>
@@ -879,39 +884,36 @@
                                             <option value="Wine and Cheese" {{ old('categories', $product->categories) == 'Wine and Cheese' ? 'selected' : '' }}>Wine and Cheese</option>
                                             <option value="Everyday sipping" {{ old('categories', $product->categories) == 'Everyday sipping' ? 'selected' : '' }}>Everyday sipping</option>
                                         </select> -->
-                                        @php
-    $savedValue = old('categories', $product->categories);
+                                                                                @php
+                                            $savedValue = old('categories', $product->categories);
 
-    // Your existing dropdown options
-    $defaultOptions = [
-        'Gifting',
-        'Wine and Cheese',
-        'Everyday Sipping',
-    ];
+                                            // Your existing dropdown options
+                                            $defaultOptions = [
+                                                'Gifting',
+                                                'Wine and Cheese',
+                                                'Everyday Sipping',
+                                            ];
 
-    // Check if savedValue is NOT in the default dropdown list
-    $shouldAddCustomOption = $savedValue && !in_array($savedValue, $defaultOptions);
-@endphp
-
-
-<select class="form-select" name="categories" id="categories" required>
-    <option value="">Select Category</option>
-
-    {{-- Show default options --}}
-    @foreach ($defaultOptions as $opt)
-        <option value="{{ $opt }}" {{ $savedValue == $opt ? 'selected' : '' }}>
-            {{ $opt }}
-        </option>
-    @endforeach
-
-    {{-- If DB value is something like "Gifting, Celebration", add it dynamically --}}
-    @if ($shouldAddCustomOption)
-        <option value="{{ $savedValue }}" selected>{{ $savedValue }}</option>
-    @endif
-</select>
+                                            // Check if savedValue is NOT in the default dropdown list
+                                            $shouldAddCustomOption = $savedValue && !in_array($savedValue, $defaultOptions);
+                                        @endphp
 
 
+                                        <select class="form-select" name="categories" id="categories" required>
+                                            <option value="">Select Category</option>
 
+                                            {{-- Show default options --}}
+                                            @foreach ($defaultOptions as $opt)
+                                                <option value="{{ $opt }}" {{ $savedValue == $opt ? 'selected' : '' }}>
+                                                    {{ $opt }}
+                                                </option>
+                                            @endforeach
+
+                                            {{-- If DB value is something like "Gifting, Celebration", add it dynamically --}}
+                                            @if ($shouldAddCustomOption)
+                                                <option value="{{ $savedValue }}" selected>{{ $savedValue }}</option>
+                                            @endif
+                                        </select>
                                     </div>
                                 </div>
 
@@ -931,39 +933,72 @@
 
     @push('scripts')
         <script>
-            // JavaScript for Image Management
-            function previewImages(input) {
-                const preview = document.getElementById('image-preview');
-                
-                // Clear any existing previews from new file selection
-                const existingPreviews = preview.querySelectorAll('.new-image-preview');
-                existingPreviews.forEach(el => el.remove());
-                
-                if (input.files) {
-                    Array.from(input.files).forEach((file, index) => {
-                        const reader = new FileReader();
-                        
-                        reader.onload = function(e) {
-                            const div = document.createElement('div');
-                            div.className = 'position-relative d-inline-block me-2 mb-2 new-image-preview';
-                            div.innerHTML = `
-                                <img src="${e.target.result}" 
-                                     alt="Preview" 
-                                     class="img-thumbnail product-thumbnail">
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="radio" 
-                                           name="primary_image_new" 
-                                           value="${index}">
-                                    <label class="form-check-label">Set as primary</label>
-                                </div>
-                            `;
-                            preview.appendChild(div);
-                        }
-                        
-                        reader.readAsDataURL(file);
-                    });
+                function previewImages(input) {
+                    const preview = document.getElementById('image-preview');
+                                
+                    const existingPreviews = preview.querySelectorAll('.new-image-preview');
+                    existingPreviews.forEach(el => el.remove());
+                    
+                    if (input.files) {
+                        Array.from(input.files).forEach((file, index) => {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                const div = document.createElement('div');
+                                div.className = 'position-relative d-inline-block me-2 mb-2 new-image-preview';
+                                div.innerHTML = `
+                                    <img src="${e.target.result}" 
+                                        alt="Preview" 
+                                        class="img-thumbnail product-thumbnail">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="radio" 
+                                            name="primary_image_new" 
+                                            value="${index}">
+                                        <label class="form-check-label">Set as primary</label>
+                                    </div>
+                                `;
+                                preview.appendChild(div);
+                            };
+                            
+                            reader.readAsDataURL(file);
+                        });
+                    }
                 }
-            }
+
+
+            // JavaScript for Image Management
+            // function previewImages(input) {
+            //     const preview = document.getElementById('image-preview');
+                
+            //     // Clear any existing previews from new file selection
+            //     const existingPreviews = preview.querySelectorAll('.new-image-preview');
+            //     existingPreviews.forEach(el => el.remove());
+                
+            //     if (input.files) {
+            //         Array.from(input.files).forEach((file, index) => {
+            //             const reader = new FileReader();
+                        
+            //             reader.onload = function(e) {
+            //                 const div = document.createElement('div');
+            //                 div.className = 'position-relative d-inline-block me-2 mb-2 new-image-preview';
+            //                 div.innerHTML = `
+            //                     <img src="${e.target.result}" 
+            //                          alt="Preview" 
+            //                          class="img-thumbnail product-thumbnail">
+            //                     <div class="form-check mt-2">
+            //                         <input class="form-check-input" type="radio" 
+            //                                name="primary_image_new" 
+            //                                value="${index}">
+            //                         <label class="form-check-label">Set as primary</label>
+            //                     </div>
+            //                 `;
+            //                 preview.appendChild(div);
+            //             }
+                        
+            //             reader.readAsDataURL(file);
+            //         });
+            //     }
+            // }
             
             // Initialize any necessary scripts when the document is ready
             document.addEventListener('DOMContentLoaded', function() {
