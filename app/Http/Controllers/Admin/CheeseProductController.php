@@ -27,7 +27,7 @@ class CheeseProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            // 'price' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'boolean'
         ]);
@@ -67,7 +67,7 @@ class CheeseProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            // 'price' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'sometimes|boolean'
         ]);
@@ -130,7 +130,7 @@ class CheeseProductController extends Controller
             'id' => $product->id,
             'name' => $product->name,
             'description' => $product->description,
-            'price' => $product->price,
+            // 'price' => $product->price,
             'image' => $product->image ? asset('storage/' . $product->image) : null,
             'is_active' => $product->is_active,
             'created_at' => $product->created_at ? $product->created_at->format('M d, Y h:i A') : null,
