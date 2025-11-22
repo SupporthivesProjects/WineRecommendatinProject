@@ -54,7 +54,7 @@
                                             <th class="text-start">SR No.</th>
                                             <th class="text-start">Image</th>
                                             <th class="text-start">Name</th>
-                                            <th class="text-start">Price</th>
+                                            <!-- <th class="text-start">Price</th> -->
                                             <th class="text-start">Status</th>
                                             <th class="text-start">Actions</th>
                                         </tr>
@@ -76,7 +76,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="align-middle">{{ $product->name }}</td>
-                                                <td class="align-middle">₹&nbsp;{{ number_format($product->price, 2) }}</td>
+                                                <!-- <td class="align-middle">₹&nbsp;{{ number_format($product->price, 2) }}</td> -->
                                                 <td class="align-middle">
                                                     <span class="badge rounded-pill border border-{{ $product->is_active ? 'success' : 'danger' }} text-{{ $product->is_active ? 'success' : 'danger' }} py-1 px-3">
                                                         {{ $product->is_active ? 'Active' : 'Inactive' }}
