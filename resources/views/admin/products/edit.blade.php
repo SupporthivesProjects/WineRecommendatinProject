@@ -873,12 +873,45 @@
                                 <div class="row g-3 mt-3">
                                     <div class="col-md-6">
                                         <label for="categories" class="form-label">Category</label>
-                                        <select class="form-select" name="categories" id="categories" required>
+                                        <!-- <select class="form-select" name="categories" id="categories" required>
                                             <option value="">Select Category</option>
                                             <option value="Gifting" {{ old('categories', $product->categories) == 'Gifting' ? 'selected' : '' }}>Gifting</option>
                                             <option value="Wine and Cheese" {{ old('categories', $product->categories) == 'Wine and Cheese' ? 'selected' : '' }}>Wine and Cheese</option>
                                             <option value="Everyday sipping" {{ old('categories', $product->categories) == 'Everyday sipping' ? 'selected' : '' }}>Everyday sipping</option>
-                                        </select>
+                                        </select> -->
+                                        @php
+    $savedValue = old('categories', $product->categories);
+
+    // Your existing dropdown options
+    $defaultOptions = [
+        'Gifting',
+        'Wine and Cheese',
+        'Everyday Sipping',
+    ];
+
+    // Check if savedValue is NOT in the default dropdown list
+    $shouldAddCustomOption = $savedValue && !in_array($savedValue, $defaultOptions);
+@endphp
+
+
+<select class="form-select" name="categories" id="categories" required>
+    <option value="">Select Category</option>
+
+    {{-- Show default options --}}
+    @foreach ($defaultOptions as $opt)
+        <option value="{{ $opt }}" {{ $savedValue == $opt ? 'selected' : '' }}>
+            {{ $opt }}
+        </option>
+    @endforeach
+
+    {{-- If DB value is something like "Gifting, Celebration", add it dynamically --}}
+    @if ($shouldAddCustomOption)
+        <option value="{{ $savedValue }}" selected>{{ $savedValue }}</option>
+    @endif
+</select>
+
+
+
                                     </div>
                                 </div>
 
