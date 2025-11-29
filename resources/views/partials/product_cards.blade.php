@@ -7,7 +7,7 @@
              data-retail-price="{{ $product->retail_price }}"
              data-country="{{ $product->country }}"
              data-featured="{{ $product->admin_featured_product ? 'true' : 'false' }}">
-            <div class="card custom-card wine-card">
+            <!-- <div class="card custom-card wine-card">
                 <div class="image-wrapper" style="position: relative;">
                     <img src="{{ asset('storage/' . $product->image1)  }}"
                          class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
@@ -25,7 +25,7 @@
                         $type = strtolower($product->type);
                         $emoji = match ($type) {
                             'red' => '🍷',
-                            'white' => '🥂',
+                            'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
                             'sparkling' => '✨',
                             'ros' => '🌸',
                             'dessert' => '🍯',
@@ -35,15 +35,46 @@
                     @endphp
                     <p>
                         <strong>Type:</strong> {{ ucfirst($type) }}
-                        <span style="font-size: 1.5em;">{{ $emoji }}</span>
+                        <span style="font-size: 1.5em;">{!! $emoji !!}</span>
                     </p>
-                    <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+    
                     <a href="{{ route('user.productdetails', $product->id) }}" 
                        class="btn btn-dark mt-2 rounded-0">
                         I want to try Now !!
                     </a>
                 </div>
+            </div> -->
+            <div class="card custom-card wine-card position-relative">
+                <div class="image-wrapper" style="position: relative;">
+                    <img src="{{ asset('storage/' . $product->image1) }}"
+                        class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+
+                    @if($product->admin_featured_product)
+                        <span class="featured-badge">
+                            <i class="fas fa-star"></i> Featured
+                        </span>
+                    @endif
+                </div>
+
+                <div class="card-body" style="box-shadow: 0 10px 30px rgba(0,0,0,0.15)">
+                    <h5 class="card-title fw-semibold">{{ $product->wine_name }}</h5>
+                    <p>
+                        <strong>Type:</strong> {{ ucfirst($type) }}
+                        <span style="font-size: 1.5em;">{!! $emoji !!}</span>
+                    </p>
+                </div>
+
+                <!-- HOVER OVERLAY -->
+                <div class="hover-overlay">
+                    <a href="{{ route('user.productdetails', $product->id) }}" 
+                    class="btn btn-dark rounded-0 overlay-btn">
+                    I want to try Now !!
+                    </a>
+                </div>
             </div>
+
+
+
         </div>
     @endforeach
 @else

@@ -120,6 +120,37 @@
         transform: translateY(0);
         transition: transform 0.1s linear;
     }
+
+
+    .wine-card {
+    position: relative;
+    overflow: hidden;
+}
+
+    .hover-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.65);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        z-index: 10;
+    }
+
+    .wine-card:hover .hover-overlay {
+        opacity: 1;
+    }
+
+    .overlay-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+
+
+
 </style>
 @endpush
 

@@ -497,15 +497,15 @@
                             your taste preferences and food pairings...
                         </p>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                                            <a href="#featuredwines"
-                                                class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
-                                                Explore Wines
-                                            </a>
-                                            <a href="#HIW"
-                                                class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
-                                                How It Works
-                                            </a>
-                                        </div>
+                        <a href="#featuredwines"
+                            class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
+                            Explore Wines
+                        </a>
+                        <a href="#HIW"
+                            class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
+                            How It Works
+                        </a>
+                    </div>
                 </div>
 
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -662,14 +662,14 @@
                                             <!-- NAME AT BOTTOM (fixed height) -->
                                             <div class="px-4 pb-6 pt-2 text-center">
                                                 <h3 class="text-xl font-bold text-gray-900 line-clamp-2 min-h-[56px]">
-                                                    {{ $product->wine_name }}
+                                                    {{ Str::title($product->wine_name) }}
                                                 </h3>
                                             </div>
 
                                             <!-- HOVER OVERLAY -->
                                             <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 
                                                         group-hover:opacity-100 transition-opacity duration-300 
-                                                        flex items-center justify-center">
+                                                        flex items-center justify-center z-30">
                                                 <a href="{{ route('user.productdetails', $product->id) }}"
                                                 class="bg-red-700 hover:bg-red-800 text-white px-5 py-3 rounded-md text-base font-medium transition">
                                                     View Details
@@ -678,7 +678,6 @@
 
                                         </div>
                                     </li>
-
                                     @endforeach
                                 </ul>
                             </div>
@@ -984,6 +983,7 @@
                     perView: 3,
                     gap: 24,
                     autoplay: 5000,
+                    navigation:FALSE,
                     hoverpause: true,
                     breakpoints: {
                         1024: {
