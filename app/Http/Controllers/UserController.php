@@ -394,8 +394,11 @@ class UserController extends Controller
                             case 'question4': // type
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
-                                    foreach ($values as $aroma) {
-                                        $q->orWhere('type', 'like', "%$aroma%");
+                                    foreach ($values as $aroma) 
+                                    {
+                                        $q->orWhere('type', 'like', "%$aroma%")
+                                        ->orWhere('method', 'like', "%$aroma%");
+                                        
                                     }
                                 }
                                 break;
@@ -443,8 +446,10 @@ class UserController extends Controller
                             case 'question4': // type
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
-                                    foreach ($values as $aroma) {
-                                        $q->orWhere('type', 'like', "%$aroma%");
+                                    foreach ($values as $aroma) 
+                                    {
+                                        $q->orWhere('type', 'like', "%$aroma%")
+                                        ->orWhere('method', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
@@ -505,8 +510,10 @@ class UserController extends Controller
                             case 'question5': // type
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
-                                    foreach ($values as $aroma) {
-                                        $q->orWhere('type', 'like', "%$aroma%");
+                                    foreach ($values as $aroma) 
+                                    {
+                                        $q->orWhere('type', 'like', "%$aroma%")
+                                        ->orWhere('method', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
@@ -566,8 +573,10 @@ class UserController extends Controller
                             case 'question5': // type
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
-                                    foreach ($values as $aroma) {
-                                        $q->orWhere('type', 'like', "%$aroma%");
+                                    foreach ($values as $aroma) 
+                                    {
+                                        $q->orWhere('type', 'like', "%$aroma%")
+                                        ->orWhere('method', 'like', "%$aroma%");
                                     }
                                 }
                                 break;
