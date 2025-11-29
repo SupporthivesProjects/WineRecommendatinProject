@@ -580,6 +580,11 @@ class UserController extends Controller
                                 }
                                 break;
                             
+                            case 'question7': // price
+                                $q->orWhere('retail_price', 'like', "%$value%");
+                                break;
+                            
+                            
                         }
                         break;
 
