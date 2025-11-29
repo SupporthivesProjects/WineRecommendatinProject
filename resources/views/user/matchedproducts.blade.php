@@ -110,10 +110,6 @@
             border-radius:0px;
         }
 
-        
-
-
-        
     </style>
 
 @endpush
@@ -154,6 +150,7 @@
         </div>
     </section> -->
 
+    
 <div class="pt-5" id="matchedproducts">
     <div class="container my-5">
          <!-- Start::row-6 -->
@@ -276,7 +273,7 @@
                                         <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                         <!-- Featured badge on the image -->
-                                        @if ($product->is_featured == 1)
+                                        @if ($product->admin_featured_product == 1)
                                             <span class="featured-badge">Featured</span>
                                         @endif
                                     </div>

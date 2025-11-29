@@ -381,8 +381,7 @@ class UserController extends Controller
 
         $query = Product::query()
             ->whereIn('id', $storeProductIds) // Only get products available in this store
-            ->where('status', 'active') // Ensure products are active
-            ->inRandomOrder();
+            ->where('status', 'active'); // Ensure products are active
 
         // Wrap all conditions in a single where closure to group the ORs
         $query->where(function ($q) use ($templateId, $answers) {
@@ -609,28 +608,32 @@ class UserController extends Controller
         Log::debug('Store ID: ' . $store->id);
         Log::debug('Store Product IDs: ' . $storeProductIds->implode(', '));
 
-        // $query->orderBy('admin_featured_product', 'desc')
-        // ->limit(15);
-        $allProducts = $query->orderBy('admin_featured_product', 'desc')->get();
+        //return $query->get();
 
-        // Split featured and normal
-        $featured = $allProducts->where('admin_featured_product', 1)->shuffle()->take(5);
-        $normal   = $allProducts->where('admin_featured_product', 0)->shuffle();
+        $allProducts = $query->get();   // Get all matching products
 
-        // Calculate remaining needed
-        $remainingCount = 15 - $featured->count();
+        // Split into featured and normal
+        $featured = $allProducts->where('admin_featured_product', true)->shuffle();
+        $normal   = $allProducts->where('admin_featured_product', false)->shuffle();
 
-        // Take remaining random normal products
-        $normal = $normal->take($remainingCount);
+        // Take up to 5 featured
+        $takeFeatured = $featured->take(5);
 
-        // Merge + shuffle final 15
-        $final = $featured->merge($normal)->shuffle();
+        // Calculate how many more we need from normal
+        $remainingCount = 15 - $takeFeatured->count();
 
-        return $final;
+        // Take remaining from normal
+        $takeNormal = $normal->take($remainingCount);
+
+        // Merge & shuffle final results
+        $finalProducts = $takeFeatured->merge($takeNormal)->shuffle()->values();
+
+        return $finalProducts;
+       
 
 
-        
-        return $query->get();
+
+
     }
 
     public function addToCart(Request $request)
