@@ -381,7 +381,8 @@ class UserController extends Controller
 
         $query = Product::query()
             ->whereIn('id', $storeProductIds) // Only get products available in this store
-            ->where('status', 'active'); // Ensure products are active
+            ->where('status', 'active') // Ensure products are active
+            ->inRandomOrder();
 
         // Wrap all conditions in a single where closure to group the ORs
         $query->where(function ($q) use ($templateId, $answers) {
@@ -608,8 +609,26 @@ class UserController extends Controller
         Log::debug('Store ID: ' . $store->id);
         Log::debug('Store Product IDs: ' . $storeProductIds->implode(', '));
 
-        $query->orderBy('admin_featured_product', 'desc')
-        ->limit(15);
+        // $query->orderBy('admin_featured_product', 'desc')
+        // ->limit(15);
+        $allProducts = $query->orderBy('admin_featured_product', 'desc')->get();
+
+        // Split featured and normal
+        $featured = $allProducts->where('admin_featured_product', 1)->shuffle()->take(5);
+        $normal   = $allProducts->where('admin_featured_product', 0)->shuffle();
+
+        // Calculate remaining needed
+        $remainingCount = 15 - $featured->count();
+
+        // Take remaining random normal products
+        $normal = $normal->take($remainingCount);
+
+        // Merge + shuffle final 15
+        $final = $featured->merge($normal)->shuffle();
+
+        return $final;
+
+
         
         return $query->get();
     }
