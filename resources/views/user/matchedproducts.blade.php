@@ -189,7 +189,7 @@
                     </div>
 
                     <!-- Winery Filter -->
-                    <div class="filter-group">
+                    <!-- <div class="filter-group">
                         <h4 class="fw-bold mb-4">Winery</h4>
                         @php
                             $wineries = $products->pluck('winery')->unique()->sort();
@@ -202,7 +202,7 @@
                                 </label>
                             </div>
                         @endforeach
-                    </div>
+                    </div> -->
 
                     <!-- Retail Price Filter -->
                     <div class="filter-group">

@@ -594,6 +594,9 @@ class UserController extends Controller
         Log::debug('Store ID: ' . $store->id);
         Log::debug('Store Product IDs: ' . $storeProductIds->implode(', '));
 
+        $query->orderBy('admin_featured_product', 'desc')
+        ->limit(15);
+        
         return $query->get();
     }
 
