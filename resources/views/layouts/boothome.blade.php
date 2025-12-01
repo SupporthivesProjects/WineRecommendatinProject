@@ -770,7 +770,7 @@
                                         classics to gourmet cuisine, discover pairings that bring harmony, depth, and
                                         pleasure to the table.
                                     </p>
-                                    <a href="{{ route('user.cheeses') }}"
+                                    <a href="{{ route('allcheese') }}"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
                                         Explore this pairing
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1"

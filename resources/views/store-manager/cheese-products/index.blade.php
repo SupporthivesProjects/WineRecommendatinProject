@@ -57,8 +57,8 @@
                                             <th>Description</th>
                                             <!-- <th>Price</th>
                                             <th>Quantity in Store</th> 
-                                            <th>Status</th> 
-                                            <th>Available</th> -->
+                                            <th>Status</th> -->
+                                            <th>Available</th> 
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,14 +85,14 @@
                                                         <span class="badge rounded-pill bg-secondary">Out of Stock</span>
                                                     @endif
                                                 </td> -->
-                                                <!-- <td>
+                                                <td>
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input available-checkbox" 
                                                                type="checkbox" 
                                                                data-product-id="{{ $product->id }}"
                                                                {{ $product->is_available_in_store ? 'checked' : '' }}>
                                                     </div>
-                                                </td> -->
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

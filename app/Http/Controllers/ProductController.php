@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Cheese;
 use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
@@ -163,6 +164,60 @@ class ProductController extends Controller
             return back()->with('error', 'Error loading products: ' . $e->getMessage());
         }
     }
+
+    public function allcheese(Request $request)
+    {
+        try {
+            // Base query with images
+            $query = Cheese::from('cheese_products as cheeses');
+
+
+            // Apply filters if any
+            $query = $this->applyFilters($query, $request);
+
+            // Paginated results (9 per page)
+            $allCheese = $query->paginate(9);
+
+            // Handle AJAX filter/pagination requests
+            if ($request->ajax()) {
+
+                $html = view('partials.product_cards', [
+                    'products' => $allCheese
+                ])->render();
+
+                return response()->json([
+                    'success'       => true,
+                    'html'          => $html,
+                    'count'         => $allCheese->total(),
+                    'pagination'    => [
+                        'current_page'  => $allCheese->currentPage(),
+                        'last_page'     => $allCheese->lastPage(),
+                        'next_page_url' => $allCheese->nextPageUrl(),
+                        'prev_page_url' => $allCheese->previousPageUrl(),
+                        'total'         => $allCheese->total(),
+                        'per_page'      => $allCheese->perPage(),
+                    ]
+                ]);
+            }
+
+            // Normal page load
+            return view('allcheese', compact('allCheese'));
+
+        } catch (\Exception $e) {
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error loading products: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->with('error', 'Error loading products: ' . $e->getMessage());
+        }
+    }
+
+
+
 
     protected function applyFilters($query, $request)
     {

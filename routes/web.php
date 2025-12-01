@@ -58,6 +58,8 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/browse', [ProductController::class, 'browse'])->name('homeBrowseWines');
+Route::get('/allcheese', [ProductController::class, 'allcheese'])->name('allcheese');
+
 
 Route::get('/careers', function () {
     return view('careers');
