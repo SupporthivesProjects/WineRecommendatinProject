@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Cheese;
+use App\Models\CheeseProduct;
 use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
@@ -165,56 +166,25 @@ class ProductController extends Controller
         }
     }
 
-    public function allcheese(Request $request)
+
+    public function allcheese()
     {
         try {
-            // Base query with images
-            $query = Cheese::from('cheese_products as cheeses');
+            // Fetch all cheese products with pagination
+            $cheeses = CheeseProduct::paginate(12);
 
-
-            // Apply filters if any
-            $query = $this->applyFilters($query, $request);
-
-            // Paginated results (9 per page)
-            $allCheese = $query->paginate(9);
-
-            // Handle AJAX filter/pagination requests
-            if ($request->ajax()) {
-
-                $html = view('partials.product_cards', [
-                    'products' => $allCheese
-                ])->render();
-
-                return response()->json([
-                    'success'       => true,
-                    'html'          => $html,
-                    'count'         => $allCheese->total(),
-                    'pagination'    => [
-                        'current_page'  => $allCheese->currentPage(),
-                        'last_page'     => $allCheese->lastPage(),
-                        'next_page_url' => $allCheese->nextPageUrl(),
-                        'prev_page_url' => $allCheese->previousPageUrl(),
-                        'total'         => $allCheese->total(),
-                        'per_page'      => $allCheese->perPage(),
-                    ]
-                ]);
-            }
-
-            // Normal page load
-            return view('allcheese', compact('allCheese'));
+            return view('allcheese', [
+                'cheeses' => $cheeses
+            ]);
 
         } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error loading cheese products: ' . $e->getMessage());
 
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error loading products: ' . $e->getMessage()
-                ], 500);
-            }
-
-            return back()->with('error', 'Error loading products: ' . $e->getMessage());
+            return back()->with('error', 'Failed to load products. Please try again later.');
         }
     }
+
 
 
 
