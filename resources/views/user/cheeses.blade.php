@@ -186,11 +186,11 @@
                                     <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <!-- <span class="h5 mb-0">₹&nbsp;{{ number_format($cheese->price, 2) }}</span> -->
-                                            @if($isInStock)
+                                            <!-- @if($isInStock)
                                                 <span class="badge bg-success">In Stock ({{ $quantity }})</span>
                                             @else
                                                 <span class="badge bg-secondary">Out of Stock</span>
-                                            @endif
+                                            @endif -->
                                         </div>
                                         <div class="d-grid">
                                             <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark btn-sm w-100">
