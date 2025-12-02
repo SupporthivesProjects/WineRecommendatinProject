@@ -105,26 +105,38 @@
     </style>
 @endpush
 
-<!-- Transparent Navbar -->
-<nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
-    <div class="container d-flex align-items-center">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-between w-100" id="navbarNav">
-            <!-- Nav links (left aligned) -->
-            <ul class="navbar-nav">
-                <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
-                <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
-                <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
-                <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link active">Browse Cheeses</a></li>
-                <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-            </ul>
+    <!-- Header -->
+    <header class="app-header p-0" style="background-color: white;border-bottom: 1px solid #ddd;height: 80px;">
+        <div class="container d-flex align-items-center justify-content-between" style="height: 100%;">
             
+            <!-- Left: Logo -->
+            <div class="d-flex align-items-center" style="flex: 0 0 auto;">
+            <a href="{{ route('home') }}">
+                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 60px;width: 60px;">
+            </a>
+            </div>
+
+            <!-- Center: Navigation -->
+            <nav class="flex-grow-1 d-flex justify-content-center">
+            <ul class="nav mb-0">
+                <li class="nav-item"><a href="{{ route('home') }}" class="nav-link  fw-semibold px-3">Home</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link  fw-semibold px-3">How It Works</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link  fw-semibold px-3">Browse Wines</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link  fw-semibold px-3">Pairing Wines</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link  fw-semibold px-3">What Our Users Say</a></li>
+                <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link  fw-semibold px-3">Moments in Between</a></li>
+            </ul>
+            </nav>
+
+            <!-- Right: Login Button -->
+            <div class="d-flex align-items-center" style="flex: 0 0 auto;">
+            <a href="{{ route('login') }}" class="btn btn-info text-white fw-semibold px-4 py-2" 
+                style="border-radius: 6px;">Login</a>
+            </div>
+
         </div>
-    </div>
-</nav>
+    </header>
+
 
 <!-- Hero Section -->
 <section class="parallax-container">
