@@ -121,18 +121,7 @@
                 <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link active">Browse Cheeses</a></li>
                 <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
             </ul>
-            <!-- Logout (right aligned) -->
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                        @csrf
-                        <a class="nav-link d-flex align-items-center" href="{{ route('logout') }}" 
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
-                        </a>
-                    </form>
-                </li>
-            </ul>
+            
         </div>
     </div>
 </nav>
@@ -172,11 +161,11 @@
                                          class="card-img-top" 
                                          alt="{{ $cheese->name }}"
                                          style="height: 200px; object-fit: cover;">
-                                    @if(!$isInStock)
+                                    <!-- @if(!$isInStock)
                                         <div class="position-absolute top-0 start-0 w-100 bg-danger text-white text-center py-1">
                                             Out of Stock
                                         </div>
-                                    @endif
+                                    @endif -->
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title fw-semibold">{{ $cheese->name }}</h5>
@@ -186,11 +175,11 @@
                                     <div class="mt-auto">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <!-- <span class="h5 mb-0">₹&nbsp;{{ number_format($cheese->price, 2) }}</span> -->
-                                            @if($isInStock)
+                                            <!-- @if($isInStock)
                                                 <span class="badge bg-success">In Stock ({{ $quantity }})</span>
                                             @else
                                                 <span class="badge bg-secondary">Out of Stock</span>
-                                            @endif
+                                            @endif -->
                                         </div>
                                         <div class="d-grid">
                                             <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark btn-sm w-100">
