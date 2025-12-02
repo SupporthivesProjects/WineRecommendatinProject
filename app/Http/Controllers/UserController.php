@@ -408,7 +408,7 @@ class UserController extends Controller
                             case 'question6': // nature
                                 $q->orWhere('nature', $value);
                                 break;    
-                            case 'question8': // body
+                            case 'question7': // body
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
                                     foreach ($values as $body) {
@@ -416,10 +416,10 @@ class UserController extends Controller
                                     }
                                 }
                                 break;
-                            case 'question9': // style
+                            case 'question8': // style
                                 $q->orWhere('style', $value);
                                 break;
-                            case 'question11': // country
+                            case 'question9': // country
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
                                     foreach ($values as $country) {
@@ -427,7 +427,7 @@ class UserController extends Controller
                                     }
                                 }
                                 break;
-                            case 'question12': // categories
+                            case 'question10': // categories
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
                                     foreach ($values as $category) {
@@ -435,8 +435,8 @@ class UserController extends Controller
                                     }
                                 }
                                 break;
-                            case 'question13': // price
-                                $q->orWhere('retail_price', 'like', "%$value%");
+                            case 'question11': // price
+                                $q->orWhere('retail_price', '<=', "%$value%");
                                 break;
                         }
                         break;
@@ -489,7 +489,13 @@ class UserController extends Controller
                                 }
                                 break;
                             case 'question10': // aroma
-                                $q->orWhere('aroma', 'like', "%$value%");
+                                if (is_array($value)) {
+                                    foreach ($value as $aroma) {
+                                        $q->orWhere('aroma', 'like', "%$aroma%");
+                                    }
+                                } else {
+                                    $q->orWhere('aroma', 'like', "%$value%");
+                                }
                                 break;
                             case 'question11': // categories
                                 if (is_array($value)) {
@@ -500,13 +506,19 @@ class UserController extends Controller
                                 }
                                 break;
                             case 'question12': // retail price
-                                $q->orWhere('retail_price', 'like', "%$value%");
+                                $q->orWhere('retail_price', '<=', "%$value%");
                                 break;
                         }
                         break;
 
                     case '3':
                         switch ($key) {
+                            case 'question4': // categories
+                                $values = is_array($value) ? $value : [$value]; // convert string to array
+                                foreach ($values as $category) {
+                                    $q->orWhere('categories', 'like', "%$category%");
+                                }
+                                break;
                             case 'question5': // type
                                 if (is_array($value)) {
                                     $values = is_array($value) ? $value : [$value];
@@ -545,7 +557,7 @@ class UserController extends Controller
                                     $values = is_array($value) ? $value : [$value];
                                     foreach ($values as $acidity) {
                                         $q->orWhere('acidity', 'like', "%$acidity%")
-                                        ->orWhere('tanin_level', 'like', "%$acidity%")
+                                        ->orWhere('tannin_level', 'like', "%$acidity%")
                                         ->orWhere('body', 'like', "%$acidity%");
 
                                     }
@@ -560,7 +572,7 @@ class UserController extends Controller
                                 }
                                 break;
                             case 'question15': // price
-                                $q->orWhere('retail_price', 'like', "%$value%");
+                                $q->orWhere('retail_price', '<=', "%$value%");
                                 break;
                         }
                         break;
@@ -590,7 +602,7 @@ class UserController extends Controller
                                 break;
                             
                             case 'question7': // price
-                                $q->orWhere('retail_price', 'like', "%$value%");
+                                $q->orWhere('retail_price', '<=', "%$value%");
                                 break;
                             
                             
@@ -630,10 +642,6 @@ class UserController extends Controller
 
         return $finalProducts;
        
-
-
-
-
     }
 
     public function addToCart(Request $request)
