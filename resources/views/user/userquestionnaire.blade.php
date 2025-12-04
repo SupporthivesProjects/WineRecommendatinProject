@@ -695,7 +695,6 @@
                 backBtn.style.display = 'inline-block';
             }
 
-
             function renderQuestionHTML(q, qIndex) 
             {
                 if (q.type === 'slider') {
