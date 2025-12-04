@@ -398,6 +398,14 @@ class UserController extends Controller
         foreach ($orderedAnswers as $key => $value) 
         {
 
+
+            // Skip questions where user selected "no response"
+            if ($value === "no response" || $value === ["no response"]) {
+                Log::info("Skipping $key because value is 'no response'");
+                continue;
+            }
+
+
             Log::info("---------------");
             Log::info("Processing Answer Key: $key", ['value' => $value]);
             Log::info("Current available product pool before filter: " . count($currentProductIds));

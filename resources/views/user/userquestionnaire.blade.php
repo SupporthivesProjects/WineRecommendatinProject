@@ -696,48 +696,6 @@
             }
 
 
-
-            // function renderQuestion() 
-            // {
-            //     const container = document.getElementById('question-container');
-
-            //     // First screen: render 3 questions together
-            //     if (currentStep === 0) {
-            //         let combinedHtml = '';
-            //         for (let i = 0; i < 3 && i < questions.length; i++) {
-            //             if (!questions[i].id) {
-            //                 questions[i].id = `question${i + 1}`;
-            //             }
-
-            //             combinedHtml += `<div class="mb-4">
-            //                 <h5 class="text-dark">${questions[i].question}</h5>
-            //                 ${renderQuestionHTML(questions[i], i)}
-            //             </div>`;
-            //         }
-
-            //         container.innerHTML = combinedHtml;
-            //         setupEventsForBatch([0, 1, 2]);
-            //         document.getElementById('backBtn').disabled = true;
-            //         return;
-            //     }
-
-            //     // For questions beyond the first 3
-            //     if (currentStep >= questions.length) return;
-
-            //     const q = questions[currentStep];
-            //     if (!q.id) {
-            //         q.id = `question${currentStep + 1}`;
-            //     }
-
-            //     container.innerHTML = `
-            //         <h5 class='text-dark'>${q.question}</h5>
-            //         ${renderQuestionHTML(q, currentStep)}
-            //     `;
-
-            //     setupEventsForBatch([currentStep]);
-            //     document.getElementById('backBtn').disabled = currentStep === 3;
-            // }
-
             function renderQuestionHTML(q, qIndex) 
             {
                 if (q.type === 'slider') {

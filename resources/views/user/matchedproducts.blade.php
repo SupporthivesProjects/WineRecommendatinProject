@@ -285,6 +285,7 @@
                                                 'red' => '🍷',
                                                 'white' => '🥂',
                                                 'sparkling' => '✨',
+                                                'Rosé' => '✨',
                                                 default => ''
                                             };
                                         @endphp
