@@ -695,38 +695,48 @@
                 backBtn.style.display = 'inline-block';
             }
 
+
             function renderQuestionHTML(q, qIndex) 
             {
-                if (q.type === 'slider') {
-                    const min = q.min_value ?? 0;
-                    const max = q.max_value ?? 10000;
-                    const step = q.step ?? 100;
-                    const defaultValue = q.default ?? min;
+            
+                if (q.type === 'slider') 
+                {
+                    const bands = q.bands ?? [
+                        { min: 0, max: 5000, label: "₹0 – ₹5,000" },
+                        { min: 5000, max: 25000, label: "₹5,000 – ₹25,000" },
+                        { min: 25000, max: 50000, label: "₹25,000 – ₹50,000" },
+                        { min: 50000, max: 100000, label: "₹50,000 – ₹1,00,000" }
+                    ];
 
-                    let tickMarks = '';
-                    for (let i = min; i <= max; i += step) {
-                        tickMarks += `<option value="${i}"></option>`;
-                    }
+                    // Default selected band = first band
+                    const defaultValue = bands[0].max;
+
+                    let optionsHtml = '';
+                    bands.forEach(b => {
+                        optionsHtml += `<option value="${b.max}">${b.label}</option>`;
+                    });
 
                     return `
+                        <select class="form-select mb-3" id="budgetDropdown${qIndex}">
+                            ${optionsHtml}
+                        </select>
+
                         <input 
                             type="range" 
-                            class="form-range" 
-                            id="budgetSlider${qIndex}" 
-                            min="${min}" 
-                            max="${max}" 
-                            step="${step}" 
-                            value="${defaultValue}" 
-                            list="tickmarks${qIndex}"
+                            class="form-range"
+                            id="budgetSlider${qIndex}"
+                            min="${bands[0].min}"
+                            max="${bands[bands.length - 1].max}"
+                            step="100"
+                            value="${defaultValue}"
                         >
-                        <datalist id="tickmarks${qIndex}">${tickMarks}</datalist>
-                        <div class="d-flex justify-content-between text-muted mt-2">
-                            <small>₹${min}</small>
-                            <small>Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span></small>
-                            <small>₹${max}</small>
+
+                        <div class="mt-2 fw-bold">
+                            Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span>
                         </div>
                     `;
                 }
+
 
                 if (q.type === 'input') {
                     return `<input type="text" class="form-control" id="textInputAnswer${qIndex}" placeholder="Enter your answer">`;
@@ -785,15 +795,46 @@
                 indexes.forEach(index => {
                     const q = questions[index];
 
-                    if (q.type === 'slider') {
+                    // if (q.type === 'slider') {
+                    //     const slider = document.getElementById(`budgetSlider${index}`);
+                    //     const output = document.getElementById(`sliderValue${index}`);
+                    //     if (slider && output) {
+                    //         slider.addEventListener('input', (e) => {
+                    //             output.textContent = e.target.value;
+                    //         });
+                    //     }
+                    // }
+                    if (q.type === 'slider') 
+                    {
                         const slider = document.getElementById(`budgetSlider${index}`);
+                        const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
-                        if (slider && output) {
-                            slider.addEventListener('input', (e) => {
-                                output.textContent = e.target.value;
-                            });
-                        }
+
+                        const bands = q.bands ?? [
+                            { min: 0, max: 5000 },
+                            { min: 5000, max: 25000 },
+                            { min: 25000, max: 50000 },
+                            { min: 50000, max: 100000 }
+                        ];
+
+                        // Slider → Updates Label + Dropdown
+                        slider.addEventListener('input', (e) => {
+                            const val = parseInt(e.target.value);
+                            output.textContent = val;
+
+                            // Find matching band
+                            const matched = bands.find(b => val >= b.min && val <= b.max);
+                            if (matched) dropdown.value = matched.max;
+                        });
+
+                        // Dropdown → Updates Slider + Label
+                        dropdown.addEventListener('change', (e) => {
+                            const val = parseInt(e.target.value);
+                            slider.value = val;
+                            output.textContent = val;
+                        });
                     }
+
 
                     if (q.type === 'single' || q.type === 'multiple') {
                         const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
