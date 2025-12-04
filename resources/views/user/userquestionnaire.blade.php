@@ -698,7 +698,7 @@
 
             function renderQuestionHTML(q, qIndex) 
             {
-            
+                
                 if (q.type === 'slider') 
                 {
                     const bands = q.bands ?? [
