@@ -679,10 +679,11 @@ class UserController extends Controller
                             $x->where('country', 'like', "%$value%");
                         });
                         break;
-        
                     case 'question9': 
-                        $q->where(function($x) use ($value) {
-                            $x->where('country', 'like', "%$value%");
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('country', 'like', "%{$v}%");
+                            }
                         });
                         break;
         
@@ -699,18 +700,23 @@ class UserController extends Controller
                             }
                         });
                         break;
-        
                     case 'question12': 
-                        $q->where(function($x) use ($values) {
-                            foreach ($values as $v) {
-                                $x->orWhere('acidity', 'like', "%$v%")
-                                  ->orWhere('tannin_level', 'like', "%$v%")
-                                  ->orWhere('body', 'like', "%$v%");
-                            }
+                        $q->where(function($x) use ($value) {
+                            $x->where('acidity', 'like', "%$value%");
+                        });
+                        break;
+                    case 'question13': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('tannin_level', 'like', "%$value%");
+                        });
+                        break;
+                    case 'question14': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('body', 'like', "%$value%");
                         });
                         break;
         
-                    case 'question14': 
+                    case 'question15': 
                         $q->where(function($x) use ($values) {
                             foreach ($values as $v) {
                                 $x->orWhere('style', 'like', "%$v%");
@@ -718,7 +724,7 @@ class UserController extends Controller
                         });
                         break;
         
-                    case 'question15':
+                    case 'question16':
                         $band = $this->detectPriceBand($value);
                         Log::info("Price Band Detected:", $band);
                     

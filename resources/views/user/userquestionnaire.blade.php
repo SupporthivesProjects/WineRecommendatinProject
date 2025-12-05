@@ -590,7 +590,15 @@
                 "Argentina" : "Argentina",
                 "England": "England",
                 "South Africa" : "SouthAfrica",
-                "New Zealand" : "NewZealand"
+                "New Zealand" : "NewZealand",
+                "low":"low",
+                "light to medium":"lighttomedium",
+                "medium to high":"mediumtohigh",
+                "high":"high",
+                "light bodied":"lightbodied",
+                "medium bodied":"mediumbodied",
+                "full bodied":"fullbodied",
+
             };
 
 
