@@ -459,6 +459,16 @@
             let currentStep = 0;
             let responses = {};  
             let selectedQuestionnaireId = null;
+            const subRegionMap = {
+                "France": ["Burgundy (France)", "Champagne (France)", "Rhône Valley (France)"],
+                "Germany": [],
+                "Italy": ["Tuscany (Italy)", "Piedmont (Italy)", "Veneto (Italy)"],
+                "Spain": ["Rioja (Spain)", "Ribera del Duero (Spain)"],
+                "Australia": ["Barossa Valley (Australia)", "Margaret River (Australia)"],
+                "USA": ["Napa Valley (USA)", "Sonoma (USA)"],
+                "Rest of the World": ["Marlborough (New Zealand)"]
+            };
+            window.selectedCountries = [];
 
             const emojiMap = 
             {
@@ -656,7 +666,6 @@
                 });
             });
 
-
             function renderQuestion() 
             {
                 const container = document.getElementById('question-container');
@@ -679,12 +688,10 @@
                     container.innerHTML = combinedHtml;
                     setupEventsForBatch([0, 1, 2]);
 
-                    // Hide back button on first screen
                     backBtn.style.display = 'none';
                     return;
                 }
 
-                // For questions beyond the first 3
                 if (currentStep >= questions.length) return;
 
                 const q = questions[currentStep];
@@ -698,17 +705,14 @@
                 `;
 
                 setupEventsForBatch([currentStep]);
-
-                // Show back button for all other steps
                 backBtn.style.display = 'inline-block';
             }
 
 
+
             function renderQuestionHTML(q, qIndex) 
             {
-                
-                if (q.type === 'slider') 
-                {
+                if (q.type === 'slider') {
                     const bands = q.bands ?? [
                         { min: 0, max: 5000, label: "₹0 – ₹5,000" },
                         { min: 5000, max: 25000, label: "₹5,000 – ₹25,000" },
@@ -716,7 +720,6 @@
                         { min: 50000, max: 100000, label: "₹50,000 – ₹1,00,000" }
                     ];
 
-                    // Default selected band = first band
                     const defaultValue = bands[0].max;
 
                     let optionsHtml = '';
@@ -750,12 +753,29 @@
                     return `<input type="text" class="form-control" id="textInputAnswer${qIndex}" placeholder="Enter your answer">`;
                 }
 
-                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+
+                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) 
+                {
+                    let options = [...q.options];
+
+                    // ⭐ FILTER SUB-REGION OPTIONS
+                    if (q.question.toLowerCase().includes("sub-region")) {
+                        let allowed = [];
+
+                        window.selectedCountries.forEach(country => {
+                            if (subRegionMap[country]) {
+                                allowed = allowed.concat(subRegionMap[country]);
+                            }
+                        });
+
+                        options = options.filter(opt => allowed.includes(opt));
+                    }
+
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
 
-                    q.options.forEach((opt, idx) => {
+                    options.forEach((opt, idx) => {
                         const basePath = '/questionnaire';
                         const emoji = emojiMap[opt]
                             ? `<div class="emoji-icon mb-1">
@@ -765,7 +785,6 @@
                                         data-color="${basePath}/${emojiMap[opt]}-colo.svg"
                                         alt="${opt}"
                                         class="emoji-img switchable-img"
-                                        onclick="selectOption(this)"
                                     />
                             </div>`
                             : '';
@@ -786,7 +805,7 @@
                             </div>
                         `;
 
-                        if ((idx + 1) % 2 === 0 || idx === q.options.length - 1) {
+                        if ((idx + 1) % 2 === 0 || idx === options.length - 1) {
                             optionsHtml += `<div class="row">${rowHtml}</div>`;
                             rowHtml = '';
                         }
@@ -798,22 +817,14 @@
                 return '';
             }
 
+
+
             function setupEventsForBatch(indexes) 
             {
                 indexes.forEach(index => {
                     const q = questions[index];
 
-                    // if (q.type === 'slider') {
-                    //     const slider = document.getElementById(`budgetSlider${index}`);
-                    //     const output = document.getElementById(`sliderValue${index}`);
-                    //     if (slider && output) {
-                    //         slider.addEventListener('input', (e) => {
-                    //             output.textContent = e.target.value;
-                    //         });
-                    //     }
-                    // }
-                    if (q.type === 'slider') 
-                    {
+                    if (q.type === 'slider') {
                         const slider = document.getElementById(`budgetSlider${index}`);
                         const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
@@ -825,17 +836,14 @@
                             { min: 50000, max: 100000 }
                         ];
 
-                        // Slider → Updates Label + Dropdown
                         slider.addEventListener('input', (e) => {
                             const val = parseInt(e.target.value);
                             output.textContent = val;
 
-                            // Find matching band
                             const matched = bands.find(b => val >= b.min && val <= b.max);
                             if (matched) dropdown.value = matched.max;
                         });
 
-                        // Dropdown → Updates Slider + Label
                         dropdown.addEventListener('change', (e) => {
                             const val = parseInt(e.target.value);
                             slider.value = val;
@@ -848,6 +856,7 @@
                         const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
                         inputs.forEach(input => {
                             input.addEventListener('change', () => {
+
                                 if (q.type === 'single') {
                                     inputs.forEach(i => {
                                         const label = document.querySelector(`label[for="${i.id}"]`);
@@ -863,12 +872,36 @@
                                         selectedLabel.classList.add('active');
                                     }
                                 }
+
+                                if (q.question.toLowerCase().includes("preferred wine country")) {
+                                    window.selectedCountries = Array.from(
+                                        document.querySelectorAll(`input[name="answer${index}"]:checked`)
+                                    ).map(i => i.value);
+
+                                    updateSubRegionOptions();
+                                }
+
                             });
                         });
                     }
                 });
             }
 
+
+            function updateSubRegionOptions() {
+                const index = questions.findIndex(q =>
+                    q.question.toLowerCase().includes("sub-region")
+                );
+
+                if (index === -1) return;
+
+                if (currentStep === index || currentStep === 0) {
+                    renderQuestion();
+                }
+            }
+
+
+           
             function captureResponse() 
             {
                 const isBatch = currentStep === 0;
