@@ -470,6 +470,20 @@
             };
             window.selectedCountries = [];
 
+            const wineRegionMap = 
+            {
+                "Domestic Indian": [],
+                "Old World (France, Germany, Italy, Spain, Portugal, Austria)": [
+                    "France", "Germany", "Italy", "Spain", "Portugal", "Austria"
+                ],
+                "New World (USA, Chile, Australia, Argentina,)": [
+                    "USA", "Chile", "Australia", "Argentina", "South Africa", "New Zealand"
+                ],
+                "No Preference": "ALL"
+            };
+            window.selectedRegionGroup = null;
+
+
             const emojiMap = 
             {
                 "Red": "Red",
@@ -770,6 +784,23 @@
 
                         options = options.filter(opt => allowed.includes(opt));
                     }
+                    // FILTER COUNTRY SELECTION
+                    if (q.question.toLowerCase().includes("country selection")) {
+                        let allowed = [];
+
+                        if (window.selectedRegionGroup && wineRegionMap[window.selectedRegionGroup]) {
+                            const selected = wineRegionMap[window.selectedRegionGroup];
+
+                            if (selected === "ALL") {
+                                allowed = q.options; // show all
+                            } else {
+                                allowed = selected;  // mapped list
+                            }
+                        }
+
+                        options = options.filter(opt => allowed.includes(opt));
+                    }
+
 
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
@@ -857,7 +888,8 @@
                         inputs.forEach(input => {
                             input.addEventListener('change', () => {
 
-                                if (q.type === 'single') {
+                                if (q.type === 'single') 
+                                {
                                     inputs.forEach(i => {
                                         const label = document.querySelector(`label[for="${i.id}"]`);
                                         if (label) label.classList.remove('active');
@@ -880,6 +912,15 @@
 
                                     updateSubRegionOptions();
                                 }
+
+                                if (q.question.toLowerCase().includes("wine region group")) 
+                                {
+                                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                                        window.selectedRegionGroup = selected ? selected.value : null;
+
+                                        updateCountryOptions();
+                                    }
+
 
                             });
                         });
@@ -1099,6 +1140,21 @@
                 }
             }
         }
+    </script>
+    <script>
+        function updateCountryOptions() 
+        {
+            const index = questions.findIndex(q =>
+                q.question.toLowerCase().includes("country selection")
+            );
+
+            if (index === -1) return;
+
+            if (currentStep === index || currentStep === 0) {
+                renderQuestion();
+            }
+        }
+
     </script>
 
 
