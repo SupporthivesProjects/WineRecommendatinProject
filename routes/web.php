@@ -284,7 +284,7 @@ Route::post('/profile/update-password', [UserProfileController::class, 'updatePa
 Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
     ->name('admin.reviews.update-status');
 
-// ⚠️ URL-based logout (ONLY for local/testing, not production)
+// URL-based logout 
 Route::get('/logout', function (Request $request) {
     Auth::guard('web')->logout();
 
