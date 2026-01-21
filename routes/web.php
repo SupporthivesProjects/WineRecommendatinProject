@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\StoreProfileController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
 
 
 use Illuminate\Support\Facades\Log;
@@ -280,5 +283,16 @@ Route::post('/profile/update-password', [UserProfileController::class, 'updatePa
 
 Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
     ->name('admin.reviews.update-status');
+
+// ⚠️ URL-based logout (ONLY for local/testing, not production)
+Route::get('/logout', function (Request $request) {
+    Auth::guard('web')->logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/login'); // or '/'
+});
+
 
 require __DIR__ . '/auth.php';
