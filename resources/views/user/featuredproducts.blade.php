@@ -234,6 +234,8 @@
 
     </style>
 
+    
+
 @endpush
 
     <!-- Transparent Navbar -->

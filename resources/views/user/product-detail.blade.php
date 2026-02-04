@@ -39,6 +39,8 @@
         }
     </style>
 
+    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const starInputs = document.querySelectorAll('.rating-stars input[type="radio"]');
