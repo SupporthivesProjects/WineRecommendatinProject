@@ -5,7 +5,7 @@
 
     <style>
         html, body {
-            overscroll-behavior: none;       
+            overscroll-behavior: auto;       
             overflow-x: hidden;             
         }
 
