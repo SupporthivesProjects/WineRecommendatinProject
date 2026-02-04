@@ -342,7 +342,7 @@
                                                 $lowerType = strtolower($type);
                                                 $emoji = match($lowerType) {
                                                     'red' => '🍷',
-                                                    'white' => '🥂',
+                                                    'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
                                                     'sparkling' => '✨',
                                                     default => ''
                                                 };
@@ -357,7 +357,7 @@
                                                     style="display: none;">
                                                 
                                                 <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
-                                                    <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
+                                                    <span class="emoji">{!! $emoji !!}</span> {{ ucfirst($type) }}
                                                 </label>
                                             </div>
                                         @endforeach
@@ -454,7 +454,70 @@
 
                 
                     <!-- Pagination Code -->
-                    @if ($products->hasPages())
+                     <!-- new code -->
+                     @if ($products->hasPages())
+                        <div class="d-flex justify-content-center my-4">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination mb-0">
+
+                                    {{-- Previous Page Link --}}
+                                    @if ($products->onFirstPage())
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="bi bi-caret-left"></i></span>
+                                        </li>
+                                    @else
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
+                                                <i class="bi bi-caret-left"></i>
+                                            </a>
+                                        </li>
+                                    @endif
+
+                                    {{-- Pagination Numbers --}}
+                                    @php
+                                        $lastPage = $products->lastPage();
+                                        $currentPage = $products->currentPage();
+                                    @endphp
+
+                                    {{-- Show first 3 pages --}}
+                                    @foreach (range(1, min(3, $lastPage)) as $page)
+                                        <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
+                                            <a class="page-link" href="{{ $products->url($page) }}">{{ $page }}</a>
+                                        </li>
+                                    @endforeach
+
+                                    {{-- Ellipsis if there’s a gap --}}
+                                    @if ($lastPage > 6)
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    @endif
+
+                                    {{-- Show last 3 pages --}}
+                                    @foreach (range(max($lastPage - 2, 4), $lastPage) as $page)
+                                        <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
+                                            <a class="page-link" href="{{ $products->url($page) }}">{{ $page }}</a>
+                                        </li>
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($products->hasMorePages())
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
+                                                <i class="bi bi-caret-right"></i>
+                                            </a>
+                                        </li>
+                                    @else
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="bi bi-caret-right"></i></span>
+                                        </li>
+                                    @endif
+
+                                </ul>
+                            </nav>
+                        </div>
+                    @endif
+
+                     <!--old code  -->
+                    <!-- @if ($products->hasPages())
                         <div class="d-flex justify-content-center my-4">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination mb-0">
@@ -493,7 +556,10 @@
                                 </ul>
                             </nav>
                         </div>
-                    @endif
+                    @endif -->
+
+
+
                 </div>
             </div>
         </section>

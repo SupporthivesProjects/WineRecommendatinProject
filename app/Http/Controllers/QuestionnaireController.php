@@ -11,6 +11,7 @@ use App\Models\Question;
 use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class QuestionnaireController extends Controller
@@ -312,8 +313,63 @@ class QuestionnaireController extends Controller
      * @param  array  $preferences
      * @return \Illuminate\Database\Eloquent\Collection
      */
+    // private function getRecommendedProducts(array $preferences)
+    // {
+    //     $query = Product::where('status', 'active');
+        
+    //     // Apply filters based on preferences
+    //     if (!empty($preferences['wine_type'])) {
+    //         $query->where('type', $preferences['wine_type']);
+    //     }
+        
+    //     if (!empty($preferences['price_range'])) {
+    //         // Parse price range and apply filter
+    //         $priceRange = explode('-', $preferences['price_range']);
+    //         if (count($priceRange) == 2) {
+    //             $query->whereBetween('retail_price', [$priceRange[0], $priceRange[1]]);
+    //         }
+    //     }
+        
+    //     if (!empty($preferences['grape_variety'])) {
+    //         if (is_array($preferences['grape_variety'])) {
+    //             $query->where(function($q) use ($preferences) {
+    //                 foreach ($preferences['grape_variety'] as $grape) {
+    //                     $q->orWhere('grape_variety', 'like', '%' . $grape . '%');
+    //                 }
+    //             });
+    //         } else {
+    //             $query->where('grape_variety', 'like', '%' . $preferences['grape_variety'] . '%');
+    //         }
+    //     }
+        
+    //     if (!empty($preferences['country'])) {
+    //         if (is_array($preferences['country'])) {
+    //             $query->whereIn('country', $preferences['country']);
+    //         } else {
+    //             $query->where('country', $preferences['country']);
+    //         }
+    //     }
+        
+    //     if (!empty($preferences['sweetness'])) {
+    //         // Assuming we have a sweetness field or we're using a tag-based approach
+    //         $query->where('sweetness', $preferences['sweetness'])
+    //               ->orWhere('description', 'like', '%' . $preferences['sweetness'] . '%');
+    //     }
+        
+    //     if (!empty($preferences['body'])) {
+    //         // Assuming we have a body field or we're using a tag-based approach
+    //         $query->where('body', $preferences['body'])
+    //               ->orWhere('description', 'like', '%' . $preferences['body'] . '%');
+    //     }
+        
+    //     // Limit to a reasonable number of recommendations
+    //     return $query->inRandomOrder()->limit(6)->get();
+    // }
     private function getRecommendedProducts(array $preferences)
     {
+        // Log the received preferences
+        Log::info('User Preferences:', $preferences);
+
         $query = Product::where('status', 'active');
         
         // Apply filters based on preferences
@@ -322,7 +378,6 @@ class QuestionnaireController extends Controller
         }
         
         if (!empty($preferences['price_range'])) {
-            // Parse price range and apply filter
             $priceRange = explode('-', $preferences['price_range']);
             if (count($priceRange) == 2) {
                 $query->whereBetween('retail_price', [$priceRange[0], $priceRange[1]]);
@@ -350,19 +405,35 @@ class QuestionnaireController extends Controller
         }
         
         if (!empty($preferences['sweetness'])) {
-            // Assuming we have a sweetness field or we're using a tag-based approach
-            $query->where('sweetness', $preferences['sweetness'])
-                  ->orWhere('description', 'like', '%' . $preferences['sweetness'] . '%');
+            $query->where(function ($q) use ($preferences) {
+                $q->where('sweetness', $preferences['sweetness'])
+                ->orWhere('description', 'like', '%' . $preferences['sweetness'] . '%');
+            });
         }
         
         if (!empty($preferences['body'])) {
-            // Assuming we have a body field or we're using a tag-based approach
-            $query->where('body', $preferences['body'])
-                  ->orWhere('description', 'like', '%' . $preferences['body'] . '%');
+            $query->where(function ($q) use ($preferences) {
+                $q->where('body', $preferences['body'])
+                ->orWhere('description', 'like', '%' . $preferences['body'] . '%');
+            });
         }
-        
-        // Limit to a reasonable number of recommendations
-        return $query->inRandomOrder()->limit(6)->get();
+
+        // Log the generated SQL query
+        Log::info('Generated SQL Query:', [
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings(),
+        ]);
+
+        $fullSql = vsprintf(str_replace('?', "'%s'", $query->toSql()), $query->getBindings());
+        Log::info('Full SQL:', ['query' => $fullSql]);
+
+        // Get results
+        $results = $query->inRandomOrder()->limit(6)->get();
+
+        // Optionally log the count of recommended products
+        Log::info('Number of recommended products: ' . $results->count());
+
+        return $results;
     }
 
 

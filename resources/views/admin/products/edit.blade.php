@@ -571,143 +571,278 @@
                             <h4 class="card-title">Edit Product</h4>
                         </div>
                         <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data" id="product-form"
+                            action="{{ route('admin.products.update', $product->id) }}">
+                            @csrf
+                            @method('PUT')
 
-                            <form action="{{ route('admin.products.update', $product->id) }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
+                            <div class="container-fluid">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="wine_name" class="form-label">Wine Name</label>
+                                        <input type="text" class="form-control" name="wine_name" id="wine_name"
+                                            value="{{ old('wine_name', $product->wine_name) }}" required>
+                                    </div>
 
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul class="mb-0">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
+                                    <div class="col-md-6">
+                                        <label for="type" class="form-label">Type</label>
+                                        <select class="form-select" name="type" id="type">
+                                            <option value="">Select Type</option>
+                                            <option value="red" {{ old('type', $product->type) == 'red' ? 'selected' : '' }}>Red Wine</option>
+                                            <option value="white" {{ old('type', $product->type) == 'white' ? 'selected' : '' }}>White Wine</option>
+                                            <option value="rose" {{ old('type', $product->type) == 'rose' ? 'selected' : '' }}>Rosé</option>
+                                            <option value="sparkling" {{ old('type', $product->type) == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="sp_mentions" class="form-label">Special Mentions</label>
+                                        <select class="form-select" name="sp_mentions" id="sp_mentions">
+                                            <option value="">Select</option>
+                                            <option value="fortified" {{ old('sp_mentions', $product->sp_mentions) == 'fortified' ? 'selected' : '' }}>Fortified</option>
+                                            <option value="port" {{ old('sp_mentions', $product->sp_mentions) == 'port' ? 'selected' : '' }}>Port</option>
+                                            <option value="marsala" {{ old('sp_mentions', $product->sp_mentions) == 'marsala' ? 'selected' : '' }}>Marsala</option>
+                                            <option value="sherry" {{ old('sp_mentions', $product->sp_mentions) == 'sherry' ? 'selected' : '' }}>Sherry</option>
+                                            <option value="orange" {{ old('sp_mentions', $product->sp_mentions) == 'orange' ? 'selected' : '' }}>Orange</option>
+                                            <option value="fruit" {{ old('sp_mentions', $product->sp_mentions) == 'fruit' ? 'selected' : '' }}>Fruit</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="method" class="form-label">Method</label>
+                                        <select class="form-select" name="method" id="method">
+                                            <option value="">Select Method</option>
+                                            <option value="still" {{ old('method', $product->Method) == 'still' ? 'selected' : '' }}>Still</option>
+                                            <option value="sparkling" {{ old('method', $product->Method) == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
+                                            <option value="semi sparkling" {{ old('method', $product->Method) == 'semi sparkling' ? 'selected' : '' }}>Semi Sparkling</option>
+                                            <option value="fortified" {{ old('method', $product->Method) == 'fortified' ? 'selected' : '' }}>Fortified</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="winery" class="form-label">Winery</label>
+                                        <input type="text" class="form-control" name="winery" id="winery"
+                                            value="{{ old('winery', $product->winery) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="grape_variety" class="form-label">Grape Variety</label>
+                                        <input type="text" class="form-control" name="grape_variety" id="grape_variety"
+                                            value="{{ old('grape_variety', $product->grape_variety) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="varietal_blend" class="form-label">Varietal Blend</label>
+                                        <input type="text" class="form-control" name="varietal_blend" id="varietal_blend"
+                                            value="{{ old('varietal_blend', $product->varietal_blend) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="vintage_year" class="form-label">Vintage Year</label>
+                                        <input type="text" class="form-control" name="vintage_year" id="vintage_year"
+                                            value="{{ old('vintage_year', $product->vintage_year) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="country" class="form-label">Country</label>
+                                        <input type="text" class="form-control" name="country" id="country"
+                                            value="{{ old('country', $product->country) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="region" class="form-label">Region</label>
+                                        <input type="text" class="form-control" name="region" id="region"
+                                            value="{{ old('region', $product->region) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="wine_sub_region" class="form-label">Sub Region</label>
+                                        <input type="text" class="form-control" name="wine_sub_region" id="wine_sub_region"
+                                            value="{{ old('wine_sub_region', $product->wine_sub_region) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="designation" class="form-label">Designation</label>
+                                        <input type="text" class="form-control" name="designation" id="designation"
+                                            value="{{ old('designation', $product->designation) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="alcohol_vol" class="form-label">Alcohol Volume</label>
+                                        <input type="text" class="form-control" name="alcohol_vol" id="alcohol_vol"
+                                            value="{{ old('alcohol_vol', $product->alcohol_vol) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="residual_sugar" class="form-label">Residual Sugar</label>
+                                        <input type="text" class="form-control" name="residual_sugar" id="residual_sugar"
+                                            value="{{ old('residual_sugar', $product->residual_sugar) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="nature" class="form-label">Nature</label>
+                                        <input type="text" class="form-control" name="nature" id="nature"
+                                            value="{{ old('nature', $product->nature) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="acidity" class="form-label">Acidity</label>
+                                        <input type="text" class="form-control" name="acidity" id="acidity"
+                                            value="{{ old('acidity', $product->acidity) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="tannin_level" class="form-label">Tannin Level</label>
+                                        <input type="text" class="form-control" name="tannin_level" id="tannin_level"
+                                            value="{{ old('tannin_level', $product->tannin_level) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="body" class="form-label">Body</label>
+                                        <input type="text" class="form-control" name="body" id="body"
+                                            value="{{ old('body', $product->body) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="aging" class="form-label">Aging</label>
+                                        <input type="text" class="form-control" name="aging" id="aging"
+                                            value="{{ old('aging', $product->aging) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="barrel_type" class="form-label">Barrel Type</label>
+                                        <input type="text" class="form-control" name="barrel_type" id="barrel_type"
+                                            value="{{ old('barrel_type', $product->barrel_type) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="time_spent_aging" class="form-label">Time Spent Aging</label>
+                                        <input type="text" class="form-control" name="time_spent_aging" id="time_spent_aging"
+                                            value="{{ old('time_spent_aging', $product->time_spent_aging) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="closure_type" class="form-label">Closure Type</label>
+                                        <input type="text" class="form-control" name="closure_type" id="closure_type"
+                                            value="{{ old('closure_type', $product->closure_type) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="aroma" class="form-label">Aroma</label>
+                                        <textarea class="form-control" name="aroma" id="aroma" rows="2">{{ old('aroma', $product->aroma) }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="palate" class="form-label">Palate</label>
+                                        <textarea class="form-control" name="palate" id="palate" rows="2">{{ old('palate', $product->palate) }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="finish" class="form-label">Finish</label>
+                                        <textarea class="form-control" name="finish" id="finish" rows="2">{{ old('finish', $product->finish) }}</textarea>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="sweetness_level" class="form-label">Sweetness Level</label>
+                                        <input type="text" class="form-control" name="sweetness_level" id="sweetness_level"
+                                            value="{{ old('sweetness_level', $product->sweetness_level) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="glass_ware" class="form-label">Glass Ware</label>
+                                        <input type="text" class="form-control" name="glass_ware" id="glass_ware"
+                                            value="{{ old('glass_ware', $product->glass_ware) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="retail_price" class="form-label">Retail Price (₹)</label>
+                                        <input type="number" step="0.01" class="form-control" name="retail_price" id="retail_price"
+                                            value="{{ old('retail_price', $product->retail_price) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="discounts" class="form-label">Discounts</label>
+                                        <input type="text" class="form-control" name="discounts" id="discounts"
+                                            value="{{ old('discounts', $product->discounts) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="optimal_drinking" class="form-label">Optimal Drinking</label>
+                                        <input type="text" class="form-control" name="optimal_drinking" id="optimal_drinking"
+                                            value="{{ old('optimal_drinking', $product->optimal_drinking) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="style" class="form-label">Style</label>
+                                        <input type="text" class="form-control" name="style" id="style"
+                                            value="{{ old('style', $product->style) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="decanting_time" class="form-label">Decanting Time</label>
+                                        <input type="text" class="form-control" name="decanting_time" id="decanting_time"
+                                            value="{{ old('decanting_time', $product->decanting_time) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="ageing_potential" class="form-label">Ageing Potential</label>
+                                        <input type="text" class="form-control" name="ageing_potential" id="ageing_potential"
+                                            value="{{ old('ageing_potential', $product->ageing_potential) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="cheese_pairing" class="form-label">Cheese Pairing</label>
+                                        <select class="form-select select2" name="cheese_pairing[]" id="cheese_pairing" multiple>
+                                            @foreach(\App\Models\CheeseProduct::all() as $cheese)
+                                                <option value="{{ $cheese->name }}"
+                                                    {{ collect(old('cheese_pairing', explode(',', $product->cheese_pairing ?? '')))->contains($cheese->name) ? 'selected' : '' }}>
+                                                    {{ $cheese->name }}
+                                                </option>
                                             @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-
-                                <div class="row">
-                                    <!-- Left Column -->
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-4">
-                                            <label for="wine_name" class="form-label">Wine Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="wine_name" id="wine_name"
-                                                class="form-control @error('wine_name') is-invalid @enderror"
-                                                value="{{ old('wine_name', $product->wine_name) }}" required>
-                                            @error('wine_name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="form-group mb-4">
-                                            <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
-                                            <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
-                                                <option value="">Select Type</option>
-                                                <option value="red" {{ old('type', $product->type) == 'red' ? 'selected' : '' }}>Red Wine</option>
-                                                <option value="white" {{ old('type', $product->type) == 'white' ? 'selected' : '' }}>White Wine</option>
-                                                <option value="rose" {{ old('type', $product->type) == 'rose' ? 'selected' : '' }}>Rosé</option>
-                                                <option value="sparkling" {{ old('type', $product->type) == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
-                                            </select>
-                                            @error('type')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="form-group mb-4">
-                                            <label for="winery" class="form-label">Winery <span class="text-danger">*</span></label>
-                                            <input type="text" name="winery" id="winery"
-                                                class="form-control @error('winery') is-invalid @enderror"
-                                                value="{{ old('winery', $product->winery) }}" required>
-                                            @error('winery')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="form-group mb-4">
-                                            <label for="grape_variety" class="form-label">Grape Variety</label>
-                                            <input type="text" name="grape_variety" id="grape_variety"
-                                                class="form-control @error('grape_variety') is-invalid @enderror"
-                                                value="{{ old('grape_variety', $product->grape_variety) }}">
-                                            @error('grape_variety')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                        </select>
                                     </div>
 
-                                    <!-- Right Column -->
                                     <div class="col-md-6">
-                                        <div class="form-group mb-4">
-                                            <label for="country" class="form-label">Country</label>
-                                            <input type="text" name="country" id="country"
-                                                class="form-control @error('country') is-invalid @enderror"
-                                                value="{{ old('country', $product->country) }}">
-                                            @error('country')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                        <label for="importer_info" class="form-label">Importer Info</label>
+                                        <input type="text" class="form-control" name="importer_info" id="importer_info"
+                                            value="{{ old('importer_info', $product->importer_info) }}">
+                                    </div>
 
-                                        <div class="form-group mb-4">
-                                            <label for="wine_sub_region" class="form-label">Region</label>
-                                            <input type="text" name="wine_sub_region" id="wine_sub_region"
-                                                class="form-control @error('wine_sub_region') is-invalid @enderror"
-                                                value="{{ old('wine_sub_region', $product->wine_sub_region) }}">
-                                            @error('wine_sub_region')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label for="wine_story" class="form-label">Wine Story</label>
+                                        <textarea class="form-control" name="wine_story" id="wine_story" rows="2">{{ old('wine_story', $product->wine_story) }}</textarea>
+                                    </div>
 
-                                        <div class="form-group mb-4">
-                                            <label for="retail_price" class="form-label">Retail Price (₹) <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₹</span>
-                                                <input type="number" name="retail_price" id="retail_price"
-                                                    class="form-control @error('retail_price') is-invalid @enderror"
-                                                    value="{{ old('retail_price', $product->retail_price) }}" step="0.01" min="0" required>
-                                            </div>
-                                            @error('retail_price')
-                                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label for="tasting_notes" class="form-label">Tasting Notes</label>
+                                        <textarea class="form-control" name="tasting_notes" id="tasting_notes" rows="2">{{ old('tasting_notes', $product->tasting_notes) }}</textarea>
+                                    </div>
 
-                                        <div class="form-group mb-4">
-                                            <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                                            <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
-                                                <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Active</option>
-                                                <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                            </select>
-                                            @error('status')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="status">Status</label>
+                                        <select class="form-select" name="status" id="status" required>
+                                            <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                        </select>
                                     </div>
                                 </div>
 
-                                <!-- Product Images Section -->
-                                <div class="mt-8">
-                                    <h3 class="text-lg font-medium text-gray-900 mb-4">Product Images</h3>
-
-                                    <!-- Current Images -->
-                                    @if ($product->image1)
-                                        <div class="mb-6">
-                                            <label class="block text-gray-700 text-sm font-bold mb-2">Current Image</label>
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <!-- Image Upload Section -->
+                                <div class="mt-4">
+                                        <div class="mt-2">
+                                            @if ($product->image1)
+                                            <p class="mb-1 fw-bold">Current Image:</p>
                                                 <img src="{{ asset('storage/' . $product->image1) }}" alt="Product image"
-                                                            class="w-full h-32 object-cover rounded border">
-                                            </div>
+                                                    class="img-thumbnail" style="width:150px; height:150px; object-fit:cover;">
+                                            @else
+                                            <p class="mb-1 fw-bold">Current Image:</p>
+                                                <img src="{{ asset('storage/default.jpg' ) }}" alt="Product image"
+                                                    class="img-thumbnail" style="width:150px; height:150px; object-fit:cover;">
+
+                                            @endif
                                         </div>
-                                    @else
-                                        <p class="text-gray-500 italic mb-4">No images have been uploaded for this
-                                            product.</p>
-                                    @endif
-
-                                    <!-- Hidden inputs for image operations -->
-                                    <input type="hidden" name="primary_image" id="primary_image"
-                                        value="{{ $product->images?->where('is_primary', true)->first()?->id ?? '' }}">
-                                    <div id="images-to-delete-container"></div>
-
-                                    <!-- Upload New Images -->
-                                    <div class="mb-6">
+                                </div>
+                                <div class="mb-6">
                                         <label class="block text-gray-700 text-sm font-bold mb-2"
                                             for="product_images">Upload New Images</label>
                                         <div
@@ -724,9 +859,14 @@
                                                     <label for="product_images"
                                                         class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
                                                         <span>Upload files</span>
-                                                        <input id="product_images" name="product_image_replace" type="file"
-                                                            class="sr-only" multiple accept="image/*"
-                                                            onchange="previewNewImages(this)">
+                                                        <div id="image-preview" class="mt-4"></div> 
+                                                        <input id="product_images" 
+                                                            name="product_image_replace" 
+                                                            type="file"
+                                                            class="sr-only"
+                                                            multiple 
+                                                            accept="image/*"
+                                                            onchange="previewImages(this)">
                                                     </label>
                                                     <p class="pl-1">or drag and drop</p>
                                                 </div>
@@ -735,25 +875,57 @@
                                         </div>
                                     </div>
 
-                                    <!-- New Images Preview -->
-                                    <div id="new-images-preview" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label for="categories" class="form-label">Category</label>
+                                        <!-- <select class="form-select" name="categories" id="categories" required>
+                                            <option value="">Select Category</option>
+                                            <option value="Gifting" {{ old('categories', $product->categories) == 'Gifting' ? 'selected' : '' }}>Gifting</option>
+                                            <option value="Wine and Cheese" {{ old('categories', $product->categories) == 'Wine and Cheese' ? 'selected' : '' }}>Wine and Cheese</option>
+                                            <option value="Everyday sipping" {{ old('categories', $product->categories) == 'Everyday sipping' ? 'selected' : '' }}>Everyday sipping</option>
+                                        </select> -->
+                                                                                @php
+                                            $savedValue = old('categories', $product->categories);
+
+                                            // Your existing dropdown options
+                                            $defaultOptions = [
+                                                'Gifting',
+                                                'Wine and Cheese',
+                                                'Everyday Sipping',
+                                            ];
+
+                                            // Check if savedValue is NOT in the default dropdown list
+                                            $shouldAddCustomOption = $savedValue && !in_array($savedValue, $defaultOptions);
+                                        @endphp
+
+
+                                        <select class="form-select" name="categories" id="categories" required>
+                                            <option value="">Select Category</option>
+
+                                            {{-- Show default options --}}
+                                            @foreach ($defaultOptions as $opt)
+                                                <option value="{{ $opt }}" {{ $savedValue == $opt ? 'selected' : '' }}>
+                                                    {{ $opt }}
+                                                </option>
+                                            @endforeach
+
+                                            {{-- If DB value is something like "Gifting, Celebration", add it dynamically --}}
+                                            @if ($shouldAddCustomOption)
+                                                <option value="{{ $savedValue }}" selected>{{ $savedValue }}</option>
+                                            @endif
+                                        </select>
                                     </div>
                                 </div>
-                        </div>
 
-                        <div class="bg-gray-50 px-6 py-4 flex items-center justify-end space-x-3 border-t border-gray-200">
-                            <a href="{{ route('admin.products.show', $product) }}"
-                                class="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-gray-50 transition">
-                                Cancel
-                            </a>
-                            <button
-                                class="bg-indigo-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-indigo-700 transition"
-                                type="submit">
-                                Update Product
-                            </button>
-                        </div>
-                    </div>
-                    </form>
+                                <!-- Submit -->
+                                <div class="d-flex justify-content-end mt-4">
+                                    <a href="{{ route('admin.products.show', $product) }}" class="btn btn-outline-secondary me-2">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Update Product</button>
+                                </div>
+                            </div>
+                        </form>
+
+                            
                 </div>
             </div>
         </div>
@@ -761,39 +933,72 @@
 
     @push('scripts')
         <script>
-            // JavaScript for Image Management
-            function previewImages(input) {
-                const preview = document.getElementById('image-preview');
-                
-                // Clear any existing previews from new file selection
-                const existingPreviews = preview.querySelectorAll('.new-image-preview');
-                existingPreviews.forEach(el => el.remove());
-                
-                if (input.files) {
-                    Array.from(input.files).forEach((file, index) => {
-                        const reader = new FileReader();
-                        
-                        reader.onload = function(e) {
-                            const div = document.createElement('div');
-                            div.className = 'position-relative d-inline-block me-2 mb-2 new-image-preview';
-                            div.innerHTML = `
-                                <img src="${e.target.result}" 
-                                     alt="Preview" 
-                                     class="img-thumbnail product-thumbnail">
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="radio" 
-                                           name="primary_image_new" 
-                                           value="${index}">
-                                    <label class="form-check-label">Set as primary</label>
-                                </div>
-                            `;
-                            preview.appendChild(div);
-                        }
-                        
-                        reader.readAsDataURL(file);
-                    });
+                function previewImages(input) {
+                    const preview = document.getElementById('image-preview');
+                                
+                    const existingPreviews = preview.querySelectorAll('.new-image-preview');
+                    existingPreviews.forEach(el => el.remove());
+                    
+                    if (input.files) {
+                        Array.from(input.files).forEach((file, index) => {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                const div = document.createElement('div');
+                                div.className = 'position-relative d-inline-block me-2 mb-2 new-image-preview';
+                                div.innerHTML = `
+                                    <img src="${e.target.result}" 
+                                        alt="Preview" 
+                                        class="img-thumbnail product-thumbnail">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="radio" 
+                                            name="primary_image_new" 
+                                            value="${index}">
+                                        <label class="form-check-label">Set as primary</label>
+                                    </div>
+                                `;
+                                preview.appendChild(div);
+                            };
+                            
+                            reader.readAsDataURL(file);
+                        });
+                    }
                 }
-            }
+
+
+            // JavaScript for Image Management
+            // function previewImages(input) {
+            //     const preview = document.getElementById('image-preview');
+                
+            //     // Clear any existing previews from new file selection
+            //     const existingPreviews = preview.querySelectorAll('.new-image-preview');
+            //     existingPreviews.forEach(el => el.remove());
+                
+            //     if (input.files) {
+            //         Array.from(input.files).forEach((file, index) => {
+            //             const reader = new FileReader();
+                        
+            //             reader.onload = function(e) {
+            //                 const div = document.createElement('div');
+            //                 div.className = 'position-relative d-inline-block me-2 mb-2 new-image-preview';
+            //                 div.innerHTML = `
+            //                     <img src="${e.target.result}" 
+            //                          alt="Preview" 
+            //                          class="img-thumbnail product-thumbnail">
+            //                     <div class="form-check mt-2">
+            //                         <input class="form-check-input" type="radio" 
+            //                                name="primary_image_new" 
+            //                                value="${index}">
+            //                         <label class="form-check-label">Set as primary</label>
+            //                     </div>
+            //                 `;
+            //                 preview.appendChild(div);
+            //             }
+                        
+            //             reader.readAsDataURL(file);
+            //         });
+            //     }
+            // }
             
             // Initialize any necessary scripts when the document is ready
             document.addEventListener('DOMContentLoaded', function() {

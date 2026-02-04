@@ -14,6 +14,8 @@ use App\Models\QuestionResponse;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use App\Models\CartCheckout;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 
 
 class UserController extends Controller
@@ -353,192 +355,432 @@ class UserController extends Controller
             'redirect' => route('user.matchedproducts', ['submissionId' => $submissionId])
         ], 200);
     }
+    private function detectPriceBand($value)
+    {
+        $v = (float) $value;
+
+        $bands = [
+            ['min' => 0,     'max' => 5000],
+            ['min' => 5000,  'max' => 25000],
+            ['min' => 25000, 'max' => 50000],
+            ['min' => 50000, 'max' => 100000],
+        ];
+
+        foreach ($bands as $band) {
+            if ($v >= $band['min'] && $v <= $band['max']) {
+                return $band;
+            }
+        }
+
+        // fallback
+        return ['min' => 0, 'max' => 100000];
+    }
+
 
     public function getMatchingProducts($responses)
     {
+        Log::info("=== START PRODUCT MATCHING ===");
+
         $templateId = $responses['template_id'];
         $answers = $responses['answers'];
 
-        Log::debug('Template ID:', ['template_id' => $templateId]);
+        Log::info("Template ID Received: $templateId");
+        Log::info("Raw Answers:", $answers);
 
-        // Get the current user's store
+        // Preserve order of answers
+        $orderedAnswers = collect($answers)->filter();
+        Log::info("Ordered Answers:", $orderedAnswers->toArray());
+
+        // Store
         $store = Auth::user()->store;
 
         if (!$store) {
-            Log::warning('User has no associated store');
-            return collect(); // Return empty collection if no store
+            Log::warning("User has no store assigned!");
+            return collect();
         }
 
-        // Get product IDs that are available in this store
+        Log::info("Store ID: {$store->id}");
+
+        // Store product IDs
         $storeProductIds = DB::table('store_products')
             ->where('store_id', $store->id)
             ->pluck('product_id');
 
+        Log::info("Store Product IDs Count: " . $storeProductIds->count());
+
         if ($storeProductIds->isEmpty()) {
-            Log::warning('No products found for store ID: ' . $store->id);
-            return collect(); // Return empty collection if no products in store
+            Log::warning("Store has NO products assigned!");
+            return collect();
         }
 
-        $query = Product::query()
-            ->whereIn('id', $storeProductIds) // Only get products available in this store
-            ->where('status', 'active'); // Ensure products are active
+        // START WITH ALL STORE PRODUCTS
+        $currentProductIds = $storeProductIds->toArray();
 
-        // Wrap all conditions in a single where closure to group the ORs
-        $query->where(function ($q) use ($templateId, $answers) {
-            foreach ($answers as $key => $value) {
-                Log::debug('Response:', ['key' => $key, 'value' => $value]);
+        foreach ($orderedAnswers as $key => $value) 
+        {
 
-                switch ($templateId) {
-                    case '1':
-                        switch ($key) {
-                            case 'question4': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-                            // case 'question2': // Cork yes or no
-                            //     $q->orWhere('sweetness_level', $value);
-                            //     break;
-                            case 'question6': // wine sweet or dry
-                                $q->orWhere('nature', $value);
-                                break;
-                            case 'question7': // flavour
-                                if (is_array($value)) {
-                                    foreach ($value as $aroma) {
-                                        $q->orWhere('aroma', 'like', "%$aroma%");
-                                    }
-                                }
-                                break;
-                            case 'question8': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
-                                break;
-                            case 'question9': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
-                                break;
-                            case 'question10': // how old 
-                                $q->orWhere('aging', $value);
-                                break;
-                            case 'question11': // Region
-                                $q->orWhere('country', $value);
-                                break;
-                            case 'question12': // Price
-                                $q->orWhere('retail_price', '<=', $value);
-                                break;
-                            case 'question13': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
-                                break;
-                        }
-                        break;
 
-                    case '2':
-                        switch ($key) {
-                            case 'question4': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-                            // case 'question2': // Cork yes or no
-                            //     $q->orWhere('sweetness_level', $value);
-                            //     break;
-                            case 'question5': // wine sweet or dry
-                                $q->orWhere('nature', $value);
-                                break;
-                            case 'question10': // flavour
-                                if (is_array($value)) {
-                                    foreach ($value as $aroma) {
-                                        $q->orWhere('aroma', 'like', "%$aroma%");
-                                    }
-                                }
-                                break;
-                            case 'question2': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
-                                break;
-                            case 'question1': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
-                                break;
-                            case 'question7': // how old 
-                                $q->orWhere('aging', $value);
-                                break;
-                            case 'question6': // Region
-                                $q->orWhere('country', $value);
-                                break;
-                            case 'question12': // Price
-                                $q->orWhere('retail_price', '<=', $value);
-                                break;
-                            case 'question11': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
-                                break;
-                        }
-                        break;
-
-                    case '3':
-                        switch ($key) {
-                            case 'question4': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-                            // case 'question2': // Cork yes or no
-                            //     $q->orWhere('sweetness_level', $value);
-                            //     break;
-                            case 'question5': // wine sweet or dry
-                                $q->orWhere('nature', $value);
-                                break;
-                            case 'question5': // flavour
-                                if (is_array($value)) {
-                                    foreach ($value as $aroma) {
-                                        $q->orWhere('aroma', 'like', "%$aroma%");
-                                    }
-                                }
-                                break;
-                            case 'question10': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
-                                break;
-                            case 'question6': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
-                                break;
-                            case 'question10': // how old 
-                                $q->orWhere('aging', $value);
-                                break;
-                            case 'question8': // Region
-                                $q->orWhere('country', $value);
-                                break;
-                            case 'question14': // Price
-                                $q->orWhere('retail_price', '<=', $value);
-                                break;
-                            case 'question111': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
-                                break;
-                        }
-                        break;
-
-                    case '4':
-                        switch ($key) {
-                            case 'question5': // Wine Type
-                                $q->orWhere('type', $value);
-                                break;
-
-                            case 'question5': // how bold would you like your wine to be
-                                $q->orWhere('body', $value);
-                                break;
-                            case 'question6': // how fruity
-                                $q->orWhere('palate', 'like', "%$value%");
-                                break;
-                            case 'question7': // Price
-                                $q->orWhere('retail_price', '<=', $value);
-                                break;
-                            case 'question10': // Occasion
-                                $q->orWhere('style', 'like', "%$value%");
-                                break;
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
+            // Skip questions where user selected "no response"
+            if ($value === "no response" || $value === ["no response"]) {
+                Log::info("Skipping $key because value is 'no response'");
+                continue;
             }
-        });
 
-        Log::debug('Generated Query: ' . $query->toSql());
-        Log::debug('Bindings: ' . json_encode($query->getBindings()));
-        Log::debug('Store ID: ' . $store->id);
-        Log::debug('Store Product IDs: ' . $storeProductIds->implode(', '));
 
-        return $query->get();
+            Log::info("---------------");
+            Log::info("Processing Answer Key: $key", ['value' => $value]);
+            Log::info("Current available product pool before filter: " . count($currentProductIds));
+
+            $matches = $this->getMatchesForSingleAnswer(
+                $templateId,
+                $key,
+                $value,
+                $currentProductIds
+            );
+
+            Log::info("Matches returned for $key: " . $matches->count());
+
+            if ($matches->count() === 0) {
+                Log::warning("No matches for $key — skipping this filter and keeping previous pool.");
+                continue; // MOVE TO NEXT QUESTION
+            }
+
+            // Update the pool for next iteration (progressive filtering)
+            $currentProductIds = $matches->pluck('id')->toArray();
+
+            Log::info("Pool after filtering by $key: " . count($currentProductIds));
+
+            // If empty → break early
+            if (empty($currentProductIds)) {
+                Log::warning("No products remaining after filtering for $key — stopping.");
+                break;
+            }
+        }
+
+        // Final matched product records
+        $finalProducts = Product::whereIn('id', $currentProductIds)->get();
+
+        Log::info("Total products AFTER all filters: " . $finalProducts->count());
+
+        // ---- FINAL LOGIC: 10 normal + 5 featured ----
+        $featured = $finalProducts->where('admin_featured_product', true)->shuffle();
+        $normal   = $finalProducts->where('admin_featured_product', false)->shuffle();
+
+        Log::info("Featured candidates: " . $featured->count());
+        Log::info("Normal candidates: " . $normal->count());
+
+        $takeFeatured = $featured->take(5);
+        $remaining    = 15 - $takeFeatured->count();
+        $takeNormal   = $normal->take($remaining);
+
+        $result = $takeFeatured->merge($takeNormal)->shuffle()->values();
+
+        Log::info("=== FINAL RESULT COUNT: " . $result->count() . " ===");
+        Log::info("=== END PRODUCT MATCHING ===");
+
+        return $result;
+    }
+
+    private function getMatchesForSingleAnswer($templateId, $key, $value, $productIds)
+    {
+        Log::info("---- START MATCH BLOCK: $key ----");
+        Log::info("Filtering inside product count: " . count($productIds));
+        Log::info("Value:", (array)$value);
+
+        if (empty($productIds)) {
+            Log::warning("No products to filter inside!");
+            return collect();
+        }
+
+        $values = is_array($value) ? $value : [$value];
+
+        // BASE QUERY – only these products
+        $q = Product::whereIn('id', $productIds)
+            ->where('status', 'active'); // correct placement
+
+        Log::info("Normalized Values:", $values);
+
+        switch ($templateId) {
+
+            case '1':
+                switch ($key) 
+                {
+                    case 'question4': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('type', 'like', "%$v%")
+                                  ->orWhere('method', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question5': 
+                        $q->where(function($x) use ($values) {
+                            $x->whereIn('closure_type', $values);
+                        });
+                        break;
+        
+                    case 'question6': 
+                        $q->where(function($x) use ($values) {
+                            $x->whereIn('nature', $values);
+                        });
+                        break;
+        
+                    case 'question7': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('body', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question8': 
+                        $q->whereIn('style', $values);
+                        break;
+        
+                    case 'question9': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('country', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question10': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('categories', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question11':
+                        $band = $this->detectPriceBand($value);
+                        Log::info("Price Band Detected:", $band);
+                    
+                        $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        break;
+                        
+                }
+                break;
+        
+        
+            case '2':
+                switch ($key) 
+                {
+                    case 'question4': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('type', 'like', "%$v%")
+                                  ->orWhere('method', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question5': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('nature', $value);
+                        });
+                        break;
+        
+                    case 'question6': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('country', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question7': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('wine_sub_region', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question8': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('grape_variety', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question9': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('optimal_drinking', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question10': 
+                        $q->where(function($x) use ($values, $value) {
+                            foreach ($values as $v) {
+                                $x->orWhere('aroma', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question11': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('categories', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question12':
+                        $band = $this->detectPriceBand($value);
+                        Log::info("Price Band Detected:", $band);
+                    
+                        $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        break;
+                        
+                }
+                break;
+        
+        
+            case '3':
+                switch ($key) 
+                {
+                    case 'question4': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('categories', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question5': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('type', 'like', "%$v%")
+                                  ->orWhere('method', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question6': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('varietal_blend', 'like', "%$value%");
+                        });
+                        break;
+        
+                    case 'question7': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('grape_variety', 'like', "%$value%");
+                        });
+                        break;
+        
+                    case 'question8': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('country', 'like', "%$value%");
+                        });
+                        break;
+                    case 'question9': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('country', 'like', "%{$v}%");
+                            }
+                        });
+                        break;
+        
+                    case 'question10': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('nature', 'like', "%$value%");
+                        });
+                        break;
+        
+                    case 'question11': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('optimal_drinking', 'like', "%$v%");
+                            }
+                        });
+                        break;
+                    case 'question12': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('acidity', 'like', "%$value%");
+                        });
+                        break;
+                    case 'question13': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('tannin_level', 'like', "%$value%");
+                        });
+                        break;
+                    case 'question14': 
+                        $q->where(function($x) use ($value) {
+                            $x->where('body', 'like', "%$value%");
+                        });
+                        break;
+        
+                    case 'question15': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('style', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question16':
+                        $band = $this->detectPriceBand($value);
+                        Log::info("Price Band Detected:", $band);
+                    
+                        $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        break;
+                        
+                }
+                break;
+        
+        
+            case '4':
+                switch ($key) 
+                {
+                    case 'question4': 
+                        $q->where(function($x) use ($value) {
+                            $x->orWhere('categories', 'like', "%$value%");
+                        });
+                        break;
+        
+                    case 'question5': 
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('type', 'like', "%$v%")
+                                  ->orWhere('method', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question6':
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('style', 'like', "%$v%");
+                            }
+                        });
+                        break;
+        
+                    case 'question7':
+                        $band = $this->detectPriceBand($value);
+                        Log::info("Price Band Detected:", $band);
+                    
+                        $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        break;
+                        
+                }
+                break;
+        }
+        
+        Log::info("Executing Query for $key");
+        Log::info("SQL: " . $q->toSql(), $q->getBindings());
+
+        $results = $q->get();
+
+        Log::info("Results for $key: " . $results->count());
+        Log::info("---- END MATCH BLOCK: $key ----");
+
+        return $results;
     }
 
     public function addToCart(Request $request)

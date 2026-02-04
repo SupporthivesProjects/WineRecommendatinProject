@@ -1,5 +1,18 @@
     @extends('layouts.bootdashboard')
     @section('admindashboardcontent')
+
+    @push('styles')
+    <style>
+        .fixed-card-image {
+            height: 300px;          /* adjust as per your card size */
+            width: 100%;
+            object-fit: contain;      /* crops and fits the image perfectly */
+            border-radius: 8px;
+        }
+    </style>
+
+    @endpush
+
     <div class="main-content app-content">
         <div class="container-fluid">
             <!-- Breadcrumb -->
@@ -33,7 +46,9 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="border p-2 rounded bg-light">
-                                    <img id="main-product-image" src="{{ asset('storage/' . $product->image1) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}">
+                                    <!-- <img id="main-product-image" src="{{ asset('storage/' . $product->image1) }}" class="img-fluid rounded w-100" alt="{{ $product->wine_name }}"> -->
+                                    <img id="main-product-image" src="{{ asset('storage/' . $product->image1) }}" class="img-fluid rounded fixed-card-image" alt="{{ $product->wine_name }}">
+
                                 </div>
                             </div>
                         </div>

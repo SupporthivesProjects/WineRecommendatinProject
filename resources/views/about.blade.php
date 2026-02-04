@@ -79,6 +79,66 @@
                 font-size: 2rem;
             }
         }
+
+        .about-section 
+        {
+            background: linear-gradient(to bottom right, #faf8f6, #ffffff);
+            border-top: 2px solid #b58969;
+            border-bottom: 2px solid #b58969;
+            padding: 80px 0;
+        }
+
+        .about-title 
+        {
+            /* font-family: 'Playfair Display', serif; */
+            font-size: 2.8rem;
+            color: #5c2c06;
+            position: relative;
+        }
+
+        .about-title::after 
+        {
+            content: '';
+            width: 80px;
+            height: 3px;
+            background: #b58969;
+            display: block;
+            margin: 12px auto 0;
+            border-radius: 2px;
+            margin-left: 0px;
+        
+        }
+
+        .about-content 
+        {
+            /* font-family: 'Lora', serif; */
+            color: #444;
+            font-size: 1.15rem;
+            line-height: 1.9;
+            letter-spacing: 0.2px;
+            text-align: justify;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        .about-content p 
+        {
+            margin-bottom: 1.6rem;
+        }
+
+        .about-content p:last-child 
+        {
+            font-style: italic;
+            color: #5c2c06;
+            border-left: 3px solid #b58969;
+            padding-left: 15px;
+        }
+
+        @keyframes fadeIn 
+        {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
     </style>
 
     <!-- Scripts -->
@@ -359,35 +419,50 @@
             </section>
 
             <!-- Section 2: About Text -->
-            <section class="container py-5">
-                <div class="row justify-content-center">
+            <section class="about-section py-5">
+                <div class="container">
+                    <div class="row justify-content-center">
                     <div class="col-lg-10">
-                        <h1 class="mb-4">Our Story</h1>
-                        <p class="text-gray-600 fs-5">TechSomm is a first-of-its-kind digital wine discovery platform, 
-                            built to help Indian wine lovers find the perfect bottle, every single time.</p>
-                        <p class="text-gray-600 fs-5">We believe choosing wine should feel as good as drinking it. 
-                            At TechSomm, we've blended technology, taste and a deep love for wine into a platform 
-                            that’s elegant, intuitive and made just for you. Whether you’re looking for something 
-                            bold and expressive or light and refined, TechSomm learns your preferences, captures 
-                            your tasting notes, and curates recommendations based on your personal profile.</p>
-                        <p class="text-gray-600 fs-5">Our growing wine library features every wine imported and 
-                            produced in India, not just a curated few. So you always have access to what’s available 
-                            with rich sommelier-style tasting notes, food and cheese pairings, and real-time insights 
-                            into flavor, style, origin, and occasion.</p>
-                        <p class="text-gray-600 fs-5">But this isn’t just about browsing labels. It’s about building 
-                            a relationship with wine, exploring what excites you, saving what you love and discovering 
-                            new favorites with every visit. Whether you’re sipping at home, dining out or choosing a 
-                            bottle to gift, TechSomm helps you make confident, delicious choices.</p>
-                        <p class="text-gray-600 fs-5">And we’re just getting started. Coming soon: Regional Wine Guides, 
-                            the SMS (Save Me Sommelier) hotline, and Wine Concierge Services to support every moment 
-                            of your wine life from quiet evenings to grand celebrations.</p>
-                        <p class="text-gray-600 fs-5">So whether you're a casual drinker, a curious enthusiast, 
-                            or a seasoned connoisseur TechSomm is your partner in pleasure, discovery and all things 
-                            wines. Let your wine journey begin, beautifully.</p>
+                        <h1 class="about-title mb-4">Our Story 🍷</h1>
+                        <div class="about-content">
+                        <p>🍇 TechSomm is a first-of-its-kind digital wine discovery platform, 
+                            built to help Indian wine lovers find the perfect bottle, every single time. 🍾
+                        </p>
 
+                        <p>We believe choosing wine should feel as good as drinking it. At TechSomm, we've blended technology, 
+                            taste and a deep love for wine into a platform that’s elegant, intuitive and made just for you. 
+                            Whether you’re looking for something bold and expressive or light and refined, 
+                            TechSomm learns your preferences, captures your tasting notes, and curates recommendations 
+                            based on your personal profile. 🍷
+                        </p>
+
+                        <p>Our growing wine library features every wine imported and produced in India, not just a curated few. 
+                            So you always have access to what’s available with rich sommelier-style tasting notes, 
+                            food and cheese pairings 🧀🍇, and real-time insights into flavor, style, origin, and occasion.
+                        </p>
+
+                        <p>But this isn’t just about browsing labels. It’s about building a relationship with wine, 
+                            exploring what excites you, saving what you love and discovering new favorites with every visit. 
+                            Whether you’re sipping at home, dining out or choosing a bottle to gift 🎁, 
+                            TechSomm helps you make confident, delicious choices.
+                        </p>
+
+                        <p>
+                            And we’re just getting started. 🚀 Coming soon: Regional Wine Guides, the SMS (Save Me Sommelier) hotline 📞, 
+                            and Wine Concierge Services to support every moment of your wine life from quiet evenings to 
+                            grand celebrations. 🥂
+                        </p>
+
+                        <p><em>So whether you're a casual drinker, a curious enthusiast, or a seasoned connoisseur 
+                            TechSomm is your partner in pleasure, discovery and all things wines. Let your wine 
+                            journey begin, beautifully. 
+                        </em></p>
+                        </div>
                     </div>
-                </div>
+                    </div>
+                </div>    
             </section>
+
         </div>
         <!-- End::app-content -->
 

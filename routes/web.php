@@ -22,6 +22,10 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\StoreProfileController;
+
+
 use Illuminate\Support\Facades\Log;
 
 /*
@@ -54,6 +58,8 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/browse', [ProductController::class, 'browse'])->name('homeBrowseWines');
+Route::get('/allcheese', [ProductController::class, 'allcheese'])->name('allcheese');
+
 
 Route::get('/careers', function () {
     return view('careers');
@@ -244,6 +250,33 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/reviews', [\App\Http\Controllers\User\ReviewController::class, 'store'])->name('user.reviews.store');
     Route::delete('/reviews/{review}', [\App\Http\Controllers\User\ReviewController::class, 'destroy'])->name('user.reviews.destroy');
 });
+
+// Show user profile
+Route::get('/user/profile', [UserProfileController::class, 'show'])->name('user.userprofile.show');
+
+// Show Store profile
+Route::get('/profile', [StoreProfileController::class, 'show'])->name('user.storeprofile.show');
+Route::get('/store-tab-profile', [StoreProfileController::class, 'storeTab'])->name('user.store-tab-profile.show');
+
+// Update Contact Number (Form Submission)
+Route::post('/store/update-contact', [StoreProfileController::class, 'updateContactNumber'])
+    ->name('store.update.contact')
+    ->middleware('auth');
+
+// Main Manager - Approve Contact Number
+Route::post('/manager/store/approve-contact/{storeId}', [MainManagerController::class, 'approveContactNumber'])
+    ->name('manager.approve.contact')
+    ->middleware('auth');
+
+//get notification on header
+Route::middleware(['auth'])->group(function () {
+    Route::get('/manager/all-stores', [MainManagerController::class, 'MainManagerAllStores'])
+        ->name('main-manager.all-stores');
+});
+
+// Update Password
+Route::post('/profile/update-password', [UserProfileController::class, 'updatePassword'])
+    ->name('profile.update.password');
 
 Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
     ->name('admin.reviews.update-status');

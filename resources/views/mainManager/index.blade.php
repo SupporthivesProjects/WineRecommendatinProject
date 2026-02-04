@@ -148,6 +148,13 @@
                                         </button>
                                     </div>
                                 </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="password" class="form-label">Group Name</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="group_name" name="group_name" required>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="modal-footer">

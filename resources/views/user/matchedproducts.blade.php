@@ -109,7 +109,7 @@
             background-color: rgba(0, 0, 0,0.7) !important;
             border-radius:0px;
         }
-        
+
     </style>
 
 @endpush
@@ -150,6 +150,7 @@
         </div>
     </section> -->
 
+    
 <div class="pt-5" id="matchedproducts">
     <div class="container my-5">
          <!-- Start::row-6 -->
@@ -189,7 +190,7 @@
                     </div>
 
                     <!-- Winery Filter -->
-                    <div class="filter-group">
+                    <!-- <div class="filter-group">
                         <h4 class="fw-bold mb-4">Winery</h4>
                         @php
                             $wineries = $products->pluck('winery')->unique()->sort();
@@ -202,10 +203,25 @@
                                 </label>
                             </div>
                         @endforeach
-                    </div>
+                    </div> -->
 
                     <!-- Retail Price Filter -->
-                    <div class="filter-group">
+                    @php
+                        $minPrice = $products->min('retail_price');
+                        $maxPrice = $products->max('retail_price');
+                    @endphp
+
+                    <div class="price-slider mt-2">
+                        <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
+                        <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
+
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>₹<span id="min-val">{{ number_format($minPrice) }}</span></span>
+                            <span>₹<span id="max-val">{{ number_format($maxPrice) }}</span></span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="filter-group">
                         <h4 class="fw-bold mb-4">Retail Price</h4>
                         @php
                             $prices = $products->pluck('retail_price')->unique()->sort();
@@ -214,11 +230,12 @@
                             <div class="form-check">
                                 <input class="form-check-input wine-retail-price-filter" type="checkbox" value="{{ $price }}" id="retail-price-{{ $price }}">
                                 <label class="form-check-label" for="retail-price-{{ $price }}">
-                                    ${{ number_format($price, 2) }}
+                                ₹{{ number_format($price, 2) }}
                                 </label>
                             </div>
                         @endforeach
-                    </div>
+                    </div> -->
+
 
                     <!-- Country Filter -->
                     <div class="filter-group">
@@ -250,13 +267,11 @@
                                 <div class="card custom-card wine-card">
                                     <!-- Image at the top -->
                                     <div class="image-wrapper" style="position: relative;">
-                                        @php
-                                            $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
-                                        @endphp
-                                        <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                        <img src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                        
 
                                         <!-- Featured badge on the image -->
-                                        @if ($product->is_featured == 1)
+                                        @if ($product->admin_featured_product == 1)
                                             <span class="featured-badge">Featured</span>
                                         @endif
                                     </div>
@@ -270,6 +285,7 @@
                                                 'red' => '🍷',
                                                 'white' => '🥂',
                                                 'sparkling' => '✨',
+                                                'Rosé' => '✨',
                                                 default => ''
                                             };
                                         @endphp
@@ -466,7 +482,70 @@
     }));
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
 
+const minSlider = document.getElementById("price-min");
+const maxSlider = document.getElementById("price-max");
+
+const minVal = document.getElementById("min-val");
+const maxVal = document.getElementById("max-val");
+
+// Call main filter function whenever slider moves
+minSlider.addEventListener("input", applyFilters);
+maxSlider.addEventListener("input", applyFilters);
+
+// Also re-run when checkboxes are clicked (to stack filters)
+document.querySelectorAll(".form-check-input").forEach(cb => {
+    cb.addEventListener("change", applyFilters);
+});
+
+function applyFilters() {
+
+    let minPrice = parseFloat(minSlider.value);
+    let maxPrice = parseFloat(maxSlider.value);
+
+    // Display values
+    minVal.textContent = minPrice.toLocaleString();
+    maxVal.textContent = maxPrice.toLocaleString();
+
+    // Loop all product cards
+    document.querySelectorAll(".wine-card-container").forEach(card => {
+
+        let price = parseFloat(card.dataset.retailPrice);
+        let type = card.dataset.type;
+        let country = card.dataset.country;
+        let vintage = card.dataset.vintageYear;
+
+        // --- TYPE FILTER ---
+        let selectedTypes = [...document.querySelectorAll('.wine-type-filter:checked')]
+            .map(el => el.value);
+        let typeMatch = selectedTypes.length ? selectedTypes.includes(type) : true;
+
+        // --- COUNTRY FILTER ---
+        let selectedCountries = [...document.querySelectorAll('.wine-country-filter:checked')]
+            .map(el => el.value);
+        let countryMatch = selectedCountries.length ? selectedCountries.includes(country) : true;
+
+        // --- VINTAGE YEAR FILTER ---
+        let selectedYears = [...document.querySelectorAll('.wine-vintage-year-filter:checked')]
+            .map(el => el.value);
+        let vintageMatch = selectedYears.length ? selectedYears.includes(vintage) : true;
+
+        // --- PRICE FILTER ---
+        let priceMatch = price >= minPrice && price <= maxPrice;
+
+        // FINAL CHECK
+        if (priceMatch && typeMatch && countryMatch && vintageMatch) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+});
+
+</script>
 
 
 @endpush

@@ -284,7 +284,6 @@
                                                 class="fab fa-twitter fa-lg"></i></a>
                                         <a href="#" class="text-white mr-3"><i
                                                 class="fab fa-instagram fa-lg"></i></a>
-                                        <a href="#" class="text-white"><i class="fab fa-pinterest fa-lg"></i></a>
                                     </div>
                                 </div>
                             </div>

@@ -19,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $allProducts = Product::where('status', 'active')->paginate(10);
+        // $allProducts = Product::where('status', 'active')->paginate(10);
+        $allProducts = Product::where('status', 'active')->get();
         $store = Auth::user()->store;
 
         // Fetch products linked to this store

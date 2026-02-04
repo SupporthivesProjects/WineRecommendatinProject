@@ -89,7 +89,7 @@
                                         </div>
 
                                         <div class="form-group mb-3">
-                                            <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
+                                            <!-- <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <span class="input-group-text">₹</span>
                                                 <input type="number" name="price" id="price" step="0.01" min="0" 
@@ -98,7 +98,7 @@
                                                 @error('price')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
-                                            </div>
+                                            </div> -->
                                         </div>
 
                                         <div class="form-check form-switch mb-3">

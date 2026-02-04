@@ -293,8 +293,10 @@
         }
 
         .option-box:hover {
-            background-color: transparent !important;
-            border-color: rgb(98,89,202) !important; /* or any static color */
+            /* background-color: transparent !important; */
+            background-color: #FFDF00 !important;
+            /* border-color: rgb(98,89,202) !important; or any static color */
+            border-color: #FFDF00;
             color: inherit !important;
         }
 
@@ -457,20 +459,44 @@
             let currentStep = 0;
             let responses = {};  
             let selectedQuestionnaireId = null;
+            const subRegionMap = {
+                "France": ["Burgundy (France)", "Champagne (France)", "Rhône Valley (France)"],
+                "Germany": [],
+                "Italy": ["Tuscany (Italy)", "Piedmont (Italy)", "Veneto (Italy)"],
+                "Spain": ["Rioja (Spain)", "Ribera del Duero (Spain)"],
+                "Australia": ["Barossa Valley (Australia)", "Margaret River (Australia)"],
+                "USA": ["Napa Valley (USA)", "Sonoma (USA)"],
+                "Rest of the World": ["Marlborough (New Zealand)"]
+            };
+            window.selectedCountries = [];
+
+            const wineRegionMap = 
+            {
+                "Domestic Indian": [],
+                "Old World (France, Germany, Italy, Spain, Portugal, Austria)": [
+                    "France", "Germany", "Italy", "Spain", "Portugal", "Austria"
+                ],
+                "New World (USA, Chile, Australia, Argentina,)": [
+                    "USA", "Chile", "Australia", "Argentina", "South Africa", "New Zealand"
+                ],
+                "No Preference": "ALL"
+            };
+            window.selectedRegionGroup = null;
+
 
             const emojiMap = 
             {
-                "Red": "red",
-                "White": "white",
+                "Red": "Red",
+                "White": "White",
                 "Rosé": "Rosé",
-                "Fruit": "fruit",
-                "Sparkling / Champagne": "sparkling_champagne",
+                "Fruit": "Fruit",
+                "Sparkling / Champagne": "Sparkling_champagne",
                 "Yes": "Yes",
                 "No": "No",
-                "SKIP": "Skip",
-                "Fruit Wine": "fruit",
+                "SKIP": "SKIP",
+                "Fruit Wine": "Fruit",
                 "Still": "Still",
-                "Sparkling": "sparkling_champagne",
+                "Sparkling": "Sparkling_champagne",
                 "Sparkling/Champagne": "Sparkling_champagne",
                 "Sweet": "Sweet",
                 "Medium Sweet": "Medium_Sweet",
@@ -496,7 +522,7 @@
                 "Italy": "Italy",
                 "Spain": "Spain",
                 "Australia": "Australia",
-                "USA": "Usa",
+                "USA": "USA",
                 "Rest of the World": "RestofTheWorld",
                 "Budget": "Budget",
                 "Everyday sipping": "Everydaysipping",
@@ -532,6 +558,7 @@
                 "Merlot": "Merlot",
                 "Syrah/Shiraz": "SyrahShiraz",
                 "Refreshingly Young (1-3 years)": "RefreshinglyYoung",
+                "Refreshingly Young (1-2 years)": "RefreshinglyYoung",
                 "Fairly Young (3-5 years)": "FairlyYoung",
                 "Slightly Aged (5-7 years)": "SlightlyAged",
                 "Aged (>7 years)": "Aged",
@@ -539,7 +566,7 @@
                 "Earthy, Moldy, Petroleum, Sulfur, Minerality": "EarthyMoldyPetroleumSulfurMinerality",
                 "Yeasty, Lactic, Floral, Spicy, Citrus, Berry, Fruity, Tropical": "Yeasty",
                 "Herbaceous, Vegetative": "HerbaceousVegetative",
-                "Surprise Me": "SurpriseMe",
+                "SurpriseMe": "SurpriseMe",
                 "Fortified": "Fortified",
                 "Varietal": "Varietal",
                 "Blends": "Blends",
@@ -547,7 +574,7 @@
                 "Regional Hero Grapes": "RegionalHeroGrapes",
                 "Domestic Indian": "DomesticIndian",
                 "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "OldWorld",
-                "New World (USA, Chile, Australia, Argentina)": "NewWorld",
+                "New World (USA, Chile, Australia, Argentina,)": "NewWorld",
                 "Brut": "Brut",
                 "Dry": "Dry",
                 "Off-Dry": "OffDry",
@@ -587,7 +614,15 @@
                 "Argentina" : "Argentina",
                 "England": "England",
                 "South Africa" : "SouthAfrica",
-                "New Zealand" : "NewZealand"
+                "New Zealand" : "NewZealand",
+                "low":"low",
+                "light to medium":"lighttomedium",
+                "medium to high":"mediumtohigh",
+                "high":"high",
+                "light bodied":"lightbodied",
+                "medium bodied":"mediumbodied",
+                "full bodied":"fullbodied",
+
             };
 
 
@@ -648,6 +683,7 @@
             function renderQuestion() 
             {
                 const container = document.getElementById('question-container');
+                const backBtn = document.getElementById('backBtn');
 
                 // First screen: render 3 questions together
                 if (currentStep === 0) {
@@ -665,11 +701,11 @@
 
                     container.innerHTML = combinedHtml;
                     setupEventsForBatch([0, 1, 2]);
-                    document.getElementById('backBtn').disabled = true;
+
+                    backBtn.style.display = 'none';
                     return;
                 }
 
-                // For questions beyond the first 3
                 if (currentStep >= questions.length) return;
 
                 const q = questions[currentStep];
@@ -683,52 +719,94 @@
                 `;
 
                 setupEventsForBatch([currentStep]);
-                document.getElementById('backBtn').disabled = currentStep === 3;
+                backBtn.style.display = 'inline-block';
             }
+
+
 
             function renderQuestionHTML(q, qIndex) 
             {
                 if (q.type === 'slider') {
-                    const min = q.min_value ?? 0;
-                    const max = q.max_value ?? 10000;
-                    const step = q.step ?? 100;
-                    const defaultValue = q.default ?? min;
+                    const bands = q.bands ?? [
+                        { min: 0, max: 5000, label: "₹0 – ₹5,000" },
+                        { min: 5000, max: 25000, label: "₹5,000 – ₹25,000" },
+                        { min: 25000, max: 50000, label: "₹25,000 – ₹50,000" },
+                        { min: 50000, max: 100000, label: "₹50,000 – ₹1,00,000" }
+                    ];
 
-                    let tickMarks = '';
-                    for (let i = min; i <= max; i += step) {
-                        tickMarks += `<option value="${i}"></option>`;
-                    }
+                    const defaultValue = bands[0].max;
+
+                    let optionsHtml = '';
+                    bands.forEach(b => {
+                        optionsHtml += `<option value="${b.max}">${b.label}</option>`;
+                    });
 
                     return `
+                        <select class="form-select mb-3" id="budgetDropdown${qIndex}">
+                            ${optionsHtml}
+                        </select>
+
                         <input 
                             type="range" 
-                            class="form-range" 
-                            id="budgetSlider${qIndex}" 
-                            min="${min}" 
-                            max="${max}" 
-                            step="${step}" 
-                            value="${defaultValue}" 
-                            list="tickmarks${qIndex}"
+                            class="form-range"
+                            id="budgetSlider${qIndex}"
+                            min="${bands[0].min}"
+                            max="${bands[bands.length - 1].max}"
+                            step="100"
+                            value="${defaultValue}"
                         >
-                        <datalist id="tickmarks${qIndex}">${tickMarks}</datalist>
-                        <div class="d-flex justify-content-between text-muted mt-2">
-                            <small>₹${min}</small>
-                            <small>Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span></small>
-                            <small>₹${max}</small>
+
+                        <div class="mt-2 fw-bold">
+                            Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span>
                         </div>
                     `;
                 }
+
 
                 if (q.type === 'input') {
                     return `<input type="text" class="form-control" id="textInputAnswer${qIndex}" placeholder="Enter your answer">`;
                 }
 
-                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+
+                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) 
+                {
+                    let options = [...q.options];
+
+                    // ⭐ FILTER SUB-REGION OPTIONS
+                    if (q.question.toLowerCase().includes("sub-region")) {
+                        let allowed = [];
+
+                        window.selectedCountries.forEach(country => {
+                            if (subRegionMap[country]) {
+                                allowed = allowed.concat(subRegionMap[country]);
+                            }
+                        });
+
+                        options = options.filter(opt => allowed.includes(opt));
+                    }
+                    // FILTER COUNTRY SELECTION
+                    if (q.question.toLowerCase().includes("country selection")) {
+                        let allowed = [];
+
+                        if (window.selectedRegionGroup && wineRegionMap[window.selectedRegionGroup]) {
+                            const selected = wineRegionMap[window.selectedRegionGroup];
+
+                            if (selected === "ALL") {
+                                allowed = q.options; // show all
+                            } else {
+                                allowed = selected;  // mapped list
+                            }
+                        }
+
+                        options = options.filter(opt => allowed.includes(opt));
+                    }
+
+
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
 
-                    q.options.forEach((opt, idx) => {
+                    options.forEach((opt, idx) => {
                         const basePath = '/questionnaire';
                         const emoji = emojiMap[opt]
                             ? `<div class="emoji-icon mb-1">
@@ -738,7 +816,6 @@
                                         data-color="${basePath}/${emojiMap[opt]}-colo.svg"
                                         alt="${opt}"
                                         class="emoji-img switchable-img"
-                                        onclick="selectOption(this)"
                                     />
                             </div>`
                             : '';
@@ -759,7 +836,7 @@
                             </div>
                         `;
 
-                        if ((idx + 1) % 2 === 0 || idx === q.options.length - 1) {
+                        if ((idx + 1) % 2 === 0 || idx === options.length - 1) {
                             optionsHtml += `<div class="row">${rowHtml}</div>`;
                             rowHtml = '';
                         }
@@ -771,6 +848,8 @@
                 return '';
             }
 
+
+
             function setupEventsForBatch(indexes) 
             {
                 indexes.forEach(index => {
@@ -778,19 +857,39 @@
 
                     if (q.type === 'slider') {
                         const slider = document.getElementById(`budgetSlider${index}`);
+                        const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
-                        if (slider && output) {
-                            slider.addEventListener('input', (e) => {
-                                output.textContent = e.target.value;
-                            });
-                        }
+
+                        const bands = q.bands ?? [
+                            { min: 0, max: 5000 },
+                            { min: 5000, max: 25000 },
+                            { min: 25000, max: 50000 },
+                            { min: 50000, max: 100000 }
+                        ];
+
+                        slider.addEventListener('input', (e) => {
+                            const val = parseInt(e.target.value);
+                            output.textContent = val;
+
+                            const matched = bands.find(b => val >= b.min && val <= b.max);
+                            if (matched) dropdown.value = matched.max;
+                        });
+
+                        dropdown.addEventListener('change', (e) => {
+                            const val = parseInt(e.target.value);
+                            slider.value = val;
+                            output.textContent = val;
+                        });
                     }
+
 
                     if (q.type === 'single' || q.type === 'multiple') {
                         const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
                         inputs.forEach(input => {
                             input.addEventListener('change', () => {
-                                if (q.type === 'single') {
+
+                                if (q.type === 'single') 
+                                {
                                     inputs.forEach(i => {
                                         const label = document.querySelector(`label[for="${i.id}"]`);
                                         if (label) label.classList.remove('active');
@@ -805,12 +904,45 @@
                                         selectedLabel.classList.add('active');
                                     }
                                 }
+
+                                if (q.question.toLowerCase().includes("preferred wine country")) {
+                                    window.selectedCountries = Array.from(
+                                        document.querySelectorAll(`input[name="answer${index}"]:checked`)
+                                    ).map(i => i.value);
+
+                                    updateSubRegionOptions();
+                                }
+
+                                if (q.question.toLowerCase().includes("wine region group")) 
+                                {
+                                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                                        window.selectedRegionGroup = selected ? selected.value : null;
+
+                                        updateCountryOptions();
+                                    }
+
+
                             });
                         });
                     }
                 });
             }
 
+
+            function updateSubRegionOptions() {
+                const index = questions.findIndex(q =>
+                    q.question.toLowerCase().includes("sub-region")
+                );
+
+                if (index === -1) return;
+
+                if (currentStep === index || currentStep === 0) {
+                    renderQuestion();
+                }
+            }
+
+
+           
             function captureResponse() 
             {
                 const isBatch = currentStep === 0;
@@ -1008,6 +1140,21 @@
                 }
             }
         }
+    </script>
+    <script>
+        function updateCountryOptions() 
+        {
+            const index = questions.findIndex(q =>
+                q.question.toLowerCase().includes("country selection")
+            );
+
+            if (index === -1) return;
+
+            if (currentStep === index || currentStep === 0) {
+                renderQuestion();
+            }
+        }
+
     </script>
 
 

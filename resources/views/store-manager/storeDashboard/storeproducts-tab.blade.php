@@ -38,9 +38,9 @@
                                     </p>
                                 </div>
                                 <div class="card-options float-end">
-                                    <a href="javascript:void(0);" class="me-0 text-default" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                                    <!-- <a href="javascript:void(0);" class="me-0 text-default" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                                         <span class="fe fe-more-vertical fs-17 float-end"></span>
-                                    </a>
+                                    </a> -->
                                     <ul class="dropdown-menu dropdown-menu-end" role="menu">
                                         <li><a href="#"><i class="fe fe-download-cloud me-2"></i>Download</a></li>
                                     </ul>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="card-body pt-0">
                                 <div class="table-responsive">
-                                    <table class="table table-vcenter border mb-0 text-nowrap table-product">
+                                    <table id="productTable" class="table table-vcenter border mb-0 text-nowrap table-product">
                                         <thead>
                                             <tr>
                                                 <th>Product ID</th>
@@ -82,6 +82,7 @@
                                                             'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>',
                                                             'sparkling' => '<i class="fas fa-champagne-glasses text-info" title="Sparkling Wine"></i>',
                                                             'still' => '<i class="fas fa-tint text-primary" title="Still Wine"></i>',
+                                                            'rosé' => '<i class="fas fa-wine-glass" style="color:#ff69b4;" title="Rosé Wine"></i>',
                                                         ];
                                                     @endphp
                                                     {!! $icons[$product->type] ?? '<i class="fas fa-question-circle"></i>' !!}
@@ -114,77 +115,7 @@
         <!-- End::Content -->
 
         <!-- Pagination Code Starts -->
-        @if ($allProducts->hasPages())
-    <div class="d-flex justify-content-center my-4">
-        <nav aria-label="Page navigation">
-            <ul class="pagination mb-0">
-
-                {{-- Previous Page Link --}}
-                @if ($allProducts->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link"><i class="bi bi-caret-left"></i></span>
-                    </li>
-                @else
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $allProducts->previousPageUrl() }}" rel="prev">
-                            <i class="bi bi-caret-left"></i>
-                        </a>
-                    </li>
-                @endif
-
-                @php
-                    $current = $allProducts->currentPage();
-                    $last = $allProducts->lastPage();
-                    $start = max(2, $current - 1); // start window (excluding 1)
-                    $end = min($last - 1, $current + 1); // end window (excluding last)
-                @endphp
-
-                {{-- First Page --}}
-                <li class="page-item {{ $current == 1 ? 'active' : '' }}">
-                    <a class="page-link" href="{{ $allProducts->url(1) }}">1</a>
-                </li>
-
-                {{-- Ellipsis before window --}}
-                @if ($start > 2)
-                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                @endif
-
-                {{-- Page window --}}
-                @for ($i = $start; $i <= $end; $i++)
-                    <li class="page-item {{ $current == $i ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $allProducts->url($i) }}">{{ $i }}</a>
-                    </li>
-                @endfor
-
-                {{-- Ellipsis after window --}}
-                @if ($end < $last - 1)
-                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                @endif
-
-                {{-- Last Page --}}
-                @if ($last > 1)
-                    <li class="page-item {{ $current == $last ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $allProducts->url($last) }}">{{ $last }}</a>
-                    </li>
-                @endif
-
-                {{-- Next Page Link --}}
-                @if ($allProducts->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $allProducts->nextPageUrl() }}" rel="next">
-                            <i class="bi bi-caret-right"></i>
-                        </a>
-                    </li>
-                @else
-                    <li class="page-item disabled">
-                        <span class="page-link"><i class="bi bi-caret-right"></i></span>
-                    </li>
-                @endif
-
-            </ul>
-        </nav>
-    </div>
-@endif
+        
 
         <!-- Pagination Code ends -->
     </div>
@@ -193,6 +124,21 @@
 @endsection
 
 @push('scripts')
+
+    <script>
+        $(document).ready(function() {
+            $('#productTable').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [10, 20, 50, 100],
+                "language": {
+                search: "Search Products:",
+                searchPlaceholder: "Type to filter..."
+            }
+            });
+        });
+    </script>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

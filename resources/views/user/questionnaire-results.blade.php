@@ -68,7 +68,7 @@
                                         <p class="text-sm text-gray-600 mt-1">{{ $product->winery }}</p>
                                         <p class="text-sm text-gray-500 mt-1">{{ $product->grape_variety }}</p>
                                         <div class="flex justify-between items-center mt-3">
-                                            <p class="text-lg font-bold text-gray-900">${{ number_format($product->retail_price, 2) }}</p>
+                                            <p class="text-lg font-bold text-gray-900">₹{{ number_format($product->retail_price, 2) }}</p>
                                             <a href="{{ route('products.show', $product) }}" class="text-indigo-600 hover:text-indigo-900">View Details</a>
                                         </div>
                                     </div>

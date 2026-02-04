@@ -497,15 +497,15 @@
                             your taste preferences and food pairings...
                         </p>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                                            <a href="#featuredwines"
-                                                class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
-                                                Explore Wines
-                                            </a>
-                                            <a href="#HIW"
-                                                class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
-                                                How It Works
-                                            </a>
-                                        </div>
+                        <a href="#featuredwines"
+                            class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-md text-lg font-medium transition">
+                            Explore Wines
+                        </a>
+                        <a href="#HIW"
+                            class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3 rounded-md text-lg font-medium transition backdrop-blur-sm">
+                            How It Works
+                        </a>
+                    </div>
                 </div>
 
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -631,7 +631,7 @@
             <!-- End:: Section-2 -->
 
             <!-- Start:: Section-3 Featured Wines Section-->
-            <div class="py-16" id="featuredwines">
+            <div class="py-16" id="featuredwines" style="background: #ffe1e1;">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Featured Wines</h2>
                     <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
@@ -643,70 +643,41 @@
                             <div class="glide__track" data-glide-el="track">
                                 <ul class="glide__slides">
                                     @foreach ($featuredProducts as $product)
-                                        <li class="glide__slide">
-                                            <div
-                                                class="wine-card bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-[500px] relative">
-                                                {{-- @if ($product->image1)
-                                                    <img src="{{ asset('storage/' . $product->image1) }}"
-                                                        alt="{{ $product->wine_name }}"
-                                                        class="w-full h-60 object-cover">
-                                                @else
-                                                    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                                                        alt="{{ $product->wine_name }}"
-                                                        class="w-full h-60 object-cover">
-                                                @endif --}}
-                                               
-                                                <div class="h-[250px] overflow-hidden">
-                                                    <img src="{{ asset('storage/' . $product->image1) }}"
-                                                        class="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
-                                                        alt="{{ $product->wine_name }}">
-                                                </div>
+                                    <li class="glide__slide">
+                                        <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md relative group h-[500px] flex flex-col">
 
-                                                <!-- Featured badge on the image -->
+                                            <!-- IMAGE SECTION (Bigger + auto adjusts) -->
+                                            <div class="flex-grow overflow-hidden relative">
+                                                <img src="{{ asset('storage/' . $product->image1) }}"
+                                                    class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                                                    alt="{{ $product->wine_name }}">
+
                                                 @if ($product->is_featured == 1)
-                                                    <span
-                                                        class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                                                    <span class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                                                         Featured
                                                     </span>
                                                 @endif
-                                                <div class="p-6 flex flex-col flex-grow">
-                                                    <div class="flex justify-between items-start mb-2">
-                                                        <h3 class="text-xl font-bold text-gray-900 line-clamp-2"
-                                                            title="{{ $product->wine_name }}">
-                                                            {{ $product->wine_name }}
-                                                        </h3>
-                                                        @if ($product->type)
-                                                            <span
-                                                                class="{{ strtolower($product->type) === 'red'
-                                                                    ? 'bg-red-100 text-red-800'
-                                                                    : (strtolower($product->type) === 'white'
-                                                                        ? 'bg-yellow-100 text-yellow-800'
-                                                                        : 'bg-blue-100 text-blue-800') }} text-xs font-medium px-2.5 py-0.5 rounded whitespace-nowrap ml-2">
-                                                                {{ $product->type }}
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                    @if ($product->winery)
-                                                        <p class="text-gray-600 font-medium mb-2 line-clamp-1"
-                                                            title="{{ $product->winery }}">
-                                                            {{ $product->winery }}
-                                                        </p>
-                                                    @endif
-                                                    @if ($product->tasting_notes)
-                                                        <p class="text-gray-600 mb-4 line-clamp-3 flex-grow"
-                                                            title="{{ $product->tasting_notes }}">
-                                                            {{ $product->tasting_notes }}
-                                                        </p>
-                                                    @endif
-                                                    <div class="mt-auto pt-4">
-                                                        <a href="{{ route('user.productdetails', $product->id) }}"
-                                                            class="block w-full text-center bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-md text-sm transition">
-                                                            View Details
-                                                        </a>
-                                                    </div>
-                                                </div>
                                             </div>
-                                        </li>
+
+                                            <!-- NAME AT BOTTOM (fixed height) -->
+                                            <div class="px-4 pb-6 pt-2 text-center">
+                                                <h3 class="text-xl font-bold text-gray-900 line-clamp-2 min-h-[56px]">
+                                                    {{ Str::title($product->wine_name) }}
+                                                </h3>
+                                            </div>
+
+                                            <!-- HOVER OVERLAY -->
+                                            <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 
+                                                        group-hover:opacity-100 transition-opacity duration-300 
+                                                        flex items-center justify-center z-30">
+                                                <a href="{{ route('user.productdetails', $product->id) }}"
+                                                class="bg-red-700 hover:bg-red-800 text-white px-5 py-3 rounded-md text-base font-medium transition">
+                                                    View Details
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -799,7 +770,7 @@
                                         classics to gourmet cuisine, discover pairings that bring harmony, depth, and
                                         pleasure to the table.
                                     </p>
-                                    <a href="{{ route('user.cheeses') }}"
+                                    <a href="{{ route('allcheese') }}"
                                         class="text-red-700 hover:text-red-800 font-medium inline-flex items-center">
                                         Explore this pairing
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1"
@@ -1012,6 +983,7 @@
                     perView: 3,
                     gap: 24,
                     autoplay: 5000,
+                    navigation:FALSE,
                     hoverpause: true,
                     breakpoints: {
                         1024: {

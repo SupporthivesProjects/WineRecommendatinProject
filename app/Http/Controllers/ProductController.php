@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Cheese;
+use App\Models\CheeseProduct;
 use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
@@ -164,6 +166,29 @@ class ProductController extends Controller
             return back()->with('error', 'Error loading products: ' . $e->getMessage());
         }
     }
+
+
+    public function allcheese()
+    {
+        try {
+            // Fetch all cheese products with pagination
+            $cheeses = CheeseProduct::paginate(12);
+
+            return view('allcheese', [
+                'cheeses' => $cheeses
+            ]);
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Error loading cheese products: ' . $e->getMessage());
+
+            return back()->with('error', 'Failed to load products. Please try again later.');
+        }
+    }
+
+
+
+
 
     protected function applyFilters($query, $request)
     {
