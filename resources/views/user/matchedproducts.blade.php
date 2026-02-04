@@ -130,8 +130,8 @@
         .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             pointer-events: auto;
-            width: 20px;
-            height: 20px;
+            width: 10px;
+            height: 10px;
             background: #E90C04;
             border-radius: 50%;
             margin-top: -3.5px;
