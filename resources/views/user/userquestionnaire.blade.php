@@ -872,7 +872,7 @@
 
                             slider.min = min;
                             slider.max = max;
-                            slider.value = max;
+                            slider.value = min;
 
                             output.textContent = min;
                         });
