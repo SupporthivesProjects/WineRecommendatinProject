@@ -233,6 +233,15 @@
 
     </style>
 
+
+    <style>
+        .card.custom-card.wine-card .image-wrapper img.card-img-top {
+            object-fit: contain;
+            width: 308px;
+            height: 287px;
+        }
+    </style>
+
 @endpush
 
     <!-- Transparent Navbar -->
