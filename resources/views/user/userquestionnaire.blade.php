@@ -860,25 +860,23 @@
                         const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
 
-                        const bands = q.bands ?? [
-                            { min: 0, max: 5000 },
-                            { min: 5000, max: 25000 },
-                            { min: 25000, max: 50000 },
-                            { min: 50000, max: 100000 }
-                        ];
-
-                        slider.addEventListener('input', (e) => {
-                            const val = parseInt(e.target.value);
-                            output.textContent = val;
-
-                            const matched = bands.find(b => val >= b.min && val <= b.max);
-                            if (matched) dropdown.value = matched.max;
+                        // slider → value display
+                        slider.addEventListener('input', () => {
+                            output.textContent = slider.value;
                         });
 
-                        dropdown.addEventListener('change', (e) => {
-                            const val = parseInt(e.target.value);
-                            slider.value = val;
-                            output.textContent = val;
+                        // dropdown → slider min/max/value
+                        dropdown.addEventListener('change', () => {
+                            const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+                            const min = Number(selectedOption.dataset.min);
+                            const max = Number(selectedOption.dataset.max);
+
+                            slider.min = min;
+                            slider.max = max;
+                            slider.value = max;
+
+                            output.textContent = max;
                         });
                     }
 
