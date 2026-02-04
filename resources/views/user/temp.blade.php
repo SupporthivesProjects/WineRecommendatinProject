@@ -92,7 +92,7 @@
         }
 
         .option-box {
-            height: 120px;
+            /* height: 120px; */
             text-align: center;
         }
 
@@ -139,7 +139,7 @@
 
         .option-box {
             border-radius: 12px;
-            height: 120px;
+            /* height: 120px; */
             background-color: #fff;
             border: 1px solid #ddd;
         }

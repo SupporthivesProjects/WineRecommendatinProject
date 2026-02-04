@@ -275,10 +275,10 @@
 
         .option-box {
             border-radius: 12px;
-            height: 120px;
+            /* height: 120px; */
             background-color: #fbfbfb;
             border: 1px solid #ddd;
-            height: 120px;
+            /* height: 120px; */
             text-align: center;
         }
 
