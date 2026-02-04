@@ -734,7 +734,7 @@
                         { min: 50000, max: 100000, label: "₹50,000 – ₹1,00,000" }
                     ];
 
-                    const defaultValue = bands[0].min;
+                    const defaultValue = bands[0].max;
 
                     let optionsHtml = '';
                     bands.forEach(b => {
@@ -874,7 +874,7 @@
                             slider.max = max;
                             slider.value = max;
 
-                            output.textContent = max;
+                            output.textContent = min;
                         });
                     }
 
