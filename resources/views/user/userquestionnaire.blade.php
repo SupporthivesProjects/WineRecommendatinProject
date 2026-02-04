@@ -738,7 +738,7 @@
 
                     let optionsHtml = '';
                     bands.forEach(b => {
-                        optionsHtml += `<option value="${b.max}">${b.label}</option>`;
+                        optionsHtml += `<option value="${b.max}" data-min="${b.min}" data-max="${b.max}">${b.label}</option>`;
                     });
 
                     return `
@@ -751,7 +751,7 @@
                             class="form-range"
                             id="budgetSlider${qIndex}"
                             min="${bands[0].min}"
-                            max="${bands[bands.length - 1].max}"
+                            max="${bands[0].max}"
                             step="100"
                             value="${defaultValue}"
                         >
