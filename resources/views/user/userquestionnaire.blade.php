@@ -860,12 +860,10 @@
                         const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
 
-                        // slider → value display
                         slider.addEventListener('input', () => {
                             output.textContent = slider.value;
                         });
 
-                        // dropdown → slider min/max/value
                         dropdown.addEventListener('change', () => {
                             const selectedOption = dropdown.options[dropdown.selectedIndex];
 
