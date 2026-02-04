@@ -112,6 +112,7 @@
         .input_range_wrapper {
             position: relative;
             width: 100%;
+            height: 10px;
         }
         .input_range_wrapper input[type="range"] {
             position: absolute;
@@ -123,15 +124,14 @@
         }
         .input_range_wrapper input[type="range"]::-webkit-slider-runnable-track {
             height: 3px;
-            background: red;
+            background: inherit;
         }
 
         .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             pointer-events: auto;
-            width: 10px;
-            height: 10px;
-            background: blue;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             margin-top: -3.5px;
         }
