@@ -124,7 +124,7 @@
         }
         .input_range_wrapper input[type="range"]::-webkit-slider-runnable-track {
             height: 3px;
-            background: inherit;
+            background: #E90C04;
         }
 
         .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
@@ -132,6 +132,7 @@
             pointer-events: auto;
             width: 20px;
             height: 20px;
+            background: #E90C04;
             border-radius: 50%;
             margin-top: -3.5px;
         }
