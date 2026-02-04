@@ -109,6 +109,32 @@
             background-color: rgba(0, 0, 0,0.7) !important;
             border-radius:0px;
         }
+        .input_range_wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .input_range_wrapper input[type="range"] {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            pointer-events: none; /* allows overlap */
+            -webkit-appearance: none;
+        }
+        .input_range_wrapper input[type="range"]::-webkit-slider-runnable-track {
+            height: 3px;
+            background: red;
+        }
+
+        .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            pointer-events: auto;
+            width: 10px;
+            height: 10px;
+            background: blue;
+            border-radius: 50%;
+            margin-top: -3.5px;
+        }
 
     </style>
 
@@ -212,9 +238,10 @@
                     @endphp
 
                     <div class="price-slider mt-2">
-                        <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
-                        <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
-
+                        <div class="input_range_wrapper">
+                            <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
+                            <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
+                        </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span>₹<span id="min-val">{{ number_format($minPrice) }}</span></span>
                             <span>₹<span id="max-val">{{ number_format($maxPrice) }}</span></span>
