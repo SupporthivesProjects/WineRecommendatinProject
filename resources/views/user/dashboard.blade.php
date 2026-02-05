@@ -210,9 +210,9 @@
         {
                 position: relative;
                 height: 100vh; 
-                background: url('{{ asset('images/Redlabel.jpg') }}') no-repeat center center/cover;
+                /* background: url('{{ asset('images/Redlabel.jpg') }}') no-repeat center center/cover;
                 background-attachment: fixed; 
-                z-index: 1;
+                z-index: 1; */
                 
         }
 
@@ -548,6 +548,11 @@
                         </h1>
                     </div>
                 </div>
+
+                <video class="bg-video" autoplay muted loop playsinline>
+                    <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
 
             </section>
 
