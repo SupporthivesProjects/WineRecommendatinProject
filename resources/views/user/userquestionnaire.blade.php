@@ -985,20 +985,34 @@
 
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
-                captureResponse(); // Save current step response(s)
+                captureResponse();
+
+                // find index of "country selection" question
+                const countryIndex = questions.findIndex(q =>
+                    q.question.toLowerCase().includes("country selection")
+                );
 
                 // Jump directly to step 3 after batch questions
                 if (currentStep === 0) {
                     currentStep = 3;
                 } else {
-                    currentStep++;
+
+                    // ⭐ SKIP country question if "No Preference" selected
+                    if (
+                        window.selectedRegionGroup === "No Preference" &&
+                        currentStep + 1 === countryIndex
+                    ) {
+                        currentStep = countryIndex + 1; // skip country question
+                    } else {
+                        currentStep++;
+                    }
                 }
 
                 if (currentStep < questions.length) {
                     renderQuestion();
-                    nextBtn.textContent = (currentStep === questions.length - 1) ? 'Finish' : 'Next';
+                    nextBtn.textContent =
+                        (currentStep === questions.length - 1) ? 'Finish' : 'Next';
                 } else {
-                    nextBtn.textContent = 'Finish';
                     localStorage.setItem('userResponses', JSON.stringify(responses));
                     submitResponses();
 
@@ -1009,6 +1023,7 @@
                     }
                 }
             });
+
 
 
             
