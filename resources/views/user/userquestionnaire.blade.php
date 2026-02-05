@@ -96,19 +96,19 @@
             transition: opacity 0.5s ease;
         }
 
-        .image-card:hover img {
+        .image-card.hover img {
             transform: scale(1.05);
         }
 
-        .image-card:hover .overlay {
+        .image-card.hover .overlay {
             background-color: rgba(0,0,0,0.9);
         }
 
-        .image-card:hover .overlay-text .default-text {
+        .image-card.hover .overlay-text .default-text {
             display: none;
         }
 
-        .image-card:hover .overlay-text .hover-text {
+        .image-card.hover .overlay-text .hover-text {
             display: block;
             opacity: 1;
         }
