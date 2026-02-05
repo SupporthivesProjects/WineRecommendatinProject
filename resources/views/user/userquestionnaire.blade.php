@@ -670,7 +670,17 @@
                             console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
 
                             renderQuestion();
-                            new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+
+                            if ($(this).hasClass("hover")) {
+                                new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+                            } else {
+                                $(this).addClass("hover");
+
+                                setTimeout(() => {
+                                    $(this).removeClass("hover");
+                                }, 30000);
+                            }
+                            
                         })
                         .catch(error => {
                             console.error('An error occurred while loading questions:', error);
