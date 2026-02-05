@@ -40,6 +40,9 @@
         .owl-dot.active {
             background: #ef4444 !important;
         }
+        #testimonials .owl-theme:before, #testimonials .owl-theme:after {
+            content: none;
+        }
     </style>
 @endpush
 
