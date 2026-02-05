@@ -643,49 +643,51 @@
                 button.addEventListener('click', function () {
                     const questionnaireId = this.getAttribute('data-questionnaire-id');
 
-                    fetch(`/get-questions/${questionnaireId}`)
-                        .then(response => {
-                            console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
-                            console.log('Response status:', response.status);
+                    if ($(this).hasClass("hover")) {
+                        fetch(`/get-questions/${questionnaireId}`)
+                            .then(response => {
+                                console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
+                                console.log('Response status:', response.status);
 
-                            if (!response.ok) {
-                                console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
-                                throw new Error('Failed to fetch questions.');
-                            }
+                                if (!response.ok) {
+                                    console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
+                                    throw new Error('Failed to fetch questions.');
+                                }
 
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Raw question data received:', data);
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Raw question data received:', data);
 
-                            if (!Array.isArray(data) || data.length === 0) {
-                                console.warn('No questions returned or data format is incorrect:', data);
-                                alert('No questions available for this questionnaire.');
-                                return;
-                            }
+                                if (!Array.isArray(data) || data.length === 0) {
+                                    console.warn('No questions returned or data format is incorrect:', data);
+                                    alert('No questions available for this questionnaire.');
+                                    return;
+                                }
 
-                            // Store and use the data
-                            questions = data;
-                            currentStep = 0;
-                            console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+                                // Store and use the data
+                                questions = data;
+                                currentStep = 0;
+                                console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
 
-                            renderQuestion();
-
-                            if ($(this).hasClass("hover")) {
+                                renderQuestion();
                                 new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
-                            } else {
-                                $(this).addClass("hover");
 
-                                setTimeout(() => {
-                                    $(this).removeClass("hover");
-                                }, 30000);
-                            }
-                            
-                        })
-                        .catch(error => {
-                            console.error('An error occurred while loading questions:', error);
-                            alert('Something went wrong while loading the questionnaire. Please try again.');
-                        });
+
+                            })
+                            .catch(error => {
+                                console.error('An error occurred while loading questions:', error);
+                                alert('Something went wrong while loading the questionnaire. Please try again.');
+                            });
+                    } else {
+                        $(this).addClass("hover");
+
+                        setTimeout(() => {
+                            $(this).removeClass("hover");
+                        }, 30000);
+                    }
+
+
 
                 });
             });
