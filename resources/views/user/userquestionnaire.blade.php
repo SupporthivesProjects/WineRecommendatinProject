@@ -1071,13 +1071,12 @@
 
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (currentStep > 0) {
-                    currentStep--;
-                    if (window.selectedRegionGroup) {
-                        console.log(window.selectedRegionGroup);
-                        
+                    
+                    if (window.selectedRegionGroup === "No Preference" &&
+                        currentStep - 1 === countryIndex) {
+                        currentStep - 2
                     } else {
-                        console.log(currentStep - 2);
-                        
+                        currentStep--;
                     }
                     
                     renderQuestion();
