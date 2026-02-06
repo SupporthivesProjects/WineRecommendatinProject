@@ -1071,7 +1071,11 @@
 
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (currentStep > 0) {
-                    
+
+                    const countryIndex = questions.findIndex(q =>
+                        q.question.toLowerCase().includes("country selection")
+                    );
+
                     if (window.selectedRegionGroup === "No Preference" &&
                         currentStep - 1 === countryIndex) {
                         currentStep - 2
