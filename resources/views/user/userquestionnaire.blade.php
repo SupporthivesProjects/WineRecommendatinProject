@@ -1071,7 +1071,10 @@
 
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (currentStep > 0) {
+                    console.log(currentStep);
                     currentStep--;
+                    console.log(currentStep);
+                    
                     renderQuestion();
                 }
             });
