@@ -1078,7 +1078,7 @@
 
                     if (window.selectedRegionGroup === "No Preference" &&
                         currentStep - 1 === countryIndex) {
-                        currentStep - 2
+                        currentStep = countryIndex - 1;
                     } else {
                         currentStep--;
                     }
