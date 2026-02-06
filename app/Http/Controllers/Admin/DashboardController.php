@@ -114,22 +114,34 @@ class DashboardController extends Controller
         $users = $usersQuery->orderBy('id', 'desc')->paginate(10);
         
 
-        // Products data for pie chart - categorized by wine type
-        $productTypes = Product::select('type')
-            ->selectRaw('count(*) as count')
-            ->groupBy('type')
-            ->get()
-            ->pluck('count', 'type')
-            ->toArray();
+        // PRODUCTS DATA FOR PIE CHART (COMBINED LOGIC)
+        // ----------------------
 
-        $productTypeLabels = array_keys($productTypes);
-        $productTypeData = array_values($productTypes);
+        // Count by wine type
+        $typeCounts = Product::select('type', DB::raw('COUNT(*) as count'))
+        ->whereNotNull('type')
+        ->groupBy('type')
+        ->pluck('count', 'type')
+        ->toArray();
 
-        // If no products found, provide default labels
-        if (empty($productTypeLabels)) {
-            $productTypeLabels = ['Red Wine', 'White Wine', 'Rosé', 'Sparkling'];
-            $productTypeData = [0, 0, 0, 0];
-        }
+        // Sparkling from method column
+        $sparklingCount = Product::where('method', 'Sparkling')->count();
+
+        // Fruity from nature column
+        $fruityCount = Product::where('nature', 'Fruity')->count();
+
+        // Final grouped data (fixed order)
+        $finalProductTypeData = [
+        'Red Wine'   => $typeCounts['red'] ?? 0,
+        'White Wine'=> $typeCounts['rosé'] ?? 0,
+        'Rosé'      => $typeCounts['white'] ?? 0,
+        'Sparkling' => $sparklingCount,
+        'Fruity'    => $fruityCount,
+        ];
+
+        $productTypeLabels = array_keys($finalProductTypeData);
+        $productTypeData   = array_values($finalProductTypeData);
+        
 
         // Product data by grape variety
         $productsByGrape = Product::select('grape_variety')

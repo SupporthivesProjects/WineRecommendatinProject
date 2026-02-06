@@ -338,11 +338,11 @@
                 label: 'Wine Type Distribution',
                 data: productTypeData,
                 backgroundColor: [
-                    'rgb(98, 89, 202)', // Color for Red Wine
-                    'rgb(241, 56, 139)', // Color for White Wine
-                    'rgb(0, 204, 204)', // Color for Rosé
-                    'rgb(255, 159, 64)', // Color for Sparkling
-                    // You can add more colors if needed based on data
+                    'rgb(98, 89, 202)',    // Red (purple)
+                    'rgb(241, 56, 139)',   // White (pink)
+                    'rgb(0, 204, 204)',    // Rosé (cyan)
+                    'rgb(255, 159, 64)',   // Sparkling (orange)
+                    'rgb(153, 255, 51)'    // Fruity (blue)
                 ],
                 hoverOffset: 4
             }]

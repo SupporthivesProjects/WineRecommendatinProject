@@ -151,7 +151,7 @@
                                 <div class="card h-100">
                                         <img src="{{ asset('storage/' . $wine->image1) }}"
                                             class="card-img-top" alt="{{ $wine->wine_name }}"
-                                            style="height: 200px; object-fit: cover;">
+                                            style="height: 200px; object-fit: contain;">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $wine->wine_name }}</h5>
                                         <p class="card-text text-muted small">

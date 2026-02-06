@@ -193,11 +193,11 @@
                                                 <span class="badge bg-secondary">Out of Stock</span>
                                             @endif -->
                                         </div>
-                                        <!-- <div class="d-grid">
+                                        <div class="d-grid">
                                             <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark btn-sm w-100">
                                                 View Details
                                             </a>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <!-- @if($storeInfo)
                                         <div class="store-info bg-light p-2 rounded mt-3 small">
