@@ -1095,6 +1095,9 @@
 
             
             function submitResponses() {
+
+                console.log("check api:- ",selectedQuestionnaireId, responses);
+                
     
                 fetch('/submit-response', {
                     method: 'POST',
