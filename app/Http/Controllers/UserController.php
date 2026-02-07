@@ -462,23 +462,61 @@ class UserController extends Controller
 
         Log::info("Total products AFTER all filters: " . $finalProducts->count());
 
-        // ---- FINAL LOGIC: 10 normal + 5 featured ----
+        // ---- FEATURED + NORMAL SPLIT (IN MEMORY) ----
         $featured = $finalProducts->where('admin_featured_product', true)->shuffle();
         $normal   = $finalProducts->where('admin_featured_product', false)->shuffle();
 
-        Log::info("Featured candidates: " . $featured->count());
+        Log::info("Featured candidates (from final products): " . $featured->count());
         Log::info("Normal candidates: " . $normal->count());
 
+        // ---- FALLBACK: If NO featured products found ----
+        if ($featured->isEmpty()) {
+            Log::info("No featured products found in final products. Fetching fallback featured products.");
+
+            $featured = Product::where('admin_featured_product', true)
+                ->inRandomOrder()
+                ->limit(5)
+                ->get();
+        }
+
+        // ---- FINAL MIX: 5 featured + rest normal ----
         $takeFeatured = $featured->take(5);
         $remaining    = 15 - $takeFeatured->count();
         $takeNormal   = $normal->take($remaining);
 
-        $result = $takeFeatured->merge($takeNormal)->shuffle()->values();
+        $result = $takeFeatured
+            ->merge($takeNormal)
+            ->shuffle()
+            ->values();
 
         Log::info("=== FINAL RESULT COUNT: " . $result->count() . " ===");
         Log::info("=== END PRODUCT MATCHING ===");
 
         return $result;
+
+
+        // // Final matched product records
+        // $finalProducts = Product::whereIn('id', $currentProductIds)->get();
+
+        // Log::info("Total products AFTER all filters: " . $finalProducts->count());
+
+        // // ---- FINAL LOGIC: 10 normal + 5 featured ----
+        // $featured = $finalProducts->where('admin_featured_product', true)->shuffle();
+        // $normal   = $finalProducts->where('admin_featured_product', false)->shuffle();
+
+        // Log::info("Featured candidates: " . $featured->count());
+        // Log::info("Normal candidates: " . $normal->count());
+
+        // $takeFeatured = $featured->take(5);
+        // $remaining    = 15 - $takeFeatured->count();
+        // $takeNormal   = $normal->take($remaining);
+
+        // $result = $takeFeatured->merge($takeNormal)->shuffle()->values();
+
+        // Log::info("=== FINAL RESULT COUNT: " . $result->count() . " ===");
+        // Log::info("=== END PRODUCT MATCHING ===");
+
+        // return $result;
     }
 
     private function getMatchesForSingleAnswer($templateId, $key, $value, $productIds)

@@ -692,6 +692,32 @@
                 });
             });
 
+            document.getElementById('questionnaireModal')
+            .addEventListener('hidden.bs.modal', function () {
+                resetQuestionnaireState();
+            });
+
+
+            function resetQuestionnaireState() 
+            {
+                questions = [];
+                currentStep = 0;
+                responses = {};
+                selectedQuestionnaireId = null;
+
+                window.selectedCountries = [];
+                window.selectedRegionGroup = null;
+
+                localStorage.removeItem('userResponses');
+
+                document.getElementById('question-container').innerHTML = '';
+                document.getElementById('backBtn').style.display = 'none';
+
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.textContent = 'Next';
+            }
+
+
             function renderQuestion() 
             {
                 const container = document.getElementById('question-container');
