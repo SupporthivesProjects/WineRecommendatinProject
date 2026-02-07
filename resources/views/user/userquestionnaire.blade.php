@@ -692,6 +692,27 @@
                 });
             });
 
+
+            function forLog(min, max) {
+                let sliderValue = max - min;
+                let bars = (sliderValue / 5000) -1;
+                console.log("number of bars:-", bars);
+                console.log("bars breakpoints:-", sliderValue / bars);
+
+                return bars;
+            }
+
+            function renderBars(container, barsCount) {
+                container.innerHTML = ""; 
+
+                for (let i = 0; i < barsCount; i++) {
+                    const bar = document.createElement("div");
+                    bar.className = "single-bar";
+                    container.appendChild(bar);
+                }
+            }
+
+
             function renderQuestion() 
             {
                 const container = document.getElementById('question-container');
@@ -758,6 +779,12 @@
                             ${optionsHtml}
                         </select>
 
+                        <div class="sliderInputWrapper">
+
+                        <div class="barsDiv">
+
+                        </div>
+
                         <input 
                             type="range" 
                             class="form-range"
@@ -767,6 +794,8 @@
                             step="100"
                             value="${defaultValue}"
                         >
+
+                        </div>
 
                         <div class="mt-2 fw-bold">
                             Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span>
@@ -860,13 +889,6 @@
                 return '';
             }
 
-            function forLog(min, max) {
-                let sliderValue = max - min;
-                let bars = sliderValue / 5000
-                console.log("number of bars:-", bars);
-                console.log("bars breakpoints:-", sliderValue / bars);
-            }
-
             function setupEventsForBatch(indexes) 
             {
                 indexes.forEach(index => {
@@ -895,7 +917,11 @@
 
                             output.textContent = min;
 
-                            forLog(min, max) 
+                            const barsCount = forLog(min, max);
+
+                            const barsDiv = slider.closest(".sliderInputWrapper").querySelector(".barsDiv");
+
+                            renderBars(barsDiv, barsCount);
                         });
                     }
 
