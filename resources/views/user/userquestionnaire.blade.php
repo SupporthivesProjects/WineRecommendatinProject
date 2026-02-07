@@ -719,18 +719,17 @@
             function forLog(min, max) {
                 let sliderValue = max - min;
                 let bars = sliderValue / 5000;
+                let step = sliderValue / bars;
                 console.log("number of bars:-", bars);
-                console.log("bars breakpoints:-", sliderValue / bars);
+                console.log("bars breakpoints:-", step);
 
                 let barValues = []
-                for (let i = 0; i <= (bars + 1); i++) {
-                    if (barValues.length() == 0) {
-                        barValues.push(min)
-                    } else {
-                        barValues.push(min + (sliderValue / bars))
-                    }
-                    
+                for (let i = 0; i <= bars; i++) {
+                    barValues.push(min + (step * i));
                 }
+
+                console.log("bar values:-", barValues);
+
 
                 return bars + 1;
             }
