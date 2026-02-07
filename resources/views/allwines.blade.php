@@ -80,8 +80,6 @@
     }
 
     .emoji { font-size: 1.4em; line-height: 1; }
-<<<<<<< HEAD
-=======
 
     .wine-type-scroll { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
 
@@ -122,49 +120,9 @@
         transform: translateY(0);
         transition: transform 0.1s linear;
     }
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
 
     .wine-type-scroll { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
 
-<<<<<<< HEAD
-    .wine-type-scroll .form-check {
-        display: inline-block;
-        margin-right: 1rem;
-        white-space: nowrap;
-        overflow: visible !important;
-        max-height: none !important;
-    }
-
-    .scrollable-filter { max-height: 200px; overflow-y: auto; padding-right: 6px; }
-
-    .scrollable-filter::-webkit-scrollbar { width: 6px; }
-    .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-
-    .app-header .nav-link { transition: color 0.3s ease; }
-    .app-header .nav-link:hover { color: #0b5ed7; }
-
-    .app-header { 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-    }
-
-    .filters-and-cards {
-        background: #fff;
-        padding: 100px 20px;
-        min-height: 100vh;
-    }
-
-    .parallax-container { position: relative; height: 70vh; overflow: hidden; }
-    .parallax-bg {
-        background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
-        background-size: cover;
-        background-position: center;
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 150%; z-index: -1;
-        transform: translateY(0);
-        transition: transform 0.1s linear;
-    }
-=======
     .wine-card {
     position: relative;
     overflow: hidden;
@@ -194,48 +152,29 @@
 
 
 
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
 </style>
 @endpush
 
 <!-- Header -->
-<<<<<<< HEAD
-<header class="app-header" style="background-color: white;border-bottom: 1px solid #ddd;height: 80px;position: fixed;top: 0;left: 0;right: 0;z-index: 1000;padding-left: 120px;">
-  <div class="container-fluid d-flex align-items-center justify-content-between" style="height: 100%;">
-=======
 <header class="app-header p-0" style="background-color: white;border-bottom: 1px solid #ddd;height: 80px;">
   <div class="container d-flex align-items-center justify-content-between" style="height: 100%;">
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
     
     <!-- Left: Logo -->
     <div class="d-flex align-items-center" style="flex: 0 0 auto;">
       <a href="{{ route('home') }}">
-<<<<<<< HEAD
-        <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 80px;width: 80px;">
-=======
         <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo" style="height: 60px;width: 60px;">
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
       </a>
     </div>
 
     <!-- Center: Navigation -->
     <nav class="flex-grow-1 d-flex justify-content-center">
       <ul class="nav mb-0">
-<<<<<<< HEAD
-        <li class="nav-item"><a href="{{ route('home') }}" class="nav-link text-dark fw-semibold px-3">Home</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link text-dark fw-semibold px-3">How It Works</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link text-dark fw-semibold px-3">Browse Wines</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link text-dark fw-semibold px-3">Pairing Wines</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link text-dark fw-semibold px-3">What Our Users Say</a></li>
-        <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link text-dark fw-semibold px-3">Moments in Between</a></li>
-=======
         <li class="nav-item"><a href="{{ route('home') }}" class="nav-link  fw-semibold px-3">Home</a></li>
         <li class="nav-item"><a href="{{ route('home') }}#HIW" class="nav-link  fw-semibold px-3">How It Works</a></li>
         <li class="nav-item"><a href="{{ route('home') }}#featuredwines" class="nav-link  fw-semibold px-3">Browse Wines</a></li>
         <li class="nav-item"><a href="{{ route('home') }}#pairing" class="nav-link  fw-semibold px-3">Pairing Wines</a></li>
         <li class="nav-item"><a href="{{ route('home') }}#testimonials" class="nav-link  fw-semibold px-3">What Our Users Say</a></li>
         <li class="nav-item"><a href="{{ route('home') }}#Moments" class="nav-link  fw-semibold px-3">Moments in Between</a></li>
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
       </ul>
     </nav>
 
@@ -252,9 +191,6 @@
 <!-- Hero Section -->
 <section class="parallax-container">
     <div class="parallax-bg"></div>
-<<<<<<< HEAD
-    <div class="hero-text my-3">
-=======
     <div class="hero-text my-3" style="
     text-align: right;
     max-width: 390px;
@@ -263,7 +199,6 @@
     right: 95px;
     top: 50%;
     transform: translateY(-50%);">
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
         <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
         <p>Curated selections for every occasion</p>
         <a type="button" class="btn btn-dark" href="#products">Explore</a>
@@ -394,10 +329,6 @@
                                 @php
                                     $lowerType = strtolower($type);
                                     $emoji = match ($lowerType) {
-<<<<<<< HEAD
-                                        'red' => '🍷', 'white' => '🥂', 'sparkling' => '✨', 'ros' => '🌸', 'dessert' => '🍯', 'bordeaux' => '🏰',
-                                        default => '🍾',
-=======
                                         'red' => '🍷', 
                                         'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
                                         'sparkling' => '✨', 
@@ -405,18 +336,13 @@
                                         '🍯', 
                                         'bordeaux' => '🏰',
                                          default => '🍾',
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
                                     };
                                 @endphp
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input wine-type-filter" type="checkbox" value="{{ $lowerType }}" id="type-inline-{{ $lowerType }}" style="display:none;">
                                     <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
-<<<<<<< HEAD
-                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($type) }}
-=======
                                         <span class="emoji">{!! $emoji !!}
                                         </span> {{ ucfirst($type) }}
->>>>>>> d1f66529ff8835a63f58d90e95a89c9a9caa2d0c
                                     </label>
                                 </div>
                             @endif
@@ -1065,8 +991,6 @@ $(document).on('click', '.method-filter-btn', function () {
     // Toggle button active state visually
     $(this).toggleClass('active', isChecked);
 });
-
-
 
     </script>
 @endpush
