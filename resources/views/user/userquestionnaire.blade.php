@@ -753,6 +753,12 @@
                         optionsHtml += `<option value="${b.max}" data-min="${b.min}" data-max="${b.max}">${b.label}</option>`;
                     });
 
+                    let sliderValue = bands[0].max - bands[0].min;
+                    let bars = sliderValue / 5000
+                    console.log("number of bars:-", bars);
+                    console.log("bars breakpoints:-", sliderValue / bars);
+                    
+
                     return `
                         <select class="form-select mb-3" id="budgetDropdown${qIndex}">
                             ${optionsHtml}
