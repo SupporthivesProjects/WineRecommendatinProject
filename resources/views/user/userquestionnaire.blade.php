@@ -957,13 +957,22 @@
                         const slider = document.getElementById(`budgetSlider${index}`);
                         const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
+                        const barsDiv = slider.closest(".sliderInputWrapper").querySelector(".barsDiv");
 
+                        // ⭐ INITIAL RENDER
+                        const firstOption = dropdown.options[dropdown.selectedIndex];
+                        const initMin = Number(firstOption.dataset.min);
+                        const initMax = Number(firstOption.dataset.max);
+
+                        const initBars = forLog(initMin, initMax);
+                        renderBars(barsDiv, initBars);
+
+                        // SLIDER INPUT
                         slider.addEventListener('input', () => {
                             output.textContent = slider.value;
-
-                            // forLog(Number(slider.min), Number(slider.max))
                         });
 
+                        // DROPDOWN CHANGE
                         dropdown.addEventListener('change', () => {
                             const selectedOption = dropdown.options[dropdown.selectedIndex];
 
@@ -977,12 +986,10 @@
                             output.textContent = min;
 
                             const barsInfo = forLog(min, max);
-
-                            const barsDiv = slider.closest(".sliderInputWrapper").querySelector(".barsDiv");
-
                             renderBars(barsDiv, barsInfo);
                         });
                     }
+
 
 
                     if (q.type === 'single' || q.type === 'multiple') {
