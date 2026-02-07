@@ -520,6 +520,7 @@
                 "India": "India",
                 "France": "France",
                 "Italy": "Italy",
+                "Germany": "Germany",
                 "Spain": "Spain",
                 "Australia": "Australia",
                 "USA": "USA",
