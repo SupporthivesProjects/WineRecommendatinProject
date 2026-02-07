@@ -737,7 +737,7 @@
             function renderBars(container, barsInfo) {
                 container.innerHTML = ""; 
 
-                for (let i = 0; i < barsInfo.barsCount; i++) {
+                for (let i = 0; i < barsInfo.barCount; i++) {
 
                     const barDiv = document.createElement("div");
                     barDiv.className = "barDiv";
