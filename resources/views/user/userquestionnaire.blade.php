@@ -747,7 +747,7 @@
 
                     const priceText = document.createElement("p");
                     priceText.className = "barValuesPrice";
-                    priceText.textContent = `₹${barsInfo.values[i]}`;
+                    priceText.textContent = `₹${barsInfo.barValues[i]}`;
 
                     barDiv.appendChild(priceText);
                     barDiv.appendChild(singleBar);
