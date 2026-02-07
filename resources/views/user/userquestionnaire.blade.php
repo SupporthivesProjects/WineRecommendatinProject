@@ -726,7 +726,13 @@
 
             function forLog(min, max) {
                 let sliderValue = max - min;
-                let bars = sliderValue / 5000;
+                if (sliderValue < 5001) {
+                    let bars = sliderValue / 1000;
+                } else if (sliderValue > 49999) {
+                    let bars = sliderValue / 10000;
+                } else {
+                    let bars = sliderValue / 5000;
+                }
                 let step = sliderValue / bars;
                 console.log("number of bars:-", bars);
                 console.log("bars breakpoints:-", step);
