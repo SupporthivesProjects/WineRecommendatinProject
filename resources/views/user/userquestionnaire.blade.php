@@ -717,9 +717,9 @@
 
             function forLog(min, max) {
                 let sliderValue = max - min;
-                let bars = (sliderValue / 5000) -1;
+                let bars = sliderValue / 5000;
                 console.log("number of bars:-", bars);
-                console.log("bars breakpoints:-", sliderValue / (bars + 1));
+                console.log("bars breakpoints:-", sliderValue / bars);
 
                 return bars;
             }
