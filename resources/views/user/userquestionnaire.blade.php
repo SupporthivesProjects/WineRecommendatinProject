@@ -317,10 +317,9 @@
             min-height: 30px;
         }
         .single-bar {
-            width: 25px;
-            height: 1px;
+            height: 25px;
+            width: 1px;
             background: #007bff;
-            rotate: 90deg;
         }
 
     </style>
