@@ -308,6 +308,7 @@
         input#budgetSlider10 {
             position: relative;
             z-index: 2;
+            margin-top: -8px;
         }
         .barsDiv {
             display: flex;
