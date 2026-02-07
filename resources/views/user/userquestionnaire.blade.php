@@ -301,6 +301,28 @@
         }
 
 
+
+        .sliderInputWrapper {
+            position: relative;
+        }
+        input#budgetSlider10 {
+            position: relative;
+            z-index: 2;
+        }
+        .barsDiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-end;
+            min-height: 30px;
+        }
+        .single-bar {
+            width: 25px;
+            height: 1px;
+            background: #007bff;
+            rotate: 90deg;
+        }
+
     </style>
 
 @endpush
@@ -697,7 +719,7 @@
                 let sliderValue = max - min;
                 let bars = (sliderValue / 5000) -1;
                 console.log("number of bars:-", bars);
-                console.log("bars breakpoints:-", sliderValue / bars);
+                console.log("bars breakpoints:-", sliderValue / (bars + 1));
 
                 return bars;
             }
