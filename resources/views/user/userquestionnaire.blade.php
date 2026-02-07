@@ -880,7 +880,7 @@
                         slider.addEventListener('input', () => {
                             output.textContent = slider.value;
 
-                            forLog(Number(slider.min), Number(slider.max))
+                            // forLog(Number(slider.min), Number(slider.max))
                         });
 
                         dropdown.addEventListener('change', () => {
@@ -894,6 +894,8 @@
                             slider.value = min;
 
                             output.textContent = min;
+
+                            forLog(min, max) 
                         });
                     }
 
