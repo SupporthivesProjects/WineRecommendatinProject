@@ -323,7 +323,15 @@
             width: 1px;
             background: #007bff;
         }
-
+        .barDiv {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1px;
+        }
+        p.barValuesPrice {
+            margin-bottom: 4px;
+        }
     </style>
 
 @endpush
