@@ -748,20 +748,10 @@
 
                     const defaultValue = bands[0].min;
 
-                    function forLog() {
-                        let sliderValue = bands[0].max - bands[0].min;
-                        let bars = sliderValue / 5000
-                        console.log("number of bars:-", bars);
-                        console.log("bars breakpoints:-", sliderValue / bars);
-                    }
-
                     let optionsHtml = '';
                     bands.forEach(b => {
-                        optionsHtml += `<option value="${b.max}" data-min="${b.min}" data-max="${b.max}" onclick="forLog()">${b.label}</option>`;
+                        optionsHtml += `<option value="${b.max}" data-min="${b.min}" data-max="${b.max}">${b.label}</option>`;
                     });
-
-                    
-                    
 
                     return `
                         <select class="form-select mb-3" id="budgetDropdown${qIndex}">
@@ -870,7 +860,12 @@
                 return '';
             }
 
-
+            function forLog(min, max) {
+                let sliderValue = max - min;
+                let bars = sliderValue / 5000
+                console.log("number of bars:-", bars);
+                console.log("bars breakpoints:-", sliderValue / bars);
+            }
 
             function setupEventsForBatch(indexes) 
             {
@@ -884,6 +879,8 @@
 
                         slider.addEventListener('input', () => {
                             output.textContent = slider.value;
+
+                            forLog(Number(slider.min), Number(slider.max))
                         });
 
                         dropdown.addEventListener('change', () => {
