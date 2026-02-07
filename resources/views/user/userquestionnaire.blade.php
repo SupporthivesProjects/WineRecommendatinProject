@@ -731,16 +731,28 @@
                 console.log("bar values:-", barValues);
 
 
-                return bars + 1;
+                return {barCount: bars + 1, barValues: barValues};
             }
 
-            function renderBars(container, barsCount) {
+            function renderBars(container, barsInfo) {
                 container.innerHTML = ""; 
 
-                for (let i = 0; i < barsCount; i++) {
-                    const bar = document.createElement("div");
-                    bar.className = "single-bar";
-                    container.appendChild(bar);
+                for (let i = 0; i < barsInfo.barsCount; i++) {
+
+                    const barDiv = document.createElement("div");
+                    barDiv.className = "barDiv";
+
+                    const singleBar = document.createElement("div");
+                    singleBar.className = "single-bar";
+
+                    const priceText = document.createElement("p");
+                    priceText.className = "barValuesPrice";
+                    priceText.textContent = `₹${barsInfo.values[i]}`;
+
+                    barDiv.appendChild(priceText);
+                    barDiv.appendChild(singleBar);
+
+                    container.appendChild(barDiv);
                 }
             }
 
@@ -949,11 +961,11 @@
 
                             output.textContent = min;
 
-                            const barsCount = forLog(min, max);
+                            const barsInfo = forLog(min, max);
 
                             const barsDiv = slider.closest(".sliderInputWrapper").querySelector(".barsDiv");
 
-                            renderBars(barsDiv, barsCount);
+                            renderBars(barsDiv, barsInfo);
                         });
                     }
 
