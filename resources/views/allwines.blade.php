@@ -992,7 +992,5 @@ $(document).on('click', '.method-filter-btn', function () {
     $(this).toggleClass('active', isChecked);
 });
 
-
-
     </script>
 @endpush

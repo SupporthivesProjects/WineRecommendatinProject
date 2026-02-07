@@ -551,6 +551,7 @@
                 "India": "India",
                 "France": "France",
                 "Italy": "Italy",
+                "Germany": "Germany",
                 "Spain": "Spain",
                 "Australia": "Australia",
                 "USA": "USA",
@@ -723,52 +724,29 @@
                 });
             });
 
-
-            function forLog(min, max) {
-                let sliderValue = max - min;
-                let bars;
-                if (sliderValue < 5001) {
-                    bars = sliderValue / 1000;
-                } else if (sliderValue > 49999) {
-                    bars = sliderValue / 10000;
-                } else {
-                    bars = sliderValue / 5000;
-                }
-                let step = sliderValue / bars;
-                console.log("number of bars:-", bars);
-                console.log("bars breakpoints:-", step);
-
-                let barValues = []
-                for (let i = 0; i <= bars; i++) {
-                    barValues.push(min + (step * i));
-                }
-
-                console.log("bar values:-", barValues);
+            document.getElementById('questionnaireModal')
+            .addEventListener('hidden.bs.modal', function () {
+                resetQuestionnaireState();
+            });
 
 
-                return {barCount: bars + 1, barValues: barValues};
-            }
+            function resetQuestionnaireState() 
+            {
+                questions = [];
+                currentStep = 0;
+                responses = {};
+                selectedQuestionnaireId = null;
 
-            function renderBars(container, barsInfo) {
-                container.innerHTML = ""; 
+                window.selectedCountries = [];
+                window.selectedRegionGroup = null;
 
-                for (let i = 0; i < barsInfo.barCount; i++) {
+                localStorage.removeItem('userResponses');
 
-                    const barDiv = document.createElement("div");
-                    barDiv.className = "barDiv";
+                document.getElementById('question-container').innerHTML = '';
+                document.getElementById('backBtn').style.display = 'none';
 
-                    const singleBar = document.createElement("div");
-                    singleBar.className = "single-bar";
-
-                    const priceText = document.createElement("p");
-                    priceText.className = "barValuesPrice";
-                    priceText.textContent = `₹${barsInfo.barValues[i]}`;
-
-                    barDiv.appendChild(priceText);
-                    barDiv.appendChild(singleBar);
-
-                    container.appendChild(barDiv);
-                }
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.textContent = 'Next';
             }
 
 
@@ -1186,6 +1164,11 @@
                     } else {
                         currentStep--;
                     }
+
+                    
+
+
+
                     
                     renderQuestion();
                 }

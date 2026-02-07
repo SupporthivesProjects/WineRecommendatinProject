@@ -287,7 +287,7 @@
         <section class="parallax-container">
             <div class="parallax-bg"></div>
             <div class="hero-text my-3">
-                <h1 class="text-black" id="mystyle">Explore Our Finest Winess</h1>
+                <h1 class="text-black" id="mystyle">Explore Our Finest Wines</h1>
                 <p>Curated selections for every occasion</p>
                 <a type="button" class="btn btn-dark" href="#products">
                     Explore
@@ -471,8 +471,8 @@
 
                 
                     <!-- Pagination Code -->
-                     <!-- new code -->
-                     @if ($products->hasPages())
+                    <!-- new code -->
+                    @if ($products->hasPages())
                         <div class="d-flex justify-content-center my-4">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination mb-0">
@@ -480,7 +480,9 @@
                                     {{-- Previous Page Link --}}
                                     @if ($products->onFirstPage())
                                         <li class="page-item disabled">
-                                            <span class="page-link"><i class="bi bi-caret-left"></i></span>
+                                            <span class="page-link">
+                                                <i class="bi bi-caret-left"></i>
+                                            </span>
                                         </li>
                                     @else
                                         <li class="page-item">
@@ -490,28 +492,37 @@
                                         </li>
                                     @endif
 
-                                    {{-- Pagination Numbers --}}
                                     @php
-                                        $lastPage = $products->lastPage();
+                                        $lastPage    = $products->lastPage();
                                         $currentPage = $products->currentPage();
+
+                                        // Dynamic start & end
+                                        $start = max($currentPage, 1);
+                                        $end   = min($currentPage + 2, $lastPage);
                                     @endphp
 
-                                    {{-- Show first 3 pages --}}
-                                    @foreach (range(1, min(3, $lastPage)) as $page)
+                                    {{-- Dynamic Pages (Current, Next 2) --}}
+                                    @foreach (range($start, $end) as $page)
                                         <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $products->url($page) }}">{{ $page }}</a>
+                                            <a class="page-link" href="{{ $products->url($page) }}">
+                                                {{ $page }}
+                                            </a>
                                         </li>
                                     @endforeach
 
-                                    {{-- Ellipsis if there’s a gap --}}
-                                    @if ($lastPage > 6)
-                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    {{-- Ellipsis --}}
+                                    @if ($end < $lastPage - 3)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
                                     @endif
 
-                                    {{-- Show last 3 pages --}}
-                                    @foreach (range(max($lastPage - 2, 4), $lastPage) as $page)
+                                    {{-- Last 3 Pages --}}
+                                    @foreach (range(max($lastPage - 2, $end + 1), $lastPage) as $page)
                                         <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $products->url($page) }}">{{ $page }}</a>
+                                            <a class="page-link" href="{{ $products->url($page) }}">
+                                                {{ $page }}
+                                            </a>
                                         </li>
                                     @endforeach
 
@@ -520,11 +531,13 @@
                                         <li class="page-item">
                                             <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
                                                 <i class="bi bi-caret-right"></i>
-                                            </a>
+                                            </span>
                                         </li>
                                     @else
                                         <li class="page-item disabled">
-                                            <span class="page-link"><i class="bi bi-caret-right"></i></span>
+                                            <span class="page-link">
+                                                <i class="bi bi-caret-right"></i>
+                                            </span>
                                         </li>
                                     @endif
 
@@ -532,51 +545,7 @@
                             </nav>
                         </div>
                     @endif
-
-                     <!--old code  -->
-                    <!-- @if ($products->hasPages())
-                        <div class="d-flex justify-content-center my-4">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination mb-0">
-                                    {{-- Previous Page Link --}}
-                                    @if ($products->onFirstPage())
-                                        <li class="page-item disabled">
-                                            <span class="page-link"><i class="bi bi-caret-left"></i></span>
-                                        </li>
-                                    @else
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
-                                                <i class="bi bi-caret-left"></i>
-                                            </a>
-                                        </li>
-                                    @endif
-
-                                    {{-- Pagination Elements --}}
-                                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-                                        <li class="page-item {{ $products->currentPage() == $page ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                        </li>
-                                    @endforeach
-
-                                    {{-- Next Page Link --}}
-                                    @if ($products->hasMorePages())
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
-                                                <i class="bi bi-caret-right"></i>
-                                            </a>
-                                        </li>
-                                    @else
-                                        <li class="page-item disabled">
-                                            <span class="page-link"><i class="bi bi-caret-right"></i></span>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </nav>
-                        </div>
-                    @endif -->
-
-
-
+                     <!--new  code  -->
                 </div>
             </div>
         </section>
