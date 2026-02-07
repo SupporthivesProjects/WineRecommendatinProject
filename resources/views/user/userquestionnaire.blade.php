@@ -315,6 +315,7 @@
             justify-content: space-between;
             align-items: flex-end;
             min-height: 30px;
+            padding: 0px 10px;
         }
         .single-bar {
             height: 25px;
