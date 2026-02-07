@@ -720,7 +720,7 @@
                 console.log("number of bars:-", bars);
                 console.log("bars breakpoints:-", sliderValue / bars);
 
-                return bars;
+                return bars + 1;
             }
 
             function renderBars(container, barsCount) {
