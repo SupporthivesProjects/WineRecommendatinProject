@@ -1,5 +1,20 @@
 @if($products->count() > 0)
     @foreach($products as $product)
+
+        <style>
+
+            .card.custom-card.wine-card .image-wrapper img.card-img-top {
+                object-fit: contain;
+                width: 308px;
+                height: 287px;
+                display: flex;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .image-wrapper {
+                padding: 10px;
+            }
+        </style>
     
         <div class="col-xl-4 wine-card-container" 
              data-type="{{ strtolower($product->type) }}"

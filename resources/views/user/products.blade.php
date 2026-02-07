@@ -239,6 +239,9 @@
                 object-fit: contain;
                 width: 308px;
                 height: 287px;
+                display: flex;
+                margin-left: auto;
+                margin-right: auto;
             }
             .image-wrapper {
                 padding: 10px;
