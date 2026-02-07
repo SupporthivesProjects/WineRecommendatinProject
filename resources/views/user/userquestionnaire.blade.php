@@ -730,6 +730,8 @@
             });
 
 
+
+
             function resetQuestionnaireState() 
             {
                 questions = [];
@@ -747,6 +749,54 @@
 
                 const nextBtn = document.getElementById('nextBtn');
                 nextBtn.textContent = 'Next';
+            }
+
+
+            function forLog(min, max) {
+                let sliderValue = max - min;
+                let bars;
+                if (sliderValue < 5001) {
+                    bars = sliderValue / 1000;
+                } else if (sliderValue > 49999) {
+                    bars = sliderValue / 10000;
+                } else {
+                    bars = sliderValue / 5000;
+                }
+                let step = sliderValue / bars;
+                console.log("number of bars:-", bars);
+                console.log("bars breakpoints:-", step);
+
+                let barValues = []
+                for (let i = 0; i <= bars; i++) {
+                    barValues.push(min + (step * i));
+                }
+
+                console.log("bar values:-", barValues);
+
+
+                return {barCount: bars + 1, barValues: barValues};
+            }
+
+            function renderBars(container, barsInfo) {
+                container.innerHTML = ""; 
+
+                for (let i = 0; i < barsInfo.barCount; i++) {
+
+                    const barDiv = document.createElement("div");
+                    barDiv.className = "barDiv";
+
+                    const singleBar = document.createElement("div");
+                    singleBar.className = "single-bar";
+
+                    const priceText = document.createElement("p");
+                    priceText.className = "barValuesPrice";
+                    priceText.textContent = `₹${barsInfo.barValues[i]}`;
+
+                    barDiv.appendChild(priceText);
+                    barDiv.appendChild(singleBar);
+
+                    container.appendChild(barDiv);
+                }
             }
 
 
