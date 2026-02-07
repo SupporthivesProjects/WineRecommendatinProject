@@ -722,6 +722,16 @@
                 console.log("number of bars:-", bars);
                 console.log("bars breakpoints:-", sliderValue / bars);
 
+                let barValues = []
+                for (let i = 0; i <= (bars + 1); i++) {
+                    if (barValues.length() == 0) {
+                        barValues.push(min)
+                    } else {
+                        barValues.push(min + (sliderValue / bars))
+                    }
+                    
+                }
+
                 return bars + 1;
             }
 
