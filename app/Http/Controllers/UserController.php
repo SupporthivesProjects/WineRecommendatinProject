@@ -552,10 +552,27 @@ class UserController extends Controller
                         });
                         break;
         
+                    // case 'question5': 
+                    //     $q->where(function($x) use ($values) {
+                    //         $x->whereIn('closure_type', $values);
+                    //     });
+                    //     break;
                     case 'question5': 
-                        $q->where(function($x) use ($values) {
-                            $x->whereIn('closure_type', $values);
+
+                        $mappedValues = [];
+                    
+                        foreach ($values as $value) {
+                            if (strtolower($value) === 'yes') {
+                                $mappedValues[] = 'Cork';
+                            } elseif (strtolower($value) === 'no') {
+                                $mappedValues[] = 'Screwtop';
+                            }
+                        }
+                    
+                        $q->where(function($x) use ($mappedValues) {
+                            $x->whereIn('closure_type', $mappedValues);
                         });
+                    
                         break;
         
                     case 'question6': 
