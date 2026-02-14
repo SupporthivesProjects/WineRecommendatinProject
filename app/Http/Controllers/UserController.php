@@ -435,7 +435,8 @@ class UserController extends Controller
                 $templateId,
                 $key,
                 $value,
-                $currentProductIds
+                $currentProductIds,
+                $orderedAnswers
             );
 
             Log::info("Matches returned for $key: " . $matches->count());
@@ -519,7 +520,8 @@ class UserController extends Controller
         // return $result;
     }
 
-    private function getMatchesForSingleAnswer($templateId, $key, $value, $productIds)
+    // 
+    private function getMatchesForSingleAnswer($templateId, $key, $value, $productIds, $allAnswers)
     {
         Log::info("---- START MATCH BLOCK: $key ----");
         Log::info("Filtering inside product count: " . count($productIds));
@@ -538,25 +540,54 @@ class UserController extends Controller
 
         Log::info("Normalized Values:", $values);
 
+        $isSparklingSelected = false;
+        if (!empty($allAnswers['question4'])) {
+            $sparklingValues = (array) $allAnswers['question4'];
+        
+            foreach ($sparklingValues as $val) {
+                if (stripos($val, 'sparkling') !== false) {
+                    $isSparklingSelected = true;
+                    break;
+                }
+            }
+        }
+
         switch ($templateId) {
 
             case '1':
                 switch ($key) 
                 {
-                    case 'question4': 
-                        $q->where(function($x) use ($values) {
-                            foreach ($values as $v) {
-                                $x->orWhere('type', 'like', "%$v%")
-                                  ->orWhere('method', 'like', "%$v%");
-                            }
-                        });
-                        break;
+                    // case 'question4': 
+                    //     $q->where(function($x) use ($values) {
+                    //         foreach ($values as $v) {
+                    //             $x->orWhere('type', 'like', "%$v%")
+                    //               ->orWhere('method', 'like', "%$v%");
+                    //         }
+                    //     });
+                    //     break;
         
                     // case 'question5': 
                     //     $q->where(function($x) use ($values) {
                     //         $x->whereIn('closure_type', $values);
                     //     });
                     //     break;
+                    case 'question4': 
+
+                        foreach ($values as $v) {
+                            if (stripos($v, 'sparkling') !== false) {
+                                $isSparklingSelected = true;
+                            }
+                        }
+                    
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('type', 'like', "%$v%")
+                                  ->orWhere('method', 'like', "%$v%");
+                            }
+                        });
+                    
+                        break;
+                    
                     case 'question5': 
 
                         $mappedValues = [];
@@ -569,11 +600,37 @@ class UserController extends Controller
                             }
                         }
                     
-                        $q->where(function($x) use ($mappedValues) {
-                            $x->whereIn('closure_type', $mappedValues);
-                        });
+                        // If sparkling selected → remove Cork
+                        if ($isSparklingSelected) 
+                        {
+                            $mappedValues = array_diff($mappedValues, ['Cork']);
+                            $mappedValues[] = 'no response';
+                        }
+                    
+                        if (!empty($mappedValues)) {
+                            $q->whereIn('closure_type', $mappedValues);
+                        }
                     
                         break;
+                        
+                    
+                    // case 'question5': 
+
+                    //     $mappedValues = [];
+                    
+                    //     foreach ($values as $value) {
+                    //         if (strtolower($value) === 'yes') {
+                    //             $mappedValues[] = 'Cork';
+                    //         } elseif (strtolower($value) === 'no') {
+                    //             $mappedValues[] = 'Screwtop';
+                    //         }
+                    //     }
+                    
+                    //     $q->where(function($x) use ($mappedValues) {
+                    //         $x->whereIn('closure_type', $mappedValues);
+                    //     });
+                    
+                    //     break;
         
                     case 'question6': 
                         $q->where(function($x) use ($values) {
