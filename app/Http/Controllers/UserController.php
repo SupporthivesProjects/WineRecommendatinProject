@@ -8,6 +8,7 @@ use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireResponse;
 use App\Models\Product;
 use App\Models\UserQuestionnaireResponse;
+use App\Models\ModalImage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\QuestionResponse;
@@ -162,7 +163,11 @@ class UserController extends Controller
 
     public function userquestionnaire()
     {
-        return view('user.userquestionnaire');
+        $modalImages = ModalImage::where('is_active', 1)
+                    ->inRandomOrder()
+                    ->pluck('image');
+
+        return view('user.userquestionnaire',compact('modalImages'));
     }
 
     public function products()

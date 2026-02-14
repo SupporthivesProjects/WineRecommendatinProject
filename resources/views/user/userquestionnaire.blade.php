@@ -1246,7 +1246,7 @@
             }
         });
     </script>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const images = [
                 "{{ asset('images/QuestModal1.jpg') }}",
@@ -1265,7 +1265,34 @@
                 container.style.backgroundRepeat = 'no-repeat';
             });
         });
+    </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const images = @json(
+                $modalImages->map(function($img) {
+                    return asset('storage/' . $img);
+                })
+            );
+
+            const modal = document.getElementById('questionnaireModal');
+            const container = document.getElementById('leftModalImageContainer');
+
+            modal.addEventListener('shown.bs.modal', function () {
+
+                if (images.length > 0) {
+
+                    const randomIndex = Math.floor(Math.random() * images.length);
+
+                    container.style.backgroundImage = `url('${images[randomIndex]}')`;
+                    container.style.backgroundSize = 'cover';
+                    container.style.backgroundPosition = 'center';
+                    container.style.backgroundRepeat = 'no-repeat';
+                }
+            });
+        });
     </script>
+
 
     <script>
         function switchToColor(img) {

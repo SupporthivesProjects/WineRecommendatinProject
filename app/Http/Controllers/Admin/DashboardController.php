@@ -9,9 +9,11 @@ use App\Models\User;
 use App\Models\Store;
 use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireLog;
+use App\Models\ModalImage;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+
 
 class DashboardController extends Controller
 {
@@ -463,8 +465,50 @@ class DashboardController extends Controller
             ->with('success', 'Questionnaire deleted successfully.');
     }
 
-    
+    public function questionnaireimages(Request $request)
+    {
+        $images = ModalImage::latest()->get();
+        return view('admin.questionnaires.images', compact('images'));
+    }
 
+
+    public function storeImages(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $path = $request->file('image')->store('modal_images', 'public');
+
+        ModalImage::create([
+            'image' => $path
+        ]);
+
+        return back()->with('success', 'Image uploaded successfully');
+    }
+
+    public function deleteImage($id)
+    {
+        $image = ModalImage::findOrFail($id);
+    
+        if (\Storage::disk('public')->exists($image->image)) {
+            \Storage::disk('public')->delete($image->image);
+        }
+    
+        $image->delete();
+    
+        return back()->with('success', 'Image deleted successfully');
+    }
+    
+    public function toggleImage($id)
+    {
+        $image = ModalImage::findOrFail($id);
+        $image->is_active = !$image->is_active;
+        $image->save();
+    
+        return back()->with('success', 'Image status updated');
+    }
+    
 
 
 }

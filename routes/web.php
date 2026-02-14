@@ -195,6 +195,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('questionnaires/{questionnaire}', [App\Http\Controllers\Admin\QuestionnaireController::class, 'destroy'])->name('questionnaires.destroy');
     Route::put('questionnaires/{questionnaire}/toggle-status', [App\Http\Controllers\Admin\QuestionnaireController::class, 'toggleStatus'])->name('questionnaires.toggle-status');
     Route::get('questionnaire-analytics', [App\Http\Controllers\Admin\QuestionnaireController::class, 'analytics'])->name('questionnaires.analytics');
+    Route::get('questionnaire-Images', [App\Http\Controllers\Admin\DashboardController::class, 'questionnaireimages'])->name('questionnaires.images');
+    Route::post('questionnaire-StoreImages', [App\Http\Controllers\Admin\DashboardController::class, 'storeImages'])->name('questionnaires.storeImages');
+    Route::delete('questionnaire-DeleteImage/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'deleteImage'])->name('questionnaires.deleteImage');
+    Route::post('questionnaire-ToggleImage/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'toggleImage'])->name('questionnaires.toggleImage');
+
+
 });
 
 // User Questionnaire Routes
