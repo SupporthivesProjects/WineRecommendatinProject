@@ -497,13 +497,14 @@
                 "Spain": ["Rioja (Spain)", "Ribera del Duero (Spain)"],
                 "Australia": ["Barossa Valley (Australia)", "Margaret River (Australia)"],
                 "USA": ["Napa Valley (USA)", "Sonoma (USA)"],
-                "Rest of the World": ["Marlborough (New Zealand)"]
+                "Rest of the World": ["Marlborough (New Zealand)"],
+                "India": ["India"],
             };
             window.selectedCountries = [];
 
             const wineRegionMap = 
             {
-                "Domestic Indian": [],
+                "Domestic Indian": ["India"],
                 "Old World (France, Germany, Italy, Spain, Portugal, Austria)": [
                     "France", "Germany", "Italy", "Spain", "Portugal", "Austria"
                 ],
@@ -513,6 +514,8 @@
                 "No Preference": "ALL"
             };
             window.selectedRegionGroup = null;
+            window.skipSubRegion = false;
+
 
 
             const emojiMap = 
@@ -1042,11 +1045,13 @@
                                     }
                                 }
 
-                                if (q.question.toLowerCase().includes("preferred wine country")) {
+                                if (q.question.toLowerCase().includes("preferred wine country")) 
+                                {
                                     window.selectedCountries = Array.from(
                                         document.querySelectorAll(`input[name="answer${index}"]:checked`)
                                     ).map(i => i.value);
 
+                                    window.skipSubRegion = window.selectedCountries.includes("No Preference");
                                     updateSubRegionOptions();
                                 }
 
@@ -1133,7 +1138,17 @@
                     ) {
                         currentStep = countryIndex + 1; // skip country question
                     } else {
-                        currentStep++;
+                        // currentStep++;
+                        const subRegionIndex = questions.findIndex(q =>
+                                q.question.toLowerCase().includes("sub-region")
+                            );
+
+                            if (window.skipSubRegion && currentStep + 1 === subRegionIndex) {
+                                currentStep = subRegionIndex + 2; // skip sub-region
+                            } else {
+                                currentStep++;
+                            }
+
                     }
                 }
 
