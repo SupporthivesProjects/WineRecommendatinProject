@@ -655,7 +655,7 @@
                 "medium to high":"mediumtohigh",
                 "high":"high",
                 "light bodied":"lightbodied",
-                "medium bodied":"mediumbodied",
+                "medium bodied":"MediumBodied",
                 "full bodied":"fullbodied",
 
             };
