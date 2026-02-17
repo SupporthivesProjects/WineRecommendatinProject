@@ -1021,52 +1021,152 @@
                         });
                     }
 
-
-
                     if (q.type === 'single' || q.type === 'multiple') {
-                        const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
-                        inputs.forEach(input => {
-                            input.addEventListener('change', () => {
 
-                                if (q.type === 'single') 
-                                {
+                    const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
+
+                    inputs.forEach(input => {
+
+                        input.addEventListener('change', () => {
+
+                            /* ===============================
+                            ⭐ SURPRISE ME LOGIC (MULTIPLE)
+                            =============================== */
+
+                            if (q.type === 'multiple') {
+
+                                if (input.value === "SurpriseMe" && input.checked) {
+
+                                    // If SurpriseMe selected → uncheck all others
                                     inputs.forEach(i => {
-                                        const label = document.querySelector(`label[for="${i.id}"]`);
-                                        if (label) label.classList.remove('active');
+                                        if (i !== input) {
+                                            i.checked = false;
+
+                                            const lbl = document.querySelector(`label[for="${i.id}"]`);
+                                            if (lbl) lbl.classList.remove('active');
+                                        }
+                                    });
+
+                                } else if (input.value !== "SurpriseMe" && input.checked) {
+
+                                    // If any other selected → uncheck SurpriseMe
+                                    inputs.forEach(i => {
+                                        if (i.value === "SurpriseMe") {
+                                            i.checked = false;
+
+                                            const lbl = document.querySelector(`label[for="${i.id}"]`);
+                                            if (lbl) lbl.classList.remove('active');
+                                        }
                                     });
                                 }
+                            }
 
-                                const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
-                                if (selectedLabel) {
-                                    if (q.type === 'multiple') {
-                                        selectedLabel.classList.toggle('active', input.checked);
-                                    } else {
-                                        selectedLabel.classList.add('active');
-                                    }
+                            /* ===============================
+                            SINGLE SELECTION ACTIVE RESET
+                            =============================== */
+
+                            if (q.type === 'single') {
+                                inputs.forEach(i => {
+                                    const label = document.querySelector(`label[for="${i.id}"]`);
+                                    if (label) label.classList.remove('active');
+                                });
+                            }
+
+                            /* ===============================
+                            APPLY ACTIVE CLASS
+                            =============================== */
+
+                            const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+                            if (selectedLabel) {
+                                if (q.type === 'multiple') {
+                                    selectedLabel.classList.toggle('active', input.checked);
+                                } else {
+                                    selectedLabel.classList.add('active');
                                 }
+                            }
 
-                                if (q.question.toLowerCase().includes("preferred wine country")) 
-                                {
-                                    window.selectedCountries = Array.from(
-                                        document.querySelectorAll(`input[name="answer${index}"]:checked`)
-                                    ).map(i => i.value);
+                            /* ===============================
+                            COUNTRY LOGIC
+                            =============================== */
 
-                                    window.skipSubRegion = window.selectedCountries.includes("No Preference");
-                                    updateSubRegionOptions();
-                                }
+                            if (q.question.toLowerCase().includes("preferred wine country")) {
 
-                                if (q.question.toLowerCase().includes("wine region group")) 
-                                {
-                                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
-                                        window.selectedRegionGroup = selected ? selected.value : null;
+                                window.selectedCountries = Array.from(
+                                    document.querySelectorAll(`input[name="answer${index}"]:checked`)
+                                ).map(i => i.value);
 
-                                        updateCountryOptions();
-                                    }
+                                window.skipSubRegion = window.selectedCountries.includes("No Preference");
 
+                                updateSubRegionOptions();
+                            }
 
-                            });
+                            /* ===============================
+                            REGION GROUP LOGIC
+                            =============================== */
+
+                            if (q.question.toLowerCase().includes("wine region group")) {
+
+                                const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                                window.selectedRegionGroup = selected ? selected.value : null;
+
+                                updateCountryOptions();
+                            }
+
                         });
+                    });
                     }
+
+
+                    // if (q.type === 'single' || q.type === 'multiple') {
+                    //     const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
+                    //     inputs.forEach(input => {
+                    //         input.addEventListener('change', () => {
+
+                    //             if (q.type === 'single') 
+                    //             {
+                    //                 inputs.forEach(i => {
+                    //                     const label = document.querySelector(`label[for="${i.id}"]`);
+                    //                     if (label) label.classList.remove('active');
+                    //                 });
+                    //             }
+
+                    //             const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+                    //             if (selectedLabel) {
+                    //                 if (q.type === 'multiple') 
+                    //                 {
+                                        
+                    //                     selectedLabel.classList.toggle('active', input.checked);
+                    //                 } else {
+                    //                     selectedLabel.classList.add('active');
+                    //                 }
+                    //             }
+
+                    //             if (q.question.toLowerCase().includes("preferred wine country")) 
+                    //             {
+                    //                 window.selectedCountries = Array.from(
+                    //                     document.querySelectorAll(`input[name="answer${index}"]:checked`)
+                    //                 ).map(i => i.value);
+
+                    //                 window.skipSubRegion = window.selectedCountries.includes("No Preference");
+                    //                 updateSubRegionOptions();
+                    //             }
+
+                    //             if (q.question.toLowerCase().includes("wine region group")) 
+                    //             {
+                    //                     const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                    //                     window.selectedRegionGroup = selected ? selected.value : null;
+
+                    //                     updateCountryOptions();
+                    //                 }
+
+
+                    //         });
+                    //     });
+                    // }
+
+
+
+
                 });
             }
 
