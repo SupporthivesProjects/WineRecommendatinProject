@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -538,4 +539,120 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')
             ->with('success', 'Product deleted successfully.');
     }
+
+    public function bulkUploadForm()
+    {
+        return view('admin.products.bulk-upload');
+    }
+    
+    public function bulkUploadStore(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xlsx'
+        ]);
+    
+        // process file
+    }
+
+    public function downloadCSV()
+    {
+        $products = DB::table('products')->get();
+
+        $filename = "products.csv";
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+        ];
+
+        $callback = function() use ($products) {
+            $file = fopen('php://output', 'w');
+
+            if ($products->count() > 0) {
+                fputcsv($file, array_keys((array)$products[0]));
+            }
+
+            foreach ($products as $product) {
+                fputcsv($file, (array)$product);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function uploadCSV(Request $request)
+    {
+        try {
+
+            $file = $request->file('csv_file');
+            $handle = fopen($file->getRealPath(), "r");
+
+            $header = fgetcsv($handle);
+
+            while (($row = fgetcsv($handle)) !== false) {
+                $data = array_combine($header, $row);
+                DB::table('products')->insert($data);
+            }
+
+            fclose($handle);
+
+            return back()->with('success','Products imported successfully');
+
+        } catch (\Exception $e) {
+
+            return back()->with('error','Import failed: '.$e->getMessage());
+
+        }
+    }
+
+
+    // public function uploadCSV(Request $request)
+    // {
+    //     $file = $request->file('csv_file');
+
+    //     $handle = fopen($file->getRealPath(), "r");
+
+    //     $header = fgetcsv($handle); // get column names from CSV
+
+    //     while (($row = fgetcsv($handle)) !== false) {
+
+    //         $data = array_combine($header, $row);
+
+    //         DB::table('products')->insert($data);
+    //     }
+
+    //     fclose($handle);
+
+    //     return back()->with('success','Products added successfully');
+    // }
+
+    // public function uploadCSV(Request $request)
+    // {
+    //     $file = $request->file('csv_file');
+
+    //     $handle = fopen($file, "r");
+
+    //     DB::table('products')->truncate(); // replace table
+
+    //     $header = fgetcsv($handle);
+
+    //     while(($row = fgetcsv($handle)) !== false){
+
+    //         DB::table('products')->insert([
+    //             'name' => $row[0],
+    //             'price' => $row[1],
+    //             'category' => $row[2]
+    //         ]);
+
+    //     }
+
+    //     fclose($handle);
+
+    //     return back()->with('success','Products replaced successfully');
+    // }
+
+
+
 }

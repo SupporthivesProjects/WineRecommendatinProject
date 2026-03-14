@@ -813,7 +813,7 @@
             <!-- End:: Section-5 -->
 
             <!-- Start:: Section-4 -->
-            <section class="section landing-Features-two landing-Features border border-danger">
+            <!-- <section class="section landing-Features-two landing-Features border border-danger">
                 <div class="container text-center">
                     <h2 class="text-3xl font-bold mb-8 text-center text-white">Our Clients</h2>
                     <h4 class="fw-semibold mb-2 text-white">Client Reviews</h4>
@@ -852,7 +852,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> -->
             <!-- End:: Section-4 -->
 
 

@@ -131,8 +131,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
 
 
+    //bulk upload
+
+    Route::get('products/bulk-upload', [AdminProductController::class, 'bulkUploadForm'])
+    ->name('products.bulk-upload');
+
+    Route::post('products/bulk-upload', [AdminProductController::class, 'bulkUploadStore'])
+        ->name('products.bulk-upload.store');
+
+    Route::get('/products/download', [AdminProductController::class, 'downloadCSV'])->name('products.download');
+
+    Route::post('/products/upload', [AdminProductController::class, 'uploadCSV'])->name('products.upload');
+
+
     // Products management
     Route::resource('products', AdminProductController::class);
+
     Route::post('products/toggle-featured/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'toggleFeatured'])
         ->name('products.toggle-featured');
 
