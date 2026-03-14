@@ -9,9 +9,14 @@ use App\Models\User;
 use App\Models\Store;
 use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireLog;
+use App\Models\StoreManagerUpload;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\CartCheckout;
+
+
 
 class StoreDashboardController extends Controller
 {
@@ -160,12 +165,113 @@ class StoreDashboardController extends Controller
         ));
     }
 
-
-
     public function test()
     {
         return view('test.dashboard');
     }
+
+    public function checkouts()
+    {
+        // return view('store-manager.checkouts');
+
+        $managerId = Auth::id();
+        $orders = CartCheckout::where('store_manager_id', $managerId)
+                    ->latest()
+                    ->get();
+
+        return view('store-manager.checkouts', compact('orders'));
+
+
+    }
+    public function uploads()
+    {
+        $user = Auth::user(); // logged-in user
+        return view('store-manager.uploads', compact('user'));
+
+    }
+    
+    //downloadSample
+    public function StoreManagerdownloadSample()
+    {
+        $filename = "store_manager_sample.csv";
+
+        $headers = [
+            "invoice_no",
+            "customer_name",
+            "customer_mobile",
+            "product_name",
+            "product_price",
+            "date"
+        ];
+
+        $callback = function() use ($headers) {
+
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $headers);
+            fclose($file);
+
+        };
+
+        return response()->streamDownload($callback,$filename);
+    }
+    // Upload CSV
+    public function StoreManageruploadCSV(Request $request)
+    {
+        $file = $request->file('csv_file');
+        $data = array_map('str_getcsv', file($file));
+
+        unset($data[0]); // remove header
+
+        $user = Auth::user();
+
+        foreach ($data as $row) {
+            if(empty($row[0]) || empty($row[2])) {
+                continue;
+            }
+            $date = Carbon::createFromFormat('m/d/Y', $row[5])->format('Y-m-d');
+            StoreManagerUpload::create([
+                'store_manager_name' => $user->first_name.' '.$user->last_name,
+                'store_manager_id'   => $user->id,
+                'invoice_no'         => $row[0],
+                'customer_name'      => $row[1],
+                'customer_mobile'    => $row[2],
+                'product_name'       => $row[3],
+                'product_price'      => $row[4],
+                'date'               => $date
+            ]);
+        }
+
+        return redirect()->route('store-manager.uploads')
+            ->with('success','CSV Uploaded Successfully');
+    }
+
+
+
+    // Manual Entry
+    public function StoreManagerManualEntry(Request $request)
+    {
+
+
+        $user = Auth::user();
+
+        StoreManagerUpload::create([
+            'store_manager_name' => $user->first_name . ' ' . $user->last_name,
+            'store_manager_id' => $user->id,
+            'invoice_no' => $request->invoice_no,
+            'customer_name' => $request->customer_name,
+            'customer_mobile' => $request->customer_mobile,
+            'product_name' => $request->product_name,
+            'product_price' => $request->product_price,
+            'date' => Carbon::today()
+        ]);
+    
+        // return back()->with('success','Record Added Successfully');
+        return redirect()->route('store-manager.uploads')
+        ->with('success','Record Added Successfully');
+
+    }
+
+
    
 
 }

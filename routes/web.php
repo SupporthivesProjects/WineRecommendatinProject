@@ -230,6 +230,15 @@ Route::middleware(['auth'])->group(function () {
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
     Route::get('/dashboard', [StoreDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/checkouts', [StoreDashboardController::class, 'checkouts'])->name('checkouts');
+    Route::get('/uploads', [StoreDashboardController::class, 'uploads'])->name('uploads');
+    Route::get('/download-sample',[StoreDashboardController::class,'StoreManagerdownloadSample'])->name('uploads.download');
+    Route::post('/upload-csv',[StoreDashboardController::class,'StoreManageruploadCSV'])->name('uploads.upload');
+    Route::post('/manual-entry',[StoreDashboardController::class,'StoreManagerManualEntry'])->name('uploads.store');
+
+
+
+
     Route::get('/products', [StoreManagerProductController::class, 'index'])->name('products');
     Route::get('/products/{id}', [StoreManagerProductController::class, 'singleproduct'])->name('singleproduct');
     Route::get('/test', [StoreDashboardController::class, 'test'])->name('test');

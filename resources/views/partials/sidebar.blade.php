@@ -121,6 +121,18 @@
                                 <span class="side-menu__label">Cheese Products</span>
                             </a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('store-manager.checkouts') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-shopping-cart" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Checkouts</span>
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('store-manager.uploads') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-shopping-cart" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Uploads</span>
+                            </a>
+                        </li>
                     @elseif(Auth::user()->role === 'main_manager')
                         <!-- Main Manager sidebar links -->
                         <li class="slide">

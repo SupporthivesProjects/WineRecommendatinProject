@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireResponse;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserQuestionnaireResponse;
 use App\Models\ModalImage;
 use Illuminate\Support\Facades\DB;
@@ -958,14 +959,20 @@ class UserController extends Controller
         return response()->json(['cart' => $cart]);
     }
 
-
-
-
     public function checkout(Request $request)
     {
         $submissionId = $request->submission_id;
         $userId = auth()->id(); // Securely fetch user ID from session/auth
 
+        $user = auth()->user();
+
+        $manager = User::where('store_id', $user->store_id)
+                        ->where('role', 'store_manager')
+                        ->first();
+
+        $managerId = $manager ? $manager->id : null;
+
+        Log::info('Manager ID: ' . $managerId);
         Log::info('Checkout started for submission_id: ' . $submissionId);
         Log::info('Checkout started for user_id: ' . $userId);
 
@@ -1004,13 +1011,15 @@ class UserController extends Controller
 
         // Save the checkout
         $checkout = new CartCheckout();
-        $checkout->store_manager_id = $userId;
+        $checkout->user_id = $userId;
+        $checkout->store_manager_id = $managerId;
         $checkout->username = $username;
         $checkout->email = $email;
         $checkout->phone = $phone;
         $checkout->submission_id = $submissionId;
         $checkout->products = json_encode($cart);
 
+    
         $saved = $checkout->save();
         Log::info('Checkout saved: ' . ($saved ? 'yes' : 'no'));
 
