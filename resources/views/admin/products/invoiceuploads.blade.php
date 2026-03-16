@@ -14,11 +14,6 @@
                     <h2 class="main-content-title fs-24 mb-1">Welcome To Invoices Dashboard</h2>
                    
                 </div>
-                <div class="d-flex">
-                    <a href="{{ route('admin.products.index') }}" class="btn btn-wave btn-secondary my-2 btn-icon-text">
-                        <i class="fe fe-arrow-left me-2"></i> Back to List
-                    </a>
-                </div>
             </div>
             <!-- End::page-header -->
 
