@@ -3,6 +3,20 @@
     .side-menu__item:hover .side-menu__label {
         color: var(--primary-color) !important;
     }
+    .admin-scroll {
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+
+    .admin-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .admin-scroll::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 10px;
+    }
 </style>
 
 @if(Auth::check() && (
@@ -24,7 +38,8 @@
         <!-- End::main-sidebar-header -->
 
         <!-- Start::main-sidebar -->
-        <div class="main-sidebar mt-0" id="sidebar-scroll">
+        <!-- <div class="main-sidebar mt-0" id="sidebar-scroll"> -->
+        <div class="main-sidebar mt-0 {{ Auth::user()->role === 'admin' ? 'admin-scroll' : '' }}" id="sidebar-scroll">
             <nav class="main-menu-container nav nav-pills flex-column sub-open">
                 <div class="slide-left" id="slide-left">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
@@ -93,6 +108,12 @@
                             <a href="{{ route('admin.questionnaires.images') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-edit" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Questionnaire Images</span>
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.invoice.uploads') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Invoices</span>
                             </a>
                         </li>
                         <li class="slide">

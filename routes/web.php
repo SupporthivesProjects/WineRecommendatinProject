@@ -143,6 +143,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::post('/products/upload', [AdminProductController::class, 'uploadCSV'])->name('products.upload');
 
+    Route::get('/invoice-uploads', [AdminProductController::class, 'invoiceUploads'])->name('invoice.uploads');
+    Route::get(
+        '/invoice-details/{store_id}/{date}', [AdminProductController::class,'invoiceBundleDetails']);
+    
+    Route::post('/update-invoice-product', [AdminProductController::class,'updateInvoiceProduct']);
+
+
+
 
     // Products management
     Route::resource('products', AdminProductController::class);

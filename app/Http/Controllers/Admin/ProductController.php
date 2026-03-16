@@ -607,52 +607,141 @@ class ProductController extends Controller
         }
     }
 
+    public function invoiceUploads(Request $request)
+    {
+        $invoices = DB::table('store_manager_uploads')
+            ->join('users', 'store_manager_uploads.store_manager_id', '=', 'users.id')
+            ->join('stores', 'users.store_id', '=', 'stores.id')
+            ->select(
+                'stores.store_name',
+                'stores.id as store_id',
+                DB::raw('DATE(store_manager_uploads.created_at) as invoice_date'),
+                DB::raw('COUNT(store_manager_uploads.id) as total_invoices'),
+                DB::raw('SUM(store_manager_uploads.product_price) as total_amount')
+            )
+            ->groupBy(
+                'stores.store_name',
+                'stores.id',
+                DB::raw('DATE(store_manager_uploads.created_at)')
+            )
+            ->orderBy('invoice_date','desc')
+            ->get();
 
-    // public function uploadCSV(Request $request)
+        return view('admin.products.invoiceuploads', compact('invoices'));
+    }
+
+
+    // public function invoiceBundleDetails($store_id, $date)
     // {
-    //     $file = $request->file('csv_file');
+    //     $details = DB::table('store_manager_uploads')
+    //         ->join('users', 'store_manager_uploads.store_manager_id', '=', 'users.id')
+    //         ->where('users.store_id', $store_id)
+    //         ->whereDate('store_manager_uploads.created_at', $date)
+    //         ->select(
+    //             'store_manager_uploads.invoice_no',
+    //             'store_manager_uploads.customer_name',
+    //             'store_manager_uploads.customer_mobile',
+    //             'store_manager_uploads.product_name',
+    //             'store_manager_uploads.product_price',
+    //             'store_manager_uploads.store_manager_name'
+    //         )
+    //         ->get();
 
-    //     $handle = fopen($file->getRealPath(), "r");
-
-    //     $header = fgetcsv($handle); // get column names from CSV
-
-    //     while (($row = fgetcsv($handle)) !== false) {
-
-    //         $data = array_combine($header, $row);
-
-    //         DB::table('products')->insert($data);
-    //     }
-
-    //     fclose($handle);
-
-    //     return back()->with('success','Products added successfully');
+    //     return response()->json($details);
     // }
+    public function invoiceBundleDetails($store_id, $date)
+    {
+        $invoices = DB::table('store_manager_uploads')
+            ->join('users', 'store_manager_uploads.store_manager_id', '=', 'users.id')
+            ->where('users.store_id', $store_id)
+            ->whereDate('store_manager_uploads.created_at', $date)
+            ->select(
+                'store_manager_uploads.id',
+                'store_manager_uploads.invoice_no',
+                'store_manager_uploads.customer_name',
+                'store_manager_uploads.customer_mobile',
+                'store_manager_uploads.product_name',
+                'store_manager_uploads.product_price'
+            )
+            ->get();
 
-    // public function uploadCSV(Request $request)
-    // {
-    //     $file = $request->file('csv_file');
+        $products = DB::table('products')
+            ->select('wine_name')
+            ->get()
+            ->pluck('wine_name')
+            ->toArray();
 
-    //     $handle = fopen($file, "r");
+        $result = [];
 
-    //     DB::table('products')->truncate(); // replace table
+        foreach ($invoices as $invoice) {
 
-    //     $header = fgetcsv($handle);
+            $uploadedName = strtolower(str_replace(' ', '', $invoice->product_name));
 
-    //     while(($row = fgetcsv($handle)) !== false){
+            $exactMatch = null;
 
-    //         DB::table('products')->insert([
-    //             'name' => $row[0],
-    //             'price' => $row[1],
-    //             'category' => $row[2]
-    //         ]);
+            foreach ($products as $product) {
 
-    //     }
+                $dbName = strtolower(str_replace(' ', '', $product));
 
-    //     fclose($handle);
+                if ($uploadedName === $dbName) {
+                    $exactMatch = $product;
+                    break;
+                }
+            }
 
-    //     return back()->with('success','Products replaced successfully');
-    // }
+            $closestMatch = null;
 
+            if (!$exactMatch) {
 
+                $shortest = -1;
+
+                foreach ($products as $product) {
+
+                    $lev = levenshtein(
+                        strtolower($invoice->product_name),
+                        strtolower($product)
+                    );
+
+                    if ($lev == 0) {
+                        $closestMatch = $product;
+                        break;
+                    }
+
+                    if ($lev <= $shortest || $shortest < 0) {
+                        $closestMatch = $product;
+                        $shortest = $lev;
+                    }
+                }
+            }
+
+            $result[] = [
+                'id' => $invoice->id,
+                'invoice_no' => $invoice->invoice_no,
+                'customer_name' => $invoice->customer_name,
+                'customer_mobile' => $invoice->customer_mobile,
+                'product_name' => $invoice->product_name,
+                'product_price' => $invoice->product_price,
+                'exact_match' => $exactMatch,
+                'closest_match' => $closestMatch
+            ];
+        }
+
+        return response()->json($result);
+    }
+
+    
+
+    public function updateInvoiceProduct(Request $request)
+    {
+        DB::table('store_manager_uploads')
+            ->where('id', $request->invoice_id)
+            ->update([
+                'product_name' => $request->product_name
+            ]);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
 
 }
