@@ -20,6 +20,21 @@ class UploadApiController extends Controller
             ], 401);
         }
 
+        if (!$request->has('uploads')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Request body missing'
+            ], 400);
+        }
+
+        $uploads = $request->uploads;
+        if (!is_array($uploads) || count($uploads) == 0) {
+            return response()->json([
+                'status'=>false,
+                'message'=>'Uploads array required'
+            ],400);
+        }
+
 
         $data = $request->validate([
             'uploads' => 'required|array',
