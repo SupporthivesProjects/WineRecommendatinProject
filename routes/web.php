@@ -39,6 +39,11 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
+
+Route::get('/test-419', function () {
+    abort(419);
+});
+
 Route::get('/', function () {
     // Get 5 random featured products
     $featuredProducts = Product::where('admin_featured_product', true)
