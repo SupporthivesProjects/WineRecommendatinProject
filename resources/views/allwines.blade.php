@@ -351,11 +351,21 @@
 
                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                         <h4 class="fw-bold mb-3">Method</h4>
-                        @php
+                        <!-- @php
                             $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
                             $methods = $allProducts->pluck('Method')->unique()->sort()
                                 ->map(fn($m) => strtolower(trim($m)))
                                 ->filter(fn($m) => in_array($m, $allowedMethods))
+                                ->values();
+                        @endphp -->
+                        @php
+                            $allowedMethods = ['still', 'semi sparkling', 'sparkling'];
+
+                            $methods = $allProducts->pluck('Method')
+                                ->map(fn($m) => strtolower(trim($m)))   // normalize first
+                                ->filter(fn($m) => in_array($m, $allowedMethods))
+                                ->unique()                              // then remove duplicates
+                                ->sort()
                                 ->values();
                         @endphp
                         @foreach ($methods as $method)
