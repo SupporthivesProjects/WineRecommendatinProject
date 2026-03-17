@@ -262,17 +262,17 @@
 
                                 <div class="mb-4">
                                     <h5><i class="fas fa-map-marker-alt mr-2"></i> Our Location</h5>
-                                    <p class="ml-4">123 Wine Valley Road, Napa, CA 94558</p>
+                                    <p class="ml-4">TBA</p>
                                 </div>
 
                                 <div class="mb-4">
                                     <h5><i class="fas fa-phone-alt mr-2"></i> Phone</h5>
-                                    <p class="ml-4">+1 (555) 123-4567</p>
+                                    <p class="ml-4">TBA</p>
                                 </div>
 
                                 <div class="mb-4">
                                     <h5><i class="fas fa-envelope mr-2"></i> Email</h5>
-                                    <p class="ml-4">info@winecellar.com</p>
+                                    <p class="ml-4">rachit@techsomm.in</p>
                                 </div>
 
                                 <div class="mt-4">
