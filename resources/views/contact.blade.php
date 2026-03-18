@@ -262,12 +262,13 @@
 
                                 <div class="mb-4">
                                     <h5><i class="fas fa-map-marker-alt mr-2"></i> Our Location</h5>
-                                    <p class="ml-4">TBA</p>
+                                    <p class="ml-4">B-22 Shri Guru Krupa Society, Rambaug Lane 4, <br>Kalyan (W) 
+                                    421301.</p>
                                 </div>
 
                                 <div class="mb-4">
                                     <h5><i class="fas fa-phone-alt mr-2"></i> Phone</h5>
-                                    <p class="ml-4">TBA</p>
+                                    <p class="ml-4">+91 9619359783</p>
                                 </div>
 
                                 <div class="mb-4">
