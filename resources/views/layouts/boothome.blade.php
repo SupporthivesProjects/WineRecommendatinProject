@@ -212,6 +212,18 @@
         #Moments .owl-theme:before, #Moments .owl-theme:after {
             content: none;
         }
+
+        .disabled-page {
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        /* Keep modal interactive even when page is disabled */
+        .modal {
+            pointer-events: auto !important;
+        }
+
     </style>
 
     <!-- Scripts -->
@@ -712,7 +724,7 @@
                         <div class="text-center mt-12">
                             <a href="{{ route('homeBrowseWines') }}"
                                 class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
-                                View All Wines
+                                View All Winess
                             </a>
                         </div>
                     @else
@@ -958,6 +970,77 @@
             <!-- End:: Section-7 -->
         </div>
         <!-- End::app-content -->
+
+        <!-- Age Verification Modal -->
+        <!-- Premium Wine-Themed Age Verification Modal (Enhanced) -->
+        <div class="modal fade" id="ageModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" 
+                    style="background: linear-gradient(135deg, #0f0a0c, #2a0d14, #3b0f1a); color: #f8f5f2; border-radius: 20px;">
+
+                <div class="modal-body text-center p-5">
+
+                    <!-- Brand / Title -->
+                    <h1 class="mb-3" style="font-weight: 700; letter-spacing: 1.5px; font-size: 2.6rem;">
+                    Welcome
+                    </h1>
+
+                    <p class="mb-4" style="opacity: 0.75; font-size: 0.95rem;">
+                    This experience is reserved for those of refined age.
+                    </p>
+
+                    <!-- Question -->
+                    <h5 class="mb-4" style="font-weight: 500;">
+                    Are you of legal drinking age?
+                    </h5>
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+
+                    <button id="yesBtn" 
+                        class="btn px-4 py-2"
+                        style="
+                        background: linear-gradient(135deg, #7b1e3a, #a8324a);
+                        color: #fff;
+                        border: none;
+                        border-radius: 30px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        "
+                        onmouseover="this.style.transform='scale(1.05)'"
+                        onmouseout="this.style.transform='scale(1)'">
+                        Yes, I am
+                    </button>
+
+                    <button id="noBtn" 
+                        class="btn px-4 py-2"
+                        style="
+                        background: transparent;
+                        color: #d6cfc7;
+                        border: 1px solid rgba(255,255,255,0.2);
+                        border-radius: 30px;
+                        font-weight: 500;
+                        transition: all 0.3s ease;
+                        "
+                        onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                        onmouseout="this.style.background='transparent'">
+                        Not yet
+                    </button>
+
+                    </div>
+
+                    <!-- Message -->
+                    <div id="noMessage" class="mt-4 d-none" style="color: #e0b4b4; font-size: 0.9rem;">
+                    A fine vintage is best appreciated with time.<br>
+                    We’ll be here when you’re ready 🍷
+                    </div>
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
         <!-- Start:: Section-11 -->
@@ -1281,6 +1364,57 @@
         });
 
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const modalEl = document.getElementById('ageModal');
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const noMessage = document.getElementById("noMessage");
+
+        const status = sessionStorage.getItem("ageVerified");
+        console.log("Status:", status);
+
+        const ageModal = new bootstrap.Modal(modalEl);
+
+        // ✅ CASE 1: User already accepted
+        if (status === "true") {
+            return;
+        }
+
+        // ❌ CASE 2: User already rejected
+        if (status === "false") {
+            ageModal.show();
+
+            noMessage.classList.remove("d-none");
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+
+            document.body.classList.add("disabled-page");
+            return;
+        }
+
+        // 🆕 CASE 3: First-time user
+        ageModal.show();
+
+        yesBtn.addEventListener("click", function () {
+            sessionStorage.setItem("ageVerified", "true");
+            ageModal.hide();
+        });
+
+        noBtn.addEventListener("click", function () {
+            sessionStorage.setItem("ageVerified", "false");
+
+            noMessage.classList.remove("d-none");
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+
+            document.body.classList.add("disabled-page");
+        });
+
+        });
+    </script>
+
 
 </body>
 
