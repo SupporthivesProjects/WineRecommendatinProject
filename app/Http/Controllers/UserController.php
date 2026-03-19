@@ -909,6 +909,9 @@ class UserController extends Controller
         $productName = $request->input('product_name');
         $productPrice = $request->input('product_price');
 
+        // ✅ Fetch product from DB
+        $product = Product::find($productId);
+
         // Check if product already in cart by id
         $foundIndex = null;
         foreach ($cart as $index => $item) {
@@ -924,6 +927,7 @@ class UserController extends Controller
                 'id' => $productId,
                 'name' => $productName,
                 'retail_price' => $productPrice,
+                'image' => $product->image1,
                 'quantity' => 1  // Optional: add quantity if needed
             ];
         } else {

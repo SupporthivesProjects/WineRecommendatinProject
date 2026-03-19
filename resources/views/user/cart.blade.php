@@ -240,6 +240,7 @@
         }
 
         function displayCartItems(cartItems) {
+            console.log(cartItems);
             const container = document.getElementById('cart-items-container');
 
             if (cartItems.length === 0) {
@@ -253,8 +254,13 @@
                 <div class="cart-item" data-product-id="${item.id}">
                     <div class="row align-items-center">
                         <div class="col-md-2">
-                            <img src="${item.image || '{{ asset('images/default.jpg') }}'}" 
-                                 alt="${item.name}" class="img-fluid">
+                            
+                            
+                            <img src="${item.image 
+                                ? '/storage/' + item.image 
+                                : '/images/default.jpg'}"
+                                alt="${item.name}" class="img-fluid">
+                            
                         </div>
                         <div class="col-md-4">
                             <h5 class="mb-1">${item.name || 'Wine Product'}</h5>

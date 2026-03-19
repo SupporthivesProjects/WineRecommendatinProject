@@ -244,7 +244,7 @@ Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'sto
     Route::get('/download-sample',[StoreDashboardController::class,'StoreManagerdownloadSample'])->name('uploads.download');
     Route::post('/upload-csv',[StoreDashboardController::class,'StoreManageruploadCSV'])->name('uploads.upload');
     Route::post('/manual-entry',[StoreDashboardController::class,'StoreManagerManualEntry'])->name('uploads.store');
-
+    Route::post('/uploads/update/{id}', [StoreDashboardController::class, 'update']);
 
 
 

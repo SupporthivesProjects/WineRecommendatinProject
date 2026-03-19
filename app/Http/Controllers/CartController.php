@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
     public function index()
     {
+        
         return view('user.cart');
     }
 
@@ -17,7 +19,11 @@ class CartController extends Controller
         $productId = $request->input('product_id');
         $productName = $request->input('product_name');
         $productPrice = $request->input('product_price');
-        
+
+        // ✅ Fetch product from DB
+        $product = Product::find($productId);
+
+    
         $cart = Session::get('cart', []);
         
         // Check if product already exists in cart
@@ -38,6 +44,7 @@ class CartController extends Controller
                 'id' => $productId,
                 'name' => $productName,
                 'retail_price' => $productPrice,
+                'image' => $product->image1,
                 'quantity' => 1
             ];
         }

@@ -186,7 +186,13 @@ class StoreDashboardController extends Controller
     public function uploads()
     {
         $user = Auth::user(); // logged-in user
-        return view('store-manager.uploads', compact('user'));
+        // return view('store-manager.uploads', compact('user'));
+        
+        $records = StoreManagerUpload::where('store_manager_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+        return view('store-manager.uploads', compact('user', 'records'));
 
     }
     
@@ -269,6 +275,28 @@ class StoreDashboardController extends Controller
         return redirect()->route('store-manager.uploads')
         ->with('success','Record Added Successfully');
 
+    }
+    public function update(Request $request, $id)
+    {
+        $record = StoreManagerUpload::findOrFail($id);
+
+        // 48 hour restriction (IMPORTANT - backend safety)
+        if ($record->created_at < now()->subHours(48)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Edit window expired'
+            ], 403);
+        }
+
+        $record->update([
+            'invoice_no' => $request->invoice_no,
+            'customer_name' => $request->customer_name,
+            'customer_mobile' => $request->customer_mobile,
+            'product_name' => $request->product_name,
+            'product_price' => $request->product_price,
+        ]);
+
+        return response()->json(['success' => true]);
     }
 
 
