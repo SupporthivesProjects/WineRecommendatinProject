@@ -69,7 +69,7 @@
                                             @foreach($orders as $key => $order)
 
                                             @php
-                                                $products = json_decode($order->products, true);
+                                                $products = $order->products;
                                                 $total = 0;
 
                                                 foreach($products as $p){
@@ -124,6 +124,7 @@
                             <thead>
                                 <tr>
                                     <th>Sr.No</th>
+                                    <th>Image</th>
                                     <th>Product</th>
                                     <th>Qty</th>
                                     <th>Price</th>
@@ -171,9 +172,17 @@
                 let rowTotal = p.retail_price * p.quantity;
                 total += rowTotal;
 
+                let image = p.image 
+                ? p.image 
+                : '/default.png';
+
+
                 html += `
                 <tr>
                     <td>${index+1}</td>
+                     <td>
+                        <img src="${image}" width="50" class="me-2"/>
+                    </td>
                     <td>${p.name}</td>
                     <td>${p.quantity}</td>
                     <td>₹${p.retail_price}</td>
@@ -226,73 +235,6 @@
                     toastr.error(`Unexpected error for product ${action}.`);
                 });
             }
-
-            // Handle 'available' checkbox change
-            document.querySelectorAll('input[name="available[]"]').forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
-                    const productId = this.value;
-                    const status = this.checked ? 'active' : 'inactive';
-
-                    // If unchecking 'available' and 'featured' is still checked, show warning and revert change
-                    const featuredCheckbox = document.querySelector(`input[name="featured[]"][value="${productId}"]`);
-                    if (!this.checked && featuredCheckbox && featuredCheckbox.checked) {
-                        toastr.warning('You cannot make the product unavailable while it is featured.');
-                        this.checked = true; // Revert 'available' checkbox to checked
-                        return; // Exit function
-                    }
-
-                    // Update status for availability
-                    fetch(`/store-manager/products/update-status`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ product_id: productId, status: status })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json(); // Parse the JSON body
-                    })
-                    .then(data => {
-                        toastr.success(data.message || 'Product status updated successfully');
-                    })
-                    .catch(error => {
-                        console.error('Error updating product status:', error);
-                        toastr.error('Failed to update product status');
-                    });
-                });
-            });
-
-            // Handle 'featured' checkbox change
-            document.querySelectorAll('input[name="featured[]"]').forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
-                    const productId = this.value;
-
-                    // If 'available' is unchecked, show warning and prevent checking 'featured'
-                    const availableCheckbox = document.querySelector(`input[name="available[]"][value="${productId}"]`);
-                    if (this.checked && !availableCheckbox.checked) {
-                        toastr.warning('Product must be available before featuring.');
-                        this.checked = false; // Revert 'featured' checkbox to unchecked
-                        return; // Exit function
-                    }
-
-                    const is_featured = this.checked ? 1 : 0;
-
-                    // Update featured status for the product
-                    fetch(`/store-manager/products/update-featured`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ product_id: productId, is_featured: is_featured })
-                    }).then(response => showToastr(response, 'featured flag'))
-                    .catch(() => toastr.error('Something went wrong.'));
-                });
-            });
         });
     </script>
 
