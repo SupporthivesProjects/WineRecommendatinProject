@@ -724,7 +724,7 @@
                         <div class="text-center mt-12">
                             <a href="{{ route('homeBrowseWines') }}"
                                 class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
-                                View All Winess
+                                View All Wines
                             </a>
                         </div>
                     @else
