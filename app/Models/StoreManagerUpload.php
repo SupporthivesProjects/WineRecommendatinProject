@@ -16,6 +16,7 @@ class StoreManagerUpload extends Model
         'customer_mobile',
         'product_name',
         'product_price',
+        'type',
         'date'
     ];
 

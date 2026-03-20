@@ -59,6 +59,7 @@ class UploadApiController extends Controller
                 'customer_mobile' => $upload['customer_mobile'],
                 'product_name' => $upload['product_name'],
                 'product_price' => $upload['product_price'],
+                'type'=>"API",
                 'created_at' => now(),
                 'updated_at' => now()
             ];

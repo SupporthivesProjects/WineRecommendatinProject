@@ -271,6 +271,7 @@ class StoreDashboardController extends Controller
                 'customer_mobile'    => $row[2],
                 'product_name'       => $row[3],
                 'product_price'      => $row[4],
+                'type'=> 'CSV',
                 'date'               => $date
             ]);
         }
@@ -296,6 +297,7 @@ class StoreDashboardController extends Controller
             'customer_mobile' => $request->customer_mobile,
             'product_name' => $request->product_name,
             'product_price' => $request->product_price,
+            'type'=> 'manual',
             'date' => Carbon::today()
         ]);
     
