@@ -76,7 +76,7 @@ class ContactController extends Controller
             Mail::to($contact->email)->send(new ContactAcknowledgment($contact));
             
             // Send notification to support team
-            Mail::to($supportEmail)->send(new ContactFormSubmitted($contact));
+            //Mail::to($supportEmail)->send(new ContactFormSubmitted($contact));
             
             // Increment the rate limiter
             RateLimiter::hit('contact-form:'.$ip, $this->decayMinutes * 60);
