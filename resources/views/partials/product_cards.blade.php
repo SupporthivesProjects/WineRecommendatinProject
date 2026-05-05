@@ -63,7 +63,7 @@
             <div class="card custom-card wine-card position-relative">
                 <div class="image-wrapper" style="position: relative;">
                     <img src="{{ asset('storage/' . $product->image1) }}"
-                        class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                        class="card-img-top rounded-0" alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
                     @if($product->admin_featured_product)
                         <span class="featured-badge">

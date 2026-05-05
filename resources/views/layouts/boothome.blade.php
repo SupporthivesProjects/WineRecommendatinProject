@@ -669,7 +669,7 @@
                                             <div class="flex-grow overflow-hidden relative">
                                                 <img src="{{ asset('storage/' . $product->image1) }}"
                                                     class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                                                    alt="{{ $product->wine_name }}">
+                                                    alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
                                                 @if ($product->is_featured == 1)
                                                     <span class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
