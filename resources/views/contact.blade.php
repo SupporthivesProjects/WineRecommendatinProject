@@ -244,6 +244,15 @@
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
+                                        <script src="https://hcaptcha.com/1/api.js" async defer></script>
+                                        <div class="mb-4 text-center">
+                                            <div class="h-captcha" data-sitekey="{{ env('HCAPTCHA_SITE_KEY') }}"></div>
+
+                                            @error('h-captcha-response')
+                                                <div class="text-danger mt-2">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
 
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary btn-lg">
