@@ -583,39 +583,52 @@
                                         <input type="text" class="form-control" name="wine_name" id="wine_name"
                                             value="{{ old('wine_name', $product->wine_name) }}" required>
                                     </div>
+                                    @php 
+                                        $selectedType = strtolower(old('type', $product->type)); 
+                                    @endphp
 
                                     <div class="col-md-6">
                                         <label for="type" class="form-label">Type</label>
                                         <select class="form-select" name="type" id="type">
                                             <option value="">Select Type</option>
-                                            <option value="red" {{ old('type', $product->type) == 'red' ? 'selected' : '' }}>Red Wine</option>
-                                            <option value="white" {{ old('type', $product->type) == 'white' ? 'selected' : '' }}>White Wine</option>
-                                            <option value="rose" {{ old('type', $product->type) == 'rose' ? 'selected' : '' }}>Rosé</option>
-                                            <option value="sparkling" {{ old('type', $product->type) == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
+                                            <option value="red" {{ $selectedType == 'red' ? 'selected' : '' }}>Red Wine</option>
+                                            <option value="white" {{ $selectedType == 'white' ? 'selected' : '' }}>White Wine</option>
+                                            <option value="rosé" {{ $selectedType == 'rose' ? 'selected' : '' }}>Rosé</option>
+                                            <option value="sparkling" {{ $selectedType == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
                                         </select>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="sp_mentions" class="form-label">Special Mentions</label>
+                                        @php
+                                            $selectedMention = strtolower(old('sp_mentions', $product->sp_mentions ?? ''));
+                    
+                                        @endphp
+
                                         <select class="form-select" name="sp_mentions" id="sp_mentions">
                                             <option value="">Select</option>
-                                            <option value="fortified" {{ old('sp_mentions', $product->sp_mentions) == 'fortified' ? 'selected' : '' }}>Fortified</option>
-                                            <option value="port" {{ old('sp_mentions', $product->sp_mentions) == 'port' ? 'selected' : '' }}>Port</option>
-                                            <option value="marsala" {{ old('sp_mentions', $product->sp_mentions) == 'marsala' ? 'selected' : '' }}>Marsala</option>
-                                            <option value="sherry" {{ old('sp_mentions', $product->sp_mentions) == 'sherry' ? 'selected' : '' }}>Sherry</option>
-                                            <option value="orange" {{ old('sp_mentions', $product->sp_mentions) == 'orange' ? 'selected' : '' }}>Orange</option>
-                                            <option value="fruit" {{ old('sp_mentions', $product->sp_mentions) == 'fruit' ? 'selected' : '' }}>Fruit</option>
+                                            <option value="fortified" {{ $selectedMention == 'fortified' ? 'selected' : '' }}>Fortified</option>
+                                            <option value="port" {{ $selectedMention == 'port' ? 'selected' : '' }}>Port</option>
+                                            <option value="marsala" {{ $selectedMention == 'marsala' ? 'selected' : '' }}>Marsala</option>
+                                            <option value="sherry" {{ $selectedMention == 'sherry' ? 'selected' : '' }}>Sherry</option>
+                                            <option value="orange" {{ $selectedMention == 'orange' ? 'selected' : '' }}>Orange</option>
+                                            <option value="fruit" {{ $selectedMention == 'fruit' ? 'selected' : '' }}>Fruit</option>
+                                            <option value="NA" {{ $selectedMention == 'na' ? 'selected' : '' }}>NA</option>
                                         </select>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="method" class="form-label">Method</label>
+                                        @php
+                                            $selectedMethod = strtolower(old('method', $product->Method ?? ''));
+                                        @endphp
+
                                         <select class="form-select" name="method" id="method">
                                             <option value="">Select Method</option>
-                                            <option value="still" {{ old('method', $product->Method) == 'still' ? 'selected' : '' }}>Still</option>
-                                            <option value="sparkling" {{ old('method', $product->Method) == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
-                                            <option value="semi sparkling" {{ old('method', $product->Method) == 'semi sparkling' ? 'selected' : '' }}>Semi Sparkling</option>
-                                            <option value="fortified" {{ old('method', $product->Method) == 'fortified' ? 'selected' : '' }}>Fortified</option>
+                                            <option value="still" {{ $selectedMethod == 'still' ? 'selected' : '' }}>Still</option>
+                                            <option value="sparkling" {{ $selectedMethod == 'sparkling' ? 'selected' : '' }}>Sparkling</option>
+                                            <option value="semi sparkling" {{ $selectedMethod == 'semi sparkling' ? 'selected' : '' }}>Semi Sparkling</option>
+                                            <option value="fortified" {{ $selectedMethod == 'fortified' ? 'selected' : '' }}>Fortified</option>
                                         </select>
                                     </div>
 
