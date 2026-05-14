@@ -187,7 +187,7 @@ class UserController extends Controller
             ->whereIn('id', $storeProducts->pluck('product_id'));
 
         // Apply pagination after applying map
-        $products = $productsQuery->paginate(6);
+        $products = $productsQuery->paginate(9);
 
         // Map the 'is_featured' value from store_products to each product
         $products->getCollection()->transform(function ($product) use ($storeProducts) {

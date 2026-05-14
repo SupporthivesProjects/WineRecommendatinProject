@@ -41,6 +41,27 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}"></script>
 
+    <style>
+        /* ONLY for kiosk screens like 720x1248 */
+        @media screen and (min-width: 700px) and (max-width: 800px)
+            and (min-height: 1100px) and (max-height: 1300px) {
+
+            html,
+            body {
+                min-height: 100vh;
+            }
+
+            .min-h-screen {
+                min-height: 100vh !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                
+            }
+        }
+    </style>
+
 
 </head>
 

@@ -81,7 +81,7 @@
                                                 $isFeatured = $isAvailable && $storeProducts[$product->id]->is_featured;
                                             @endphp
                                                 <tr>
-                                                    <td>#{{ $product->id }}</td>
+                                                    <td>{{ $product->id }}</td>
                                                     <td class="d-flex align-items-center">
                                                         <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
                                                         <span class="my-auto text-truncate">{{ $product->wine_name }}</span>

@@ -408,16 +408,15 @@
         {
             .video-section {
                 position: relative;
-                min-height: 300px; /* adjust as needed */
+                min-height: 300px; 
                 overflow: hidden;
                 padding: 2rem 1rem;
-                background-color: #000; /* fallback in case video doesn't load */
+                background-color: #000; 
             }
 
+            
             .bg-video {
                 position: absolute;
-                top: 0;
-                left: 0;
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
@@ -538,7 +537,7 @@
                 </nav>
 
                 <!-- Centered Text on Landing Image -->
-                <div class="d-flex justify-content-end align-items-center text-end text-white" style="height: 100vh; padding-right: 50px;">
+                <div class="d-flex justify-content-end align-items-center text-end text-white videotext" style="height: 100vh; padding-right: 50px;">
                     <div>
                         <h1 class="display-3 fw-bold" style="color: #dacea1;">
                             Discover the Wine That <br>

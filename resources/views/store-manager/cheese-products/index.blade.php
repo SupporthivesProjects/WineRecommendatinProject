@@ -50,7 +50,7 @@
                             @endif
 
                             <div class="table-responsive">
-                                <table class="table table-vcenter border mb-0 text-nowrap">
+                                <table class="table table-vcenter border mb-0 text-nowrap" id="storemanagercheesetable">
                                     <thead>
                                         <tr>
                                             <th>Product</th>
@@ -151,6 +151,19 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
+            $('#storemanagercheesetable').DataTable({
+                paging: false,
+                info: false,
+                ordering: false,
+                responsive: true,
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search cheese products..."
+                }
+            });
+
+
             // Handle 'available' checkbox change
             document.querySelectorAll('.available-checkbox').forEach(function (checkbox) {
                 checkbox.addEventListener('change', function () {

@@ -67,7 +67,7 @@
 
                     @if($product->admin_featured_product)
                         <span class="featured-badge">
-                            <i class="fas fa-star"></i> Featured
+                            <i class="fas fa-crown"></i>
                         </span>
                     @endif
                 </div>

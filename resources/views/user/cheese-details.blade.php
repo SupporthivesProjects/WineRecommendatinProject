@@ -47,20 +47,105 @@
                 border-bottom: none;
             }
 
-            /* Slick Carousel Styles */
-            .wine-carousel .slick-slide {
-                padding: 0 10px;
+          /* Slick Carousel Styles */
+        .wine-carousel .slick-slide {
+            padding: 0 10px;
+        }
+
+        .wine-carousel .slick-prev,
+        .wine-carousel .slick-next {
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+        }
+
+        .wine-carousel .slick-prev {
+            left: 10px;
+        }
+
+        .wine-carousel .slick-next {
+            right: 10px;
+        }
+
+        .wine-carousel .slick-prev:before,
+        .wine-carousel .slick-next:before {
+            font-size: 40px;
+            color: #000;
+        }
+            
+
+
+            /* Wine image container */
+            .wine-image-wrapper {
+                height: 240px;
+                padding: 20px;
+                background: white;
+                border-radius: 12px 12px 0 0;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
-            .wine-carousel .slick-prev:before,
-            .wine-carousel .slick-next:before {
-                color: #000;
+
+            /* Wine image */
+            .wine-card-image {
+                max-height: 100%;
+                max-width: 100%;
+                object-fit: contain;
             }
-            .wine-carousel .slick-prev {
-                left: -25px;
+
+            /* Better card styling */
+            .wine-carousel .card {
+                border: none;
+                border-radius: 12px;
+                overflow: hidden;
+                transition: 0.3s ease;
             }
-            .wine-carousel .slick-next {
-                right: -15px;
+
+            .wine-carousel .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
             }
+
+            /* Equal height cards */
+            .wine-carousel .card {
+                height: 100%;
+                border: none;
+                border-radius: 12px;
+                overflow: hidden;
+                transition: 0.3s ease;
+
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Hover effect */
+            .wine-carousel .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            }
+
+            /* Card body layout */
+            .wine-carousel .card-body {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+            }
+
+            /* Wine title fixed space */
+            .wine-carousel .card-title {
+                min-height: 72px;
+                font-size: 1.1rem;
+                line-height: 1.4;
+            }
+
+            /* Push bottom section downward */
+            .wine-carousel .card-body .d-flex {
+                margin-top: auto;
+            }
+
+
+
         </style>
         <!-- Slick Carousel CSS -->
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -149,9 +234,11 @@
                         @foreach ($pairedWines as $wine)
                             <div class="col-md-3 mb-4">
                                 <div class="card h-100">
-                                        <img src="{{ asset('storage/' . $wine->image1) }}"
-                                            class="card-img-top" alt="{{ $wine->wine_name }}"
-                                            style="height: 200px; object-fit: contain;">
+                                <div class="wine-image-wrapper">
+                                    <img src="{{ asset('storage/' . $wine->image1) }}"
+                                        class="wine-card-image"
+                                        alt="{{ $wine->wine_name }}">
+                                </div>
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $wine->wine_name }}</h5>
                                         <p class="card-text text-muted small">
@@ -186,13 +273,15 @@
             // Initialize Slick Carousel if there are more than 4 wines
             if ($('.wine-carousel').length > 0) {
                 $('.wine-carousel').slick({
-                    dots: true,
+                    dots: false,
+                    arrows: true,
                     infinite: true,
-                    speed: 300,
                     slidesToShow: 4,
                     slidesToScroll: 1,
                     autoplay: true,
-                    autoplaySpeed: 3000,
+                    autoplaySpeed: 0,
+                    speed: 8000,
+                    cssEase: 'linear',
                     responsive: [
                         {
                             breakpoint: 1024,
@@ -200,7 +289,7 @@
                                 slidesToShow: 3,
                                 slidesToScroll: 1,
                                 infinite: true,
-                                dots: true
+                                dots: false
                             }
                         },
                         {

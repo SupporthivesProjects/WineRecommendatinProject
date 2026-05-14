@@ -314,7 +314,9 @@
 
                                         <!-- Featured badge on the image -->
                                         @if ($product->admin_featured_product == 1)
-                                            <span class="featured-badge">Featured</span>
+                                            <span class="featured-badge">
+                                                <i class="fas fa-crown"></i>
+                                            </span>
                                         @endif
                                     </div>
 
