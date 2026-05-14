@@ -104,9 +104,9 @@
                                                 $discountedPrice = $product->retail_price - $discountAmount;
                                             @endphp
                                             <span class="text-muted me-2"><del>₹{{ number_format($product->retail_price, 2) }} INR</del></span>
-                                            <b>₹{{ number_format($discountedPrice, 2) }} INR</b>
+                                            <b>₹&nhsp;{{ number_format($discountedPrice, 2) }} INR</b>
                                         @else
-                                            <b>₹{{ number_format($product->retail_price, 2) }} INR</b>
+                                            <b>₹&nhsp;{{ number_format($product->retail_price, 2) }} INR</b>
                                         @endif
 
                                     </h5>

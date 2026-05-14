@@ -195,11 +195,11 @@
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <span>Subtotal:</span>
-                        <span id="subtotal">₹ 0.00</span>
+                        <span id="subtotal">₹&nhsp; 0.00</span>
                     </div>
                     <div class="d-flex justify-content-between mb-4 fw-bold" >
                         <span>Total:</span>
-                        <span id="total-amount">₹ 0.00</span>
+                        <span id="total-amount">₹ &nhsp;0.00</span>
                     </div>
                     <button class="checkout-btn" id="checkout-btn">
                         Let's Checkout
@@ -263,7 +263,7 @@
                         </div>
                         <div class="col-md-4">
                             <h5 class="mb-1">${item.name || 'Wine Product'}</h5>
-                            <p class="text-muted mb-0">Price: ₹ ${parseFloat(item.retail_price || 0).toFixed(2)}</p>
+                            <p class="text-muted mb-0">Price: ₹&nhsp; ${parseFloat(item.retail_price || 0).toFixed(2)}</p>
                         </div>
                         <div class="col-md-3">
                             <div class="quantity-controls">
@@ -278,7 +278,7 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <p class="fw-bold mb-0">₹ ${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                            <p class="fw-bold mb-0">&nhsp; ${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
                         </div>
                         <div class="col-md-1">
                             <button class="remove-btn" onclick="removeFromCart(${item.id})">

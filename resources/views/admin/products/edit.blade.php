@@ -768,7 +768,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="retail_price" class="form-label">Retail Price (₹)</label>
+                                        <label for="retail_price" class="form-label">Retail Price (₹)&nhsp;</label>
                                         <input type="number" step="0.01" class="form-control" name="retail_price" id="retail_price"
                                             value="{{ old('retail_price', $product->retail_price) }}">
                                     </div>

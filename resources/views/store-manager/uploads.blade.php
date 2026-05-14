@@ -135,7 +135,7 @@
                                             <td>{{ $row->customer_name }}</td>
                                             <td>{{ $row->customer_mobile }}</td>
                                             <td>{{ $row->product_name }}</td>
-                                            <td>₹{{ number_format($row->product_price,2) }}</td>
+                                            <td>₹&nhsp;{{ number_format($row->product_price,2) }}</td>
                                             <td>{{ $row->created_at->format('d M Y H:i') }}</td>
 
                                             <td>

@@ -246,7 +246,7 @@
                                             {{ $wine->vintage_year }} • {{ $wine->wine_sub_region }}
                                         </p>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="h6 mb-0">${{ number_format($wine->retail_price, 2) }}</span>
+                                            <span class="h6 mb-0">₹&nhsp;{{ number_format($wine->retail_price, 2) }}</span>
                                             <a href="{{ route('products.show', $wine->id) }}"
                                                 class="btn btn-sm btn-outline-dark">
                                                 View
