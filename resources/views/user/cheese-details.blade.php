@@ -279,9 +279,11 @@
                     slidesToShow: 4,
                     slidesToScroll: 1,
                     autoplay: true,
-                    autoplaySpeed: 0,
-                    speed: 8000,
-                    cssEase: 'linear',
+                    autoplaySpeed: 2500,
+                    speed: 1200,
+                    cssEase: 'ease',
+                    pauseOnHover: true,
+                    pauseOnFocus: true,
                     responsive: [
                         {
                             breakpoint: 1024,
