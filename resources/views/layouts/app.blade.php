@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta property="og:title" content="TechSomm">
+    <meta property="og:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
+    <meta property="og:image" content="{{ asset('images/links/share_preview.jpg') }}">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TechSomm">
+    <meta name="twitter:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
+    <meta name="twitter:image" content="{{ asset('images/share-preview.jpg') }}">
+
+
+
+
     <title>{{ config('app.name', 'Wine Recommender') }}</title>
 
     <!-- Basic CSS -->
