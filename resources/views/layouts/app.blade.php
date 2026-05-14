@@ -8,7 +8,7 @@
 
     <meta property="og:title" content="TechSomm">
     <meta property="og:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
-    <meta property="og:image" content="{{ asset('images/links/share_preview.jpg') }}">
+    <meta property="og:image" content="{{ asset('images/links/share_preview.png') }}">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:type" content="website">
 
