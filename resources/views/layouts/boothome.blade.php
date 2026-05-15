@@ -12,6 +12,19 @@
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
 
+    <meta property="og:title" content="TechSomm">
+    <meta property="og:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
+    <meta property="og:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.png">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TechSomm">
+    <meta name="twitter:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
+    <meta name="twitter:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.png">
+
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/wine_store_favicon.ico') }}" type="image/x-icon">
     <!-- Bootstrap Css -->

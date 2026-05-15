@@ -8,7 +8,7 @@
 
     <meta property="og:title" content="TechSomm">
     <meta property="og:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
-    <meta property="og:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.png">>
+    <meta property="og:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.png">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:type" content="website">
     <meta property="og:image:width" content="1200">
@@ -17,7 +17,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="TechSomm">
     <meta name="twitter:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
-    <meta name="twitter:image" content="{{ asset('images/share-preview.jpg') }}">
+    <meta name="twitter:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.png">
 
 
 
