@@ -9,8 +9,9 @@
     <meta property="og:title" content="TechSomm">
     <meta property="og:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
     <meta property="og:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.png">
-    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:url" content="https://app.wine.supporthives.com/">
     <meta property="og:type" content="website">
+
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
