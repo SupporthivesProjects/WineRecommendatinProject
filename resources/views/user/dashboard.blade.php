@@ -488,6 +488,13 @@
             color: white !important;
         }
 
+        @media screen and (min-width: 700px) and (max-width: 900px){
+            .navbar-brand .mobile-logo{
+                height:90px !important;
+                width:auto !important;
+            }
+        }
+
     </style>
 
 @endpush
@@ -497,7 +504,7 @@
                 <!-- Navbar (stays on top of landing image) -->
                 <nav id="mainNavbar" class="navbar navbar-expand-lg ">
                     <div class="container ">
-                        <a class="navbar-brand text-white" href="#">
+                        <!-- <a class="navbar-brand text-white" href="#">
                             <lottie-player 
                                 src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
                                 background="transparent" 
@@ -506,6 +513,9 @@
                                 loop 
                                 autoplay>
                             </lottie-player>
+                        </a> -->
+                        <a class="navbar-brand d-flex align-items-center" href="#">
+                            <img src="{{ asset('images/logofullwhite.png') }}" alt="Logo"class="mobile-logo">
                         </a>
                         <button class="navbar-toggler me-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                             <span class="navbar-toggler-icon"></span>
