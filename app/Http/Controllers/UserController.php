@@ -85,7 +85,15 @@ class UserController extends Controller
             }
         }
 
-        return view('user.dashboard', compact('questionnaires', 'recentRecommendations'));
+        $cardImages = ModalImage::where('is_active', 1)
+        ->inRandomOrder()
+        ->take(4)
+        ->pluck('image')
+        ->map(function($img){
+            return asset('storage/' . $img);
+        });
+
+        return view('user.dashboard', compact('questionnaires', 'recentRecommendations','cardImages'));
     }
 
     /**

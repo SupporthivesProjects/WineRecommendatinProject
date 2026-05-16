@@ -60,18 +60,43 @@
                 
             }
         }
+        
+        .kiosk-login-logo{
+            display:none;
+        }
+
+        @media screen and (min-width:700px) and (max-width:900px){
+
+            .default-login-logo{
+                display:none;
+            }
+
+            .kiosk-login-logo{
+                display:block;
+                width:140px;
+                height:auto;
+                margin-bottom:20px;
+            }
+
+        }
     </style>
 
 
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <a href="/">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">       
+        <div class="login-logo-wrapper">
+            <div class="default-login-logo">
                 <x-application-logo class="w-30 h-30 fill-current text-gray-500" />
-            </a>
+            </div>
+            <img 
+                src="{{ asset('images/logoblackred_new.png') }}"
+                class="kiosk-login-logo"
+                alt="Kiosk Logo"
+            >
         </div>
+
 
         <div class="row signpages text-center">
             {{ $slot }}

@@ -490,9 +490,153 @@
 
         @media screen and (min-width: 700px) and (max-width: 900px){
             .navbar-brand .mobile-logo{
-                height:90px !important;
+                height:100px !important;
                 width:auto !important;
             }
+        }
+        @media (max-width: 768px)
+        {
+
+            #mainNavbar .container{
+                display:flex !important;
+                justify-content:flex-end !important;
+                align-items:center;
+                position:relative;
+                padding-right:15px !important;
+            }
+
+            #mainNavbar{
+                padding:15px 0;
+            }
+
+            .navbar-toggler{
+                margin-left:auto !important;
+                margin-right:0 !important;
+                z-index:9999;
+                border:1px solid rgba(255,255,255,0.7);
+                border-radius:10px;
+                padding:8px 10px;
+                background:rgba(0,0,0,0.25);
+                backdrop-filter:blur(8px);
+            }
+
+            .navbar-toggler:focus{
+                box-shadow:none !important;
+            }
+
+            .navbar .navbar-toggler .navbar-toggler-icon:before{
+                content:"\f479";
+                font-family:bootstrap-icons !important;
+                position:absolute;
+                right:10px;
+                font-size:1rem;
+                color:#ffffff !important;
+                inset-inline-start:0;
+            }
+
+            .navbar-collapse{
+                position:absolute;
+                top:70px;
+                right:15px;
+                width:260px;
+                background:rgba(0,0,0,0.82);
+                backdrop-filter:blur(12px);
+                padding:18px 20px;
+                border-radius:18px;
+                text-align:right;
+                z-index:9998;
+                border:1px solid rgba(255,255,255,0.08);
+                box-shadow:0 10px 35px rgba(0,0,0,0.35);
+            }
+
+            .navbar-nav{
+                width:100%;
+                align-items:flex-end;
+                gap:2px;
+            }
+
+            .navbar-nav .nav-item{
+                width:100%;
+            }
+
+            .navbar-nav .nav-link{
+                display:flex;
+                justify-content:flex-end;
+                align-items:center;
+                gap:8px;
+                text-align:right;
+                padding:10px 0;
+                font-size:15px;
+                font-weight:500;
+                color:#fff !important;
+                transition:0.25s ease;
+            }
+
+            .navbar-nav .nav-link:hover{
+                color:#e57351 !important;
+                transform:translateX(-3px);
+            }
+
+            .navbar-nav .nav-link i{
+                margin-right:0 !important;
+                font-size:14px;
+            }
+
+            .video-overlay .content h2{
+                font-size:2.6rem;
+                line-height:1.2;
+            }
+
+            .video-overlay .content p{
+                font-size:1.2rem;
+            }
+
+            .mobile-logo{
+                max-width:120px;
+                height:auto;
+                margin-top:10px;
+            }
+
+        }
+
+        .questionnaire-image{
+            width:100%;
+            height:280px;
+            object-fit:contain;
+            object-position:center;
+            padding:20px;
+            background:#fff;
+            transition:0.3s ease;
+        }
+
+        /* Desktop */
+        @media (min-width: 992px){
+
+            .questionnaire-image{
+                height:320px;
+                padding:25px;
+            }
+
+        }
+
+        /* Tablet */
+        @media (max-width: 991px){
+
+            .questionnaire-image{
+                height:260px;
+                padding:20px;
+            }
+
+        }
+
+        /* Mobile */
+        @media (max-width: 768px){
+
+            .questionnaire-image{
+                height:220px;
+                padding:15px;
+            }
+
         }
 
     </style>
@@ -504,20 +648,7 @@
                 <!-- Navbar (stays on top of landing image) -->
                 <nav id="mainNavbar" class="navbar navbar-expand-lg ">
                     <div class="container ">
-                        <!-- <a class="navbar-brand text-white" href="#">
-                            <lottie-player 
-                                src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
-                                background="transparent" 
-                                speed="1"  
-                                style="width: 40px; height: 40px;" 
-                                loop 
-                                autoplay>
-                            </lottie-player>
-                        </a> -->
-                        <a class="navbar-brand d-flex align-items-center" href="#">
-                            <img src="{{ asset('images/logofullwhite.png') }}" alt="Logo"class="mobile-logo">
-                        </a>
-                        <button class="navbar-toggler me-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
@@ -545,9 +676,8 @@
                         </div>
                     </div>
                 </nav>
-
                 <!-- Centered Text on Landing Image -->
-                <div class="d-flex justify-content-end align-items-center text-end text-white videotext" style="height: 100vh; padding-right: 50px;">
+                <!-- <div class="d-flex justify-content-end align-items-center text-end text-white videotext" style="height: 100vh; padding-right: 50px;">
                     <div>
                         <h1 class="display-3 fw-bold" style="color: #dacea1;">
                             Discover the Wine That <br>
@@ -557,11 +687,25 @@
                         </h1>
                     </div>
                 </div>
-
                 <video class="bg-video" autoplay muted loop playsinline>
                     <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
                     Your browser does not support the video tag.
-                </video>
+                </video> -->
+                <section class="video-section">
+                        <div class="video-overlay">
+                            <div class="content text-center text-white">
+                                <h2 class="display-4">Discover the wine that</h2>
+                                <p class="lead" style="color: #e57351;">Speaks to you.</p>
+                                <a class="navbar-brand d-flex align-items-center justify-content-center w-100" href="#">
+                                    <img src="{{ asset('images/logofullwhite.png') }}" alt="Logo" class="mobile-logo">
+                                </a>
+                            </div>
+                        </div>
+                        <video class="bg-video" autoplay muted loop playsinline>
+                            <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                </section>
 
             </section>
 
@@ -586,9 +730,9 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card    ">
                                                     <div class="questionnaire-label">First Sip</div>
-                                                    <img src="{{ asset('images/FirstPour.jpeg') }}" class="card-img-top" alt="First Sip" style="height:250px;">
+                                                    <img src="{{ asset(($cardImages[0] ?? 'images/FirstPour.jpeg')) }}"  class="card-img-top questionnaire-image" alt="First Sip" >
                                                     <div class="card-body">
-                                                        <h5 class="card-title mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                       </h5>
+                                                        <h5 class="card-title mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                 
                                                     </div>
                                                     <div class="text-center">
                                                         <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
@@ -604,7 +748,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Savy Sip</div>
-                                                    <img src="{{ asset('images/SavySipper.png') }}" class="card-img-top" alt="Savy Sip" style="height:250px;">
+                                                    <img  src="{{ asset(($cardImages[1] ?? 'images/SavySipper.png')) }}" class="card-img-top questionnaire-image" alt="Savy Sip" >
                                                     <div class="card-body">
                                                         <h5 class="card-title  mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
                                                     </div>
@@ -622,7 +766,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Cork Master</div>
-                                                    <img src="{{ asset('images/CorkMaster.jpeg') }}" class="card-img-top" alt="Cork Master" style="height:250px;">
+                                                    <img  src="{{ asset(($cardImages[2] ?? 'images/CorkMaster.jpeg')) }}"  class="card-img-top questionnaire-image" alt="Cork Master">
                                                     <div class="card-body">
                                                         <h5 class="card-title mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
                                                     </div>
@@ -640,7 +784,7 @@
                                             <div class="col-12 col-md-6 col-lg-3">
                                                 <div class="card custom-card">
                                                     <div class="questionnaire-label">Quick Pour</div>
-                                                    <img src="{{ asset('images/QuickPour1.png') }}" class="card-img-top" alt="Quick Pur" style="height:250px;">
+                                                    <img src="{{ asset(($cardImages[3] ?? 'images/QuickPour1.png')) }}"   class="card-img-top questionnaire-image" alt="Quick Pur">
                                                     <div class="card-body">
                                                         <h5 class="card-title  mb-0">For when you need a wine—quick and right.!!</h5>
                                                     </div>

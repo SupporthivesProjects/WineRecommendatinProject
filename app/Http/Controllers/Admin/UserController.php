@@ -127,7 +127,7 @@ class UserController extends Controller
             'mobile' => ['nullable', 'string', 'max:20'],
             'store_id' => ['nullable', 'exists:stores,id'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'password' => ['nullable', 'confirmed', Password::defaults()],
+            'password' => ['nullable',  Password::defaults()],
             'role' => ['required', 'in:admin,store_manager,user'],
             'status' => ['required', 'in:active,inactive'],
         ]);

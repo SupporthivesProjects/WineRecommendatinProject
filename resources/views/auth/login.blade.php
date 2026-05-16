@@ -1,6 +1,51 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
+    <style>
+        .password-wrapper{
+            position:relative;
+        }
+
+        .toggle-password{
+            position:absolute;
+            top:50%;
+            right:15px;
+            transform:translateY(-50%);
+            cursor:pointer;
+            z-index:10;
+            color:#6c757d;
+            font-size:18px;
+        }
+        html,
+        body{
+            height:100%;
+            margin:0;
+            overflow:hidden;
+            background:#ecebfa !important;
+        }
+
+        /* Remove white bottom band */
+        body{
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* Main wrapper */
+        .min-h-screen{
+            min-height:100vh !important;
+            background:#ecebfa !important;
+        }
+
+        /* Kiosk/tablet positioning */
+        @media screen and (min-width: 700px) and (max-width: 1100px){
+
+            .min-h-screen{
+                justify-content:flex-start !important;
+                padding-top:120px !important;
+            }
+
+        }
+    </style>
     <div >
         <!-- Start::row-1 -->
             <div class="col-md-12">
@@ -35,9 +80,28 @@
                                             </div>
 
                                             <!-- Password -->
-                                            <div class="form-group text-start mt-4">
+                                            <!-- <div class="form-group text-start mt-4">
                                                 <label class="form-label" for="password">Password</label>
                                                 <x-text-input id="password" class="form-control" placeholder="Enter your password" type="password" name="password" required autocomplete="current-password" />
+                                                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                            </div> -->
+                                            <div class="form-group text-start mt-4">
+                                                <label class="form-label" for="password">Password</label>
+                                                <div class="password-wrapper">
+                                                    <x-text-input 
+                                                        id="password"
+                                                        class="form-control pe-5"
+                                                        placeholder="Enter your password"
+                                                        type="password"
+                                                        name="password"
+                                                        required
+                                                        autocomplete="current-password"
+                                                    />
+                                                    <span class="toggle-password" onclick="togglePassword()">
+                                                        <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                                    </span>
+
+                                                </div>
                                                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
                                             </div>
 
@@ -76,7 +140,28 @@
     </div>
 
 
+    <script>
+        function togglePassword(){
 
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('togglePasswordIcon');
+
+            if(passwordInput.type === 'password'){
+
+                passwordInput.type = 'text';
+
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+
+            }else{
+
+                passwordInput.type = 'password';
+
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+    </script>
 
     <!-- <form method="POST" action="{{ route('login') }}">
         @csrf

@@ -181,7 +181,7 @@
                 <tr>
                     <td>${index+1}</td>
                      <td>
-                        <img src="${image}" width="50" class="me-2"/>
+                        <img src="${image}" width="200" height="200" class="me-2"/>
                     </td>
                     <td>${p.name}</td>
                     <td>${p.quantity}</td>
