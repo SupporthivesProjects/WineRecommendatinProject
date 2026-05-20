@@ -63,9 +63,12 @@
                             $rows = [
                                 'Store Name' => $store->store_name,
                                 'Business Type' => $store->business_type ?? 'N/A',
-                                'Address' => $store->address ?? 'N/A',
+                                'Address1' => $store->address1 ?? 'N/A',
+                                'Address2' => $store->address2 ?? 'N/A',
                                 'Contact Number' => $store->contact_number ?? 'N/A',
                                 'Email' => $store->email ?? 'N/A',
+                                'Location' => $store->location ?? 'N/A',
+                                'City' => $store->city ?? 'N/A',
                                 'State' => $store->state ?? 'N/A',
                                 'License Type' => $store->licence_type ?? 'N/A',
                                 'License Number' => $store->license_number ?? 'N/A',

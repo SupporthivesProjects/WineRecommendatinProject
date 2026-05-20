@@ -53,9 +53,16 @@
 
                                     <!-- Address -->
                                     <div class="col-12">
-                                        <label for="address" class="form-label">{{ __('Address') }}</label>
-                                        <textarea id="address" name="address" rows="3" class="form-control">{{ old('address', $store->address) }}</textarea>
-                                        @error('address')
+                                        <label for="address" class="form-label">{{ __('Address 1') }}</label>
+                                        <textarea id="address1" name="address1" rows="3" class="form-control">{{ old('address1', $store->address1) }}</textarea>
+                                        @error('address1')
+                                            <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="address2" class="form-label">{{ __('Address 2') }}</label>
+                                        <textarea id="address2" name="address2" rows="3" class="form-control">{{ old('address2', $store->address2) }}</textarea>
+                                        @error('address2')
                                             <div class="text-danger mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -74,6 +81,23 @@
                                         <label for="email" class="form-label">{{ __('Email') }}</label>
                                         <input id="email" class="form-control" type="email" name="email" value="{{ old('email', $store->email) }}" />
                                         @error('email')
+                                            <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <!-- location -->
+                                    <div class="col-12 col-md-6">
+                                        <label for="location" class="form-label">{{ __('Location') }}</label>
+                                        <input id="location" class="form-control" type="text" name="location" value="{{ old('location', $store->location) }}" />
+                                        @error('location')
+                                            <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- city -->
+                                    <div class="col-12 col-md-6">
+                                        <label for="city" class="form-label">{{ __('City') }}</label>
+                                        <input id="city" class="form-control" type="text" name="city" value="{{ old('city', $store->city) }}" />
+                                        @error('city')
                                             <div class="text-danger mt-2">{{ $message }}</div>
                                         @enderror
                                     </div>

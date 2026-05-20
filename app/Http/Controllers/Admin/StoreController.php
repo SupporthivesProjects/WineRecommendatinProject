@@ -80,12 +80,16 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+    
         $validated = $request->validate([
             'business_type' => 'required|string|max:255',
             'store_name' => 'required|string|max:255',
-            'address' => 'required|string',
+            'address1' => 'required|string',
+            'address2' => 'required|string',
             'contact_number' => 'required|string|max:20',
             'email' => 'required|email|max:255',
+            'location' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'licence_type' => 'required|string|max:255',
             'license_number' => 'required|string|max:255',
