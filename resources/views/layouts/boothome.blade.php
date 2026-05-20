@@ -996,6 +996,13 @@
 
                 <div class="modal-body text-center p-5">
 
+                <div class="d-flex justify-content-center align-items-center mb-3">
+                    <div style="width:120px; overflow:hidden; text-align:center;">
+                        <img src="/images/logofullwhite.png"
+                            alt="Logo" style="width: 80px;height: auto;display: block;margin: 0 auto;">
+                    </div>
+                </div>
+
                     <!-- Brand / Title -->
                     <h1 class="mb-3" style="font-weight: 700; letter-spacing: 1.5px; font-size: 2.6rem;">
                     Welcome

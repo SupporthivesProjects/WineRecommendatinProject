@@ -744,4 +744,63 @@ class ProductController extends Controller
         ]);
     }
 
+    public function CheesebulkUploadForm()
+    {
+        return view('admin.cheese-products.cheese-bulk-upload');
+    }
+
+    public function CheesedownloadCSV()
+    {
+        $cheeseproducts = DB::table('cheese_products')->get();
+
+        $filename = "cheeseproducts.csv";
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+        ];
+
+        $callback = function() use ($cheeseproducts) {
+            $file = fopen('php://output', 'w');
+
+            if ($cheeseproducts->count() > 0) {
+                fputcsv($file, array_keys((array)$cheeseproducts[0]));
+            }
+
+            foreach ($cheeseproducts as $product) {
+                fputcsv($file, (array)$product);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function CheeseuploadCSV(Request $request)
+    {
+        try {
+
+            $file = $request->file('csv_file');
+            $handle = fopen($file->getRealPath(), "r");
+
+            $header = fgetcsv($handle);
+
+            while (($row = fgetcsv($handle)) !== false) {
+                $data = array_combine($header, $row);
+                DB::table('cheese_products')->insert($data);
+            }
+
+            fclose($handle);
+
+            return back()->with('success','Cheese Products imported successfully');
+
+        } catch (\Exception $e) {
+
+            return back()->with('error','Import failed: '.$e->getMessage());
+
+        }
+    }
+
+
 }

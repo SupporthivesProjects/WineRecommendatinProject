@@ -33,7 +33,11 @@
                         <li class="breadcrumb-item active" aria-current="page">Cheese Products</li>
                     </ol>
                 </div>
-                <div class="d-flex">
+
+                <div class="d-flex gap-2">
+                    <a  href="{{ route('admin.products.cheese-bulk-upload') }}" type="button" class="btn btn-wave btn-primary my-2 btn-icon-text">
+                        <i class="fe fe-plus me-2"></i> Bulk Upload
+                    </a>
                     <a href="{{ route('admin.cheese-products.create') }}" type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text">
                         <i class="fe fe-plus me-2"></i> Add Cheese Product
                     </a>

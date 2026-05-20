@@ -11,10 +11,10 @@
             <!-- Start::page-header -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
                 <div>
-                    <h2 class="main-content-title fs-24 mb-1">Welcome To Bulk Upload Dashboard</h2>
+                    <h2 class="main-content-title fs-24 mb-1">Welcome To Cheese Bulk Upload Dashboard</h2>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Upload Bulk Products</li>
+                        <li class="breadcrumb-item active" aria-current="page">Upload Bulk Cheese</li>
                     </ol>
                 </div>
                 <div class="d-flex">
@@ -32,14 +32,14 @@
                         <div class="card-body">
 
                             <!-- Download CSV -->
-                            <a href="{{ route('admin.products.download') }}" class="btn btn-primary">
-                                Download Products CSV
+                            <a href="{{ route('admin.products.Cheesedownload') }}" class="btn btn-primary">
+                                Download Cheese Products CSV
                             </a>
 
                             <hr>
 
                             <!-- Upload CSV -->
-                            <form action="{{ route('admin.products.upload') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.products.cheesebulkupload') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" name="csv_file" accept=".csv" required>
                                 <button type="submit" class="btn btn-success">

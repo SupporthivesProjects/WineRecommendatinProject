@@ -151,7 +151,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/update-invoice-product', [AdminProductController::class,'updateInvoiceProduct']);
 
 
-
+    //cheese bulk upload
+    Route::get('products/cheese-bulk-upload', [AdminProductController::class, 'CheesebulkUploadForm'])
+    ->name('products.cheese-bulk-upload');
+    Route::get('/products/cheesedownload', [AdminProductController::class, 'CheesedownloadCSV'])->name('products.Cheesedownload');
+    Route::post('/products/cheesebulkupload', [AdminProductController::class, 'CheeseuploadCSV'])->name('products.cheesebulkupload');
 
     // Products management
     Route::resource('products', AdminProductController::class);

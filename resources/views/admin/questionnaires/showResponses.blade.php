@@ -45,6 +45,9 @@
                                             <th class="text-start">Customer Name</th>
                                             <th class="text-start">Email</th>
                                             <th class="text-start">Phone</th>
+                                            <th class="text-start">Store Name</th>
+                                            <th class="text-start">Store Contact</th>
+                                            <th class="text-start">Store Address</th>
                                             <th class="text-start">Created On</th>
                                             <th class="text-start">Action</th>
                                             
@@ -57,6 +60,10 @@
                                                 <td>{{ $submission->cust_name }}</td>
                                                 <td>{{ $submission->cust_email }}</td>
                                                 <td>{{ $submission->cust_phone }}</td>
+                                                <td>{{ $submission->store_name }}</td>
+                                                <td>{{ $submission->contact_number }}</td>
+                                                <td>{{ $submission->address }}</td>
+
                                                 <td>{{ \Carbon\Carbon::parse($submission->created_at)->format('d M Y, h:i A') }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.questionnaire.responses.show', $submission->submission_id) }}" class="btn btn-sm btn-primary">View</a>

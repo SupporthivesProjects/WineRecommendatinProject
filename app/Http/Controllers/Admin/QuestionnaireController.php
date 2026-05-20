@@ -390,27 +390,71 @@ class QuestionnaireController extends Controller
         return "rgb($r, $g, $b)";
     }
 
+    // public function showRespnses()
+    // {
+    //     $submissions = DB::table('question_responses')
+    //     ->join('questionnaire_usage', 'question_responses.customerID', '=', 'questionnaire_usage.id')
+    //     ->select(
+    //         'question_responses.submission_id',
+    //         'question_responses.customerID',
+    //         DB::raw('MIN(question_responses.created_at) as created_at'),
+    //         'questionnaire_usage.cust_name',
+    //         'questionnaire_usage.cust_email',
+    //         'questionnaire_usage.cust_phone'
+    //     )
+    //     ->groupBy(
+    //         'question_responses.submission_id',
+    //         'question_responses.customerID',
+    //         'questionnaire_usage.cust_name',
+    //         'questionnaire_usage.cust_email',
+    //         'questionnaire_usage.cust_phone'
+    //     )
+    //     ->orderByDesc('created_at')
+    //     ->get();
+
+    //     return view('admin.questionnaires.showResponses', compact('submissions'));
+    // }
     public function showRespnses()
     {
         $submissions = DB::table('question_responses')
-        ->join('questionnaire_usage', 'question_responses.customerID', '=', 'questionnaire_usage.id')
-        ->select(
-            'question_responses.submission_id',
-            'question_responses.customerID',
-            DB::raw('MIN(question_responses.created_at) as created_at'),
-            'questionnaire_usage.cust_name',
-            'questionnaire_usage.cust_email',
-            'questionnaire_usage.cust_phone'
-        )
-        ->groupBy(
-            'question_responses.submission_id',
-            'question_responses.customerID',
-            'questionnaire_usage.cust_name',
-            'questionnaire_usage.cust_email',
-            'questionnaire_usage.cust_phone'
-        )
-        ->orderByDesc('created_at')
-        ->get();
+            ->join('questionnaire_usage', 'question_responses.customerID', '=', 'questionnaire_usage.id')
+
+            // Join users table
+            ->join('users', 'question_responses.user_id', '=', 'users.id')
+
+            // Join stores table
+            ->join('stores', 'users.store_id', '=', 'stores.id')
+
+            ->select(
+                'question_responses.submission_id',
+                'question_responses.customerID',
+                DB::raw('MIN(question_responses.created_at) as created_at'),
+
+                'questionnaire_usage.cust_name',
+                'questionnaire_usage.cust_email',
+                'questionnaire_usage.cust_phone',
+
+                // Store fields
+                'stores.store_name',
+                'stores.contact_number',
+                'stores.address'
+            )
+
+            ->groupBy(
+                'question_responses.submission_id',
+                'question_responses.customerID',
+
+                'questionnaire_usage.cust_name',
+                'questionnaire_usage.cust_email',
+                'questionnaire_usage.cust_phone',
+
+                'stores.store_name',
+                'stores.contact_number',
+                'stores.address'
+            )
+
+            ->orderByDesc('created_at')
+            ->get();
 
         return view('admin.questionnaires.showResponses', compact('submissions'));
     }
