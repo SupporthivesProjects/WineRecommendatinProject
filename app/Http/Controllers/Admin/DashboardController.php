@@ -120,9 +120,17 @@ class DashboardController extends Controller
         // ----------------------
 
         // Count by wine type
-        $typeCounts = Product::select('type', DB::raw('COUNT(*) as count'))
+        // $typeCounts = Product::select('type', DB::raw('COUNT(*) as count'))
+        // ->whereNotNull('type')
+        // ->groupBy('type')
+        // ->pluck('count', 'type')
+        // ->toArray();
+        $typeCounts = Product::select(
+            DB::raw('LOWER(type) as type'),
+            DB::raw('COUNT(*) as count')
+        )
         ->whereNotNull('type')
-        ->groupBy('type')
+        ->groupBy(DB::raw('LOWER(type)'))
         ->pluck('count', 'type')
         ->toArray();
 
@@ -134,11 +142,11 @@ class DashboardController extends Controller
 
         // Final grouped data (fixed order)
         $finalProductTypeData = [
-        'Red Wine'   => $typeCounts['red'] ?? 0,
-        'White Wine'=> $typeCounts['rosé'] ?? 0,
-        'Rosé'      => $typeCounts['white'] ?? 0,
-        'Sparkling' => $sparklingCount,
-        'Fruity'    => $fruityCount,
+            'Red Wine'   => $typeCounts['red'] ?? 0,
+            'White Wine' => $typeCounts['white'] ?? 0,
+            'Rosé'       => $typeCounts['rosé'] ?? 0,
+            'Sparkling'  => $sparklingCount,
+            'Fruity'     => $fruityCount,
         ];
 
         $productTypeLabels = array_keys($finalProductTypeData);
