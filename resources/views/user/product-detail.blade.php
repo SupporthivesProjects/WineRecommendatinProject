@@ -178,7 +178,7 @@
                                                     'still' => 'text-primary',
                                                 ];
 
-                                                $type = $product->type ?? 'unknown';
+                                                $type = strtolower(trim($product->type ?? 'unknown'));
                                             @endphp
 
                                             {!! $icons[$type] ?? '<i class="fas fa-question-circle"></i>' !!}
