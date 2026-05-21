@@ -179,12 +179,16 @@
     </section>
 
     <div class="container my-5">
-    <div class="row my-2 justify-content-end">
-        <a href="{{ route('user.products') }}"
-        class="btn btn-wave btn-primary w-25 my-2 btn-icon-text">
-            <i class="fe fe-arrow-left me-2"></i> Explore More
-        </a>
-    </div>
+        <div class="row my-2 justify-content-end">
+            <div class="col-lg-8">
+                
+            </div>
+            <div class="col-lg-4">
+                <a href="{{ route('user.products') }}" class="btn btn-wave btn-primary w-100 my-2 btn-icon-text">
+                    <i class="fe fe-arrow-left me-2"> </i>Explore More
+                </a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-8">
                 <div id="cart-items-container">
@@ -201,11 +205,11 @@
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <span>Subtotal:</span>
-                        <span id="subtotal">₹&nhsp; 0.00</span>
+                        <span id="subtotal">₹ &nbsp; 0.00</span>
                     </div>
                     <div class="d-flex justify-content-between mb-4 fw-bold" >
                         <span>Total:</span>
-                        <span id="total-amount">₹ &nhsp;0.00</span>
+                        <span id="total-amount">₹ &nbsp; 0.00</span>
                     </div>
                     <button class="checkout-btn" id="checkout-btn">
                         Let's Checkout
@@ -269,7 +273,7 @@
                         </div>
                         <div class="col-md-4">
                             <h5 class="mb-1">${item.name || 'Wine Product'}</h5>
-                            <p class="text-muted mb-0">Price: ₹&nhsp; ${parseFloat(item.retail_price || 0).toFixed(2)}</p>
+                            <p class="text-muted mb-0">Price: ₹ &nbsp; ${parseFloat(item.retail_price || 0).toFixed(2)}</p>
                         </div>
                         <div class="col-md-3">
                             <div class="quantity-controls">
@@ -284,7 +288,7 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <p class="fw-bold mb-0">&nhsp; ${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                            <p class="fw-bold mb-0"> ₹ &nbsp; ${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
                         </div>
                         <div class="col-md-1">
                             <button class="remove-btn" onclick="removeFromCart(${item.id})">
