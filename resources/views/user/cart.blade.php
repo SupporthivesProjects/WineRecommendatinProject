@@ -273,7 +273,7 @@
                         </div>
                         <div class="col-md-4">
                             <h5 class="mb-1">${item.name || 'Wine Product'}</h5>
-                            <p class="text-muted mb-0">Price: ₹ &nbsp; ${parseFloat(item.retail_price || 0).toFixed(2)}</p>
+                            <p class="text-muted mb-0">Price:${parseFloat(item.retail_price || 0).toFixed(2)}</p>
                         </div>
                         <div class="col-md-3">
                             <div class="quantity-controls">
@@ -288,7 +288,7 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <p class="fw-bold mb-0"> ₹ &nbsp; ${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                            <p class="fw-bold mb-0">${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
                         </div>
                         <div class="col-md-1">
                             <button class="remove-btn" onclick="removeFromCart(${item.id})">
@@ -413,6 +413,7 @@
                     }
 
                     const submissionId = '{{ session('submission_id') }}';
+                    console.log('Submission ID:', submissionId);
 
                     fetch('{{ route('user.checkout') }}', {
                             method: 'POST',

@@ -996,28 +996,55 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => 'Cart is empty.']);
         }
 
-        $responses = QuestionResponse::where('submission_id', $submissionId)->get();
-        Log::info('Fetched responses count: ' . $responses->count());
+        // $responses = QuestionResponse::where('submission_id', $submissionId)->get();
+        // Log::info('Fetched responses count: ' . $responses->count());
 
-        if ($responses->isEmpty()) {
-            Log::warning('Invalid submission ID: no responses found.');
-            return response()->json(['success' => false, 'message' => 'Invalid submission ID.']);
-        }
+        // if ($responses->isEmpty()) {
+        //     Log::warning('Invalid submission ID: no responses found.');
+        //     return response()->json(['success' => false, 'message' => 'Invalid submission ID.']);
+        // }
 
-        $username = $email = $phone = 'N/A';
+        // $username = $email = $phone = 'N/A';
 
-        foreach ($responses as $response) {
-            Log::info("Processing response: question_key={$response->question_key}, answer={$response->answer}");
+        // foreach ($responses as $response) {
+        //     Log::info("Processing response: question_key={$response->question_key}, answer={$response->answer}");
 
-            if ($response->question_key === 'question1') {
-                $username = $response->answer;
-                Log::info("Username set to: $username");
-            } elseif ($response->question_key === 'question2') {
-                $phone = $response->answer;
-                Log::info("Email set to: $email");
-            } elseif ($response->question_key === 'question3') {
-                $email = $response->answer;
-                Log::info("Phone set to: $phone");
+        //     if ($response->question_key === 'question1') {
+        //         $username = $response->answer;
+        //         Log::info("Username set to: $username");
+        //     } elseif ($response->question_key === 'question2') {
+        //         $phone = $response->answer;
+        //         Log::info("Email set to: $email");
+        //     } elseif ($response->question_key === 'question3') {
+        //         $email = $response->answer;
+        //         Log::info("Phone set to: $phone");
+        //     }
+        // }
+        $username = auth()->user()->name ?? 'N/A';
+        $email    = auth()->user()->email ?? 'N/A';
+        $phone    = 'N/A';
+
+        if (!empty($submissionId)) {
+
+            $responses = QuestionResponse::where('submission_id', $submissionId)->get();
+
+            Log::info('Fetched responses count: ' . $responses->count());
+
+            foreach ($responses as $response) {
+
+                Log::info("Processing response: question_key={$response->question_key}, answer={$response->answer}");
+
+                if ($response->question_key === 'question1') {
+                    $username = $response->answer;
+                }
+
+                elseif ($response->question_key === 'question2') {
+                    $phone = $response->answer;
+                }
+
+                elseif ($response->question_key === 'question3') {
+                    $email = $response->answer;
+                }
             }
         }
 
@@ -1028,7 +1055,8 @@ class UserController extends Controller
         $checkout->username = $username;
         $checkout->email = $email;
         $checkout->phone = $phone;
-        $checkout->submission_id = $submissionId;
+        // $checkout->submission_id = $submissionId;
+        $checkout->submission_id = $submissionId ?: 'PRODUCT_' . uniqid();
         $checkout->products = json_encode($cart);
 
     
