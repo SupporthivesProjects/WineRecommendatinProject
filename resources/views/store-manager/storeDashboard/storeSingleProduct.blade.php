@@ -209,7 +209,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">Aging Potential</th>
-                                        <td>{!! $extraIcons['ageging_potential'] ?? $defaultIcon !!} {{ $product->ageging_potential ?? 'N/A' }}</td>
+                                        <td>{!! $extraIcons['ageging_potential'] ?? $defaultIcon !!} {{ $product->ageing_potential ?? 'N/A' }}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Cheese pairings</th>
