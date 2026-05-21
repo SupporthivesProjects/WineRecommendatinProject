@@ -179,6 +179,12 @@
     </section>
 
     <div class="container my-5">
+    <div class="row my-2 justify-content-end">
+        <a href="{{ route('user.products') }}"
+        class="btn btn-wave btn-primary w-25 my-2 btn-icon-text">
+            <i class="fe fe-arrow-left me-2"></i> Explore More
+        </a>
+    </div>
         <div class="row">
             <div class="col-lg-8">
                 <div id="cart-items-container">

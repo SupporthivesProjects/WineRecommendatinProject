@@ -30,7 +30,7 @@ class CheeseProductController extends Controller
         })
             ->with(['stores' => function ($query) use ($user) {
                 $query->where('store_id', $user->store_id)
-                    ->select('stores.id', 'store_name', 'address')
+                    ->select('stores.id', 'store_name', 'address1')
                     ->withPivot(['quantity', 'is_available']);
             }])
             ->paginate(12);
@@ -56,7 +56,7 @@ class CheeseProductController extends Controller
             $query->where('store_id', $user->store_id)
                 ->where('is_available', true)
                 ->where('quantity', '>', 0)
-                ->select('stores.id', 'store_name', 'address')
+                ->select('stores.id', 'store_name', 'address1')
                 ->withPivot(['quantity', 'is_available']);
         }])->findOrFail($id);
 
