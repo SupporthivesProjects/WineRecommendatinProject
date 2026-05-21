@@ -267,6 +267,11 @@
                         <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                         <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
                         <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
+                        <li class="nav-item">
+                            <a href="{{ route('user.cart') }}" class="nav-link">
+                                View Cart (<span id="cart-count">{{ count($cart ?? []) }}</span>)
+                            </a>
+                        </li>
                     </ul>
                     <!-- Logout (right aligned) -->
                     <ul class="navbar-nav ms-auto">
@@ -462,6 +467,14 @@
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
                                                         Read More !!
                                                     </a>
+                                                    <button
+                                                        class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
+                                                        data-product-id="{{ $product->id }}"
+                                                        data-product-name="{{ $product->wine_name }}"
+                                                        data-product-price="{{ $product->retail_price }}">
+
+                                                        {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Buy Now' }}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -667,6 +680,96 @@
             if (parallax) {
                 parallax.style.transform = `translateY(${scrolled * 0.4}px)`; // adjust 0.4 for speed
             }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.buy-now-btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const productId = this.getAttribute('data-product-id');
+                    const productName = this.getAttribute('data-product-name');
+                    const productPrice = this.getAttribute('data-product-price');
+                    const isInCart = this.classList.contains('btn-dark');
+                    const url = isInCart ? '{{ route("user.cart.remove") }}' : '{{ route("user.cart.add") }}';
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        body: JSON.stringify({ 
+                            product_id: productId, 
+                            product_name: productName,
+                            product_price: productPrice
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (isInCart) {
+                                this.classList.remove('btn-dark');
+                                this.classList.add('btn-light');
+                                this.textContent = 'Buy Now';
+
+                                toastr.warning('Product removed from cart!', 'Removed', {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: 'toast-top-right',
+                                    timeOut: 3000
+                                });
+                            } else {
+                                this.classList.remove('btn-light');
+                                this.classList.add('btn-dark');
+                                this.textContent = 'Remove from Cart';
+
+                                toastr.success('Product added to cart!', 'Added', {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: 'toast-top-right',
+                                    timeOut: 3000
+                                });
+                            }
+                        }
+
+                        // ✅ Update the cart count dynamically
+                        const cartCountElement = document.getElementById('cart-count');
+                        if (cartCountElement) {
+                            let currentCount = parseInt(cartCountElement.textContent) || 0;
+
+                            if (isInCart) {
+                                // Product removed
+                                currentCount = Math.max(0, currentCount - 1);
+                            } else {
+                                // Product added
+                                currentCount += 1;
+                            }
+
+                            cartCountElement.textContent = currentCount;
+                        }
+
+
+
+
+
+                    })
+                    .catch(() => {
+                        toastr.error('Something went wrong!', 'Error', {
+                            closeButton: true,
+                            progressBar: true,
+                            positionClass: 'toast-top-right',
+                            timeOut: 3000
+                        });
+                    });
+                });
+            });
+
+            // Updated View Cart button - now redirects to cart page
+            document.getElementById('view-cart-btn').addEventListener('click', function () {
+                window.location.href = '{{ route("user.cart") }}';
+            });
         });
     </script>
 

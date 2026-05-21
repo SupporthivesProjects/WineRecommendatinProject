@@ -203,8 +203,8 @@ class UserController extends Controller
             return $product;
         });
 
-
-        return view('user.products', compact('products'));
+        $cart = session()->get('cart', []);
+        return view('user.products', compact('products', 'cart'));
     }
 
     public function matchedproducts($submissionId)
