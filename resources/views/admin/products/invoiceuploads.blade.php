@@ -191,7 +191,7 @@
                             <td>${invoice.customer_name}</td>
                             <td>${invoice.customer_mobile}</td>
                             <td>${productDisplay}</td>
-                            <td>₹&nhsp; ${invoice.product_price}</td>
+                            <td>₹&nbsp; ${invoice.product_price}</td>
                         </tr>
                     `;
 

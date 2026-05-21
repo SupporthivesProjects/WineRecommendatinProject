@@ -82,7 +82,7 @@
                                                 <td>#{{ $order->id }}</td>
                                                 <td>{{ $order->username }}</td>
                                                 <td>{{ $order->phone }}</td>
-                                                <td>₹&nhsp;{{ number_format($total,2) }}</td>
+                                                <td>₹&nbsp;{{ number_format($total,2) }}</td>
                                                 <td>{{ $order->created_at->format('d M Y H:i') }}</td>
 
                                                 <td>
@@ -186,7 +186,7 @@
                     <td>${p.name}</td>
                     <td>${p.quantity}</td>
                     <td>₹${p.retail_price}</td>
-                    <td>₹&nhsp;${rowTotal}</td>
+                    <td>₹&nbsp;${rowTotal}</td>
                 </tr>
                 `;
 
