@@ -37,22 +37,29 @@
         .rating-stars input[type="radio"]:checked ~ .star-label ~ .star-label .bx {
             color: #ffc107;
         }
+
+        @media (max-width: 768px) {
+            .page-header-breadcrumb > div {
+                margin-bottom: 20px;
+            }
+
+            .page-header-breadcrumb > div:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .card.custom-card.wine-card .image-wrapper img.card-img-top {
+            object-fit: contain;
+            width: 308px;
+            height: 287px;
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .image-wrapper {
+            padding: 10px;
+        }
     </style>
-
-        <style>
-
-            .card.custom-card.wine-card .image-wrapper img.card-img-top {
-                object-fit: contain;
-                width: 308px;
-                height: 287px;
-                display: flex;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .image-wrapper {
-                padding: 10px;
-            }
-        </style>
     
 
     <script>
@@ -113,7 +120,7 @@
                 <div>
                     <h2 class="main-content-title fs-24 mb-1">Welcome To Products Boards</h2>
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Products</li>
                     </ol>
                 </div>

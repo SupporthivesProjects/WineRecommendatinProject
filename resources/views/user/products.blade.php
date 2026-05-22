@@ -48,11 +48,11 @@
         .wine-card {
             border-radius: 0 !important; 
             transition: box-shadow 0.3s ease, transform 0.3s ease;
-            box-shadow: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
         }
 
         .wine-card:hover {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Floating effect */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15)!important; 
             transform: translateY(-4px);
         }
 
@@ -229,23 +229,23 @@
             white-space: nowrap;
         }
 
-
-
-    </style>
-
-        <style>
-
-            .card.custom-card.wine-card .image-wrapper img.card-img-top {
-                object-fit: contain;
-                width: 308px;
-                height: 287px;
-                display: flex;
-                margin-left: auto;
-                margin-right: auto;
+        .card.custom-card.wine-card .image-wrapper img.card-img-top {
+            object-fit: contain;
+            width: 308px;
+            height: 287px;
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .image-wrapper {
+            padding: 10px;
+        }
+        @media (max-width: 768px) {
+            .filters-and-cards {
+                padding: 50px 20px;
             }
-            .image-wrapper {
-                padding: 10px;
-            }
+        }
+        
         </style>
 
     

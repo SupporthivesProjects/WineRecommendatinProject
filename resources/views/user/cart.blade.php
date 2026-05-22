@@ -142,6 +142,44 @@
                 background-color: rgba(0, 0, 0, 0.7) !important;
                 border-radius: 0px;
             }
+
+            @media (max-width: 768px) 
+            {
+
+                .cart-item .col-md-3,
+                .cart-item .col-md-2,
+                .cart-item .col-md-1 {
+                    display: inline-flex;
+                    width: auto;
+                    flex: 0 0 auto;
+                    align-items: center;
+                    margin-top: 10px;
+                    margin-right: 50px;  
+                }
+
+                .cart-item .row {
+                    row-gap: 10px;
+                }
+
+                .quantity-controls {
+                    gap: 5px;
+                }
+
+                .quantity-btn {
+                    width: 32px;
+                    height: 32px;
+                }
+
+                .quantity-input {
+                    width: 50px;
+                }
+
+                .remove-btn {
+                    padding: 8px 10px;
+                }
+            }
+
+
         </style>
     @endpush
 
