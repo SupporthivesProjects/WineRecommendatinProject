@@ -13,27 +13,61 @@ class CheeseProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     // Get the logged-in user with their store
+    //     $user = User::with('store')->findOrFail(Auth::id());
+
+    //     if (!$user->store_id) {
+    //         return back()->with('error', 'No store assigned to your account. Please contact support.');
+    //     }
+
+    //     // Get cheeses that are available in the user's store
+    //     $cheeses = CheeseProduct::whereHas('stores', function ($query) use ($user) {
+    //         $query->where('store_id', $user->store_id)
+    //             ->where('is_available', true)
+    //             ->where('quantity', '>', 0);
+    //     })
+    //         ->with(['stores' => function ($query) use ($user) {
+    //             $query->where('store_id', $user->store_id)
+    //                 ->select('stores.id', 'store_name', 'address1')
+    //                 ->withPivot(['quantity', 'is_available']);
+    //         }])
+    //         ->paginate(12);
+
+    //     return view('user.cheeses', [
+    //         'cheeses' => $cheeses,
+    //         'store' => $user->store
+    //     ]);
+    // }
     public function index()
     {
-        // Get the logged-in user with their store
         $user = User::with('store')->findOrFail(Auth::id());
 
         if (!$user->store_id) {
             return back()->with('error', 'No store assigned to your account. Please contact support.');
         }
 
-        // Get cheeses that are available in the user's store
+        $search = request('search');
+
         $cheeses = CheeseProduct::whereHas('stores', function ($query) use ($user) {
-            $query->where('store_id', $user->store_id)
-                ->where('is_available', true)
-                ->where('quantity', '>', 0);
-        })
+                $query->where('store_id', $user->store_id)
+                    ->where('is_available', true)
+                    ->where('quantity', '>', 0);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%");
+                });
+            })
             ->with(['stores' => function ($query) use ($user) {
                 $query->where('store_id', $user->store_id)
                     ->select('stores.id', 'store_name', 'address1')
                     ->withPivot(['quantity', 'is_available']);
             }])
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         return view('user.cheeses', [
             'cheeses' => $cheeses,

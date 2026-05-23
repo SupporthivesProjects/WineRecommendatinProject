@@ -152,6 +152,33 @@
 <!-- Cheese Products Section -->
 <section class="filters-and-cards" id="products">
     <div class="container my-5">
+        <!-- search box -->
+        <!-- Search Bar -->
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-6">
+                <form method="GET" action="{{ route('user.cheeses') }}">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fe fe-search"></i>
+                        </span>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="cheeseSearch"
+                            name="search"
+                            placeholder="Search cheeses..."
+                            value="{{ request('search') }}"
+                        >
+                        <button class="btn btn-dark" type="submit">
+                            Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
         <div class="row">
             <!-- Cheese Products Grid -->
             <div class="col-12">
@@ -165,13 +192,14 @@
                             $quantity = $storeInfo ? $storeInfo->pivot->quantity : 0;
                             $isInStock = $quantity > 0 && $storeInfo && $storeInfo->pivot->is_available;
                         @endphp
-                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                        <div class="col-xl-3 col-lg-4 col-md-6 mb-4" data-name="{{ strtolower($cheese->name) }}"
+                        data-description="{{ strtolower($cheese->description ?? '') }}">
                             <div class="card cheese-card h-100">
                                 <div class="position-relative">
                                     <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
                                          class="card-img-top" 
                                          alt="{{ $cheese->name }}"
-                                         style="height: 200px; object-fit: cover;">
+                                         style="object-fit: cover;">
                                     @if(!$isInStock)
                                         <div class="position-absolute top-0 start-0 w-100 bg-danger text-white text-center py-1">
                                             Out of Stock
