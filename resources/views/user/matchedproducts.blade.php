@@ -341,7 +341,7 @@
                                         </p>
 
                                         <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
-                                        <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
+                                        <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0" target="_blank">
                                             View !!
                                         </a>
                                         <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
