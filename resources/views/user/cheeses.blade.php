@@ -102,6 +102,7 @@
             padding: 100px 20px;
             min-height: 100vh;
         }
+        
     </style>
 @endpush
 
@@ -207,7 +208,7 @@
                                     @endif
                                 </div>
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title fw-semibold">{{ $cheese->name }}</h5>
+                                    <h4 class="card-title fw-semibold">{{ $cheese->name }}</h4>
                                     <p class="card-text text-muted flex-grow-1">
                                         {{ $cheese->description ? \Illuminate\Support\Str::limit($cheese->description, 100) : 'Artisanal cheese selection' }}
                                     </p>
@@ -221,8 +222,8 @@
                                             @endif -->
                                         </div>
                                         <div class="d-grid">
-                                            <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark btn-sm w-100">
-                                                View Details
+                                            <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark w-100 py-2 d-flex align-items-center justify-content-center">
+                                            View Details
                                             </a>
                                         </div>
                                     </div>
