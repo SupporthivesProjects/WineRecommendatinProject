@@ -71,6 +71,13 @@
             height: 70vh;
             overflow: hidden;
         }
+        .parallax-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.45); 
+            z-index: 0;
+        }
 
         .parallax-bg {
             background-image: url('{{ asset('images/cheese-banner.jpg') }}');
@@ -103,6 +110,12 @@
             min-height: 100vh;
         }
         
+        .navbar .navbar-toggler .navbar-toggler-icon:before 
+        {
+            font-size: 2rem !important;
+        }
+            
+
     </style>
 @endpush
 
