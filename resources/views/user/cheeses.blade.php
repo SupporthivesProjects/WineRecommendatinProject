@@ -110,11 +110,10 @@
             min-height: 100vh;
         }
         
-        .navbar .navbar-toggler .navbar-toggler-icon:before 
-        {
-            font-size: 2rem !important;
-        }
             
+        .navbar-dark .navbar-toggler {
+            border: 0px solid var(--white-1);
+        }
 
     </style>
 @endpush

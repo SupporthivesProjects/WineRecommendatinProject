@@ -126,12 +126,12 @@
                 </div>
 
                 <div>
-                    <!-- <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i> Back
-                        </a> -->
-                    <a href="{{ route('user.products') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
+                    <!-- <a href="{{ route('user.products') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a> -->
                 </div>
             </div>
 
