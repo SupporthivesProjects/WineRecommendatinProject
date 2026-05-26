@@ -6,8 +6,9 @@
     <style>
         html, body {
             overscroll-behavior: auto;       
-            overflow-x: hidden;             
+            overflow-x: hidden !important;             
         }
+
 
         .card-title 
         {
@@ -334,111 +335,16 @@
                 z-index: 0; 
         }
 
-        html, body {
-            overflow-x: hidden!important;
-        }
+       
 
-
-        @media (max-width: 768px) {
-            .background-section 
-            {
-                z-index: 1;
-            }
-            .background-section::before {
-                display: none !important;   
-            }
-            #myheading 
-            {
-                color:black!important;
-            }
-            #mysubheading
-            {
-                color:black;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .custom-card {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .navbar .navbar-toggler .navbar-toggler-icon:before 
-            {
-                content: "\f479";
-                font-family: bootstrap-icons !important;
-                position: absolute;
-                right:10px;
-                font-size: 1rem;
-                color: #ffffff!important;
-                inset-inline-start: 0;
-            }
-
-            .row.g-4 {
-                margin: 0 !important;
-            }
-
-            .container, .container-fluid {
-                padding-left: 0 !important;
-                padding-right: 0 !important;
-            }
-
-            .card-img-top {
-                width: 100%;
-                height: auto;
-            }
-
-            .open-questionnaire-modal {
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
-            }
-
-            .scrolled
-            {
-                background-color: rgba(0, 0, 0,0.7) !important;
-                color: black!important;
-                font-size : 1.0rem !important;
-                z-index: 1000;;
-            }
-        }
-
-        @media (max-width: 768px) 
-        {
-            .video-section {
-                position: relative;
-                min-height: 300px; 
-                overflow: hidden;
-                padding: 2rem 1rem;
-                background-color: #000; 
-            }
-
-            
-            .bg-video {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                z-index: 1;
-            }
-
-            .video-overlay {
-                position: relative;
-                z-index: 2;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 1rem;
-            }
-
-            .video-overlay .content 
-            {
-                    position: relative;
-                z-index: 3;
-            }
+        .questionnaire-image{
+            width:100%;
+            height:280px;
+            object-fit:contain;
+            object-position:center;
+            padding:20px;
+            background:#fff;
+            transition:0.3s ease;
         }
 
         #explorebtn
@@ -488,14 +394,104 @@
             color: white !important;
         }
 
-        @media screen and (min-width: 700px) and (max-width: 900px){
-            .navbar-brand .mobile-logo{
-                height:100px !important;
-                width:auto !important;
-            }
-        }
-        @media (max-width: 768px)
+
+
+        @media (max-width: 768px) 
         {
+            .background-section 
+            {
+                z-index: 1;
+            }
+            .background-section::before {
+                display: none !important;   
+            }
+            #myheading 
+            {
+                color:black!important;
+            }
+            #mysubheading
+            {
+                color:black;
+            }
+    
+            .custom-card {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .navbar .navbar-toggler .navbar-toggler-icon:before 
+            {
+                content: "\f479";
+                font-family: bootstrap-icons !important;
+                position: absolute;
+                right:10px;
+                font-size: 1rem;
+                color: #ffffff!important;
+                inset-inline-start: 0;
+            }
+
+            .row.g-4 {
+                margin: 0 !important;
+            }
+
+            .container, .container-fluid {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            .card-img-top {
+                width: 100%;
+                height: auto;
+            }
+
+            .open-questionnaire-modal {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .scrolled
+            {
+                background-color: rgba(0, 0, 0,0.7) !important;
+                color: black!important;
+                font-size : 1.0rem !important;
+                z-index: 1000;;
+            }
+        
+            .video-section {
+                position: relative;
+                min-height: 300px; 
+                overflow: hidden;
+                padding: 2rem 1rem;
+                background-color: #000; 
+            }
+
+            
+            .bg-video {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 1;
+            }
+
+            .video-overlay {
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem;
+            }
+
+            .video-overlay .content 
+            {
+                    position: relative;
+                z-index: 3;
+            }
 
             #mainNavbar .container{
                 display:flex !important;
@@ -583,31 +579,36 @@
             }
 
             .video-overlay .content h2{
-                font-size:2.6rem;
-                line-height:1.2;
+                /* font-size:2.6rem;
+                line-height:1.2; */
+                display: none;
             }
 
             .video-overlay .content p{
-                font-size:1.2rem;
+                /* font-size:1.2rem; */
+                display: none;
             }
 
             .mobile-logo{
-                max-width:120px;
                 height:auto;
                 margin-top:10px;
             }
 
+            .questionnaire-image{
+                height:220px;
+                padding:15px;
+            }
+
         }
 
-        .questionnaire-image{
-            width:100%;
-            height:280px;
-            object-fit:contain;
-            object-position:center;
-            padding:20px;
-            background:#fff;
-            transition:0.3s ease;
+        
+        @media screen and (min-width: 700px) and (max-width: 900px){
+            .navbar-brand .mobile-logo{
+                height:400px !important;
+                width:auto !important;
+            }
         }
+    
 
         /* Desktop */
         @media (min-width: 992px){
@@ -629,15 +630,7 @@
 
         }
 
-        /* Mobile */
-        @media (max-width: 768px){
-
-            .questionnaire-image{
-                height:220px;
-                padding:15px;
-            }
-
-        }
+    
 
     </style>
 
