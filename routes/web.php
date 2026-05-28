@@ -127,9 +127,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Stores management
     Route::resource('stores', StoreController::class);
 
+    Route::get('/users/loginhistory', [UserController::class, 'loginhistory'])->name('users.loginhistory');
+
     // Users management
     Route::resource('users', UserController::class);
     Route::put('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
+    
+
+
+
 
 
     //bulk upload

@@ -6,28 +6,52 @@
             <!-- Start::page-header -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
                 <div>
-                    <h2 class="main-content-title fs-24 mb-1">Welcome To Dashboard</h2>
+                    <h2 class="main-content-title fs-24 mb-1">
+                        Welcome To Dashboard
+                    </h2>
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0)">Home</a>
+                        </li>
+
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Dashboard
+                        </li>
                     </ol>
                 </div>
-                <div class="d-flex">
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-light border rounded px-3 py-2 text-end">
+                        <small class="text-muted d-block">
+                            Last Login
+                        </small>
+                        <span class="fw-semibold text-dark">
+                            <i class="fe fe-clock text-primary me-1"></i>
+                            {{ auth()->user()->previous_login_at 
+                            ? auth()->user()->previous_login_at->format('d M Y, h:i A')
+                            : 'First Login' }}
+                           
+                        </span>
+                    </div>
+
                     <div class="justify-content-center">
                         <form method="GET" action="{{ route('main-manager.dashboard') }}" class="d-flex align-items-center">
-                            <label for="store_id" class="me-2 fw-semibold">Select Store:</label>
+                            <label for="store_id" class="me-2 fw-semibold">
+                                Select Store:
+                            </label>
                             <select name="store_id" id="store_id" class="form-select form-select-sm w-auto text-dark bg-white border" onchange="this.form.submit()">
                                 <option value="">All Stores</option>
                                 @foreach($managerStores as $store)
-                                <option value="{{ $store->id }}" {{ $selectedStoreId == $store->id ? 'selected' : '' }}>
-                                    {{ trim($store->store_name) ?: 'Unnamed Store' }}
-                                </option>
-
+                                    <option value="{{ $store->id }}" {{ $selectedStoreId == $store->id ? 'selected' : '' }}>
+                                        {{ trim($store->store_name) ?: 'Unnamed Store' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </form>
                     </div>
+
                 </div>
+
             </div>
 
             <!-- End::page-header -->

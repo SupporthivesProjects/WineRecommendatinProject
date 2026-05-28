@@ -117,11 +117,18 @@
                             </a>
                         </li>
                         <li class="slide">
+                            <a href="{{ route('admin.users.loginhistory') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">User Login History</span>
+                            </a>
+                        </li>
+                        {{--
+                        <li class="slide">
                             <a href="{{ route('admin.settings.index') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Settings</span>
                             </a>
-                        </li>
+                        </li>--}}
                     @elseif(Auth::user()->role === 'store_manager')
                         <!-- Store Manager sidebar links -->
                         <li class="slide">

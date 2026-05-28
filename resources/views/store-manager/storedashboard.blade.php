@@ -8,12 +8,35 @@
             <!-- Start::page-header -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
                 <div>
-                    <h2 class="main-content-title fs-24 mb-1">Welcome To Dashboard</h2>
+                    <h2 class="main-content-title fs-24 mb-1">
+                        Welcome To Dashboard
+                    </h2>
+
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0)">Home</a>
+                        </li>
+
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Dashboard
+                        </li>
                     </ol>
                 </div>
+
+                <div class="mt-3 mt-md-0">
+                    <div class="bg-light border rounded px-3 py-2 text-end">
+                        <small class="text-muted d-block">
+                            Last Login
+                        </small>
+                        <span class="fw-semibold text-dark">
+                            <i class="fe fe-clock text-primary me-1"></i>
+                            {{ auth()->user()->previous_login_at 
+                            ? auth()->user()->previous_login_at->format('d M Y, h:i A')
+                            : 'First Login' }}
+                        </span>
+                    </div>
+                </div>
+
             </div>
 
             <!-- End::page-header -->

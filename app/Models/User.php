@@ -27,6 +27,8 @@ class User extends Authenticatable
         'status',
         'store_id',
         'group_name',
+        'last_login_at',
+        'previous_login_at',
     ];
 
     const ROLE_ADMIN = 'admin';
@@ -56,6 +58,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_login_at' => 'datetime',
+        'previous_login_at' => 'datetime',
+
     ];
 
     /**

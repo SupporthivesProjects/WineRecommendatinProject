@@ -188,4 +188,22 @@ class UserController extends Controller
         return redirect()->route('admin.users.show', $user)
             ->with('success', 'User status updated successfully.');
     }
+
+    public function loginhistory(Request $request)
+    {
+        $users = User::select(
+                'id',
+                'first_name',
+                'last_name',
+                'email',
+                'previous_login_at',
+                'last_login_at'
+            )
+            ->latest()
+            ->get();
+
+        return view('admin.users.loginhistory', compact('users'));
+    }
+
+
 }
