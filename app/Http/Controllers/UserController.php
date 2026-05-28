@@ -179,31 +179,76 @@ class UserController extends Controller
         return view('user.userquestionnaire',compact('modalImages'));
     }
 
-    public function products()
+    // public function products()
+    // {
+    //     $store = Auth::user()->store;asf
+
+    //     // Fetch products linked to this store and eager load the 'images' relationship
+    //     $storeProducts = DB::table('store_products')
+    //         ->where('store_id', $store->id)
+    //         ->where('status', 'active')
+    //         ->orderBy('is_featured', 'desc')
+    //         ->get()
+    //         ->keyBy('product_id');
+
+    //     // Fetch the products with their images for the store products
+    //     $productsQuery = Product::with('images')
+    //         ->whereIn('id', $storeProducts->pluck('product_id'));
+
+    //     // Apply pagination after applying map
+    //     $products = $productsQuery->paginate(9);
+
+    //     // Map the 'is_featured' value from store_products to each product
+    //     $products->getCollection()->transform(function ($product) use ($storeProducts) {
+    //         $product->is_featured = $storeProducts[$product->id]->is_featured;
+    //         return $product;
+    //     });
+
+    //     $cart = session()->get('cart', []);
+    //     return view('user.products', compact('products', 'cart'));
+    // }
+    public function products(Request $request)
     {
         $store = Auth::user()->store;
 
-        // Fetch products linked to this store and eager load the 'images' relationship
         $storeProducts = DB::table('store_products')
             ->where('store_id', $store->id)
+            ->where('status', 'active')
             ->orderBy('is_featured', 'desc')
             ->get()
             ->keyBy('product_id');
 
-        // Fetch the products with their images for the store products
         $productsQuery = Product::with('images')
             ->whereIn('id', $storeProducts->pluck('product_id'));
 
-        // Apply pagination after applying map
-        $products = $productsQuery->paginate(9);
+        // SEARCH
+        if ($request->filled('search')) {
 
-        // Map the 'is_featured' value from store_products to each product
+            $search = $request->search;
+
+            $productsQuery->where(function ($q) use ($search) {
+
+                $q->where('wine_name', 'LIKE', "%{$search}%")
+                ->orWhere('type', 'LIKE', "%{$search}%")
+                ->orWhere('country', 'LIKE', "%{$search}%")
+                ->orWhere('winery', 'LIKE', "%{$search}%")
+                ->orWhere('vintage_year', 'LIKE', "%{$search}%");
+
+            });
+        }
+
+        $products = $productsQuery->paginate(9)
+                        ->appends($request->all());
+
         $products->getCollection()->transform(function ($product) use ($storeProducts) {
+
             $product->is_featured = $storeProducts[$product->id]->is_featured;
+
             return $product;
         });
 
         $cart = session()->get('cart', []);
+
         return view('user.products', compact('products', 'cart'));
     }
 

@@ -262,7 +262,7 @@
                 <div class="collapse navbar-collapse justify-content-between w-100" id="navbarNav">
                     <!-- Nav links (left aligned) -->
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
+                        <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboarsd</a></li>
                         <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
                         <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                         <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
@@ -421,6 +421,28 @@
                                                 </label>
                                             </div>
                                         @endforeach
+
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <form method="GET" action="{{ route('user.products') }}">
+
+                                            <div class="input-group">
+
+                                                <input type="text"
+                                                    name="search"
+                                                    class="form-control"
+                                                    placeholder="Search wines..."
+                                                    value="{{ request('search') }}">
+
+                                                <button class="btn btn-dark" type="submit">
+                                                    Search
+                                                </button>
+
+                                            </div>
+
+                                        </form>
 
                                     </div>
                                 </div>

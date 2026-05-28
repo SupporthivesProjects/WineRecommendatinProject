@@ -77,7 +77,8 @@
                                         <tbody>
                                             @foreach($allProducts as $product)
                                             @php
-                                                $isAvailable = isset($storeProducts[$product->id]);
+                                                $isAvailable = isset($storeProducts[$product->id]) 
+                                                && $storeProducts[$product->id]->status == 'active';
                                                 $isFeatured = $isAvailable && $storeProducts[$product->id]->is_featured;
                                             @endphp
                                                 <tr>
