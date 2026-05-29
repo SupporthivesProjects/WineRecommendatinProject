@@ -161,7 +161,7 @@
                 <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
                     <h3 class="h5 text-dark mb-3">Store Products</h3>
                     <div class="table-responsive">
-                        <table class="table table table-bordered table-striped">
+                        <table class="table table table-bordered table-striped" id="store-products-table">
                             <thead class="table-light">
                                 <tr>
                                     <th>Wine Name</th>
@@ -317,6 +317,14 @@
 @endsection
 
     @push('scripts')
+        <script>
+            $(document).ready(function () {
+                $('#store-products-table').DataTable({
+                    pageLength: 25
+                });
+            });
+        </script>
+
         <script>
             // Store ID for use in JavaScript
             const storeId = {{ $store->id }};

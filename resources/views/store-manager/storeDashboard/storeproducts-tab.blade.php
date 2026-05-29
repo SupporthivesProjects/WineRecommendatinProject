@@ -11,7 +11,15 @@
         margin-left: 20px;
     }
 
-    
+    .row-success {
+        border: 4px solid #28a745 !important;
+        transition: all 0.3s ease;
+    }
+
+    .row-error {
+        border: 4px solid #dc3545 !important;
+        transition: all 0.3s ease;
+    }
 
 </style>
 
@@ -110,12 +118,18 @@
                                                     </span>
                                                     </td>
                                                     <!-- Available Checkbox -->
-                                                    <td>
-                                                        <input type="checkbox" name="available[]" value="{{ $product->id }}" {{ $isAvailable ? 'checked' : '' }}>
+                                                    <td data-order="{{ $isAvailable ? 1 : 0 }}">
+                                                        <input type="checkbox"
+                                                            name="available[]"
+                                                            value="{{ $product->id }}"
+                                                            {{ $isAvailable ? 'checked' : '' }}>
                                                     </td>
                                                     <!-- Featured Checkbox -->
-                                                    <td>
-                                                        <input type="checkbox" name="featured[]" value="{{ $product->id }}" {{ $isFeatured ? 'checked' : '' }}>
+                                                    <td data-order="{{ $isFeatured ? 1 : 0 }}">
+                                                        <input type="checkbox"
+                                                            name="featured[]"
+                                                            value="{{ $product->id }}"
+                                                            {{ $isFeatured ? 'checked' : '' }}>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -177,6 +191,7 @@
             // Handle 'available' checkbox change
             document.querySelectorAll('input[name="available[]"]').forEach(function (checkbox) {
                 checkbox.addEventListener('change', function () {
+                    const row = this.closest('tr');
                     const productId = this.value;
                     const status = this.checked ? 'active' : 'inactive';
 
@@ -205,10 +220,18 @@
                     })
                     .then(data => {
                         toastr.success(data.message || 'Product status updated successfully');
+                        row.classList.add('row-success');
+                        setTimeout(() => {
+                            row.classList.remove('row-success');
+                        }, 2000);
                     })
                     .catch(error => {
                         console.error('Error updating product status:', error);
                         toastr.error('Failed to update product status');
+                        row.classList.add('row-error');
+                            setTimeout(() => {
+                                row.classList.remove('row-error');
+                            }, 3000);
                     });
                 });
             });

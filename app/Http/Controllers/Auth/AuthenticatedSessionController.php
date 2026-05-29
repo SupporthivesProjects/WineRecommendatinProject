@@ -27,6 +27,17 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = auth()->user();
+
+        if ($user->status !== 'active') {
+    
+            auth()->logout();
+    
+            return back()->withErrors([
+                'email' => 'Your account is inactive. Please contact administrator.'
+            ]);
+        }
+
         $request->session()->regenerate();
 
         $user = auth()->user();
