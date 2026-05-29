@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProductMaster;
+use App\Models\ProductStock;
+use App\Services\T3ApiService;
 
 class UploadApiController extends Controller
 {
@@ -74,4 +77,48 @@ class UploadApiController extends Controller
         ]);
     
     }
+
+    public function productMaster()
+    {
+        $products = ProductMaster::latest()->get();
+
+        return view(
+            'admin.api.productmaster',
+            compact('products')
+        );
+    }
+
+    public function productStock()
+    {
+        $products = ProductStock::latest()->get();
+
+        return view(
+            'admin.api.productstock',
+            compact('products')
+        );
+    }
+
+
+    public function pullProductMaster(T3ApiService $service)
+    {
+        $service->pullProductMasters();
+
+        return back()->with(
+            'success',
+            'Product Master data pulled successfully.'
+        );
+    }
+
+    public function pullProductStock(T3ApiService $service)
+    {
+        $service->pullProductStocks();
+
+        return back()->with(
+            'success',
+            'Product Stock data pulled successfully.'
+        );
+    }
+
+
+
 }

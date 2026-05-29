@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\StoreProfileController;
+use App\Http\Controllers\Api\UploadApiController;
 
 
 use Illuminate\Support\Facades\Log;
@@ -134,8 +135,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
     
 
+    //API routes
+    Route::get('/api-master-data', [UploadApiController::class, 'productMaster'])
+    ->name('api.master.data');
 
-
+    Route::get('/api-stock-data', [UploadApiController::class, 'productStock'])
+        ->name('api.stock.data');
+    
+    Route::post('/api-master-data/pull', [UploadApiController::class, 'pullProductMaster'])
+        ->name('api.master.pull');
+    
+    Route::post('/api-stock-data/pull', [UploadApiController::class, 'pullProductStock'])
+        ->name('api.stock.pull');
 
 
     //bulk upload
