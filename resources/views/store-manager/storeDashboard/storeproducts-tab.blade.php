@@ -21,6 +21,24 @@
         transition: all 0.3s ease;
     }
 
+
+    .save-status {
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .save-status.updating {
+        color: #0d6efd;
+    }
+
+    .save-status.success {
+        color: #198754;
+    }
+
+    .save-status.error {
+        color: #dc3545;
+    }
+
 </style>
 
 
@@ -94,6 +112,7 @@
                                                     <td class="d-flex align-items-center">
                                                         <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
                                                         <span class="my-auto text-truncate">{{ $product->wine_name }}</span>
+                                                        <span class="save-status ms-2" style="display:none;"></span>
                                                         <a href="{{ route('store-manager.singleproduct', $product->id) }}" class="ms-2" title="View Product">
                                                             <i class="bi bi-box-arrow-up-right"></i>
                                                         </a>
@@ -195,6 +214,13 @@
                     const productId = this.value;
                     const status = this.checked ? 'active' : 'inactive';
 
+                    const statusEl = row.querySelector('.save-status');
+                    statusEl.style.display = 'inline';
+                    statusEl.className = 'save-status updating';
+                    statusEl.innerHTML =
+                        '<span class="spinner-border spinner-border-sm me-1"></span> Updating...';
+
+
                     // If unchecking 'available' and 'featured' is still checked, show warning and revert change
                     const featuredCheckbox = document.querySelector(`input[name="featured[]"][value="${productId}"]`);
                     if (!this.checked && featuredCheckbox && featuredCheckbox.checked) {
@@ -224,6 +250,13 @@
                         setTimeout(() => {
                             row.classList.remove('row-success');
                         }, 2000);
+                        statusEl.className = 'save-status success';
+                        statusEl.innerHTML = '✓ Updated';
+
+                        setTimeout(() => {
+                            statusEl.style.display = 'none';
+                        }, 2000);
+
                     })
                     .catch(error => {
                         console.error('Error updating product status:', error);
@@ -232,6 +265,13 @@
                             setTimeout(() => {
                                 row.classList.remove('row-error');
                             }, 3000);
+                            statusEl.className = 'save-status error';
+                            statusEl.innerHTML = '✗ Update Failed';
+
+                            setTimeout(() => {
+                                statusEl.style.display = 'none';
+                            }, 3000);
+
                     });
                 });
             });
@@ -240,6 +280,12 @@
             document.querySelectorAll('input[name="featured[]"]').forEach(function (checkbox) {
                 checkbox.addEventListener('change', function () {
                     const productId = this.value;
+                    const row = this.closest('tr');
+                    const statusEl = row.querySelector('.save-status');
+                    statusEl.style.display = 'inline';
+                    statusEl.className = 'save-status updating';
+                    statusEl.innerHTML =
+                        '<span class="spinner-border spinner-border-sm me-1"></span> Updating...';
 
                     // If 'available' is unchecked, show warning and prevent checking 'featured'
                     const availableCheckbox = document.querySelector(`input[name="available[]"][value="${productId}"]`);
@@ -259,8 +305,32 @@
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
                         body: JSON.stringify({ product_id: productId, is_featured: is_featured })
-                    }).then(response => showToastr(response, 'featured flag'))
-                    .catch(() => toastr.error('Something went wrong.'));
+                    }).then(response => {
+                        showToastr(response, 'featured flag');
+                        row.classList.add('row-success');
+                        setTimeout(() => {
+                            row.classList.remove('row-success');
+                        }, 2000);
+                        statusEl.className = 'save-status success';
+                        statusEl.innerHTML = '✓ Updated';
+                        setTimeout(() => {
+                            statusEl.style.display = 'none';
+                        }, 2000);
+
+                        })
+                        .catch(() => {
+                        toastr.error('Something went wrong.');
+                        row.classList.add('row-error');
+                        setTimeout(() => {
+                            row.classList.remove('row-error');
+                        }, 3000);
+                        statusEl.className = 'save-status error';
+                        statusEl.innerHTML = '✗ Update Failed';
+                        setTimeout(() => {
+                            statusEl.style.display = 'none';
+                        }, 3000);
+
+                        });
                 });
             });
         });
