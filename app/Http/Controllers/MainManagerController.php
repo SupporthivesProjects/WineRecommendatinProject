@@ -152,6 +152,7 @@ class MainManagerController extends Controller
 
         $allProductCount = DB::table('store_products')
             ->whereIn('store_id', $filteredStoreIds)
+            ->where('status', 'active')
             ->count();
 
         $storeCount = count($filteredStoreIds);
