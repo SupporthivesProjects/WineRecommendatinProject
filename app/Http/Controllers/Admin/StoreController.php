@@ -63,8 +63,11 @@ class StoreController extends Controller
         $store->load('users');
 
         $activeProducts = $store->products()->wherePivot('status', 'active')->get();
+        $cheeseProducts = $store->cheeseProducts()
+        ->withPivot(['quantity', 'is_available'])
+        ->get();
 
-        return view('admin.stores.show', compact('store', 'activeProducts'));
+        return view('admin.stores.show', compact('store', 'activeProducts','cheeseProducts'));
     }
 
     /**

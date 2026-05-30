@@ -3,6 +3,59 @@
 
 @push('styles')
 
+<style>
+
+    .store-nav-box {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+    }
+
+    .store-nav-tabs {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .store-nav-tabs .nav-link {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 10px 18px;
+        color: #374151;
+        font-weight: 600;
+        background: #fff;
+        transition: all .2s ease;
+    }
+
+    .store-nav-tabs .nav-link:hover {
+        border-color: #6C5CE7;
+        color: #6C5CE7;
+    }
+
+    .store-nav-tabs .nav-link.active {
+        background: #6C5CE7;
+        border-color: #6C5CE7;
+        color: #fff;
+    }
+
+    .store-tab-badge {
+        margin-left: 8px;
+        border: 2px solid #ec4899;
+        color: #000;
+        border-radius: 10px;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .store-nav-tabs .nav-link.active .store-tab-badge {
+        /* background: rgba(255,255,255,.25); */
+        background: white;
+    }
+
+</style>
 
 
 @endpush
@@ -29,27 +82,60 @@
         </div>
 
         <!-- Tabs Navigation -->
-         <div class="">
-            <ul class="nav nav-tabs mb-3" id="storeTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details"
-                        type="button" role="tab" aria-controls="details" aria-selected="true" style="background-color:transparent!important;border:0px solid black!imporant;">
-                        Store Details
+         <div class="container">
+            <div class="store-nav-box">
+                <div class="nav store-nav-tabs" id="storeTab" role="tablist">
+                    <button
+                        class="nav-link active"
+                        id="details-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#details"
+                        type="button"
+                        role="tab">
+                        Overview
                     </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
-                        type="button" role="tab" aria-controls="users" aria-selected="false" style="background-color:transparent!important;border:0px!imporant;">
-                        Store Users
+
+                    <button
+                        class="nav-link"
+                        id="users-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#users"
+                        type="button"
+                        role="tab">
+                        Users
+                        <span class="store-tab-badge">
+                            {{ $store->users->count() }}
+                        </span>
                     </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="products-tab" data-bs-toggle="tab" data-bs-target="#products"
-                        type="button" role="tab" aria-controls="products" aria-selected="false" style="background-color:transparent!important;border:0px!imporant;">
-                        Store Products
+
+                    <button
+                        class="nav-link"
+                        id="products-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#products"
+                        type="button"
+                        role="tab">
+                        Products
+                        <span class="store-tab-badge">
+                            {{ $store->products->count() }}
+                        </span>
                     </button>
-                </li>
-            </ul>
+
+                    <button
+                        class="nav-link"
+                        id="orders-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#cheese"
+                        type="button"
+                        role="tab">
+                        Cheese
+                        <span class="store-tab-badge">
+                            {{ $cheeseProducts->count() ?? 0 }}
+                        </span>
+                    </button>
+
+                </div>
+            </div>
         </div>
 
         <!-- Tabs Content -->
@@ -83,7 +169,7 @@
                         @foreach($rows as $label => $value)
                             <div class="row border-bottom py-2">
                                 <dt class="col-sm-3 text-muted">{{ $label }}</dt>
-                                <dd class="col-sm-9">
+                                <dd class="col-sm-9 fw-bold">
                                     @if ($label === 'Status')
                                         <span class="badge {{ $value === 'active' ? 'bg-success' : 'bg-danger' }}">
                                             {{ ucfirst($value) }}
@@ -189,6 +275,46 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Cheese Tab -->
+            <div class="tab-pane fade" id="cheese" role="tabpanel" aria-labelledby="orders-tab">
+                <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
+                    <h3 class="h5 text-dark mb-3">Store Cheese</h3>
+                    <p class="text-muted">
+                        <table class="table table table-bordered table-striped" id="store-cheese-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Cheese Name</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($cheeseProducts as $product)
+                                    <tr>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ ucfirst($product->description) }}</td>
+                                        <td>{{ $product->price }}</td>
+                                        @if ($product->is_active == 0)
+                                            <td>Inactive</td>
+                                        @else
+                                            <td>Active</td>
+                                        @endif
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">No products found.</td>
+                                    </tr>
+                                @endforelse
+                                
+                            </tbody>
+                        </table>
+                    </p>
+                </div>
+            </div>
+
+
 
         </div>
 
