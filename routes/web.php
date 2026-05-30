@@ -226,6 +226,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //assign stores to manager
     Route::get('/assign-stores/{manager}', [StoreAssignmentController::class, 'edit'])->name('assign.stores');
     Route::post('/assign-stores/{manager}', [StoreAssignmentController::class, 'update'])->name('assign.stores.update');
+
+    // Add cheese 
+    Route::post('/stores/{store}/cheese/add',[StoreController::class, 'addCheese'])->name('stores.cheese.add');
+    //edit cheese status
+    Route::post('/stores/{store}/cheese/{cheese}/toggle',[StoreController::class, 'toggleCheese'])->name('stores.cheese.toggle');    
+
 });
 
 // Admin Questionnaire Routes

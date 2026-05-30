@@ -59,7 +59,26 @@
 
 
 @endpush
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
 
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+    </div>
+@endif
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+        </button>
+    </div>
+@endif
 <div class="main-content app-content">
     <div class="container-fluid">
         <!-- Page Header -->
@@ -279,7 +298,17 @@
             <!-- Cheese Tab -->
             <div class="tab-pane fade" id="cheese" role="tabpanel" aria-labelledby="orders-tab">
                 <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
-                    <h3 class="h5 text-dark mb-3">Store Cheese</h3>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h5 text-dark mb-0">Store Cheese</h3>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addCheeseModal">
+                        Add Cheese
+                    </button>
+                </div>
                     <p class="text-muted">
                         <table class="table table table-bordered table-striped" id="store-cheese-table">
                             <thead class="table-light">
@@ -296,11 +325,31 @@
                                         <td>{{ $product->name }}</td>
                                         <td>{{ ucfirst($product->description) }}</td>
                                         <td>{{ $product->price }}</td>
-                                        @if ($product->is_active == 0)
-                                            <td>Inactive</td>
-                                        @else
-                                            <td>Active</td>
-                                        @endif
+                                        <td>
+                                            @if($product->pivot->is_available)
+                                                <form method="POST"
+                                                    action="{{ route('admin.stores.cheese.toggle', [$store->id, $product->id]) }}">
+                                                    @csrf
+
+                                                    <input type="hidden" name="status" value="0">
+
+                                                    <button type="submit" class="btn btn-sm btn-success">
+                                                        Active
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form method="POST"
+                                                    action="{{ route('admin.stores.cheese.toggle', [$store->id, $product->id]) }}">
+                                                    @csrf
+
+                                                    <input type="hidden" name="status" value="1">
+
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Inactive
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -313,9 +362,77 @@
                     </p>
                 </div>
             </div>
+        </div>
 
+        <!-- Add Cheese Modal -->
+        <div class="modal fade" id="addCheeseModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
 
+                    <form method="POST"
+                        action="{{ route('admin.stores.cheese.add', $store->id) }}">
+                        @csrf
 
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Cheese</h5>
+                            <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                            </button>
+                        </div>
+                        <input
+                            type="text"
+                            id="cheeseSearch"
+                            class="form-control mb-3"
+                            placeholder="Search cheese..."
+                        >
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Select Cheese
+                                </label>
+                                <div style="max-height: 400px; overflow-y: auto;">
+                                    @foreach($availableCheeses as $cheese)
+                                        <div class="form-check mb-2 cheese-item">
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                name="cheese_ids[]"
+                                                value="{{ $cheese->id }}"
+                                                id="cheese{{ $cheese->id }}"
+                                            >
+
+                                            <label
+                                                class="form-check-label"
+                                                for="cheese{{ $cheese->id }}"
+                                            >
+                                                {{ $cheese->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
+                                Add Cheese
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
         </div>
 
        
@@ -449,6 +566,14 @@
                     pageLength: 25
                 });
             });
+        </script>
+        <script>
+              $(document).ready(function () {
+                $('#store-cheese-table').DataTable({
+                    pageLength: 25
+                });
+            });
+           
         </script>
 
         <script>
@@ -608,7 +733,17 @@
                 eyeIcon.classList.toggle('bi-eye-slash');
             });
         </script>
+        <script>
+            $('#cheeseSearch').on('keyup', function () {
+                let value = $(this).val().toLowerCase();
 
+                $('.cheese-item').filter(function () {
+                    $(this).toggle(
+                        $(this).text().toLowerCase().indexOf(value) > -1
+                    );
+                });
+            });
+        </script>
 
     @endpush
 

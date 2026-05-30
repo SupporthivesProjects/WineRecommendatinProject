@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\CheeseProduct;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
@@ -67,7 +68,12 @@ class StoreController extends Controller
         ->withPivot(['quantity', 'is_available'])
         ->get();
 
-        return view('admin.stores.show', compact('store', 'activeProducts','cheeseProducts'));
+        $assignedCheeseIds = $cheeseProducts->pluck('id');
+        $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.stores.show', compact('store', 'activeProducts','cheeseProducts','availableCheeses'));
     }
 
     /**
@@ -162,4 +168,50 @@ class StoreController extends Controller
             'message' => 'User assigned to store successfully',
         ]);
     }
+
+
+    // Admin Add cheese
+    public function addCheese(Request $request, Store $store)
+    {
+        $request->validate([
+            'cheese_ids' => 'required|array',
+            'cheese_ids.*' => 'exists:cheese_products,id',
+        ]);
+
+        $data = [];
+
+        foreach ($request->cheese_ids as $cheeseId) {
+            $data[$cheeseId] = [
+                'quantity' => 10,
+                'is_available' => true,
+            ];
+        }
+        
+        $store->cheeseProducts()->syncWithoutDetaching($data);
+
+        return back()->with(
+            'success',
+            'Cheese added successfully.'
+        );
+    }
+
+    public function toggleCheese(Request $request,Store $store,CheeseProduct $cheese)
+    {
+        $status = (bool) $request->status;
+    
+        $store->cheeseProducts()->updateExistingPivot(
+            $cheese->id,
+            [
+                'is_available' => $status,
+                'updated_at' => now(),
+            ]
+        );
+    
+        return back()->with(
+            'success',
+            'Cheese status updated successfully.'
+        );
+    }
+
+
 }
