@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\Models\User;
 use App\Models\CheeseProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
@@ -59,21 +60,65 @@ class StoreController extends Controller
     // {
     //     return view('admin.stores.show', compact('store'));
     // }
+    // public function show(Store $store)
+    // {
+    //     $store->load('users');
+
+    //     $activeProducts = $store->products()->wherePivot('status', 'active')->get();
+    //     $storeProducts = $store->products()->get();
+
+    //     $cheeseProducts = $store->cheeseProducts()
+    //     ->withPivot(['quantity', 'is_available'])
+    //     ->get();
+
+    //     $assignedCheeseIds = $cheeseProducts->pluck('id');
+    //     $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
+    //         ->orderBy('name')
+    //         ->get();
+
+        
+    //     $assignedProductIds = $storeProducts->pluck('id');
+
+    //     return view('admin.stores.show', compact('store', 'activeProducts','cheeseProducts','availableCheeses','storeProducts',
+    //     'availableProducts',));
+    // }
     public function show(Store $store)
     {
         $store->load('users');
 
-        $activeProducts = $store->products()->wherePivot('status', 'active')->get();
+        $activeProducts = $store->products()
+            ->wherePivot('status', 'active')
+            ->get();
+
+        $storeProducts = $store->products()->get();
+
         $cheeseProducts = $store->cheeseProducts()
-        ->withPivot(['quantity', 'is_available'])
-        ->get();
+            ->withPivot(['quantity', 'is_available'])
+            ->get();
 
         $assignedCheeseIds = $cheeseProducts->pluck('id');
+
         $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
             ->orderBy('name')
             ->get();
 
-        return view('admin.stores.show', compact('store', 'activeProducts','cheeseProducts','availableCheeses'));
+        $assignedProductIds = $storeProducts->pluck('id');
+
+        $availableProducts = Product::whereNotIn('id', $assignedProductIds)
+            ->orderBy('wine_name')
+            ->get();
+
+        return view(
+            'admin.stores.show',
+            compact(
+                'store',
+                'activeProducts',
+                'storeProducts',
+                'availableProducts',
+                'cheeseProducts',
+                'availableCheeses'
+            )
+        );
     }
 
     /**
@@ -210,6 +255,50 @@ class StoreController extends Controller
         return back()->with(
             'success',
             'Cheese status updated successfully.'
+        );
+    }
+
+    //admin adds wine to store
+    public function addProducts(Request $request, Store $store)
+    {
+        $request->validate([
+            'product_ids' => 'required|array',
+            'product_ids.*' => 'exists:products,id',
+        ]);
+
+        $data = [];
+
+        foreach ($request->product_ids as $productId) {
+            $data[$productId] = [
+                'status' => 'active',
+            ];
+        }
+
+        $store->products()->syncWithoutDetaching($data);
+
+        return back()->with(
+            'success',
+            'Products added successfully.'
+        );
+    }
+
+    public function toggleProduct(Request $request,Store $store,Product $product)
+    {
+        $request->validate([
+            'status' => 'required|in:active,inactive'
+        ]);
+    
+        $store->products()->updateExistingPivot(
+            $product->id,
+            [
+                'status' => $request->status,
+                'updated_at' => now(),
+            ]
+        );
+    
+        return back()->with(
+            'success',
+            'Product status updated successfully.'
         );
     }
 

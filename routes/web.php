@@ -232,6 +232,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //edit cheese status
     Route::post('/stores/{store}/cheese/{cheese}/toggle',[StoreController::class, 'toggleCheese'])->name('stores.cheese.toggle');    
 
+    // Add store wine
+    Route::post('/stores/{store}/product/add',[StoreController::class, 'addProducts'])->name('stores.product.add');
+    Route::post('/stores/{store}/product/{product}/toggle',[StoreController::class, 'toggleProduct'])->name('stores.product.toggle');
+
+
 });
 
 // Admin Questionnaire Routes
@@ -249,7 +254,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('questionnaire-StoreImages', [App\Http\Controllers\Admin\DashboardController::class, 'storeImages'])->name('questionnaires.storeImages');
     Route::delete('questionnaire-DeleteImage/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'deleteImage'])->name('questionnaires.deleteImage');
     Route::post('questionnaire-ToggleImage/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'toggleImage'])->name('questionnaires.toggleImage');
-
+    
 
 });
 

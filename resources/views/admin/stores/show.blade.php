@@ -59,26 +59,6 @@
 
 
 @endpush
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-    </div>
-@endif
-@if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-    </div>
-@endif
 <div class="main-content app-content">
     <div class="container-fluid">
         <!-- Page Header -->
@@ -264,7 +244,17 @@
             <!-- Store Products Tab -->
             <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
                 <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
-                    <h3 class="h5 text-dark mb-3">Store Products</h3>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h5 text-dark mb-0">Store Products</h3>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addProductModal">
+                        Add Product
+                    </button>
+                </div>
                     <div class="table-responsive">
                         <table class="table table table-bordered table-striped" id="store-products-table">
                             <thead class="table-light">
@@ -273,15 +263,53 @@
                                     <th>Type</th>
                                     <th>Vintage</th>
                                     <th>Price</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($store->products as $product)
+                                @forelse ($storeProducts as $product)
                                     <tr>
                                         <td>{{ $product->wine_name }}</td>
                                         <td>{{ ucfirst($product->type) }}</td>
                                         <td>{{ $product->vintage_year }}</td>
                                         <td>{{ $product->retail_price }}</td>
+                                        <td>
+                                            @if($product->pivot->status == 'active')
+
+                                                <form method="POST"
+                                                    action="{{ route('admin.stores.product.toggle', [$store->id, $product->id]) }}">
+                                                    @csrf
+
+                                                    <input type="hidden"
+                                                        name="status"
+                                                        value="inactive">
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-success">
+                                                        Active
+                                                    </button>
+                                                </form>
+
+                                            @else
+
+                                                <form method="POST"
+                                                    action="{{ route('admin.stores.product.toggle', [$store->id, $product->id]) }}">
+                                                    @csrf
+
+                                                    <input type="hidden"
+                                                        name="status"
+                                                        value="active">
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-danger">
+                                                        Inactive
+                                                    </button>
+                                                </form>
+
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -360,6 +388,87 @@
                             </tbody>
                         </table>
                     </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Add Product Modal -->
+        <div class="modal fade" id="addProductModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <form method="POST"
+                        action="{{ route('admin.stores.product.add', $store->id) }}">
+                        @csrf
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Products</h5>
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal">
+                            </button>
+                        </div>
+
+                        <input
+                            type="text"
+                            id="productSearch"
+                            class="form-control mb-3"
+                            placeholder="Search wine..."
+                        >
+
+                        <div class="modal-body">
+
+                            <div style="max-height: 400px; overflow-y: auto;">
+
+                                @foreach($availableProducts as $product)
+
+                                    <div class="form-check mb-2 product-item">
+
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="product_ids[]"
+                                            value="{{ $product->id }}"
+                                            id="product{{ $product->id }}"
+                                        >
+
+                                        <label
+                                            class="form-check-label"
+                                            for="product{{ $product->id }}"
+                                        >
+                                            {{ $product->wine_name }}
+                                        </label>
+
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
+                                Add Products
+                            </button>
+
+                        </div>
+
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -738,6 +847,18 @@
                 let value = $(this).val().toLowerCase();
 
                 $('.cheese-item').filter(function () {
+                    $(this).toggle(
+                        $(this).text().toLowerCase().indexOf(value) > -1
+                    );
+                });
+            });
+        </script>
+
+        <script>
+            $('#productSearch').on('keyup', function () {
+                let value = $(this).val().toLowerCase();
+
+                $('.product-item').filter(function () {
                     $(this).toggle(
                         $(this).text().toLowerCase().indexOf(value) > -1
                     );
