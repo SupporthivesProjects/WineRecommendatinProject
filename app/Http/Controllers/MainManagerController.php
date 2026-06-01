@@ -242,7 +242,7 @@ class MainManagerController extends Controller
 
         // Fetch stores for this manager with required fields only
         $stores = Store::where('manager_id', $managerId)
-            ->select('id', 'store_name', 'contact_number', 'email', 'business_type', 'address', 'new_contact_number', 'contact_status')
+            ->select('id', 'store_name', 'contact_number', 'email', 'business_type', 'address1', 'address2' , 'new_contact_number', 'contact_status')
             ->get();
 
         return view('mainManager.allStores', compact('stores'));

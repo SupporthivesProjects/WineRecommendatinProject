@@ -251,8 +251,12 @@
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label class="form-label"><strong>Address</strong></label>
-                                                            <p class="form-control">{{ $store->address }}</p>
+                                                            <label class="form-label"><strong>Address 1</strong></label>
+                                                            <p class="form-control">{{ $store->address1 }}</p>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label"><strong>Address 2</strong></label>
+                                                            <p class="form-control">{{ $store->address2 }}</p>
                                                         </div>
 
                                                         <div class="mb-3">
