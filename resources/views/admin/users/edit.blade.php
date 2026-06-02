@@ -12,7 +12,7 @@
                 <h2 class="main-content-title fs-24 mb-1">{{ __('Edit User') }}</h2>
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Users / Edit</li>
+                    <li class="breadcrumb-item active" aria-current="page">Users / Edist</li>
                 </ol>
             </div>
             <div class="d-flex">
@@ -80,7 +80,7 @@
                                 <!-- Role -->
                                 <div class="col-12 col-md-6">
                                     <label for="role" class="form-label">{{ __('Role') }}</label>
-                                    <input id="role" class="form-control" type="text" name="role" value="{{ old('role', $user->role) }}" readonly/>
+                                    <input id="role" class="form-control border border-danger" type="text" name="role" value="{{ old('role', $user->role) }}" readonly/>
                                     @error('role')
                                         <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
@@ -101,7 +101,7 @@
                                 <!-- Store ID -->
                                 <div class="col-12 col-md-6">
                                     <label for="store_display" class="form-label">{{ __('Store') }}</label>
-                                    <input id="store_display" class="form-control" type="text" value="{{ old('store_id', $user->store ? $user->store->store_name : '') }}" readonly />
+                                    <input id="store_display" class="form-control border border-danger" type="text" value="{{ old('store_id', $user->store ? $user->store->store_name : '') }}" readonly />
                                     <input type="hidden" name="store_id" value="{{ old('store_id', $user->store_id) }}" />
                                     @error('store_id')
                                         <div class="text-danger mt-2">{{ $message }}</div>
