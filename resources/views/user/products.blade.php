@@ -508,37 +508,52 @@
 
                 
                     <!-- Pagination Code -->
-                    <!-- new code -->
                     @if ($products->hasPages())
+                        @php
+                            $lastPage = $products->lastPage();
+                            $currentPage = $products->currentPage();
+
+                            // Show current page with one page before and after
+                            $start = max(1, $currentPage - 1);
+                            $end = min($lastPage, $currentPage + 1);
+                        @endphp
+
                         <div class="d-flex justify-content-center my-4">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination mb-0">
 
-                                    {{-- Previous Page Link --}}
-                                    @if ($products->onFirstPage())
-                                        <li class="page-item disabled">
-                                            <span class="page-link">
-                                                <i class="bi bi-caret-left"></i>
-                                            </span>
-                                        </li>
-                                    @else
-                                        <li class="page-item">
+                                    {{-- First Page --}}
+                                    <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ $products->url(1) }}" aria-label="First">
+                                            &laquo;&laquo;
+                                        </a>
+                                    </li>
+
+                                    {{-- Previous Page --}}
+                                    <li class="page-item {{ $products->onFirstPage() ? 'disabled' : '' }}">
+                                        @if ($products->onFirstPage())
+                                            <span class="page-link">&laquo;</span>
+                                        @else
                                             <a class="page-link" href="{{ $products->previousPageUrl() }}" rel="prev">
-                                                <i class="bi bi-caret-left"></i>
+                                                &laquo;
                                             </a>
+                                        @endif
+                                    </li>
+
+                                    {{-- First Page + Ellipsis --}}
+                                    @if ($start > 1)
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->url(1) }}">1</a>
                                         </li>
+
+                                        @if ($start > 2)
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        @endif
                                     @endif
 
-                                    @php
-                                        $lastPage    = $products->lastPage();
-                                        $currentPage = $products->currentPage();
-
-                                        // Dynamic start & end
-                                        $start = max($currentPage, 1);
-                                        $end   = min($currentPage + 2, $lastPage);
-                                    @endphp
-
-                                    {{-- Dynamic Pages (Current, Next 2) --}}
+                                    {{-- Middle Pages --}}
                                     @foreach (range($start, $end) as $page)
                                         <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
                                             <a class="page-link" href="{{ $products->url($page) }}">
@@ -547,36 +562,38 @@
                                         </li>
                                     @endforeach
 
-                                    {{-- Ellipsis --}}
-                                    @if ($end < $lastPage - 3)
-                                        <li class="page-item disabled">
-                                            <span class="page-link">...</span>
-                                        </li>
-                                    @endif
+                                    {{-- Last Page + Ellipsis --}}
+                                    @if ($end < $lastPage)
+                                        @if ($end < $lastPage - 1)
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        @endif
 
-                                    {{-- Last 3 Pages --}}
-                                    @foreach (range(max($lastPage - 2, $end + 1), $lastPage) as $page)
-                                        <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $products->url($page) }}">
-                                                {{ $page }}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->url($lastPage) }}">
+                                                {{ $lastPage }}
                                             </a>
                                         </li>
-                                    @endforeach
-
-                                    {{-- Next Page Link --}}
-                                    @if ($products->hasMorePages())
-                                        <li class="page-item">
-                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
-                                                <i class="bi bi-caret-right"></i>
-                                            </span>
-                                        </li>
-                                    @else
-                                        <li class="page-item disabled">
-                                            <span class="page-link">
-                                                <i class="bi bi-caret-right"></i>
-                                            </span>
-                                        </li>
                                     @endif
+
+                                    {{-- Next Page --}}
+                                    <li class="page-item {{ !$products->hasMorePages() ? 'disabled' : '' }}">
+                                        @if ($products->hasMorePages())
+                                            <a class="page-link" href="{{ $products->nextPageUrl() }}" rel="next">
+                                                &raquo;
+                                            </a>
+                                        @else
+                                            <span class="page-link">&raquo;</span>
+                                        @endif
+                                    </li>
+
+                                    {{-- Last Page --}}
+                                    <li class="page-item {{ $currentPage == $lastPage ? 'disabled' : '' }}">
+                                        <a class="page-link" href="{{ $products->url($lastPage) }}" aria-label="Last">
+                                            &raquo;&raquo;
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </nav>

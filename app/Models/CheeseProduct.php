@@ -24,7 +24,7 @@ class CheeseProduct extends Model
         'description',
         'price',
         'image',
-        'is_available'
+        'is_active'
     ];
     
     /**

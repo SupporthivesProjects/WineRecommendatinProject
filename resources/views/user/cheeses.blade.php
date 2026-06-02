@@ -263,41 +263,96 @@
 
                 <!-- Pagination -->
                 @if ($cheeses->hasPages())
+                    @php
+                        $lastPage = $cheeses->lastPage();
+                        $currentPage = $cheeses->currentPage();
+
+                        // Show current page with one page before and after
+                        $start = max(1, $currentPage - 1);
+                        $end = min($lastPage, $currentPage + 1);
+                    @endphp
+
                     <div class="d-flex justify-content-center my-4">
                         <nav aria-label="Page navigation">
                             <ul class="pagination mb-0">
-                                {{-- Previous Page Link --}}
-                                @if ($cheeses->onFirstPage())
-                                    <li class="page-item disabled">
-                                        <span class="page-link"><i class="bi bi-caret-left"></i></span>
-                                    </li>
-                                @else
-                                    <li class="page-item">
+
+                                {{-- First Page --}}
+                                <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
+                                    <a class="page-link" href="{{ $cheeses->url(1) }}">
+                                        <i class="bi bi-chevron-double-left"></i>
+                                    </a>
+                                </li>
+
+                                {{-- Previous Page --}}
+                                <li class="page-item {{ $cheeses->onFirstPage() ? 'disabled' : '' }}">
+                                    @if ($cheeses->onFirstPage())
+                                        <span class="page-link">
+                                            <i class="bi bi-caret-left"></i>
+                                        </span>
+                                    @else
                                         <a class="page-link" href="{{ $cheeses->previousPageUrl() }}" rel="prev">
                                             <i class="bi bi-caret-left"></i>
                                         </a>
+                                    @endif
+                                </li>
+
+                                {{-- First Page + Ellipsis --}}
+                                @if ($start > 1)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $cheeses->url(1) }}">1</a>
                                     </li>
+
+                                    @if ($start > 2)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
                                 @endif
 
-                                {{-- Pagination Elements --}}
-                                @foreach ($cheeses->getUrlRange(1, $cheeses->lastPage()) as $page => $url)
-                                    <li class="page-item {{ $cheeses->currentPage() == $page ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                {{-- Middle Pages --}}
+                                @foreach (range($start, $end) as $page)
+                                    <li class="page-item {{ $currentPage == $page ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $cheeses->url($page) }}">
+                                            {{ $page }}
+                                        </a>
                                     </li>
                                 @endforeach
 
-                                {{-- Next Page Link --}}
-                                @if ($cheeses->hasMorePages())
+                                {{-- Last Page + Ellipsis --}}
+                                @if ($end < $lastPage)
+                                    @if ($end < $lastPage - 1)
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    @endif
+
                                     <li class="page-item">
+                                        <a class="page-link" href="{{ $cheeses->url($lastPage) }}">
+                                            {{ $lastPage }}
+                                        </a>
+                                    </li>
+                                @endif
+
+                                {{-- Next Page --}}
+                                <li class="page-item {{ !$cheeses->hasMorePages() ? 'disabled' : '' }}">
+                                    @if ($cheeses->hasMorePages())
                                         <a class="page-link" href="{{ $cheeses->nextPageUrl() }}" rel="next">
                                             <i class="bi bi-caret-right"></i>
                                         </a>
-                                    </li>
-                                @else
-                                    <li class="page-item disabled">
-                                        <span class="page-link"><i class="bi bi-caret-right"></i></span>
-                                    </li>
-                                @endif
+                                    @else
+                                        <span class="page-link">
+                                            <i class="bi bi-caret-right"></i>
+                                        </span>
+                                    @endif
+                                </li>
+
+                                {{-- Last Page --}}
+                                <li class="page-item {{ $currentPage == $lastPage ? 'disabled' : '' }}">
+                                    <a class="page-link" href="{{ $cheeses->url($lastPage) }}">
+                                        <i class="bi bi-chevron-double-right"></i>
+                                    </a>
+                                </li>
+
                             </ul>
                         </nav>
                     </div>

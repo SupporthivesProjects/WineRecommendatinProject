@@ -29,8 +29,16 @@ class StoreDashboardController extends Controller
         // Step 2: Get product IDs for this store from store_products
         $storeProductIds = DB::table('store_products')
             ->where('store_id', $storeId)
+            ->where('status', 'active')
             ->pluck('product_id')
             ->toArray();
+
+        $cheeseProductsCount = DB::table('store_inventory')
+            ->where('store_id', $storeId)
+            ->where('is_available', 1)
+            ->count();
+
+
 
         $featuredCount = DB::table('store_products')
         ->where('store_id', $storeId)
@@ -161,7 +169,8 @@ class StoreDashboardController extends Controller
             'products',
             'featuredCount',
             'graphData',
-            'dates'
+            'dates',
+            'cheeseProductsCount'
         ));
     }
 

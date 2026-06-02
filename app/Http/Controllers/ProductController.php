@@ -120,10 +120,11 @@ class ProductController extends Controller
     public function browse(Request $request)
     {
         try {
-            $query = Product::query()->with('images');
+            $query = Product::where('status', 'active')->with('images');
 
             // Get all unique values for filters
-            $allProducts = Product::all();
+            // $allProducts = Product::all();
+            $allProducts = Product::where('status', 'active')->get();
             $vintageYears = $allProducts->pluck('vintage_year')->unique()->sort()->values();
             $wineries = $allProducts->pluck('winery')->unique()->sort()->values();
             $types = $allProducts->pluck('type')->unique()->sort()->values();
@@ -171,15 +172,15 @@ class ProductController extends Controller
     public function allcheese()
     {
         try {
-            // Fetch all cheese products with pagination
-            $cheeses = CheeseProduct::paginate(12);
+            // Fetch only active cheese products with pagination
+            $cheeses = CheeseProduct::where('is_active', 1)
+                ->paginate(12);
 
             return view('allcheese', [
                 'cheeses' => $cheeses
             ]);
 
         } catch (\Exception $e) {
-            // Log the error for debugging
             Log::error('Error loading cheese products: ' . $e->getMessage());
 
             return back()->with('error', 'Failed to load products. Please try again later.');

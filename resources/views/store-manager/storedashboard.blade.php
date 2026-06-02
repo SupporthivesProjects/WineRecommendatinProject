@@ -112,7 +112,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3">
                     <div class="card custom-card">
                         <div class="card-body">
                             <div class="card-item">
@@ -128,20 +128,20 @@
                                     </svg>
                                 </div>
                                 <div class="card-item-title  mb-2">
-                                    <label class="main-content-label fs-13 fw-bold mb-1">Total
+                                    <label class="main-content-label fs-13 fw-bold mb-1">Cheese
                                         Products</label>
-                                    <span class="d-block fs-12 mb-0 text-muted">Total Number of Products</span>
+                                    <span class="d-block fs-12 mb-0 text-muted">Cheese Products</span>
                                 </div>
                                 <div class="card-item-body">
                                     <div class="card-item-stat">
-                                        <h4 class="fw-bold">productsCount</h4>
+                                        <h4 class="fw-bold">{{ $cheeseProductsCount }}</h4>
                                         <small><b class="text-danger"></small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div> 
             </div>
             <!-- End::row -->    
             <!-- Start::row-1 -->
