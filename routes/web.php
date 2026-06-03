@@ -237,6 +237,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/stores/{store}/product/{product}/toggle',[StoreController::class, 'toggleProduct'])->name('stores.product.toggle');
 
 
+    //toggle features for a store
+    Route::post('/stores/{store}/features/{feature}/toggle',[StoreController::class, 'toggleFeature'])->name('stores.feature.toggle');
+
+
 });
 
 // Admin Questionnaire Routes

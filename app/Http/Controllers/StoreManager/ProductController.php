@@ -29,29 +29,32 @@ class ProductController extends Controller
             ->get()
             ->keyBy('product_id'); // Makes it easy to lookup
 
-        return view('store-manager.storeDashboard.storeproducts-tab', compact('allProducts', 'storeProducts'));
+        $canAddProducts = $store->features()
+            ->where('key', 'add_products')
+            ->wherePivot('enabled', 1)
+            ->exists();
+        
+        $canFeatureProducts = $store->features()
+            ->where('key', 'featured_wine')
+            ->wherePivot('enabled', 1)
+            ->exists();
+
+        return view(
+            'store-manager.storeDashboard.storeproducts-tab',
+            compact(
+                'allProducts',
+                'storeProducts',
+                'canFeatureProducts',
+                'canAddProducts'
+            )
+        );
     }
 
     
     /**
      * Update the store's product selection.
      */
-    // public function updateStoreProducts(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'product_ids' => 'required|array',
-    //         'product_ids.*' => 'exists:products,id',
-    //     ]);
-        
-    //     $store = Auth::user()->store;
-        
-    //     // Sync the products with the store
-    //     $store->products()->sync($validated['product_ids']);
-        
-    //     return redirect()->route('store-manager.products.index')
-    //         ->with('success', 'Store products updated successfully.');
-    // }
-
+    
     public function updateStatus(Request $request)
     {
         Log::info('Entered updateStatus method.', ['user_id' => Auth::id()]);
@@ -65,6 +68,19 @@ class ProductController extends Controller
 
         $user = Auth::user();
         $storeId = $user->store_id;
+
+        $canAddProducts = $user->store
+            ->features()
+            ->where('key', 'add_products')
+            ->wherePivot('enabled', 1)
+            ->exists();
+
+        if (! $canAddProducts) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Add Products feature is not enabled for this store.'
+            ], 403);
+        }
 
         Log::info('User store ID retrieved:', ['store_id' => $storeId]);
 
@@ -109,7 +125,22 @@ class ProductController extends Controller
 
     public function updateFeatured(Request $request)
     {
-        $storeId = Auth::user()->store_id;
+        // $storeId = Auth::user()->store_id;
+        $user = Auth::user();
+        $storeId = $user->store_id;
+
+        $canFeatureProducts = $user->store
+            ->features()
+            ->where('key', 'featured_wine')
+            ->wherePivot('enabled', 1)
+            ->exists();
+
+        if (! $canFeatureProducts) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Featured Products feature is not enabled for this store.'
+            ], 403);
+        }
         \DB::table('store_products')
             ->updateOrInsert(
                 ['store_id' => $storeId, 'product_id' => $request->product_id],

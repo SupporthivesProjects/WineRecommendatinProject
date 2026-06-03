@@ -141,14 +141,14 @@
                                                         <input type="checkbox"
                                                             name="available[]"
                                                             value="{{ $product->id }}"
-                                                            {{ $isAvailable ? 'checked' : '' }}>
+                                                            {{ $isAvailable ? 'checked' : '' }} {{ $canAddProducts ? '' : 'disabled' }}>
                                                     </td>
                                                     <!-- Featured Checkbox -->
                                                     <td data-order="{{ $isFeatured ? 1 : 0 }}">
                                                         <input type="checkbox"
                                                             name="featured[]"
                                                             value="{{ $product->id }}"
-                                                            {{ $isFeatured ? 'checked' : '' }}>
+                                                            {{ $isFeatured ? 'checked' : '' }} {{ $canFeatureProducts ? '' : 'disabled' }}>
                                                     </td>
                                                 </tr>
                                             @endforeach

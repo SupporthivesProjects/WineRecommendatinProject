@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CheeseProduct;
+use App\Models\Feature;
 
 class Store extends Model
 {
@@ -68,4 +68,17 @@ class Store extends Model
                     ->withPivot('status')
                     ->withTimestamps();
     }
+
+    public function features()
+    {
+        return $this->belongsToMany(
+            Feature::class,
+            'store_features'
+        )->withPivot('enabled')
+        ->withTimestamps();
+    }
+
+
+
+
 }

@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Models\CheeseProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Feature;
+use App\Models\StoreFeature;
+
 
 class StoreController extends Controller
 {
@@ -33,11 +36,15 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'business_type' => 'required|string|max:255',
             'store_name' => 'required|string|max:255',
-            'address' => 'required|string',
+            'address1' => 'required|string',
+            'address2' => 'required|string',
             'contact_number' => 'required|string|max:20',
+            'location' => 'required|string|max:50',
+            'city' => 'required|string|max:100',
             'email' => 'required|email|max:255',
             'state' => 'required|string|max:255',
             'licence_type' => 'required|string|max:255',
@@ -47,41 +54,24 @@ class StoreController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
-        Store::create($validated);
+        // Store::create($validated);
+        $store = Store::create($validated);
+
+        $features = Feature::where('status', 1)->get();
+
+        foreach ($features as $feature) {
+            StoreFeature::create([
+                'store_id'  => $store->id,
+                'feature_id' => $feature->id,
+                'enabled'   => 0,
+            ]);
+        }
 
         return redirect()->route('admin.stores.index')
             ->with('success', 'Store created successfully.');
     }
 
-    /**
-     * Display the specified store.
-     */
-    // public function show(Store $store)
-    // {
-    //     return view('admin.stores.show', compact('store'));
-    // }
-    // public function show(Store $store)
-    // {
-    //     $store->load('users');
-
-    //     $activeProducts = $store->products()->wherePivot('status', 'active')->get();
-    //     $storeProducts = $store->products()->get();
-
-    //     $cheeseProducts = $store->cheeseProducts()
-    //     ->withPivot(['quantity', 'is_available'])
-    //     ->get();
-
-    //     $assignedCheeseIds = $cheeseProducts->pluck('id');
-    //     $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
-    //         ->orderBy('name')
-    //         ->get();
-
-        
-    //     $assignedProductIds = $storeProducts->pluck('id');
-
-    //     return view('admin.stores.show', compact('store', 'activeProducts','cheeseProducts','availableCheeses','storeProducts',
-    //     'availableProducts',));
-    // }
+    
     public function show(Store $store)
     {
         $store->load('users');
@@ -108,6 +98,8 @@ class StoreController extends Controller
             ->orderBy('wine_name')
             ->get();
 
+        $features = $store->features()->orderBy('name')->get();
+
         return view(
             'admin.stores.show',
             compact(
@@ -116,7 +108,8 @@ class StoreController extends Controller
                 'storeProducts',
                 'availableProducts',
                 'cheeseProducts',
-                'availableCheeses'
+                'availableCheeses',
+                'features'
             )
         );
     }
@@ -300,6 +293,25 @@ class StoreController extends Controller
             'success',
             'Product status updated successfully.'
         );
+    }
+
+
+    public function toggleFeature(Request $request,Store $store,Feature $feature)
+    {
+        $enabled = (bool) $request->enabled;
+    
+        $store->features()->updateExistingPivot(
+            $feature->id,
+            [
+                'enabled' => $enabled,
+                'updated_at' => now(),
+            ]
+        );
+    
+        return response()->json([
+            'success' => true,
+            'enabled' => $enabled,
+        ]);
     }
 
 

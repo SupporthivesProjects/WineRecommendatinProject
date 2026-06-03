@@ -225,11 +225,17 @@ class StoreDashboardController extends Controller
         $user = Auth::user(); // logged-in user
         // return view('store-manager.uploads', compact('user'));
         
+        $canBulkUpload = $user->store
+            ->features()
+            ->where('key', 'bulk_upload_invoices')
+            ->wherePivot('enabled', 1)
+            ->exists();
+
         $records = StoreManagerUpload::where('store_manager_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-        return view('store-manager.uploads', compact('user', 'records'));
+        return view('store-manager.uploads', compact('user', 'records', 'canBulkUpload'));
 
     }
     

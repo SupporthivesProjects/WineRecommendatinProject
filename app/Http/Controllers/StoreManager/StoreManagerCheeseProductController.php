@@ -24,6 +24,12 @@ class StoreManagerCheeseProductController extends Controller
 
             $storeId = $user->store_id;
 
+            $canAddCheese = $user->store
+            ->features()
+            ->where('key', 'add_cheese')
+            ->wherePivot('enabled', 1)
+            ->exists();
+
             // Step 2: Get all active cheese products joined with store inventory
             $cheeseProducts = CheeseProduct::where('is_active', true)
                 ->leftJoin('store_inventory', function($join) use ($storeId) {
@@ -43,6 +49,7 @@ class StoreManagerCheeseProductController extends Controller
             return view('store-manager.cheese-products.index', [
                 'cheeseProducts' => $cheeseProducts,
                 'storeId' => $storeId,
+                'canAddCheese' => $canAddCheese,
             ]);
 
         } catch (\Throwable $e) {
@@ -70,6 +77,19 @@ class StoreManagerCheeseProductController extends Controller
             ]);
 
             $user = Auth::user();
+
+            $canAddCheese = $user->store
+                ->features()
+                ->where('key', 'add_cheese')
+                ->wherePivot('enabled', 1)
+                ->exists();
+
+            if (! $canAddCheese) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Add Cheese feature is not enabled for this store.'
+                ], 403);
+            }
 
             // Check if the logged-in user is associated with a store
             if (!$user || !$user->store_id) {
@@ -117,10 +137,6 @@ class StoreManagerCheeseProductController extends Controller
             ], 500);
         }
     }
-
-
-
-    
 
     public function updateFeatured(Request $request)
     {

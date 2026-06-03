@@ -89,7 +89,7 @@
             <!-- Add Store Modal -->
             <div class="modal fade" id="addStoreModal" data-bs-effect="effect-fall" tabindex="-1" aria-labelledby="addStoreModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+                    <div class="modal-content p-lg-4">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addStoreModalLabel">Add Store</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -120,10 +120,26 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                                    <label for="address1" class="form-label">Address 1</label>
+                                    <textarea class="form-control" id="address1" name="address1" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address2" class="form-label">Address 2</label>
+                                    <textarea class="form-control" id="address2" name="address2" rows="3" required></textarea>
                                 </div>
 
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="locatoin" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="location" name="location" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city" name="city" required>
+                                    </div>
+                                </div>
+
+                               
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="state" class="form-label">State</label>

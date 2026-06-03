@@ -90,7 +90,9 @@
                                                         <input class="form-check-input available-checkbox" 
                                                                type="checkbox" 
                                                                data-product-id="{{ $product->id }}"
-                                                               {{ $product->is_available_in_store ? 'checked' : '' }}>
+                                                               {{ $product->is_available_in_store ? 'checked' : '' }}
+                                                               {{ $canAddCheese ? '' : 'disabled' }}
+                                                               >
                                                     </div>
                                                 </td>
                                             </tr>

@@ -132,6 +132,19 @@
                             {{ $cheeseProducts->count() ?? 0 }}
                         </span>
                     </button>
+    
+                    <button
+                        class="nav-link"
+                        id="features-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#features"
+                        type="button"
+                        role="tab">
+                        Features
+                        <span class="store-tab-badge">
+                            {{ $features->count() }}
+                        </span>
+                    </button>
 
                 </div>
             </div>
@@ -388,6 +401,53 @@
                             </tbody>
                         </table>
                     </p>
+                </div>
+            </div>
+
+            <!-- Features Tab -->
+            <div class="tab-pane fade" id="features" role="tabpanel" aria-labelledby="features-tab">
+                <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
+                    <h3 class="h5 text-dark mb-3">Store Features</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($features as $feature)
+                                    <tr>
+                                        <td>{{ $feature->name }}</td>
+                                        <td>
+                                            @if($feature->pivot->enabled)
+                                                <button
+                                                    class="btn btn-sm btn-success feature-toggle-btn"
+                                                    data-store="{{ $store->id }}"
+                                                    data-feature="{{ $feature->id }}"
+                                                    data-status="0"
+                                                    data-url="{{ route('admin.stores.feature.toggle', [$store->id, $feature->id]) }}"
+                                                    >
+                                                    Active
+                                                </button>
+                                            @else
+                                                <button
+                                                    class="btn btn-sm btn-danger feature-toggle-btn"
+                                                    data-store="{{ $store->id }}"
+                                                    data-feature="{{ $feature->id }}"
+                                                    data-status="1"
+                                                    data-url="{{ route('admin.stores.feature.toggle', [$store->id, $feature->id]) }}"
+                                                    >
+                                                    Inactive
+                                                </button>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -864,6 +924,128 @@
                     );
                 });
             });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                document.querySelectorAll('.feature-toggle-btn').forEach(button => {
+
+                    button.addEventListener('click', function () {
+
+                        const url = this.dataset.url;
+                        const enabled = this.dataset.status;
+                        const btn = this;
+
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document
+                                    .querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content'),
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                enabled: enabled
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+
+                            if (!data.success) {
+                                showToast('Unable to update feature status.', 'danger');
+                                return;
+                            }
+
+                            if (data.enabled) {
+
+                                btn.classList.remove('btn-danger');
+                                btn.classList.add('btn-success');
+
+                                btn.textContent = 'Active';
+                                btn.dataset.status = 0;
+
+                                showToast(
+                                    'Feature activated successfully.',
+                                    'success'
+                                );
+
+                            } else {
+
+                                btn.classList.remove('btn-success');
+                                btn.classList.add('btn-danger');
+
+                                btn.textContent = 'Inactive';
+                                btn.dataset.status = 1;
+
+                                showToast(
+                                    'Feature deactivated successfully.',
+                                    'warning'
+                                );
+                            }
+
+                        })
+                        .catch(error => {
+
+                            console.error(error);
+
+                            showToast(
+                                'Unable to update feature status.',
+                                'danger'
+                            );
+                        });
+
+                    });
+
+                });
+
+            });
+
+
+            function showToast(message, type = 'success')
+            {
+                const toastId = 'dynamicToast';
+
+                let toastElement = document.getElementById(toastId);
+
+                if (!toastElement) {
+
+                    document.body.insertAdjacentHTML(
+                        'beforeend',
+                        `
+                        <div class="toast-container position-fixed top-0 end-0 p-3">
+                            <div id="${toastId}" class="toast align-items-center border-0" role="alert">
+                                <div class="d-flex">
+                                    <div class="toast-body"></div>
+                                    <button type="button"
+                                            class="btn-close me-2 m-auto"
+                                            data-bs-dismiss="toast">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        `
+                    );
+
+                    toastElement = document.getElementById(toastId);
+                }
+
+                toastElement.classList.remove(
+                    'text-bg-success',
+                    'text-bg-danger',
+                    'text-bg-warning'
+                );
+
+                toastElement.classList.add(`text-bg-${type}`);
+
+                toastElement.querySelector('.toast-body').textContent = message;
+
+                const toast = new bootstrap.Toast(toastElement, {
+                    delay: 3000
+                });
+
+                toast.show();
+            }
         </script>
 
     @endpush
