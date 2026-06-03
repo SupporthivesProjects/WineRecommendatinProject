@@ -193,6 +193,48 @@ class StoreController extends Controller
     }
 
 
+    public function show(Store $store)
+    {
+        $store->load('users');
+
+        $activeProducts = $store->products()
+            ->wherePivot('status', 'active')
+            ->get();
+
+        $storeProducts = $store->products()->get();
+
+        $cheeseProducts = $store->cheeseProducts()
+            ->withPivot(['quantity', 'is_available'])
+            ->get();
+
+        $assignedCheeseIds = $cheeseProducts->pluck('id');
+
+        $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
+            ->orderBy('name')
+            ->get();
+
+        $assignedProductIds = $storeProducts->pluck('id');
+
+        $availableProducts = Product::whereNotIn('id', $assignedProductIds)
+            ->orderBy('wine_name')
+            ->get();
+
+        $features = $store->features()->orderBy('name')->get();
+
+        return view(
+            'admin.stores.show',
+            compact(
+                'store',
+                'activeProducts',
+                'storeProducts',
+                'availableProducts',
+                'cheeseProducts',
+                'availableCheeses',
+                'features'
+            )
+        );
+    }
+
     /**
      * Show the form for editing the specified store.
      */
