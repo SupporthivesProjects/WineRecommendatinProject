@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             StoreInventorySeeder::class,
             QuestionnaireTableSeeder::class,
             QuestionnaireTemplateSeeder::class,
+            TemplateSeeder::class,
         ]);
     }
 }

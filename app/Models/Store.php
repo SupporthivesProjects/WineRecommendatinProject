@@ -30,6 +30,7 @@ class Store extends Model
         'group',
         'gst_vat',
         'status',
+        'template_id',
     ];
 
     /**
@@ -79,6 +80,10 @@ class Store extends Model
     }
 
 
+    public function template()
+    {
+        return $this->belongsTo(Template::class);
+    }
 
 
 }

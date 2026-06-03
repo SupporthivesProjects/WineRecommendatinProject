@@ -10,6 +10,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Feature;
 use App\Models\StoreFeature;
+use App\Models\Template;
+use Illuminate\Support\Facades\DB;
 
 
 class StoreController extends Controller
@@ -20,7 +22,13 @@ class StoreController extends Controller
     public function index()
     {
         $stores = Store::orderBy('id', 'asc')->get();
-        return view('admin.dashboard.stores-tab', compact('stores'));
+        $templates = Template::where(
+            'status',
+            1
+        )
+        ->orderBy('name')
+        ->get();
+        return view('admin.dashboard.stores-tab', compact('stores','templates'));
     }
 
     /**
@@ -34,85 +42,156 @@ class StoreController extends Controller
     /**
      * Store a newly created store in storage.
      */
+    // public function store(Request $request)
+    // {
+
+    //     $validated = $request->validate([
+    //         'business_type' => 'required|string|max:255',
+    //         'store_name' => 'required|string|max:255',
+    //         'address1' => 'required|string',
+    //         'address2' => 'required|string',
+    //         'contact_number' => 'required|string|max:20',
+    //         'location' => 'required|string|max:50',
+    //         'city' => 'required|string|max:100',
+    //         'email' => 'required|email|max:255',
+    //         'state' => 'required|string|max:255',
+    //         'licence_type' => 'required|string|max:255',
+    //         'license_number' => 'required|string|max:255',
+    //         'group' => 'nullable|string|max:255',
+    //         'gst_vat' => 'nullable|string|max:255',
+    //         'status' => 'required|in:active,inactive',
+    //         'template_id' => 'nullable|exists:templates,id',
+    //     ]);
+
+    //     // Store::create($validated);
+    //     $store = Store::create($validated);
+
+    //     $features = Feature::where('status', 1)->get();
+
+    //     foreach ($features as $feature) {
+    //         StoreFeature::create([
+    //             'store_id'  => $store->id,
+    //             'feature_id' => $feature->id,
+    //             'enabled'   => 0,
+    //         ]);
+    //     }
+
+    //     return redirect()->route('admin.stores.index')
+    //         ->with('success', 'Store created successfully.');
+    // }
+
     public function store(Request $request)
     {
-
         $validated = $request->validate([
-            'business_type' => 'required|string|max:255',
-            'store_name' => 'required|string|max:255',
-            'address1' => 'required|string',
-            'address2' => 'required|string',
-            'contact_number' => 'required|string|max:20',
-            'location' => 'required|string|max:50',
-            'city' => 'required|string|max:100',
-            'email' => 'required|email|max:255',
-            'state' => 'required|string|max:255',
-            'licence_type' => 'required|string|max:255',
-            'license_number' => 'required|string|max:255',
-            'group' => 'nullable|string|max:255',
-            'gst_vat' => 'nullable|string|max:255',
-            'status' => 'required|in:active,inactive',
+        'business_type' => 'required|string|max:255',
+        'store_name' => 'required|string|max:255',
+        'address1' => 'required|string',
+        'address2' => 'required|string',
+        'contact_number' => 'required|string|max:20',
+        'location' => 'required|string|max:50',
+        'city' => 'required|string|max:100',
+        'email' => 'required|email|max:255',
+        'state' => 'required|string|max:255',
+        'licence_type' => 'required|string|max:255',
+        'license_number' => 'required|string|max:255',
+        'group' => 'nullable|string|max:255',
+        'gst_vat' => 'nullable|string|max:255',
+        'status' => 'required|in:active,inactive',
+        'template_id' => 'nullable|exists:templates,id',
         ]);
 
-        // Store::create($validated);
-        $store = Store::create($validated);
 
-        $features = Feature::where('status', 1)->get();
+        try {
 
-        foreach ($features as $feature) {
-            StoreFeature::create([
-                'store_id'  => $store->id,
-                'feature_id' => $feature->id,
-                'enabled'   => 0,
-            ]);
+            DB::beginTransaction();
+            // Create Store
+            $store = Store::create($validated);
+            //  Copy Template Products & Cheese
+
+            if ($store->template_id) 
+            {
+                $template = Template::with([
+                    'products',
+                    'cheeseProducts'
+                ])->findOrFail($store->template_id);
+               
+                // Wine Products
+
+                $wineProducts = [];
+                foreach ($template->products as $product) 
+                {
+                    $wineProducts[$product->id] = [
+                        'status' => 'active',
+                        'is_featured' => 0,
+                    ];
+                }
+                if (!empty($wineProducts)) 
+                {
+                    $store->products()->syncWithoutDetaching(
+                        $wineProducts
+                    );
+                }
+                
+                // Cheese Products
+
+                $cheeseProducts = [];
+                foreach ($template->cheeseProducts as $cheese) 
+                {
+
+                    $cheeseProducts[$cheese->id] = [
+                        'quantity' => 10,
+                        'is_available' => 1,
+                    ];
+                }
+                if (!empty($cheeseProducts)) 
+                {
+                    $store->cheeseProducts()->syncWithoutDetaching(
+                        $cheeseProducts
+                    );
+                }
+            }
+
+            // Create Store features
+
+            $features = Feature::where('status', 1)->get();
+            foreach ($features as $feature) 
+            {
+                StoreFeature::create([
+                    'store_id' => $store->id,
+                    'feature_id' => $feature->id,
+                    'enabled' => 0,
+                ]);
+            }
+
+            DB::commit();
+            return redirect()
+                ->route('admin.stores.index')
+                ->with(
+                    'success',
+                    'Store created successfully.'
+                );
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            \Log::error(
+                'Store creation failed',
+                [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                ]
+            );
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Store creation failed. Please try again.'
+                );
         }
-
-        return redirect()->route('admin.stores.index')
-            ->with('success', 'Store created successfully.');
     }
 
-    
-    public function show(Store $store)
-    {
-        $store->load('users');
-
-        $activeProducts = $store->products()
-            ->wherePivot('status', 'active')
-            ->get();
-
-        $storeProducts = $store->products()->get();
-
-        $cheeseProducts = $store->cheeseProducts()
-            ->withPivot(['quantity', 'is_available'])
-            ->get();
-
-        $assignedCheeseIds = $cheeseProducts->pluck('id');
-
-        $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
-            ->orderBy('name')
-            ->get();
-
-        $assignedProductIds = $storeProducts->pluck('id');
-
-        $availableProducts = Product::whereNotIn('id', $assignedProductIds)
-            ->orderBy('wine_name')
-            ->get();
-
-        $features = $store->features()->orderBy('name')->get();
-
-        return view(
-            'admin.stores.show',
-            compact(
-                'store',
-                'activeProducts',
-                'storeProducts',
-                'availableProducts',
-                'cheeseProducts',
-                'availableCheeses',
-                'features'
-            )
-        );
-    }
 
     /**
      * Show the form for editing the specified store.

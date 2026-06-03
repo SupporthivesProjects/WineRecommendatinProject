@@ -111,4 +111,14 @@ class Product extends Model
     {
         return $this->approvedReviews()->count();
     }
+
+    public function templates()
+    {
+        return $this->belongsToMany(
+            Template::class,
+            'template_products'
+        )->withTimestamps();
+    }
+
+
 }

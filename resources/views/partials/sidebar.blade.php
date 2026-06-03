@@ -123,6 +123,12 @@
                             </a>
                         </li>
                         <li class="slide">
+                            <a href="{{ route('admin.templates.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Templates</span>
+                            </a>
+                        </li>
+                        <li class="slide">
                             <a href="{{ route('admin.api.stock.data') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">API Product Stock</span>

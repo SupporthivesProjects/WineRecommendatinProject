@@ -20,6 +20,7 @@ use App\Http\Controllers\StoreAssignmentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\Admin\TemplateController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 use App\Http\Controllers\UserProfileController;
@@ -240,6 +241,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //toggle features for a store
     Route::post('/stores/{store}/features/{feature}/toggle',[StoreController::class, 'toggleFeature'])->name('stores.feature.toggle');
 
+
+    //template route
+    Route::resource('templates', TemplateController::class);
+    Route::post('/templates/{template}/product/add',[TemplateController::class, 'addProducts'])->name('templates.product.add');
+    Route::delete('/templates/{template}/product/{product}',[TemplateController::class, 'removeProduct'])->name('templates.product.remove');
+    Route::post('/templates/{template}/cheese/add',[TemplateController::class, 'addCheeseProducts'])->name('templates.cheese.add');
+    Route::delete('/templates/{template}/cheese/{cheese}',[TemplateController::class, 'removeCheeseProduct'])->name('templates.cheese.remove');
 
 });
 

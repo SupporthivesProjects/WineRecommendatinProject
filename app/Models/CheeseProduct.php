@@ -48,4 +48,13 @@ class CheeseProduct extends Model
             ->withPivot(['quantity', 'is_available'])
             ->withTimestamps();
     }
+
+    public function templates()
+    {
+        return $this->belongsToMany(
+            Template::class,
+            'template_cheese_products'
+        )->withTimestamps();
+    }
+
 }

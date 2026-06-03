@@ -167,6 +167,28 @@
                                         <label for="license_number" class="form-label">License Number</label>
                                         <input type="text" class="form-control" id="license_number" name="license_number" required>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <label for="template_id" class="form-label">
+                                            Template
+                                        </label>
+
+                                        <select class="form-select" id="template_id" name="template_id">
+                                            <option value="">
+                                                Select Template (Optional)
+                                            </option>
+                                            @foreach($templates as $template)
+                                                <option value="{{ $template->id }}">
+                                                    {{ $template->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <small class="text-muted">
+                                            If no template is selected, the store will be created without any products.
+                                        </small>
+                                    </div>
+
                                     <div class="col-md-6">
                                         <label for="status" class="form-label">Status</label>
                                         <select class="form-select" id="status" name="status" required>
