@@ -126,13 +126,19 @@
                 </div>
 
                 <div>
+                    <a href="{{ route('user.cart') }}" class="btn btn-dark me-2">
+                        View Cart (<span id="cart-count">{{ count($cart ?? []) }}</span>)
+                    </a>
+
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                </div>
+                <!-- <div>
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
-                    <!-- <a href="{{ route('user.products') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Back
-                    </a> -->
-                </div>
+                </div> -->
             </div>
 
             <!-- End::page-header -->
@@ -237,6 +243,17 @@
 
                                         <h6 class="mt-4 fs-16">Tasting Notes</h6>
                                         <p>{{ $product->tasting_notes ?? 'N/A' }}</p>
+                                        <div class="mt-4">
+                                            <button
+                                                class="btn rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
+                                                data-product-id="{{ $product->id }}"
+                                                data-product-name="{{ $product->wine_name }}"
+                                                data-product-price="{{ $product->retail_price }}">
+
+                                                {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Buy Now' }}
+
+                                            </button>
+                                        </div>
 
                                         <div class="d-flex mt-2">
                                             <!-- <div class="mt-2 sizes">Quantity:</div>
@@ -722,6 +739,15 @@
                                                     class="btn btn-dark mt-2 rounded-0">
                                                     Tell Me More !!
                                                 </a>
+                                                <button
+                                                    class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
+                                                    data-product-id="{{ $product->id }}"
+                                                    data-product-name="{{ $product->wine_name }}"
+                                                    data-product-price="{{ $product->retail_price }}">
+
+                                                    {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Buy Now' }}
+
+                                                </button>
 
                                             </div>
                                         </div>
@@ -740,3 +766,81 @@
     </div>
 
 @endsection
+@push('scripts')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const buttons = document.querySelectorAll('.buy-now-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+
+            const productId = this.getAttribute('data-product-id');
+            const productName = this.getAttribute('data-product-name');
+            const productPrice = this.getAttribute('data-product-price');
+
+            const isInCart = this.classList.contains('btn-dark');
+
+            const url = isInCart
+                ? '{{ route("user.cart.remove") }}'
+                : '{{ route("user.cart.add") }}';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    product_name: productName,
+                    product_price: productPrice
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (!data.success) return;
+                const cartCountElement = document.getElementById('cart-count');
+                    if (cartCountElement) 
+                    {
+                        let currentCount = parseInt(cartCountElement.textContent) || 0;
+                        if (isInCart) {
+                            currentCount = Math.max(0, currentCount - 1);
+                        } else {
+                            currentCount += 1;
+                        }
+                        cartCountElement.textContent = currentCount;
+                    }
+
+                    if (isInCart) {
+                        this.classList.remove('btn-dark');
+                        this.classList.add('btn-light');
+                        this.textContent = 'Buy Now';
+                        toastr.warning('Product removed from cart!', 'Removed', {
+                            closeButton: true,
+                            progressBar: true,
+                            positionClass: 'toast-top-right',
+                            timeOut: 3000
+                        });
+
+                        } else {
+
+                        this.classList.remove('btn-light');
+                        this.classList.add('btn-dark');
+                        this.textContent = 'Remove from Cart';
+
+                        toastr.success('Product added to cart!', 'Added', {
+                            closeButton: true,
+                            progressBar: true,
+                            positionClass: 'toast-top-right',
+                            timeOut: 3000
+                        });
+                    }
+            });
+            });
+        });
+    });
+</script>
+
+@endpush

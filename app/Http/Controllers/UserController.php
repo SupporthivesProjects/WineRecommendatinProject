@@ -324,6 +324,9 @@ class UserController extends Controller
             $relatedProducts = $relatedProducts->merge($additionalProducts);
         }
 
+
+        $cart = session()->get('cart', []);
+
         return view('user.product-detail', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
@@ -331,6 +334,7 @@ class UserController extends Controller
             'averageRating' => $averageRating ?? 0,
             'totalReviews' => $totalReviews,
             'ratingDistribution' => $ratingDistribution,
+            'cart' => $cart,
         ]);
     }
 

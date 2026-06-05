@@ -93,17 +93,31 @@ class TemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Template $template)
     {
-        //
+        return view('admin.templates.edit', compact('template'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Template $template)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|boolean',
+        ]);
+    
+        $template->update([
+            'name'        => $request->name,
+            'description' => $request->description,
+            'status'      => $request->status,
+        ]);
+    
+        return redirect()
+            ->route('admin.templates.index')
+            ->with('success', 'Template updated successfully.');
     }
 
     /**
