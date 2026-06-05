@@ -37,6 +37,13 @@
         .rating-stars input[type="radio"]:checked ~ .star-label ~ .star-label .bx {
             color: #ffc107;
         }
+        .product-main-image {
+            width: 100%;
+            height: 450px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
 
         @media (max-width: 768px) {
             .page-header-breadcrumb > div {
@@ -158,7 +165,7 @@
                                                     <div class="carousel-inner">
                                                         <div class="thumb my-2">
                                                             <img src="{{ asset('storage/' . $product->image1) }}"
-                                                                alt="Product Image">
+                                                                alt="Product Image" class="product-main-image">
                                                         </div>
                                                     </div>
                                                 </div>
