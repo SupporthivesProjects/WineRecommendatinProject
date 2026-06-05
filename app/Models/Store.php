@@ -86,4 +86,10 @@ class Store extends Model
     }
 
 
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+
 }

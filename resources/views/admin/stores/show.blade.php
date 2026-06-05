@@ -158,7 +158,21 @@
                     <h3 class="h5 text-dark mb-4">{{ $store->store_name }}</h3>
                     <dl>
                         @php
+                            if ($store->template_id == 1)
+                            {
+                                $template = "ALL";
+                            }
+                            else if($store->template_id == 2)
+                            {
+                                $template = "Nature's Basket";
+                            }
+                            else
+                            {
+                                $template = "No template selected for this store";
+                            }
+
                             $rows = [
+                                'Template' => $template,
                                 'Store Name' => $store->store_name,
                                 'Business Type' => $store->business_type ?? 'N/A',
                                 'Address1' => $store->address1 ?? 'N/A',
@@ -229,7 +243,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <div class="btn-group">
+                                            <div class="btn-group flex gap-2">
                                                 <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-info btn-sm">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
@@ -248,6 +262,61 @@
                                         <td colspan="5" class="text-center text-muted">No users found for this store.</td>
                                     </tr>
                                 @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Main manager details -->
+                <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="h5 text-dark">Store Manager</h3>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @if ($store->manager)
+                                <tr>
+                                    <td>{{ $store->manager->first_name }} {{ $store->manager->last_name }}</td>
+                                    <td>{{ $store->manager->email }}</td>
+                                    <td>{{ ucfirst($store->manager->role) }}</td>
+                                    <td>
+                                        <span class="badge {{ $store->manager->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                            {{ ucfirst($store->manager->status) }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group flex gap-2">
+                                            <a href="{{ route('admin.users.edit', $store->manager) }}" class="btn btn-info btn-sm">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @else
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        No manager assigned to this store.
+                                    </td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

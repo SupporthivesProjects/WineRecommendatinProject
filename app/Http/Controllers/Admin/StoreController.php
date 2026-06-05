@@ -195,7 +195,7 @@ class StoreController extends Controller
 
     public function show(Store $store)
     {
-        $store->load('users');
+        $store->load('users', 'manager');
 
         $activeProducts = $store->products()
             ->wherePivot('status', 'active')
