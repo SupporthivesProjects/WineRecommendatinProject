@@ -245,7 +245,7 @@
                                         <p>{{ $product->tasting_notes ?? 'N/A' }}</p>
                                         <div class="mt-4">
                                             <button
-                                                class="btn rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
+                                                class="btn border border-dark w-100 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                 data-product-id="{{ $product->id }}"
                                                 data-product-name="{{ $product->wine_name }}"
                                                 data-product-price="{{ $product->retail_price }}">
