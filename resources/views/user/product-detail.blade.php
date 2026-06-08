@@ -342,7 +342,7 @@
                                                 <td>{!! $extraIcons['sp_mentions'] ?? $defaultIcon !!} {{ $product->sp_mentions ?? 'N/A' }}</td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">Vintage <small>[ Please check for recent editions with our stroe manager ]</small></th>
+                                                <th scope="row">Vintage <small>[ Please check for recent editions with our store manager ]</small></th>
                                                 <td>{!! $extraIcons['vintage_year'] ?? $defaultIcon !!} {{ $product->vintage_year ?? 'N/A' }}</td>
                                             </tr>
                                             <tr>
@@ -741,7 +741,7 @@
                                                     @endif
                                                 </p>
 
-                                                <p><strong>Vintage Year: <small>[ Please check for recent editions with our stroe manager ]</small></strong> {{ $product->vintage_year }}</p>
+                                                <p><strong>Vintage Year: <small>[ Please check for recent editions with our store manager ]</small></strong> {{ $product->vintage_year }}</p>
                                                 <a href="{{ route('user.productdetails', $product->id) }}"
                                                     class="btn btn-dark mt-2 rounded-0">
                                                     Tell Me More !!
