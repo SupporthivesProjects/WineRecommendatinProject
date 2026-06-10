@@ -26,6 +26,7 @@ use App\Models\Product;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\StoreProfileController;
 use App\Http\Controllers\Api\UploadApiController;
+use App\Http\Controllers\Admin\FeatureController;
 
 
 use Illuminate\Support\Facades\Log;
@@ -248,6 +249,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::delete('/templates/{template}/product/{product}',[TemplateController::class, 'removeProduct'])->name('templates.product.remove');
     Route::post('/templates/{template}/cheese/add',[TemplateController::class, 'addCheeseProducts'])->name('templates.cheese.add');
     Route::delete('/templates/{template}/cheese/{cheese}',[TemplateController::class, 'removeCheeseProduct'])->name('templates.cheese.remove');
+
+    //Features
+    Route::resource('features', FeatureController::class);
 
 });
 
