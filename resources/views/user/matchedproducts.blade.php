@@ -340,7 +340,7 @@
                                             @endif
                                         </p>
 
-                                        <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                        <p><strong>MRP:</strong> {{ $product->retail_price }}</p>
                                         <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0" target="_blank">
                                             View !!
                                         </a>
