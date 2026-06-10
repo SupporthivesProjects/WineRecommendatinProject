@@ -322,7 +322,12 @@
                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                         <h4 class="fw-bold mb-3">Types</h4>
                         @php
-                            $types = $allProducts->pluck('type')->unique()->sort();
+                        $types = $allProducts
+                        ->pluck('type')
+                        ->map(fn($type) => ucfirst(strtolower(trim($type))))
+                        ->unique()
+                        ->sort()
+                        ->values();
                         @endphp
                         @foreach ($types as $type)
                             @if ($type)
