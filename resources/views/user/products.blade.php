@@ -359,14 +359,17 @@
                                             $types = $products->pluck('type')->unique()->sort();
                                         @endphp
 
-                                        @foreach ($types as $type)
+                                        @foreach ($allTypes as $type)
                                             @php
                                                 $lowerType = strtolower($type);
                                                 $emoji = match($lowerType) {
-                                                    'red' => '🍷',
+                                                    'red' => '🍷', 
                                                     'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
-                                                    'sparkling' => '✨',
-                                                    default => ''
+                                                    'sparkling' => '✨', 
+                                                    'rosé' => '🌸', 
+                                                    'dessert' => '🍯', 
+                                                    'bordeaux' => '🏰',
+                                                    default => '🍾',
                                                 };
                                             @endphp
 

@@ -237,6 +237,14 @@ class UserController extends Controller
             });
         }
 
+
+        $allTypes = Product::whereIn('id', $storeProducts->pluck('product_id'))
+        ->pluck('type')
+        ->map(fn($type) => ucfirst(strtolower(trim($type))))
+        ->unique()
+        ->sort()
+        ->values();
+
         $products = $productsQuery->paginate(9)
                         ->appends($request->all());
 
@@ -249,7 +257,7 @@ class UserController extends Controller
 
         $cart = session()->get('cart', []);
 
-        return view('user.products', compact('products', 'cart'));
+        return view('user.products', compact('products', 'cart', 'allTypes'));
     }
 
     public function matchedproducts($submissionId)

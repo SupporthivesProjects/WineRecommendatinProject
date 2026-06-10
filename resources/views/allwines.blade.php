@@ -337,8 +337,8 @@
                                         'red' => '🍷', 
                                         'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>', 
                                         'sparkling' => '✨', 
-                                        'ros' => '🌸', 'dessert' => 
-                                        '🍯', 
+                                        'rosé' => '🌸', 
+                                        'dessert' => '🍯', 
                                         'bordeaux' => '🏰',
                                          default => '🍾',
                                     };
@@ -852,55 +852,55 @@
 
                 // Set search input from URL if exists
                 // Set search input if present in URL
-if (urlParams.has('search')) {
-    $('#search-input').val(urlParams.get('search'));
-}
-
-if (hasFilters) {
-    // Set checkboxes based on URL parameters
-    urlParams.forEach((value, key) => {
-        if (key.endsWith('[]')) {
-            const name = key.replace('[]', '');
-            let checkboxes = [];
-
-            switch (name.toLowerCase()) {
-                case 'type':
-                    checkboxes = document.querySelectorAll(`input.wine-type-filter[value="${value}"]`);
-                    break;
-                case 'vintage_year':
-                    checkboxes = document.querySelectorAll(`input.wine-vintage-year-filter[value="${value}"]`);
-                    break;
-                case 'winery':
-                    checkboxes = document.querySelectorAll(`input.wine-winery-filter[value="${value}"]`);
-                    break;
-                case 'country':
-                    checkboxes = document.querySelectorAll(`input.wine-country-filter[value="${value}"]`);
-                    break;
-                case 'method': // Method filter
-                    checkboxes = document.querySelectorAll(`input.wine-method-filter[value="${value}"]`);
-                    break;
-            }
-
-            checkboxes.forEach(cb => cb.checked = true);
-        } else if (key === 'min_price' || key === 'max_price') {
-            // Handle price range
-            if ($("#price-slider").length) {
-                const currentValues = $("#price-slider").slider("values");
-                if (key === 'min_price') {
-                    currentValues[0] = parseInt(value) || 0;
-                    $("#price-min").text(currentValues[0]);
-                } else {
-                    currentValues[1] = parseInt(value) || 1000;
-                    $("#max-price").text(currentValues[1]);
-                }
-                $("#price-slider").slider("values", currentValues);
-            }
+        if (urlParams.has('search')) {
+            $('#search-input').val(urlParams.get('search'));
         }
-    });
 
-    // Load products with filters
-    loadProducts();
-} }
+        if (hasFilters) {
+            // Set checkboxes based on URL parameters
+            urlParams.forEach((value, key) => {
+                if (key.endsWith('[]')) {
+                    const name = key.replace('[]', '');
+                    let checkboxes = [];
+
+                    switch (name.toLowerCase()) {
+                        case 'type':
+                            checkboxes = document.querySelectorAll(`input.wine-type-filter[value="${value}"]`);
+                            break;
+                        case 'vintage_year':
+                            checkboxes = document.querySelectorAll(`input.wine-vintage-year-filter[value="${value}"]`);
+                            break;
+                        case 'winery':
+                            checkboxes = document.querySelectorAll(`input.wine-winery-filter[value="${value}"]`);
+                            break;
+                        case 'country':
+                            checkboxes = document.querySelectorAll(`input.wine-country-filter[value="${value}"]`);
+                            break;
+                        case 'method': // Method filter
+                            checkboxes = document.querySelectorAll(`input.wine-method-filter[value="${value}"]`);
+                            break;
+                    }
+
+                    checkboxes.forEach(cb => cb.checked = true);
+                } else if (key === 'min_price' || key === 'max_price') {
+                    // Handle price range
+                    if ($("#price-slider").length) {
+                        const currentValues = $("#price-slider").slider("values");
+                        if (key === 'min_price') {
+                            currentValues[0] = parseInt(value) || 0;
+                            $("#price-min").text(currentValues[0]);
+                        } else {
+                            currentValues[1] = parseInt(value) || 1000;
+                            $("#max-price").text(currentValues[1]);
+                        }
+                        $("#price-slider").slider("values", currentValues);
+                    }
+                }
+            });
+
+            // Load products with filters
+            loadProducts();
+        } }
 
 
             // Initialize pagination on page load if there are products
@@ -995,17 +995,17 @@ if (hasFilters) {
                }
            });
       // When user clicks the button instead of checkbox
-$(document).on('click', '.method-filter-btn', function () {
-    const method = $(this).data('method');
-    const checkbox = $(`.wine-method-filter[value="${method}"]`);
+        $(document).on('click', '.method-filter-btn', function () {
+            const method = $(this).data('method');
+            const checkbox = $(`.wine-method-filter[value="${method}"]`);
 
-    // Toggle checked state
-    const isChecked = !checkbox.prop('checked');
-    checkbox.prop('checked', isChecked).trigger('change');
+            // Toggle checked state
+            const isChecked = !checkbox.prop('checked');
+            checkbox.prop('checked', isChecked).trigger('change');
 
-    // Toggle button active state visually
-    $(this).toggleClass('active', isChecked);
-});
+            // Toggle button active state visually
+            $(this).toggleClass('active', isChecked);
+        });
 
-    </script>
+</script>
 @endpush
