@@ -437,7 +437,7 @@ class QuestionnaireController extends Controller
                 // Store fields
                 'stores.store_name',
                 'stores.contact_number',
-                'stores.address'
+                'stores.address1'
             )
 
             ->groupBy(
@@ -450,7 +450,7 @@ class QuestionnaireController extends Controller
 
                 'stores.store_name',
                 'stores.contact_number',
-                'stores.address'
+                'stores.address1'
             )
 
             ->orderByDesc('created_at')

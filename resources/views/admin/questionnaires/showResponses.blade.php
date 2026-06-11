@@ -62,7 +62,7 @@
                                                 <td>{{ $submission->cust_phone }}</td>
                                                 <td>{{ $submission->store_name }}</td>
                                                 <td>{{ $submission->contact_number }}</td>
-                                                <td>{{ $submission->address }}</td>
+                                                <td>{{ $submission->address1 }}</td>
 
                                                 <td>{{ \Carbon\Carbon::parse($submission->created_at)->format('d M Y, h:i A') }}</td>
                                                 <td>
