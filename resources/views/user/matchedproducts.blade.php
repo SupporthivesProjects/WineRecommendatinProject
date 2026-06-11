@@ -341,9 +341,13 @@
                                         </p>
 
                                         <p><strong>MRP:</strong> {{ $product->retail_price }}</p>
-                                        <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0" target="_blank">
+                                        <button
+                                            type="button"
+                                            class="btn btn-dark mt-2 rounded-0 open-product-modal"
+                                            data-product-id="{{ $product->id }}"
+                                        >
                                             View !!
-                                        </a>
+                                        </button>
                                         <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
                                                 data-product-id="{{ $product->id }}"
                                                 data-product-name="{{ $product->wine_name }}"
@@ -360,6 +364,23 @@
         <!-- End::row-6 -->
     </div>
 </div>
+
+<!-- product modal -->
+ <!-- Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <div id="product-modal-content">
+                    <div class="text-center p-5">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 @push('scripts')
@@ -429,92 +450,135 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const buttons = document.querySelectorAll('.buy-now-btn');
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function () {
-                const productId = this.getAttribute('data-product-id');
-                const productName = this.getAttribute('data-product-name');
-                const productPrice = this.getAttribute('data-product-price');
-                const isInCart = this.classList.contains('btn-dark');
-                const url = isInCart ? '{{ route("user.cart.remove") }}' : '{{ route("user.cart.add") }}';
+        // Buy Now / Remove From Cart
+        document.addEventListener('click', function (e) {
 
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                    body: JSON.stringify({ 
-                        product_id: productId, 
-                        product_name: productName,
-                        product_price: productPrice
-                    })
+            const button = e.target.closest('.buy-now-btn');
+
+            if (!button) {
+                return;
+            }
+
+            const productId = button.getAttribute('data-product-id');
+            const productName = button.getAttribute('data-product-name');
+            const productPrice = button.getAttribute('data-product-price');
+
+            const isInCart = button.classList.contains('btn-dark');
+
+            const url = isInCart
+                ? '{{ route("user.cart.remove") }}'
+                : '{{ route("user.cart.add") }}';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    product_name: productName,
+                    product_price: productPrice
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        if (isInCart) {
-                            this.classList.remove('btn-dark');
-                            this.classList.add('btn-light');
-                            this.textContent = 'Buy Now';
+            })
+            .then(response => response.json())
+            .then(data => {
 
-                            toastr.warning('Product removed from cart!', 'Removed', {
+                if (data.success) {
+
+                    if (isInCart) {
+
+                        button.classList.remove('btn-dark');
+                        button.classList.add('btn-light');
+                        button.textContent = 'Buy Now';
+
+                        toastr.warning(
+                            'Product removed from cart!',
+                            'Removed',
+                            {
                                 closeButton: true,
                                 progressBar: true,
                                 positionClass: 'toast-top-right',
                                 timeOut: 3000
-                            });
-                        } else {
-                            this.classList.remove('btn-light');
-                            this.classList.add('btn-dark');
-                            this.textContent = 'Remove from Cart';
+                            }
+                        );
 
-                            toastr.success('Product added to cart!', 'Added', {
+                    } else {
+
+                        button.classList.remove('btn-light');
+                        button.classList.add('btn-dark');
+                        button.textContent = 'Remove from Cart';
+
+                        toastr.success(
+                            'Product added to cart!',
+                            'Added',
+                            {
                                 closeButton: true,
                                 progressBar: true,
                                 positionClass: 'toast-top-right',
                                 timeOut: 3000
-                            });
-                        }
+                            }
+                        );
+                    }
+                }
+
+                const cartCountElement =
+                    document.getElementById('cart-count');
+
+                if (cartCountElement) {
+
+                    let currentCount =
+                        parseInt(cartCountElement.textContent) || 0;
+
+                    if (isInCart) {
+                        currentCount = Math.max(
+                            0,
+                            currentCount - 1
+                        );
+                    } else {
+                        currentCount += 1;
                     }
 
-                    // ✅ Update the cart count dynamically
-                    const cartCountElement = document.getElementById('cart-count');
-                    if (cartCountElement) {
-                        let currentCount = parseInt(cartCountElement.textContent) || 0;
+                    cartCountElement.textContent = currentCount;
+                }
 
-                        if (isInCart) {
-                            // Product removed
-                            currentCount = Math.max(0, currentCount - 1);
-                        } else {
-                            // Product added
-                            currentCount += 1;
-                        }
+            })
+            .catch(() => {
 
-                        cartCountElement.textContent = currentCount;
-                    }
-
-
-
-
-
-                })
-                .catch(() => {
-                    toastr.error('Something went wrong!', 'Error', {
+                toastr.error(
+                    'Something went wrong!',
+                    'Error',
+                    {
                         closeButton: true,
                         progressBar: true,
                         positionClass: 'toast-top-right',
                         timeOut: 3000
-                    });
-                });
+                    }
+                );
+
             });
+
         });
 
-        // Updated View Cart button - now redirects to cart page
-        document.getElementById('view-cart-btn').addEventListener('click', function () {
-            window.location.href = '{{ route("user.cart") }}';
-        });
+        // View Cart button
+        const viewCartBtn =
+            document.getElementById('view-cart-btn');
+
+        if (viewCartBtn) {
+
+            viewCartBtn.addEventListener(
+                'click',
+                function () {
+
+                    window.location.href =
+                        '{{ route("user.cart") }}';
+
+                }
+            );
+
+        }
+
     });
 </script>
 
@@ -528,67 +592,107 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+    const minSlider = document.getElementById("price-min");
+    const maxSlider = document.getElementById("price-max");
 
-const minSlider = document.getElementById("price-min");
-const maxSlider = document.getElementById("price-max");
+    const minVal = document.getElementById("min-val");
+    const maxVal = document.getElementById("max-val");
 
-const minVal = document.getElementById("min-val");
-const maxVal = document.getElementById("max-val");
+    // Call main filter function whenever slider moves
+    minSlider.addEventListener("input", applyFilters);
+    maxSlider.addEventListener("input", applyFilters);
 
-// Call main filter function whenever slider moves
-minSlider.addEventListener("input", applyFilters);
-maxSlider.addEventListener("input", applyFilters);
-
-// Also re-run when checkboxes are clicked (to stack filters)
-document.querySelectorAll(".form-check-input").forEach(cb => {
-    cb.addEventListener("change", applyFilters);
-});
-
-function applyFilters() {
-
-    let minPrice = parseFloat(minSlider.value);
-    let maxPrice = parseFloat(maxSlider.value);
-
-    // Display values
-    minVal.textContent = minPrice.toLocaleString();
-    maxVal.textContent = maxPrice.toLocaleString();
-
-    // Loop all product cards
-    document.querySelectorAll(".wine-card-container").forEach(card => {
-
-        let price = parseFloat(card.dataset.retailPrice);
-        let type = card.dataset.type;
-        let country = card.dataset.country;
-        let vintage = card.dataset.vintageYear;
-
-        // --- TYPE FILTER ---
-        let selectedTypes = [...document.querySelectorAll('.wine-type-filter:checked')]
-            .map(el => el.value);
-        let typeMatch = selectedTypes.length ? selectedTypes.includes(type) : true;
-
-        // --- COUNTRY FILTER ---
-        let selectedCountries = [...document.querySelectorAll('.wine-country-filter:checked')]
-            .map(el => el.value);
-        let countryMatch = selectedCountries.length ? selectedCountries.includes(country) : true;
-
-        // --- VINTAGE YEAR FILTER ---
-        let selectedYears = [...document.querySelectorAll('.wine-vintage-year-filter:checked')]
-            .map(el => el.value);
-        let vintageMatch = selectedYears.length ? selectedYears.includes(vintage) : true;
-
-        // --- PRICE FILTER ---
-        let priceMatch = price >= minPrice && price <= maxPrice;
-
-        // FINAL CHECK
-        if (priceMatch && typeMatch && countryMatch && vintageMatch) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+    // Also re-run when checkboxes are clicked (to stack filters)
+    document.querySelectorAll(".form-check-input").forEach(cb => {
+        cb.addEventListener("change", applyFilters);
     });
-}
-});
 
+    function applyFilters() {
+
+        let minPrice = parseFloat(minSlider.value);
+        let maxPrice = parseFloat(maxSlider.value);
+
+        // Display values
+        minVal.textContent = minPrice.toLocaleString();
+        maxVal.textContent = maxPrice.toLocaleString();
+
+        // Loop all product cards
+        document.querySelectorAll(".wine-card-container").forEach(card => {
+
+            let price = parseFloat(card.dataset.retailPrice);
+            let type = card.dataset.type;
+            let country = card.dataset.country;
+            let vintage = card.dataset.vintageYear;
+
+            // --- TYPE FILTER ---
+            let selectedTypes = [...document.querySelectorAll('.wine-type-filter:checked')]
+                .map(el => el.value);
+            let typeMatch = selectedTypes.length ? selectedTypes.includes(type) : true;
+
+            // --- COUNTRY FILTER ---
+            let selectedCountries = [...document.querySelectorAll('.wine-country-filter:checked')]
+                .map(el => el.value);
+            let countryMatch = selectedCountries.length ? selectedCountries.includes(country) : true;
+
+            // --- VINTAGE YEAR FILTER ---
+            let selectedYears = [...document.querySelectorAll('.wine-vintage-year-filter:checked')]
+                .map(el => el.value);
+            let vintageMatch = selectedYears.length ? selectedYears.includes(vintage) : true;
+
+            // --- PRICE FILTER ---
+            let priceMatch = price >= minPrice && price <= maxPrice;
+
+            // FINAL CHECK
+            if (priceMatch && typeMatch && countryMatch && vintageMatch) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+    });
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modalElement = document.getElementById('productModal');
+    const productModal = new bootstrap.Modal(modalElement);
+
+    document.querySelectorAll('.open-product-modal').forEach(button => {
+
+        button.addEventListener('click', function () {
+
+            const productId = this.dataset.productId;
+
+            document.getElementById('product-modal-content').innerHTML =
+                '<div class="text-center p-5">Loading...</div>';
+
+            fetch('/product-modal/' + productId)
+                .then(response => response.text())
+                .then(html => {
+
+                    document.getElementById('product-modal-content').innerHTML = html;
+
+                    productModal.show();
+
+                })
+                .catch(error => {
+
+                    console.error(error);
+
+                    document.getElementById('product-modal-content').innerHTML =
+                        '<div class="text-center p-5 text-danger">Unable to load product.</div>';
+
+                    productModal.show();
+                });
+
+        });
+
+    });
+
+});
 </script>
 
 

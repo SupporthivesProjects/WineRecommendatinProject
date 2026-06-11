@@ -109,6 +109,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/user/checkout', [UserDashboardController::class, 'checkout'])->name('user.checkout');
 
     Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
+    Route::get('/product-modal/{id}',[UserDashboardController::class, 'productModal'])->name('user.product.modal');
     Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
     Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
     Route::post('/submit-response', [UserDashboardController::class, 'storeResponse']);

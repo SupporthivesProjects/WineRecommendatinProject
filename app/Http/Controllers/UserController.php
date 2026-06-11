@@ -179,34 +179,7 @@ class UserController extends Controller
         return view('user.userquestionnaire',compact('modalImages'));
     }
 
-    // public function products()
-    // {
-    //     $store = Auth::user()->store;asf
-
-    //     // Fetch products linked to this store and eager load the 'images' relationship
-    //     $storeProducts = DB::table('store_products')
-    //         ->where('store_id', $store->id)
-    //         ->where('status', 'active')
-    //         ->orderBy('is_featured', 'desc')
-    //         ->get()
-    //         ->keyBy('product_id');
-
-    //     // Fetch the products with their images for the store products
-    //     $productsQuery = Product::with('images')
-    //         ->whereIn('id', $storeProducts->pluck('product_id'));
-
-    //     // Apply pagination after applying map
-    //     $products = $productsQuery->paginate(9);
-
-    //     // Map the 'is_featured' value from store_products to each product
-    //     $products->getCollection()->transform(function ($product) use ($storeProducts) {
-    //         $product->is_featured = $storeProducts[$product->id]->is_featured;
-    //         return $product;
-    //     });
-
-    //     $cart = session()->get('cart', []);
-    //     return view('user.products', compact('products', 'cart'));
-    // }
+    
     public function products(Request $request)
     {
         $store = Auth::user()->store;
@@ -345,6 +318,82 @@ class UserController extends Controller
             'cart' => $cart,
         ]);
     }
+
+
+    public function productModal($id)
+    {
+        $product = Product::with(['images', 'reviews.user'])
+            ->findOrFail($id);
+
+        $reviews = $product->reviews()
+            ->with('user')
+            ->where('status', 'approved')
+            ->latest()
+            ->paginate(5, ['*'], 'reviews_page');
+
+        $averageRating = $product->reviews()
+            ->where('status', 'approved')
+            ->avg('rating');
+
+        $totalReviews = $product->reviews()
+            ->where('status', 'approved')
+            ->count();
+
+        $ratingDistribution = [];
+
+        for ($i = 5; $i >= 1; $i--) {
+
+            $ratingDistribution[$i] = $product->reviews()
+                ->where('status', 'approved')
+                ->where('rating', $i)
+                ->count();
+        }
+
+        $relatedProducts = Product::with('images')
+            ->where('id', '!=', $product->id)
+            ->where(function ($query) use ($product) {
+
+                $query->where('type', $product->type)
+                    ->orWhere('country', $product->country);
+            })
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
+        if ($relatedProducts->count() < 3) {
+
+            $excludeIds = $relatedProducts->pluck('id')
+                ->push($product->id)
+                ->toArray();
+
+            $additionalProducts = Product::with('images')
+                ->whereNotIn('id', $excludeIds)
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge(
+                $additionalProducts
+            );
+        }
+
+        $cart = session()->get('cart', []);
+
+        return view(
+            'user.partials.product-modal',
+            compact(
+                'product',
+                'relatedProducts',
+                'reviews',
+                'averageRating',
+                'totalReviews',
+                'ratingDistribution',
+                'cart'
+            )
+        );
+    }
+
+
 
 
     public function storeResponse(Request $request)
