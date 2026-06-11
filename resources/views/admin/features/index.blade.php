@@ -35,7 +35,7 @@
                     </ol>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.templates.create') }}" type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text">
+                    <a href="{{ route('admin.features.create') }}" type="button" class="btn btn-wave btn-secondary my-2 btn-icon-text">
                         <i class="fe fe-plus me-2"></i> Add Features
                     </a>
                 </div>
@@ -80,13 +80,13 @@
                                                 </td>
                                                 <td class="align-middle action-btns">
                                                     <div class="d-flex">
-                                                        <a href="#" 
+                                                        <a href="{{ route('admin.features.show', $feature->id)}}" 
                                                            class="btn btn-sm btn-info me-1" 
                                                            data-bs-toggle="tooltip" 
                                                            title="View">
                                                             <i class="fe fe-eye"></i>
                                                         </a>
-                                                        <a href="#" 
+                                                        <a href="{{ route('admin.features.edit', $feature) }}"
                                                            class="btn btn-sm btn-primary me-1"
                                                            data-bs-toggle="tooltip" 
                                                            title="Edit">

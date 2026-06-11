@@ -9,6 +9,12 @@ use App\Models\Store;
 class Feature extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'key',
+        'description',
+        'status',
+    ];
 
     public function stores()
     {

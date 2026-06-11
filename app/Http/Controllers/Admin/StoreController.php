@@ -240,7 +240,13 @@ class StoreController extends Controller
      */
     public function edit(Store $store)
     {
-        return view('admin.stores.edit', compact('store'));
+        $templates = Template::where(
+            'status',
+            1
+        )
+        ->orderBy('name')
+        ->get();
+        return view('admin.stores.edit', compact('store','templates'));
     }
 
     /**
@@ -248,7 +254,6 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
-    
         $validated = $request->validate([
             'business_type' => 'required|string|max:255',
             'store_name' => 'required|string|max:255',
@@ -264,12 +269,123 @@ class StoreController extends Controller
             'group' => 'nullable|string|max:255',
             'gst_vat' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
+            'template_id' => 'nullable|exists:templates,id',
         ]);
 
-        $store->update($validated);
+        try {
 
-        return redirect()->route('admin.stores.index')
-            ->with('success', 'Store updated successfully.');
+            DB::beginTransaction();
+
+            $store->update($validated);
+
+            $addedWineCount = 0;
+            $addedCheeseCount = 0;
+
+            if (!empty($validated['template_id'])) {
+
+                $template = Template::with([
+                    'products',
+                    'cheeseProducts'
+                ])->findOrFail($validated['template_id']);
+
+                /*
+                |--------------------------------------------------------------------------
+                | Wine Products
+                |--------------------------------------------------------------------------
+                */
+
+                $existingWineIds = $store->products()
+                    ->pluck('products.id')
+                    ->toArray();
+
+                $wineProducts = [];
+
+                foreach ($template->products as $product) {
+                    if (!in_array($product->id, $existingWineIds)) {
+                        $addedWineCount++;
+                        $wineProducts[$product->id] = [
+                            'status' => 'active',
+                            'is_featured' => 0,
+                        ];
+                    }
+                }
+
+                if (!empty($wineProducts)) {
+
+                    $store->products()->syncWithoutDetaching(
+                        $wineProducts
+                    );
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Cheese Products
+                |--------------------------------------------------------------------------
+                */
+
+                $existingCheeseIds = $store->cheeseProducts()
+                    ->pluck('cheese_products.id')
+                    ->toArray();
+
+                $cheeseProducts = [];
+
+                foreach ($template->cheeseProducts as $cheese) {
+
+                    if (!in_array($cheese->id, $existingCheeseIds)) {
+
+                        $addedCheeseCount++;
+
+                        $cheeseProducts[$cheese->id] = [
+                            'quantity' => 10,
+                            'is_available' => 1,
+                        ];
+                    }
+                }
+
+                if (!empty($cheeseProducts)) {
+
+                    $store->cheeseProducts()->syncWithoutDetaching(
+                        $cheeseProducts
+                    );
+                }
+            }
+
+            DB::commit();
+
+            $totalAdded = $addedWineCount + $addedCheeseCount;
+
+            $message = 'Store updated successfully.';
+
+            if ($totalAdded > 0) {
+
+                $message .= " Added {$addedWineCount} wine products and {$addedCheeseCount} cheese products from the selected template.";
+            }
+
+            return redirect()
+                ->route('admin.stores.index')
+                ->with('success', $message);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            \Log::error(
+                'Store update failed',
+                [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'Store update failed. Please try again.'
+                );
+        }
     }
 
     /**

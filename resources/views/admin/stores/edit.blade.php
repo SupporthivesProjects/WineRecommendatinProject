@@ -160,6 +160,49 @@
                                     </div>
                                 </div>
 
+                                <!-- Templates drop down -->
+                                <div class="col-md-6">
+                                    <label for="template_id" class="form-label">
+                                        Template
+                                    </label>
+
+                                    <select
+                                        class="form-select"
+                                        id="template_id"
+                                        name="template_id"
+                                        {{ $store->template_id ? 'disabled' : '' }}
+                                    >
+                                        <option value="">
+                                            Select Template (Optional)
+                                        </option>
+
+                                        @foreach($templates as $template)
+                                            <option
+                                                value="{{ $template->id }}"
+                                                {{ old('template_id', $store->template_id) == $template->id ? 'selected' : '' }}
+                                            >
+                                                {{ $template->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @if($store->template_id)
+                                        <input
+                                            type="hidden"
+                                            name="template_id"
+                                            value="{{ $store->template_id }}"
+                                        >
+                                    @endif
+
+                                    <small class="text-muted">
+                                        @if($store->template_id)
+                                            A template has already been assigned to this store and cannot be changed.
+                                        @else
+                                            If no template is selected, there will be no product changes.
+                                        @endif
+                                    </small>
+                                </div>
+
                                 <div class="d-flex justify-content-end mt-4">
                                     <a href="{{ route('admin.stores.index') }}" class="btn btn-secondary me-3">
                                         Cancel
@@ -168,6 +211,7 @@
                                         {{ __('Update Store') }}
                                     </button>
                                 </div>
+
                             </form>
                         </div>
                     </div>
