@@ -460,6 +460,14 @@
             const productName = button.getAttribute('data-product-name');
             const productPrice = button.getAttribute('data-product-price');
             const isInCart = button.classList.contains('btn-dark');
+            let quantity = 1;
+
+            const qtyInput =
+                document.getElementById('modal-product-qty');
+
+            if (qtyInput) {
+                quantity = parseInt(qtyInput.value) || 1;
+            }
             const url = isInCart
                 ? '{{ route("user.cart.remove") }}'
                 : '{{ route("user.cart.add") }}';
@@ -472,7 +480,9 @@
                 body: JSON.stringify({
                     product_id: productId,
                     product_name: productName,
-                    product_price: productPrice
+                    product_price: productPrice,
+                    quantity: quantity
+
                 })
             })
             .then(response => response.json())
@@ -732,5 +742,34 @@
     });
 
 
+</script>
+<script>
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.qty-plus-btn')) {
+            const qtyInput =
+                document.getElementById(
+                    'modal-product-qty'
+                );
+
+            qtyInput.value =
+                parseInt(qtyInput.value) + 1;
+        }
+
+        if (e.target.closest('.qty-minus-btn')) {
+
+            const qtyInput =
+                document.getElementById(
+                    'modal-product-qty'
+                );
+
+            let qty =
+                parseInt(qtyInput.value);
+
+            if (qty > 1) {
+                qtyInput.value = qty - 1;
+            }
+        }
+
+        });
 </script>
 @endpush

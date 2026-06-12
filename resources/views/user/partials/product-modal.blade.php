@@ -73,6 +73,31 @@
                 @php
                     $isInCart = in_array($product->id, $cart ?? []);
                 @endphp
+                <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+                    <button
+                        type="button"
+                        class="btn btn-outline-dark qty-minus-btn"
+                    >
+                        -
+                    </button>
+                    <input
+                        type="text"
+                        value="1"
+                        class="form-control text-center"
+                        id="modal-product-qty"
+                        style="
+                            width:80px;
+                            font-weight:bold;
+                        "
+                        readonly
+                    >
+                    <button
+                        type="button"
+                        class="btn btn-outline-dark qty-plus-btn"
+                    >
+                        +
+                    </button>
+                </div>
                 <div class="mb-4">
                     <button
                         class="btn w-100 buy-now-btn {{ $isInCart ? 'btn-dark' : 'btn-light' }}"

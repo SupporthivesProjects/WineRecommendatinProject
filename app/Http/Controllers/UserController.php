@@ -378,6 +378,10 @@ class UserController extends Controller
         }
 
         $cart = session()->get('cart', []);
+        $cartItem = collect($cart)
+            ->firstWhere('id', $product->id);
+
+        $quantity = $cartItem['quantity'] ?? 0;
 
         
         return view(
@@ -389,7 +393,8 @@ class UserController extends Controller
                 'averageRating',
                 'totalReviews',
                 'ratingDistribution',
-                'cart'
+                'cart',
+                'quantity'
             )
         );
     }
@@ -1043,11 +1048,11 @@ class UserController extends Controller
                 'name' => $productName,
                 'retail_price' => $productPrice,
                 'image' => $product->image1,
-                'quantity' => 1  // Optional: add quantity if needed
+                'quantity' => $request->quantity ?? 1,
             ];
         } else {
             // Optionally increase quantity or ignore duplicates
-            $cart[$foundIndex]['quantity']++;
+            $cart[$foundIndex]['quantity'] += ($request->quantity ?? 1);
         }
 
         session(['cart' => $cart]);
