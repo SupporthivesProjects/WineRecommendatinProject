@@ -529,21 +529,12 @@
                 const cartCountElement =
                     document.getElementById('cart-count');
 
-                if (cartCountElement) {
-
-                    let currentCount =
-                        parseInt(cartCountElement.textContent) || 0;
-
-                    if (isInCart) {
-                        currentCount = Math.max(
-                            0,
-                            currentCount - 1
-                        );
-                    } else {
-                        currentCount += 1;
-                    }
-
-                    cartCountElement.textContent = currentCount;
+                if (
+                    cartCountElement &&
+                    typeof data.cart_count !== 'undefined'
+                ) {
+                    cartCountElement.textContent =
+                        data.cart_count;
                 }
 
             })

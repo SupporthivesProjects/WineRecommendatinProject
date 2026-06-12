@@ -82,7 +82,7 @@
                     </button>
                     <input
                         type="text"
-                        value="1"
+                        value="{{ max($quantity, 1) }}"
                         class="form-control text-center"
                         id="modal-product-qty"
                         style="
