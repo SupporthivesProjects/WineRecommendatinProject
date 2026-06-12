@@ -379,6 +379,7 @@ class UserController extends Controller
 
         $cart = session()->get('cart', []);
 
+        
         return view(
             'user.partials.product-modal',
             compact(
@@ -1050,8 +1051,13 @@ class UserController extends Controller
         }
 
         session(['cart' => $cart]);
+        $cartCount = collect($cart)->sum('quantity');
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'cart_count' => $cartCount,
+        ]);
+
     }
 
 
@@ -1064,7 +1070,12 @@ class UserController extends Controller
 
         session(['cart' => array_values($cart)]);
 
-        return response()->json(['success' => true]);
+        $cartCount = collect($cart)->sum('quantity');
+
+        return response()->json([
+            'success' => true,
+            'cart_count' => $cartCount,
+        ]);
     }
 
 

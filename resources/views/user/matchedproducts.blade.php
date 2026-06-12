@@ -450,26 +450,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
         // Buy Now / Remove From Cart
         document.addEventListener('click', function (e) {
-
             const button = e.target.closest('.buy-now-btn');
-
             if (!button) {
                 return;
             }
-
             const productId = button.getAttribute('data-product-id');
             const productName = button.getAttribute('data-product-name');
             const productPrice = button.getAttribute('data-product-price');
-
             const isInCart = button.classList.contains('btn-dark');
-
             const url = isInCart
                 ? '{{ route("user.cart.remove") }}'
                 : '{{ route("user.cart.add") }}';
-
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -594,7 +587,6 @@
     document.addEventListener("DOMContentLoaded", function () {
     const minSlider = document.getElementById("price-min");
     const maxSlider = document.getElementById("price-max");
-
     const minVal = document.getElementById("min-val");
     const maxVal = document.getElementById("max-val");
 
@@ -655,45 +647,90 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
-    const modalElement = document.getElementById('productModal');
-    const productModal = new bootstrap.Modal(modalElement);
+        const modalElement = document.getElementById('productModal');
+        const productModal = new bootstrap.Modal(modalElement);
 
-    document.querySelectorAll('.open-product-modal').forEach(button => {
+        document.querySelectorAll('.open-product-modal').forEach(button => {
 
-        button.addEventListener('click', function () {
+            button.addEventListener('click', function () {
 
-            const productId = this.dataset.productId;
+                const productId = this.dataset.productId;
 
-            document.getElementById('product-modal-content').innerHTML =
-                '<div class="text-center p-5">Loading...</div>';
+                const modalContent =
+                    document.getElementById(
+                        'product-modal-content'
+                    );
 
-            fetch('/product-modal/' + productId)
-                .then(response => response.text())
-                .then(html => {
+                modalContent.style.opacity = '0.5';
 
-                    document.getElementById('product-modal-content').innerHTML = html;
+                fetch('/product-modal/' + productId)
+                    .then(response => response.text())
+                    .then(html => {
 
-                    productModal.show();
+                        modalContent.innerHTML = html;
+                        modalContent.style.opacity = '1';
 
-                })
-                .catch(error => {
+                        productModal.show();
 
-                    console.error(error);
+                    })
+                    .catch(error => {
 
-                    document.getElementById('product-modal-content').innerHTML =
-                        '<div class="text-center p-5 text-danger">Unable to load product.</div>';
+                        console.error(error);
 
-                    productModal.show();
-                });
+                        document.getElementById('product-modal-content').innerHTML =
+                            '<div class="text-center p-5 text-danger">Unable to load product.</div>';
+
+                        productModal.show();
+                    });
+
+            });
 
         });
 
     });
 
-});
+    document.addEventListener('click', function (e) {
+    const relatedButton =
+        e.target.closest('.related-product-btn');
+
+    if (!relatedButton) {
+        return;
+    }
+
+    const productId =
+        relatedButton.dataset.productId;
+
+    document.getElementById(
+        'product-modal-content'
+    ).innerHTML =
+        '<div class="text-center p-5">Loading...</div>';
+
+    fetch('/product-modal/' + productId)
+        .then(response => response.text())
+        .then(html => {
+
+            document.getElementById(
+                'product-modal-content'
+            ).innerHTML = html;
+
+            const modalBody =
+                document.querySelector(
+                    '#productModal .modal-body'
+                );
+
+            if (modalBody) {
+                modalBody.scrollTop = 0;
+            }
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    });
+
+
 </script>
-
-
 @endpush

@@ -134,7 +134,9 @@
 
                 <div>
                     <a href="{{ route('user.cart') }}" class="btn btn-dark me-2">
-                        View Cart (<span id="cart-count">{{ count($cart ?? []) }}</span>)
+                        View Cart (<span id="cart-count">
+                            {{ collect($cart ?? [])->sum('quantity') }}
+                        </span>)
                     </a>
 
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">
@@ -807,15 +809,11 @@
 
                 if (!data.success) return;
                 const cartCountElement = document.getElementById('cart-count');
-                    if (cartCountElement) 
-                    {
-                        let currentCount = parseInt(cartCountElement.textContent) || 0;
-                        if (isInCart) {
-                            currentCount = Math.max(0, currentCount - 1);
-                        } else {
-                            currentCount += 1;
-                        }
-                        cartCountElement.textContent = currentCount;
+                    if (cartCountElement) {
+
+                        cartCountElement.textContent =
+                            data.cart_count ?? 0;
+
                     }
 
                     if (isInCart) {

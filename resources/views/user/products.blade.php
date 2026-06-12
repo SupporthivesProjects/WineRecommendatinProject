@@ -269,7 +269,9 @@
                         <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
                         <li class="nav-item">
                             <a href="{{ route('user.cart') }}" class="nav-link">
-                                View Cart (<span id="cart-count">{{ count($cart ?? []) }}</span>)
+                                View Cart (<span id="cart-count">
+                                    {{ collect($cart ?? [])->sum('quantity') }}
+                                </span>)
                             </a>
                         </li>
                     </ul>
@@ -778,23 +780,12 @@
 
                         // ✅ Update the cart count dynamically
                         const cartCountElement = document.getElementById('cart-count');
-                        if (cartCountElement) {
-                            let currentCount = parseInt(cartCountElement.textContent) || 0;
+                        if (cartCountElement) 
+                        {
+                            cartCountElement.textContent =
+                                data.cart_count ?? 0;
 
-                            if (isInCart) {
-                                // Product removed
-                                currentCount = Math.max(0, currentCount - 1);
-                            } else {
-                                // Product added
-                                currentCount += 1;
-                            }
-
-                            cartCountElement.textContent = currentCount;
                         }
-
-
-
-
 
                     })
                     .catch(() => {
