@@ -252,6 +252,32 @@
 
                                         <h6 class="mt-4 fs-16">Tasting Notes</h6>
                                         <p>{{ $product->tasting_notes ?? 'N/A' }}</p>
+                                        <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-dark detail-qty-minus"
+                                        >
+                                            -
+                                        </button>
+
+                                        <input
+                                            type="text"
+                                            value="1"
+                                            id="detail-product-qty"
+                                            class="form-control text-center"
+                                            style="width:80px;font-weight:bold;"
+                                            readonly
+                                        >
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-dark detail-qty-plus"
+                                        >
+                                            +
+                                        </button>
+
+                                    </div>
                                         <div class="mt-4">
                                             <button
                                                 class="btn border border-dark w-100 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
@@ -779,6 +805,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+
+        document.querySelector('.detail-qty-plus')?.addEventListener('click', function () {
+
+        const qtyInput =
+            document.getElementById('detail-product-qty');
+
+        qtyInput.value =
+            parseInt(qtyInput.value) + 1;
+
+        });
+
+        document.querySelector('.detail-qty-minus')?.addEventListener('click', function () {
+
+        const qtyInput =
+            document.getElementById('detail-product-qty');
+
+        let qty =
+            parseInt(qtyInput.value);
+
+        if (qty > 1) {
+            qtyInput.value = qty - 1;
+        }
+
+        });
+
+
         const buttons = document.querySelectorAll('.buy-now-btn');
         buttons.forEach(button => {
             button.addEventListener('click', function () {
@@ -788,6 +840,17 @@
             const productPrice = this.getAttribute('data-product-price');
 
             const isInCart = this.classList.contains('btn-dark');
+            let quantity = 1;
+
+            const qtyInput =
+                document.getElementById('detail-product-qty');
+
+            if (qtyInput) {
+                quantity = parseInt(qtyInput.value) || 1;
+            }
+
+
+
 
             const url = isInCart
                 ? '{{ route("user.cart.remove") }}'
@@ -799,10 +862,12 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
+                
                 body: JSON.stringify({
                     product_id: productId,
                     product_name: productName,
-                    product_price: productPrice
+                    product_price: productPrice,
+                    quantity:quantity
                 })
             })
             .then(response => response.json())
