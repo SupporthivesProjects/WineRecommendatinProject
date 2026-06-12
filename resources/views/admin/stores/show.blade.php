@@ -55,6 +55,64 @@
         background: white;
     }
 
+
+    .analytics-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        transition: all .25s ease;
+        box-shadow: 0 4px 20px rgba(0,0,0,.05);
+        height: 100%;
+    }
+
+    .analytics-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    }
+
+    .analytics-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #fff;
+    }
+
+    .revenue-card .analytics-icon {
+        background: linear-gradient(135deg,#10b981,#059669);
+    }
+
+    .orders-card .analytics-icon {
+        background: linear-gradient(135deg,#3b82f6,#2563eb);
+    }
+
+    .bottles-card .analytics-icon {
+        background: linear-gradient(135deg,#8b5cf6,#7c3aed);
+    }
+
+    .avg-card .analytics-icon {
+        background: linear-gradient(135deg,#f59e0b,#d97706);
+    }
+
+    .analytics-label {
+        display: block;
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .analytics-value {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
 </style>
 
 
@@ -145,6 +203,11 @@
                             {{ $features->count() }}
                         </span>
                     </button>
+     
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#analytics" type="button" role="tab">
+                        Analytics
+                    </button>
+
 
                 </div>
             </div>
@@ -516,6 +579,278 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Analytics tab -->
+            <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
+                <div class="row">
+                    @php
+                        $currentRange = request('range', 'all');
+                    @endphp
+                        <div class="analytics-filters mb-4">
+
+                            <a href="{{ request()->url() }}?range=all"
+                            class="btn btn-sm {{ $currentRange == 'all' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                All Time
+                            </a>
+
+                            <a href="{{ request()->url() }}?range=today"
+                            class="btn btn-sm {{ $currentRange == 'today' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                Today
+                            </a>
+
+                            <a href="{{ request()->url() }}?range=7days"
+                            class="btn btn-sm {{ $currentRange == '7days' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                7 Days
+                            </a>
+
+                            <a href="{{ request()->url() }}?range=30days"
+                            class="btn btn-sm {{ $currentRange == '30days' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                30 Days
+                            </a>
+
+                            <a href="{{ request()->url() }}?range=month"
+                            class="btn btn-sm {{ $currentRange == 'month' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                Month
+                            </a>
+
+                            <a href="{{ request()->url() }}?range=year"
+                            class="btn btn-sm {{ $currentRange == 'year' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                Year
+                            </a>
+
+                            <button
+                                class="btn btn-sm {{ $currentRange == 'custom' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#customRangeFilter">
+                                Custom Range
+                            </button>
+                    </div>
+                    <div class="collapse my-3" id="customRangeFilter">
+                        <form method="GET" action="{{ request()->url() }}">
+                            <input type="hidden" name="range" value="custom">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="form-label">
+                                        From Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        name="from"
+                                        class="form-control"
+                                        value="{{ request('from') }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">
+                                        To Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        name="to"
+                                        class="form-control"
+                                        value="{{ request('to') }}">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary">
+                                        Apply Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="analytics-card revenue-card">
+                            <div class="analytics-icon">
+                                <i class="bi bi-currency-rupee"></i>
+                            </div>
+
+                            <div class="analytics-content">
+                                <span class="analytics-label">
+                                    Total Revenue
+                                </span>
+
+                                <h2 class="analytics-value">
+                                    ₹{{ number_format($analyticsSummary['total_revenue'] ?? 0, 2) }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="analytics-card orders-card">
+                            <div class="analytics-icon">
+                                <i class="bi bi-cart-check"></i>
+                            </div>
+
+                            <div class="analytics-content">
+                                <span class="analytics-label">
+                                    Total Orders
+                                </span>
+
+                                <h2 class="analytics-value">
+                                    {{ $analyticsSummary['total_orders'] ?? 0 }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="analytics-card bottles-card">
+                            <div class="analytics-icon">
+                                <i class="bi bi-cup-straw"></i>
+                            </div>
+
+                            <div class="analytics-content">
+                                <span class="analytics-label">
+                                    Total Bottles
+                                </span>
+
+                                <h2 class="analytics-value">
+                                    {{ $analyticsSummary['total_bottles'] ?? 0 }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="analytics-card avg-card">
+                            <div class="analytics-icon">
+                                <i class="bi bi-receipt"></i>
+                            </div>
+
+                            <div class="analytics-content">
+                                <span class="analytics-label">
+                                    Avg Order Value
+                                </span>
+
+                                <h2 class="analytics-value">
+                                    ₹{{ number_format($analyticsSummary['avg_order_value'] ?? 0, 2) }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- top selling wines -->
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">
+                                    🍷 Top Selling Wines
+                                </h4>
+
+                                <span class="badge bg-primary">
+                                    {{ $topSellingWines->count() }} Wines
+                                </span>
+                                </div>
+                                    @foreach($topSellingWines as $index => $wine)
+                                        <div class="mb-4">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <div>
+                                                @php
+                                                    $badge = match($index) {
+                                                        0 => '🥇',
+                                                        1 => '🥈',
+                                                        2 => '🥉',
+                                                        default => '#'.($index + 1)
+                                                    };
+                                                @endphp
+
+                                                <span class="wine-rank">
+                                                    {{ $badge }}
+                                                </span>
+                                                    {{ $wine->product_name }}
+                                                </div>
+                                                <div>
+                                                    {{ $wine->total_sold }} bottles
+                                                </div>
+                                            </div>
+                                            @php
+                                                $barColor = match($index) {
+                                                    0 => '#f59e0b',
+                                                    1 => '#9ca3af',
+                                                    2 => '#b45309',
+                                                    default => '#6366f1'
+                                                };
+                                            @endphp
+                                            <div class="progress" style="height:10px;">
+                                            <div class="progress-bar"
+                                                    style="
+                                                        background: {{ $barColor }};
+                                                        width: {{ ($wine->total_sold / $topSellingWines->max('total_sold')) * 100 }}%;
+                                                    ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Chart  -->
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">
+                                    📈 Revenue Trend
+                                </h4>
+                            </div>
+                            <div style="height:350px;">
+                                <canvas id="revenueTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Wine type -->
+                    @php
+                    $wineTypeLabels = $wineTypeDistribution
+                        ->pluck('type');
+
+                    $wineTypeValues = $wineTypeDistribution
+                        ->pluck('total_sold');
+
+                    @endphp
+                    <div class="row mt-4">
+                        {{-- Wine Type --}}
+                        <div class="col-md-6">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-white">
+                                    <h5 class="mb-0">
+                                        🍷 Wine Type Distribution
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas
+                                        id="wineTypeChart"
+                                        height="250">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Country --}}
+                        <div class="col-md-6">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header bg-white">
+                                    <h5 class="mb-0">
+                                        🌍 Country Distribution
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas
+                                        id="countryChart"
+                                        height="250">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1116,7 +1451,167 @@
                 toast.show();
             }
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
 
+                const revenueLabels = @json(
+                    $revenueTrend->pluck('sale_date')->values()
+                );
+
+                const revenueValues = @json(
+                    $revenueTrend->pluck('revenue')
+                        ->map(fn($value) => (float)$value)
+                        ->values()
+                );
+
+                const ctx = document.getElementById(
+                    'revenueTrendChart'
+                );
+
+                if (ctx) {
+
+                    new Chart(ctx, {
+                        type: 'line',
+
+                        data: {
+                            labels: revenueLabels,
+
+                            datasets: [{
+                                label: 'Revenue',
+
+                                data: revenueValues,
+
+                                tension: 0.4,
+
+                                fill: true,
+
+                                borderWidth: 3,
+
+                                pointRadius: 5
+                            }]
+                        },
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+
+            });
+        </script>
+        
+        <script>
+            const wineTypeCtx =
+                document.getElementById(
+                    'wineTypeChart'
+                );
+
+            new Chart(
+                wineTypeCtx,
+                {
+                    type: 'doughnut',
+                    data: {
+
+                        labels:
+                            @json($wineTypeLabels),
+
+                        datasets: [{
+                            data:
+                                @json($wineTypeValues),
+
+                            backgroundColor: [
+                                '#dc3545',
+                                '#ffc107',
+                                '#fd7e14'
+                            ]
+                        }]
+                    },
+
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                }
+            );
+
+        </script>
+        <script>
+            const countryCtx =
+                document.getElementById(
+                    'countryChart'
+                );
+
+            new Chart(
+                countryCtx,
+                {
+                    type: 'doughnut',
+
+                    data: {
+
+                        labels:
+                            @json(
+                                $countryDistribution
+                                    ->pluck('country')
+                            ),
+
+                        datasets: [{
+
+                            data:
+                                @json(
+                                    $countryDistribution
+                                        ->pluck('total_sold')
+                                ),
+
+                            backgroundColor: [
+                                '#4e73df',
+                                '#1cc88a',
+                                '#36b9cc',
+                                '#f6c23e',
+                                '#e74a3b',
+                                '#6f42c1',
+                                '#fd7e14',
+                                '#20c997'
+                            ]
+                        }]
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        plugins: {
+
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                }
+            );
+
+        </script>
+
+    
     @endpush
 
 

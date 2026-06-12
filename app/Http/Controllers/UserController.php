@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\CartCheckout;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
-
+use App\Models\CheckoutItem;
 
 class UserController extends Controller
 {
@@ -1118,30 +1118,6 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => 'Cart is empty.']);
         }
 
-        // $responses = QuestionResponse::where('submission_id', $submissionId)->get();
-        // Log::info('Fetched responses count: ' . $responses->count());
-
-        // if ($responses->isEmpty()) {
-        //     Log::warning('Invalid submission ID: no responses found.');
-        //     return response()->json(['success' => false, 'message' => 'Invalid submission ID.']);
-        // }
-
-        // $username = $email = $phone = 'N/A';
-
-        // foreach ($responses as $response) {
-        //     Log::info("Processing response: question_key={$response->question_key}, answer={$response->answer}");
-
-        //     if ($response->question_key === 'question1') {
-        //         $username = $response->answer;
-        //         Log::info("Username set to: $username");
-        //     } elseif ($response->question_key === 'question2') {
-        //         $phone = $response->answer;
-        //         Log::info("Email set to: $email");
-        //     } elseif ($response->question_key === 'question3') {
-        //         $email = $response->answer;
-        //         Log::info("Phone set to: $phone");
-        //     }
-        // }
         $username = auth()->user()->name ?? 'N/A';
         $email    = auth()->user()->email ?? 'N/A';
         $phone    = 'N/A';
@@ -1184,6 +1160,24 @@ class UserController extends Controller
     
         $saved = $checkout->save();
         Log::info('Checkout saved: ' . ($saved ? 'yes' : 'no'));
+
+        if ($saved) {
+
+            foreach ($cart as $item) {
+        
+                CheckoutItem::create([
+                    'checkout_id'      => $checkout->id,
+                    'product_id'       => $item['id'],
+                    'user_id'          => $userId,
+                    'store_manager_id' => $managerId,
+                    'product_name'     => $item['name'],
+                    'price'            => $item['retail_price'],
+                    'quantity'         => $item['quantity'],
+                ]);
+            }
+        
+            Log::info('Checkout items saved successfully.');
+        }
 
         // Clear cart
         Session::forget('cart');

@@ -12,6 +12,7 @@ use App\Models\Feature;
 use App\Models\StoreFeature;
 use App\Models\Template;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Admin\StoreAnalyticsController;
 
 
 class StoreController extends Controller
@@ -195,6 +196,8 @@ class StoreController extends Controller
 
     public function show(Store $store)
     {
+
+        $range = request('range', 'all');
         $store->load('users', 'manager');
 
         $activeProducts = $store->products()
@@ -220,6 +223,46 @@ class StoreController extends Controller
             ->get();
 
         $features = $store->features()->orderBy('name')->get();
+        $storeManager = $store->users
+        ->where('role', 'store_manager')
+        ->first();
+        $analyticsSummary = null;
+        $topSellingWines = collect();
+        $revenueTrend = collect();
+        $wineTypeDistribution = collect();
+        $countryDistribution = collect();
+
+        if ($storeManager) {
+
+            $analyticsSummary = StoreAnalyticsController::getStoreSummary(
+                $storeManager->id,
+                $range
+            );
+        
+            $topSellingWines = StoreAnalyticsController::getTopSellingWines(
+                $storeManager->id,
+                $range
+            );
+
+            \Log::info($topSellingWines->toArray());
+
+            $revenueTrend = StoreAnalyticsController::getRevenueTrend(
+                $storeManager->id,
+                $range
+            );
+
+            $wineTypeDistribution =
+            StoreAnalyticsController::getWineTypeDistribution(
+                $storeManager->id,
+                $range
+            );
+
+            $countryDistribution =
+            StoreAnalyticsController::getCountryDistribution(
+                $storeManager->id,
+                $range
+            );
+        }
 
         return view(
             'admin.stores.show',
@@ -230,7 +273,12 @@ class StoreController extends Controller
                 'availableProducts',
                 'cheeseProducts',
                 'availableCheeses',
-                'features'
+                'features',
+                'analyticsSummary',
+                'topSellingWines',
+                'revenueTrend',
+                'wineTypeDistribution',
+                'countryDistribution'
             )
         );
     }

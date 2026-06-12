@@ -27,7 +27,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\StoreProfileController;
 use App\Http\Controllers\Api\UploadApiController;
 use App\Http\Controllers\Admin\FeatureController;
-
+use App\Http\Controllers\Admin\StoreAnalyticsController;
 
 use Illuminate\Support\Facades\Log;
 
@@ -253,6 +253,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     //Features
     Route::resource('features', FeatureController::class);
+
+    //Analytics data
+    Route::get('/analytics/store/{storeManagerId}/top-wines',[StoreAnalyticsController::class, 'topSellingWines']);
 
 });
 
