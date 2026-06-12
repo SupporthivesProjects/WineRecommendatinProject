@@ -41,13 +41,32 @@ class UploadApiController extends Controller
 
         $data = $request->validate([
             'uploads' => 'required|array',
+        
             'uploads.*.store_manager_name' => 'required|string',
-            'uploads.*.store_manager_id' => 'required|integer',
-            'uploads.*.invoice_no' => 'required|string',
-            'uploads.*.customer_name' => 'required|string',
-            'uploads.*.customer_mobile' => 'required|string',
+            'uploads.*.store_manager_id' => 'required',
+        
+            'uploads.*.invoice_no' => 'nullable|string',
+            'uploads.*.customer_name' => 'nullable|string',
+            'uploads.*.customer_mobile' => 'nullable|string',
+        
             'uploads.*.product_name' => 'required|string',
-            'uploads.*.product_price' => 'required|numeric'
+            'uploads.*.product_id' => 'nullable|string',
+        
+            'uploads.*.product_category' => 'nullable|string',
+            'uploads.*.product_sub_category' => 'nullable|string',
+        
+            'uploads.*.product_price' => 'nullable|numeric',
+        
+            'uploads.*.size' => 'nullable|string',
+            'uploads.*.packsize' => 'nullable|string',
+        
+            'uploads.*.qty' => 'nullable|integer',
+            'uploads.*.stock' => 'nullable|integer',
+        
+            'uploads.*.location' => 'nullable|string',
+        
+            'uploads.*.product_created_time' => 'nullable',
+            'uploads.*.product_modified_time' => 'nullable',
         ]);
     
         $rows = [];
@@ -55,20 +74,81 @@ class UploadApiController extends Controller
         foreach ($data['uploads'] as $upload) {
     
             $rows[] = [
+
                 'store_manager_name' => $upload['store_manager_name'],
-                'store_manager_id' => $upload['store_manager_id'],
-                'invoice_no' => $upload['invoice_no'],
-                'customer_name' => $upload['customer_name'],
-                'customer_mobile' => $upload['customer_mobile'],
-                'product_name' => $upload['product_name'],
-                'product_price' => $upload['product_price'],
-                'type'=>'API',
+                'store_manager_id'   => $upload['store_manager_id'],
+            
+                'invoice_no'         => $upload['invoice_no'] ?? null,
+                'customer_name'      => $upload['customer_name'] ?? null,
+                'customer_mobile'    => $upload['customer_mobile'] ?? null,
+            
+                'product_name'       => $upload['product_name'],
+            
+                'product_id'         => $upload['product_id'] ?? null,
+            
+                'product_category'   => $upload['product_category'] ?? null,
+                'product_sub_category' => $upload['product_sub_category'] ?? null,
+            
+                'product_price'      => $upload['product_price'] ?? null,
+            
+                'size'               => $upload['size'] ?? null,
+                'packsize'           => $upload['packsize'] ?? null,
+            
+                'qty'       => $upload['qty'] ?? null,
+                'stock'              => $upload['stock'] ?? null,
+            
+                'location'           => $upload['location'] ?? null,
+            
+                'product_created_time' =>
+                    $upload['product_created_time'] ?? null,
+            
+                'product_modified_time' =>
+                    $upload['product_modified_time'] ?? null,
+            
+                'type' => 'API',
+            
                 'created_at' => now(),
                 'updated_at' => now()
             ];
         }
     
+
+        $checkoutRows = [];
+        foreach ($data['uploads'] as $upload) {
+
+            $checkoutRows[] = [
+
+                'checkout_id' => null,
+
+                'product_id' => null,
+
+                'user_id' => null,
+
+                'store_manager_id' =>
+                    $upload['store_manager_id'],
+
+                'product_name' =>
+                    $upload['product_name'],
+
+                'price' =>
+                    $upload['product_price'] ?? 0,
+
+                'quantity' =>
+                    !empty($upload['qty'])
+                        ? $upload['qty']
+                        : 1,
+
+                'created_at' => now(),
+
+                'updated_at' => now()
+            ];
+        }
+
+
+
         DB::table('store_manager_uploads')->insert($rows);
+        DB::table('checkout_items')
+        ->insert($checkoutRows);
     
         return response()->json([
             'status' => true,

@@ -248,8 +248,26 @@ class StoreDashboardController extends Controller
             "invoice_no",
             "customer_name",
             "customer_mobile",
+        
             "product_name",
+            "product_id",
+        
+            "product_category",
+            "product_sub_category",
+        
             "product_price",
+        
+            "size",
+            "packsize",
+        
+            "qty",
+            "stock",
+        
+            "location",
+        
+            "product_created_time",
+            "product_modified_time",
+        
             "date"
         ];
 
@@ -274,22 +292,52 @@ class StoreDashboardController extends Controller
         $user = Auth::user();
 
         foreach ($data as $row) {
-            if(empty($row[0]) || empty($row[2])) {
+            if(empty($row[3])) {
                 continue;
             }
             $date = Carbon::createFromFormat('m/d/Y', $row[5])->format('Y-m-d');
-            StoreManagerUpload::create([
+            $upload = StoreManagerUpload::create([
+
                 'store_manager_name' => $user->first_name.' '.$user->last_name,
                 'store_manager_id'   => $user->id,
-                'invoice_no'         => $row[0],
-                'customer_name'      => $row[1],
-                'customer_mobile'    => $row[2],
-                'product_name'       => $row[3],
-                'product_price'      => $row[4],
-                'type'=> 'CSV',
-                'date'               => $date
+            
+                'invoice_no'         => $row[0] ?? null,
+                'customer_name'      => $row[1] ?? null,
+                'customer_mobile'    => $row[2] ?? null,
+            
+                'product_name'       => $row[3] ?? null,
+                'product_id'         => $row[4] ?? null,
+            
+                'product_category'   => $row[5] ?? null,
+                'product_sub_category' => $row[6] ?? null,
+            
+                'product_price'      => $row[7] ?? null,
+            
+                'size'               => $row[8] ?? null,
+                'packsize'           => $row[9] ?? null,
+            
+                'qty'       => !empty($row[10]) ? $row[10] : null,
+                'stock'              => !empty($row[11]) ? $row[11] : null,
+            
+                'location'           => $row[12] ?? null,
+            
+                'product_created_time' =>
+                    !empty($row[13]) ? $row[13] : null,
+            
+                'product_modified_time' =>
+                    !empty($row[14]) ? $row[14] : null,
+            
+                'type' => 'CSV',
+            
+                'date' => !empty($row[15])
+                    ? Carbon::parse($row[15])->format('Y-m-d')
+                    : Carbon::today()
             ]);
+
+            $upload = StoreManagerUpload::create;
+
         }
+
 
         return redirect()->route('store-manager.uploads')
             ->with('success','CSV Uploaded Successfully');
@@ -304,17 +352,40 @@ class StoreDashboardController extends Controller
 
         $user = Auth::user();
 
-        StoreManagerUpload::create([
+        $upload = StoreManagerUpload::create([
+
             'store_manager_name' => $user->first_name . ' ' . $user->last_name,
-            'store_manager_id' => $user->id,
-            'invoice_no' => $request->invoice_no,
-            'customer_name' => $request->customer_name,
-            'customer_mobile' => $request->customer_mobile,
-            'product_name' => $request->product_name,
-            'product_price' => $request->product_price,
-            'type'=> 'manual',
+            'store_manager_id'   => $user->id,
+        
+            'invoice_no'         => $request->invoice_no,
+            'customer_name'      => $request->customer_name,
+            'customer_mobile'    => $request->customer_mobile,
+        
+            'product_name'       => $request->product_name,
+            'product_id'         => $request->product_id,
+        
+            'product_category'   => $request->product_category,
+            'product_sub_category' => $request->product_sub_category,
+        
+            'product_price'      => $request->product_price,
+        
+            'size'               => $request->size,
+            'packsize'           => $request->packsize,
+        
+            'qty'       => $request->qty,
+            'stock'              => $request->stock,
+        
+            'location'           => $request->location,
+        
+            'product_created_time' => $request->product_created_time,
+            'product_modified_time' => $request->product_modified_time,
+        
+            'type' => 'manual',
+        
             'date' => Carbon::today()
         ]);
+
+        $upload->syncToCheckoutItem();
     
         // return back()->with('success','Record Added Successfully');
         return redirect()->route('store-manager.uploads')
@@ -334,11 +405,30 @@ class StoreDashboardController extends Controller
         }
 
         $record->update([
+
             'invoice_no' => $request->invoice_no,
+        
             'customer_name' => $request->customer_name,
             'customer_mobile' => $request->customer_mobile,
+        
             'product_name' => $request->product_name,
+            'product_id' => $request->product_id,
+        
+            'product_category' => $request->product_category,
+            'product_sub_category' => $request->product_sub_category,
+        
             'product_price' => $request->product_price,
+        
+            'size' => $request->size,
+            'packsize' => $request->packsize,
+        
+            'qty' => $request->qty,
+            'stock' => $request->stock,
+        
+            'location' => $request->location,
+        
+            'product_created_time' => $request->product_created_time,
+            'product_modified_time' => $request->product_modified_time,
         ]);
 
         return response()->json(['success' => true]);
