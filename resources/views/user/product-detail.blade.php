@@ -379,7 +379,8 @@
                                             <tr>
                                                 <th scope="row">Cheese pairings</th>
                                                 <td style="white-space: normal; word-wrap: break-word;">
-                                                    {!! $extraIcons['cheese_pairing'] ?? $defaultIcon !!} {{ $product->cheese_pairing ?? 'N/A' }}</td>
+                                                    {!! $extraIcons['cheese_pairing'] ?? $defaultIcon !!} {{ $product->cheese_pairing ?? 'N/A' }}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Importer</th>
