@@ -10,6 +10,8 @@ use App\Models\Store;
 use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireLog;
 use App\Models\StoreManagerUpload;
+use App\Models\CheckoutItem;
+
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -429,6 +431,22 @@ class StoreDashboardController extends Controller
         
             'product_created_time' => $request->product_created_time,
             'product_modified_time' => $request->product_modified_time,
+        ]);
+
+        CheckoutItem::where(
+            'store_manager_upload_id',
+            $record->id
+        )->update([
+        
+            'product_name' => $request->product_name,
+        
+            'price' => $request->product_price,
+        
+            'quantity' => $request->qty ?: 1,
+        
+            'created_at' => $request->date
+                ? \Carbon\Carbon::parse($request->date)
+                : now(),
         ]);
 
         return response()->json(['success' => true]);

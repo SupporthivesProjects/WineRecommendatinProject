@@ -231,6 +231,10 @@ class StoreController extends Controller
         $revenueTrend = collect();
         $wineTypeDistribution = collect();
         $countryDistribution = collect();
+        $slowMovingWines = collect();
+        $lowStockWines = collect();
+        $highStockLowMovement = collect();
+        $priceBandAnalytics = collect();
 
         if ($storeManager) {
 
@@ -262,6 +266,29 @@ class StoreController extends Controller
                 $storeManager->id,
                 $range
             );
+
+            $slowMovingWines =
+            StoreAnalyticsController::getSlowMovingWines(
+                $storeManager->id,
+                $range
+            );
+
+        $lowStockWines =
+            StoreAnalyticsController::getLowStockWines(
+                $storeManager->id
+            );
+
+        $highStockLowMovement =
+            StoreAnalyticsController::getHighStockLowMovement(
+                $storeManager->id,
+                $range
+            );
+
+        $priceBandAnalytics =
+            StoreAnalyticsController::getPriceBandAnalytics(
+                $storeManager->id,
+                $range
+            );
         }
 
         return view(
@@ -278,7 +305,11 @@ class StoreController extends Controller
                 'topSellingWines',
                 'revenueTrend',
                 'wineTypeDistribution',
-                'countryDistribution'
+                'countryDistribution',
+                'slowMovingWines',
+                'lowStockWines',
+                'highStockLowMovement',
+                'priceBandAnalytics',
             )
         );
     }

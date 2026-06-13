@@ -182,6 +182,186 @@ class StoreAnalyticsController extends Controller
 
 
 
+    public static function getSlowMovingWines(
+        $storeManagerId,
+        $range = 'all',
+        $limit = 10
+    )
+    {
+        $query = CheckoutItem::where(
+            'store_manager_id',
+            $storeManagerId
+        );
+    
+        self::applyDateFilter(
+            $query,
+            $range
+        );
+    
+        return $query
+            ->select(
+                'product_name',
+                DB::raw('SUM(quantity) as total_sold')
+            )
+            ->groupBy('product_name')
+            ->orderBy('total_sold')
+            ->limit($limit)
+            ->get();
+    }
+
+    public static function getLowStockWines(
+        $storeManagerId,
+        $threshold = 5
+    )
+    {
+        return DB::table('store_manager_uploads as s1')
+            ->select(
+                's1.product_name',
+                's1.stock'
+            )
+            ->where(
+                's1.store_manager_id',
+                $storeManagerId
+            )
+            ->whereRaw('s1.id = (
+                SELECT MAX(s2.id)
+                FROM store_manager_uploads s2
+                WHERE s2.product_name = s1.product_name
+            )')
+            ->where('s1.stock', '>', 0)
+            ->where('s1.stock', '<=', $threshold)
+            ->orderBy('s1.stock')
+            ->get();
+    }
+
+    public static function getHighStockLowMovement(
+        $storeManagerId,
+        $range = 'all'
+    )
+    {
+        $salesQuery = CheckoutItem::where(
+            'store_manager_id',
+            $storeManagerId
+        );
+    
+        self::applyDateFilter(
+            $salesQuery,
+            $range
+        );
+    
+        $sales = $salesQuery
+            ->select(
+                'product_name',
+                DB::raw('SUM(quantity) as total_sold')
+            )
+            ->groupBy('product_name')
+            ->get()
+            ->keyBy('product_name');
+    
+        $latestStocks = DB::table('store_manager_uploads as s1')
+            ->select(
+                's1.product_name',
+                's1.stock'
+            )
+            ->where(
+                's1.store_manager_id',
+                $storeManagerId
+            )
+            ->whereRaw('s1.id = (
+                SELECT MAX(s2.id)
+                FROM store_manager_uploads s2
+                WHERE s2.product_name = s1.product_name
+            )')
+            ->get();
+    
+        return $latestStocks
+            ->map(function ($wine) use ($sales) {
+    
+                $sold = $sales[$wine->product_name]->total_sold ?? 0;
+    
+                return (object)[
+                    'product_name' => $wine->product_name,
+                    'stock' => $wine->stock,
+                    'sold' => $sold
+                ];
+            })
+            ->filter(function ($wine) {
+    
+                return
+                    $wine->stock >= 20 &&
+                    $wine->sold <= 5;
+    
+            })
+            ->sortByDesc('stock')
+            ->take(10)
+            ->values();
+    }
+
+    public static function getPriceBandAnalytics(
+        $storeManagerId,
+        $range = 'all'
+    )
+    {
+        $query = CheckoutItem::where(
+            'store_manager_id',
+            $storeManagerId
+        );
+    
+        self::applyDateFilter(
+            $query,
+            $range
+        );
+    
+        $items = $query->get();
+    
+        return collect([
+    
+            [
+                'band' => '0 - 5000',
+                'qty' => $items
+                    ->where('price', '<=', 5000)
+                    ->sum('quantity')
+            ],
+    
+            [
+                'band' => '5000 - 25000',
+                'qty' => $items
+                    ->whereBetween(
+                        'price',
+                        [5001, 25000]
+                    )
+                    ->sum('quantity')
+            ],
+    
+            [
+                'band' => '25000 - 50000',
+                'qty' => $items
+                    ->whereBetween(
+                        'price',
+                        [25001, 50000]
+                    )
+                    ->sum('quantity')
+            ],
+    
+            [
+                'band' => '50000 - 100000',
+                'qty' => $items
+                    ->whereBetween(
+                        'price',
+                        [50001, 100000]
+                    )
+                    ->sum('quantity')
+            ],
+    
+            [
+                'band' => '100000+',
+                'qty' => $items
+                    ->where('price', '>', 100000)
+                    ->sum('quantity')
+            ]
+    
+        ]);
+    }
 
     private static function applyDateFilter($query, $range)
     {

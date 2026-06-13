@@ -60,8 +60,7 @@
         background: #fff;
         border-radius: 16px;
         padding: 24px;
-        display: flex;
-        align-items: center;
+        display: block;
         gap: 18px;
         transition: all .25s ease;
         box-shadow: 0 4px 20px rgba(0,0,0,.05);
@@ -808,7 +807,7 @@
                     </div>
 
 
-                    <!-- Wine type -->
+                    <!-- Wine and country distribution -->
                     @php
                     $wineTypeLabels = $wineTypeDistribution
                         ->pluck('type');
@@ -852,6 +851,150 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <!-- Intelligence Report -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="analytics-card">
+                                <h4 class="mb-0">
+                                    Inventory Intelligence
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        {{-- Slow Moving Wines --}}
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-primary">
+                                    🍷 Slow Moving Wines
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Wine</th>
+                                                <th class="text-end">Sold</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($slowMovingWines as $wine)
+                                                <tr>
+                                                    <td>{{ $wine->product_name }}</td>
+                                                    <td class="text-end">
+                                                        {{ $wine->total_sold }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="2" class="text-center text-muted">
+                                                        No data found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Low Stock Alert --}}
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-danger">
+                                    ⚠️ Low Stock Alert
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Wine</th>
+                                                <th class="text-end">Stock</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($lowStockWines as $wine)
+                                                <tr>
+                                                    <td>{{ $wine->product_name }}</td>
+
+                                                    <td class="text-end fw-bold text-danger">
+                                                        {{ $wine->stock }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="2" class="text-center text-muted">
+                                                        No low stock wines
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-warning">
+                                    📦 High Stock + Low Movement
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Wine</th>
+                                                <th class="text-end">Stock</th>
+                                                <th class="text-end">Sold</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($highStockLowMovement as $wine)
+                                                <tr>
+                                                    <td>
+                                                        {{ $wine->product_name }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {{ $wine->stock }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {{ $wine->sold }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3" class="text-center text-muted">
+                                                        No overstocked wines found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-success">
+                                    💰 Price Band Performance
+                                </h4>
+                                <div style="height:500px; position:relative;">
+                                    <canvas id="priceBandChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -1611,6 +1754,47 @@
 
         </script>
 
+    <script>
+
+            const priceBandLabels =
+            @json(
+                $priceBandAnalytics
+                    ->pluck('band')
+            );
+
+            const priceBandValues =
+            @json(
+                $priceBandAnalytics
+                    ->pluck('qty'));
+
+            new Chart(
+                document.getElementById(
+                    'priceBandChart'
+                ),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: priceBandLabels,
+                        datasets: [{
+                            label:
+                                'Bottles Sold',
+                            data:
+                                priceBandValues,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            );
+    </script>
     
     @endpush
 

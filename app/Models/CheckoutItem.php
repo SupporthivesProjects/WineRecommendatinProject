@@ -14,6 +14,7 @@ class CheckoutItem extends Model
         'product_name',
         'price',
         'quantity',
+        'store_manager_upload_id',
     ];
 
 
