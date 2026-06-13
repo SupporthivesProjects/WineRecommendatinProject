@@ -143,10 +143,7 @@ class StoreAnalyticsController extends Controller
     }
 
 
-    public static function getCountryDistribution(
-        $storeManagerId,
-        $range = 'all'
-    )
+    public static function getCountryDistribution($storeManagerId,$range = 'all')
     {
         $query = CheckoutItem::query()
             ->join(
@@ -182,11 +179,7 @@ class StoreAnalyticsController extends Controller
 
 
 
-    public static function getSlowMovingWines(
-        $storeManagerId,
-        $range = 'all',
-        $limit = 10
-    )
+    public static function getSlowMovingWines($storeManagerId,$range = 'all',$limit = 10)
     {
         $query = CheckoutItem::where(
             'store_manager_id',
@@ -209,10 +202,7 @@ class StoreAnalyticsController extends Controller
             ->get();
     }
 
-    public static function getLowStockWines(
-        $storeManagerId,
-        $threshold = 5
-    )
+    public static function getLowStockWines($storeManagerId,$threshold = 5)
     {
         return DB::table('store_manager_uploads as s1')
             ->select(
@@ -234,10 +224,7 @@ class StoreAnalyticsController extends Controller
             ->get();
     }
 
-    public static function getHighStockLowMovement(
-        $storeManagerId,
-        $range = 'all'
-    )
+    public static function getHighStockLowMovement($storeManagerId,$range = 'all')
     {
         $salesQuery = CheckoutItem::where(
             'store_manager_id',
@@ -297,10 +284,7 @@ class StoreAnalyticsController extends Controller
             ->values();
     }
 
-    public static function getPriceBandAnalytics(
-        $storeManagerId,
-        $range = 'all'
-    )
+    public static function getPriceBandAnalytics($storeManagerId,$range = 'all')
     {
         $query = CheckoutItem::where(
             'store_manager_id',
@@ -361,6 +345,151 @@ class StoreAnalyticsController extends Controller
             ]
     
         ]);
+    }
+
+    public static function getDomesticImportedSplit($storeManagerId,$range = 'all')
+    {
+        $query = CheckoutItem::join(
+            'products',
+            'checkout_items.product_id',
+            '=',
+            'products.id'
+        )
+        ->where(
+            'checkout_items.store_manager_id',
+            $storeManagerId
+        );
+    
+        self::applyDateFilter(
+            $query,
+            $range
+        );
+    
+        $domesticCountries = [
+            'India'
+        ];
+    
+        $domestic = (clone $query)
+            ->whereIn(
+                'products.country',
+                $domesticCountries
+            )
+            ->sum('checkout_items.quantity');
+    
+        $imported = (clone $query)
+            ->whereNotIn(
+                'products.country',
+                $domesticCountries
+            )
+            ->sum('checkout_items.quantity');
+    
+        return collect([
+            [
+                'label' => 'Domestic',
+                'qty' => $domestic
+            ],
+            [
+                'label' => 'Imported',
+                'qty' => $imported
+            ]
+        ]);
+    }
+
+    public static function getAverageBottleValueTrend($storeManagerId,$range = 'all')
+    {
+        $query = CheckoutItem::where(
+            'store_manager_id',
+            $storeManagerId
+        );
+    
+        self::applyDateFilter(
+            $query,
+            $range
+        );
+    
+        return $query
+            ->selectRaw("
+                DATE(created_at) as sale_date,
+                AVG(price) as avg_price
+            ")
+            ->groupByRaw(
+                'DATE(created_at)'
+            )
+            ->orderBy(
+                'sale_date'
+            )
+            ->get();
+    }
+
+    public static function getReorderAttentionList($storeManagerId,$range = 'all')
+    {
+        $salesQuery = CheckoutItem::where(
+            'store_manager_id',
+            $storeManagerId
+        );
+    
+        self::applyDateFilter(
+            $salesQuery,
+            $range
+        );
+    
+        $sales = $salesQuery
+            ->select(
+                'product_name',
+                DB::raw(
+                    'SUM(quantity) as total_sold'
+                )
+            )
+            ->groupBy('product_name')
+            ->get()
+            ->keyBy('product_name');
+    
+        return DB::table(
+            'store_manager_uploads as s1'
+        )
+        ->select(
+            's1.product_name',
+            's1.stock'
+        )
+        ->where(
+            's1.store_manager_id',
+            $storeManagerId
+        )
+        ->whereRaw("
+            s1.id =
+            (
+                SELECT MAX(s2.id)
+                FROM store_manager_uploads s2
+                WHERE s2.product_name =
+                s1.product_name
+            )
+        ")
+        ->get()
+        ->map(function($wine) use ($sales){
+    
+            $wine->sold =
+                $sales[$wine->product_name]
+                ->total_sold ?? 0;
+    
+            return $wine;
+    
+        })
+        ->filter(function($wine){
+    
+            return
+                $wine->stock <= 5 &&
+                $wine->sold >= 10;
+    
+        })
+        ->values();
+    }
+
+    public static function getPromotionList($storeManagerId,$range = 'all')
+    {
+        return self::getHighStockLowMovement(
+            $storeManagerId,
+            $range
+        );
     }
 
     private static function applyDateFilter($query, $range)

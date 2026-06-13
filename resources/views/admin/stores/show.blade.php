@@ -994,6 +994,130 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <!-- Domestic and Imported -->
+                    <div class="row mt-4">
+                        {{-- Domestic vs Imported --}}
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-info">
+                                    🌍 Domestic vs Imported
+                                </h4>
+                                <div style="height:350px; position:relative;">
+                                    <canvas id="domesticImportedChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Average Bottle Value Trend --}}
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-success">
+                                    📈 Average Bottle Value Trend
+                                </h4>
+                                <div style="height:350px; position:relative;">
+                                    <canvas id="avgBottleValueChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        {{-- Reorder Attention --}}
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-danger">
+                                    🚨 Suggested Reorder Attention
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Wine</th>
+                                                <th class="text-end">
+                                                    Stock
+                                                </th>
+                                                <th class="text-end">
+                                                    Sold
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($reorderAttentionList as $wine)
+                                                <tr>
+                                                    <td>
+                                                        {{ $wine->product_name }}
+                                                    </td>
+                                                    <td class="text-end text-danger fw-bold">
+                                                        {{ $wine->stock }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {{ $wine->sold }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3"
+                                                        class="text-center text-muted">
+                                                        No wines require reordering
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Promotion List --}}
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="mb-4 fw-bold text-warning">
+                                    🎯 Suggested Display / Promotion
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Wine</th>
+                                                <th class="text-end">
+                                                    Stock
+                                                </th>
+                                                <th class="text-end">
+                                                    Sold
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($promotionList as $wine)
+                                                <tr>
+                                                    <td>
+                                                        {{ $wine->product_name }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {{ $wine->stock }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {{ $wine->sold }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3"
+                                                        class="text-center text-muted">
+                                                        No promotion opportunities found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     
                 </div>
             </div>
@@ -1025,15 +1149,10 @@
                             class="form-control mb-3"
                             placeholder="Search wine..."
                         >
-
                         <div class="modal-body">
-
                             <div style="max-height: 400px; overflow-y: auto;">
-
                                 @foreach($availableProducts as $product)
-
                                     <div class="form-check mb-2 product-item">
-
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
@@ -1041,41 +1160,30 @@
                                             value="{{ $product->id }}"
                                             id="product{{ $product->id }}"
                                         >
-
                                         <label
                                             class="form-check-label"
                                             for="product{{ $product->id }}"
                                         >
                                             {{ $product->wine_name }}
                                         </label>
-
                                     </div>
-
                                 @endforeach
-
                             </div>
-
                         </div>
-
                         <div class="modal-footer">
-
                             <button
                                 type="button"
                                 class="btn btn-secondary"
                                 data-bs-dismiss="modal">
                                 Cancel
                             </button>
-
                             <button
                                 type="submit"
                                 class="btn btn-primary">
                                 Add Products
                             </button>
-
                         </div>
-
                     </form>
-
                 </div>
             </div>
         </div>
@@ -1151,8 +1259,6 @@
             </div>
         </div>
 
-       
-        <!-- Add user to a store -->
 
          <!-- Add User Modal -->
          <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
@@ -1794,6 +1900,130 @@
                     }
                 }
             );
+    </script>
+    <script>
+        const domesticLabels =
+        @json(
+            $domesticImportedSplit->pluck('label')
+        );
+
+        const domesticValues =
+        @json(
+            $domesticImportedSplit->pluck('qty')
+        );
+
+        new Chart(
+            document.getElementById(
+                'domesticImportedChart'
+            ),
+            {
+
+                type: 'doughnut',
+
+                data: {
+
+                    labels: domesticLabels,
+
+                    datasets: [{
+
+                        data: domesticValues
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            position: 'bottom'
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+
+        const avgBottleLabels =
+        @json(
+            $averageBottleValueTrend
+                ->pluck('sale_date')
+        );
+
+        const avgBottleValues =
+        @json(
+            $averageBottleValueTrend
+                ->pluck('avg_price')
+        );
+
+        new Chart(
+            document.getElementById(
+                'avgBottleValueChart'
+            ),
+            {
+
+                type: 'line',
+
+                data: {
+
+                    labels: avgBottleLabels,
+
+                    datasets: [{
+
+                        label: 'Average Bottle Value',
+
+                        data: avgBottleValues,
+
+                        tension: 0.3,
+
+                        fill: false
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
     </script>
     
     @endpush

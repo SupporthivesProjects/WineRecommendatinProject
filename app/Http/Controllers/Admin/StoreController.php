@@ -289,6 +289,31 @@ class StoreController extends Controller
                 $storeManager->id,
                 $range
             );
+
+        $domesticImportedSplit =
+            StoreAnalyticsController::getDomesticImportedSplit(
+                $storeManager->id,
+                $range
+            );
+        
+        $averageBottleValueTrend =
+            StoreAnalyticsController::getAverageBottleValueTrend(
+                $storeManager->id,
+                $range
+            );
+        
+        $reorderAttentionList =
+            StoreAnalyticsController::getReorderAttentionList(
+                $storeManager->id,
+                $range
+            );
+        
+        $promotionList =
+            StoreAnalyticsController::getPromotionList(
+                $storeManager->id,
+                $range
+            );
+
         }
 
         return view(
@@ -310,6 +335,10 @@ class StoreController extends Controller
                 'lowStockWines',
                 'highStockLowMovement',
                 'priceBandAnalytics',
+                'averageBottleValueTrend',
+                'domesticImportedSplit',
+                'reorderAttentionList',
+                'promotionList',
             )
         );
     }
