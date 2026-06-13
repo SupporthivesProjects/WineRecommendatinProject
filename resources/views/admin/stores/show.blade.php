@@ -1114,14 +1114,182 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
 
+                    <!-- customers -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="analytics-card p-4">
+                                <h2 class="fw-bold text-primary mb-0">
+                                    👥 Customer Preference Analytics
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
 
-                    
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <div class="analytics-card p-4 text-center">
+                                <h6 class="text-muted">
+                                    Questionnaires Completed
+                                </h6>
+                                <h2 class="fw-bold text-primary">
+                                    {{ number_format($questionnaireStats['completed']) }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="analytics-card p-4 text-center">
+                                <h6 class="text-muted">
+                                    Most Popular Template
+                                </h6>
+                                <h2 class="fw-bold text-success">
+                                    {{ $questionnaireStats['popular_template'] }}
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="analytics-card p-4 text-center">
+                                <h6 class="text-muted">
+                                    Average Preferred Budget
+                                </h6>
+                                <h2 class="fw-bold text-info">
+                                    ₹{{ number_format($budgetStats['average_budget']) }}
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="analytics-card p-4 text-center">
+                                <h6 class="text-muted">
+                                    Premium Customers
+                                </h6>
+                                <h2 class="fw-bold text-warning">
+                                    {{ $budgetStats['premium_percent'] }}%
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>                                   
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-primary mb-4">
+                            📋 Questionnaire Usage
+                        </h4>
+                        <div style="height:400px">
+                            <canvas id="questionnaireUsageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-danger mb-4">
+                            🍷 Wine Type Preferences
+                        </h4>
+                        <div style="height:400px">
+                            <canvas id="wineTypeChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-success mb-4">
+                            🌍 Country Preferences
+                        </h4>
+                        <div style="height:400px">
+                            <canvas id="countryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-info mb-4">
+                            💰 Budget Distribution
+                        </h4>
+                        <div style="height:400px">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-warning mb-4">
+                            🎉 Occasion Preferences
+                        </h4>
+                        <div style="height:400px">
+                            <canvas id="occasionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-secondary mb-4">
+                            😋 Taste Preferences
+                        </h4>
+                        <div style="height:400px">
+                            <canvas id="tasteChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="analytics-card p-4">
+                        <h4 class="fw-bold text-dark mb-4">
+                            🍇 Top Requested Varieties
+                        </h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Variety</th>
+                                        <th class="text-end">
+                                            Requests
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($topVarieties as $variety)
+                                        <tr>
+                                            <td>
+                                                {{ $variety->answer }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ $variety->total }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2"
+                                                class="text-center">
+                                                No data found
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
         </div>
+    </div>
 
 
         <!-- Add Product Modal -->
@@ -1356,8 +1524,6 @@
                 </div>
             </div>
         </div>
-
-    </div>
 </div>
 @if ($errors->has('duplicate'))
     <script>
@@ -2015,6 +2181,318 @@
 
                             beginAtZero: true
 
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    </script>
+    <script>
+
+    new Chart(
+        document.getElementById('questionnaireUsageChart'),
+        {
+            type: 'bar',
+
+            data: {
+
+                labels:
+                @json(
+                    $questionnaireUsage->pluck('name')
+                ),
+
+                datasets: [{
+
+                    label: 'Completions',
+
+                    data:
+                    @json(
+                        $questionnaireUsage->pluck('total')
+                    ),
+
+                    borderWidth: 1
+
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+                        display: false
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+                        beginAtZero: true
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+    </script>
+    <script>
+
+    new Chart(
+        document.getElementById('wineTypeChart'),
+        {
+            type: 'doughnut',
+
+            data: {
+
+                labels:
+                @json(
+                    $wineTypePreferences->pluck('answer')
+                ),
+
+                datasets: [{
+
+                    data:
+                    @json(
+                        $wineTypePreferences->pluck('total')
+                    )
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        }
+    );
+
+    </script>
+    <script>
+
+        new Chart(
+            document.getElementById('countryChart'),
+            {
+                type: 'bar',
+
+                data: {
+
+                    labels:
+                    @json(
+                        $countryPreferences->pluck('answer')
+                    ),
+
+                    datasets: [{
+
+                        label: 'Requests',
+
+                        data:
+                        @json(
+                            $countryPreferences->pluck('total')
+                        )
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+                            beginAtZero: true
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+    </script>
+    <script>
+
+        new Chart(
+            document.getElementById('budgetChart'),
+            {
+                type: 'bar',
+
+                data: {
+
+                    labels:
+                    @json(
+                        $budgetDistribution->pluck('answer')
+                    ),
+
+                    datasets: [{
+
+                        label: 'Customers',
+
+                        data:
+                        @json(
+                            $budgetDistribution->pluck('total')
+                        )
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+                            beginAtZero: true
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    </script>
+    <script>
+
+        new Chart(
+            document.getElementById('occasionChart'),
+            {
+                type: 'bar',
+
+                data: {
+
+                    labels:
+                    @json(
+                        $occasionPreferences->pluck('answer')
+                    ),
+
+                    datasets: [{
+
+                        label: 'Selections',
+
+                        data:
+                        @json(
+                            $occasionPreferences->pluck('total')
+                        )
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+                            beginAtZero: true
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    </script>
+    <script>
+
+        new Chart(
+            document.getElementById('tasteChart'),
+            {
+                type: 'bar',
+
+                data: {
+
+                    labels:
+                    @json(
+                        $tastePreferences->pluck('answer')
+                    ),
+
+                    datasets: [{
+
+                        label: 'Selections',
+
+                        data:
+                        @json(
+                            $tastePreferences->pluck('total')
+                        )
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    },
+
+                    scales: {
+
+                        y: {
+                            beginAtZero: true
                         }
 
                     }

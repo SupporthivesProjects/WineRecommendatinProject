@@ -13,6 +13,7 @@ use App\Models\StoreFeature;
 use App\Models\Template;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Admin\StoreAnalyticsController;
+use App\Http\Controllers\Admin\CustomerPreferenceAnalyticsController;
 
 
 class StoreController extends Controller
@@ -313,8 +314,68 @@ class StoreController extends Controller
                 $storeManager->id,
                 $range
             );
+        
+        $questionnaireStats =
+            CustomerPreferenceAnalyticsController::getQuestionnaireStats(
+                $store->id,
+                $range
+            );
+
+        $questionnaireUsage =
+            CustomerPreferenceAnalyticsController::getQuestionnaireUsage(
+                $store->id,
+                $range
+            );
+
+
+        $wineTypePreferences =
+            CustomerPreferenceAnalyticsController::getWineTypePreferences(
+                $store->id,
+                $range
+            );
+        
+            $countryPreferences =
+            CustomerPreferenceAnalyticsController::getCountryPreferences(
+                $store->id,
+                $range
+            );
+        
+        $budgetDistribution =
+            CustomerPreferenceAnalyticsController::getBudgetDistribution(
+                $store->id,
+                $range
+            );
+        
+        $occasionPreferences =
+            CustomerPreferenceAnalyticsController::getOccasionPreferences(
+                $store->id,
+                $range
+            );
+        
+        $tastePreferences =
+            CustomerPreferenceAnalyticsController::getTastePreferences(
+                $store->id,
+                $range
+            );
+        
+        $topVarieties =
+            CustomerPreferenceAnalyticsController::getTopVarieties(
+                $store->id,
+                $range
+            );
+
+
+        $budgetStats =
+            CustomerPreferenceAnalyticsController::getBudgetStats(
+                $store->id,
+                $range
+            );
+
 
         }
+
+
+        
 
         return view(
             'admin.stores.show',
@@ -339,6 +400,19 @@ class StoreController extends Controller
                 'domesticImportedSplit',
                 'reorderAttentionList',
                 'promotionList',
+                'questionnaireStats',
+                'questionnaireUsage',
+                'wineTypePreferences',
+                'countryPreferences',
+                'budgetDistribution',
+                'occasionPreferences',
+                'tastePreferences',
+                'topVarieties',
+                'budgetStats',
+                
+                
+                
+
             )
         );
     }
