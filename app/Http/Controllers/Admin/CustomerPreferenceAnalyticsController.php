@@ -668,4 +668,115 @@ class CustomerPreferenceAnalyticsController
     
         return $query;
     }
+
+    public static function getOccasionBudgetPreferences(
+        $storeId,
+        $range = 'all'
+    )
+    {
+        $occasions = self::getAnswersByType(
+            $storeId,
+            'occasion',
+            $range
+        )
+        ->select(
+            'submission_id',
+            'answer'
+        )
+        ->get()
+        ->keyBy('submission_id');
+    
+        $budgets = self::getAnswersByType(
+            $storeId,
+            'budget',
+            $range
+        )
+        ->select(
+            'submission_id',
+            'answer'
+        )
+        ->get();
+    
+        $data = [];
+    
+        foreach ($budgets as $budget) {
+    
+            if (
+                !isset(
+                    $occasions[$budget->submission_id]
+                )
+            ) {
+                continue;
+            }
+    
+            $occasion =
+                $occasions[
+                    $budget->submission_id
+                ]->answer;
+    
+            $decoded =
+                json_decode(
+                    $occasion,
+                    true
+                );
+    
+            if (
+                is_array($decoded)
+                &&
+                count($decoded)
+            ) {
+                $occasion =
+                    implode(
+                        ', ',
+                        $decoded
+                    );
+            }
+    
+            $value = (float) preg_replace(
+                '/[^\d.]/',
+                '',
+                (string) $budget->answer
+            );
+    
+            if ($value <= 25000) {
+                $band = '0-25K';
+            }
+            elseif ($value <= 50000) {
+                $band = '25K-50K';
+            }
+            elseif ($value <= 75000) {
+                $band = '50K-75K';
+            }
+            elseif ($value <= 100000) {
+                $band = '75K-100K';
+            }
+            else {
+                $band = '100K+';
+            }
+    
+            $data[$occasion][$band] =
+                ($data[$occasion][$band] ?? 0)
+                + 1;
+        }
+    
+        $results = [];
+    
+        foreach ($data as $occasion => $bands) {
+    
+            arsort($bands);
+    
+            $results[] = (object)[
+                'occasion' => $occasion,
+                'budget_band' => array_key_first($bands),
+                'responses' => reset($bands)
+            ];
+        }
+    
+        return collect($results)
+            ->sortByDesc('responses')
+            ->values();
+    }
+    
+
+
 }

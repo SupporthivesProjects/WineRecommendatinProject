@@ -1179,124 +1179,153 @@
                     </div>
 
                 
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-primary mb-4">
-                            📋 Questionnaire Usage
-                        </h4>
-                        <div style="height:400px">
-                            <canvas id="questionnaireUsageChart"></canvas>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-primary mb-4">
+                                    📋 Questionnaire Usage
+                                </h4>
+                                <div style="height:400px">
+                                    <canvas id="questionnaireUsageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-danger mb-4">
+                                    🍷 Wine Type Preferences
+                                </h4>
+                                <div style="height:400px">
+                                    <canvas id="wineTypePreferencesChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-danger mb-4">
-                            🍷 Wine Type Preferences
-                        </h4>
-                        <div style="height:400px">
-                            <canvas id="wineTypePreferencesChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-success mb-4">
-                            🌍 Country Preferences
-                        </h4>
-                        <div style="height:400px">
-                            <canvas id="countryChartCustomer"></canvas>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-success mb-4">
+                                    🌍 Country Preferences
+                                </h4>
+                                <div style="height:400px">
+                                    <canvas id="countryChartCustomer"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-info mb-4">
+                                    💰 Budget Distribution
+                                </h4>
+                                <div style="height:400px">
+                                    <canvas id="budgetChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-info mb-4">
-                            💰 Budget Distribution
-                        </h4>
-                        <div style="height:400px">
-                            <canvas id="budgetChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-warning mb-4">
-                            🎉 Occasion Preferences
-                        </h4>
-                        <div style="height:400px">
-                            <canvas id="occasionChart"></canvas>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-warning mb-4">
+                                    🎉 Occasion Preferences
+                                </h4>
+                                <div style="height:400px">
+                                    <canvas id="occasionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-secondary mb-4">
+                                    😋 Taste Preferences
+                                </h4>
+                                <div style="height:400px">
+                                    <canvas id="tasteChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-secondary mb-4">
-                            😋 Taste Preferences
-                        </h4>
-                        <div style="height:400px">
-                            <canvas id="tasteChart"></canvas>
+                
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <div class="analytics-card p-4">
+                                <h4 class="fw-bold text-dark mb-4">
+                                    🍇 Top Requested Varieties
+                                    <i class="fas fa-info-circle text-secondary ms-1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Most frequently requested wine grape varieties based on customer questionnaire responses">
+                                    </i>
+                                </h4>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Variety</th>
+                                                <th class="text-end">
+                                                    Requests
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @forelse($topVarieties as $variety)
+                                                <tr>
+                                                    <td>
+                                                        {{ $variety->answer }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        {{ $variety->total }}
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="2"
+                                                        class="text-center">
+                                                        No data found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        
-            <div class="row mt-3">
-                <div class="col-12">
-                    <div class="analytics-card p-4">
-                        <h4 class="fw-bold text-dark mb-4">
-                            🍇 Top Requested Varieties
-                            <i class="fas fa-info-circle text-secondary ms-1"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="Most frequently requested wine grape varieties based on customer questionnaire responses">
-                            </i>
-                        </h4>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
+                        <div class="col-6">
+                            <div class="analytics-card p-4">
+                            <h4 class="fw-bold text-dark mb-4">
+                                🎁 Occasion vs Budget Preferences
+                            </h4>
+
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th>Variety</th>
-                                        <th class="text-end">
-                                            Requests
-                                        </th>
+                                        <th>Occasion</th>
+                                        <th>Preferred Budget</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($topVarieties as $variety)
+                                    @foreach($occasionBudgetPreferences as $row)
                                         <tr>
-                                            <td>
-                                                {{ $variety->answer }}
-                                            </td>
-                                            <td class="text-end">
-                                                {{ $variety->total }}
-                                            </td>
+                                            <td>{{ $row->occasion }}</td>
+                                            <td>{{ $row->budget_band }}</td>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="2"
-                                                class="text-center">
-                                                No data found
-                                            </td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+
+           
 
 
 
-
+       
+       
+       
+       
         </div>
     </div>
 
