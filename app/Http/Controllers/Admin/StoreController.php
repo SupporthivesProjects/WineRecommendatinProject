@@ -384,6 +384,11 @@ class StoreController extends Controller
             ->where('type', 'API')
             ->latest()
             ->get();
+        
+        $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+            ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
+            ->latest()
+            ->get();
 
 
         }
@@ -425,10 +430,8 @@ class StoreController extends Controller
                 'budgetStats',
                 'occasionBudgetPreferences',
                 'apiUploads',
-                
-                
-                
-
+                'invoiceData',
+            
             )
         );
     }

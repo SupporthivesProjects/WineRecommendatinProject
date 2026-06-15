@@ -217,6 +217,16 @@
                         API Data
                     </button>
 
+                    <button
+                        id="invoicesData-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#InvoicesData"
+                        type="button"
+                        role="tab">
+                        Invoice Data
+                    </button>
+
 
                 </div>
             </div>
@@ -1335,7 +1345,7 @@
                     <div class="card-body">
                         <h5 class="mb-3">API Uploaded Data</h5>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped" id="apiData">
                                 <thead>
                                     <tr>
                                         <th>Invoice</th>
@@ -1349,6 +1359,49 @@
                                 </thead>
                                 <tbody>
                                     @forelse($apiUploads as $row)
+                                        <tr>
+                                            <td>{{ $row->invoice_no }}</td>
+                                            <td>{{ $row->customer_name }}</td>
+                                            <td>{{ $row->product_name }}</td>
+                                            <td>{{ $row->qty }}</td>
+                                            <td>{{ $row->stock }}</td>
+                                            <td>{{ $row->product_price }}</td>
+                                            <td>{{ $row->date }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="text-center">
+                                                No API data found
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Invoices Data tab -->
+             <div class="tab-pane fade" id="InvoicesData" role="tabpanel" aria-labelledby="invoicesData-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-3">API Uploaded Data</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" id="invoiceData">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                        <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($invoiceData as $row)
                                         <tr>
                                             <td>{{ $row->invoice_no }}</td>
                                             <td>{{ $row->customer_name }}</td>
@@ -1653,6 +1706,22 @@
         <script>
               $(document).ready(function () {
                 $('#store-cheese-table').DataTable({
+                    pageLength: 25
+                });
+            });
+           
+        </script>
+         <script>
+              $(document).ready(function () {
+                $('#apiData').DataTable({
+                    pageLength: 25
+                });
+            });
+           
+        </script>
+         <script>
+              $(document).ready(function () {
+                $('#invoiceData').DataTable({
                     pageLength: 25
                 });
             });

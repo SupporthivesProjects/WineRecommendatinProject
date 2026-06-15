@@ -116,7 +116,7 @@
                                 <span class="side-menu__label">Invoices</span>
                             </a>
                         </li>
-                        <li class="slide">
+                        <!-- <li class="slide">
                             <a href="{{ route('admin.api.master.data') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">API Product Master</span>
@@ -127,7 +127,7 @@
                                 <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">API Product Stock</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="slide">
                             <a href="{{ route('admin.templates.index') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
