@@ -104,6 +104,8 @@ class UploadApiController extends Controller
             
                 'product_modified_time' =>
                     $upload['product_modified_time'] ?? null,
+
+                'date' => $upload['date'] ?? now()->format('Y-m-d'),
             
                 'type' => 'API',
             

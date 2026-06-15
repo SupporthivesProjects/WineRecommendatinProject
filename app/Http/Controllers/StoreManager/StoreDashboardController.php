@@ -289,60 +289,63 @@ class StoreDashboardController extends Controller
         $file = $request->file('csv_file');
         $data = array_map('str_getcsv', file($file));
 
-        unset($data[0]); // remove header
+        unset($data[0]); // Remove header row
 
         $user = Auth::user();
 
         foreach ($data as $row) {
-            if(empty($row[3])) {
+
+            if (empty($row[3])) {
                 continue;
             }
-            $date = Carbon::createFromFormat('m/d/Y', $row[5])->format('Y-m-d');
-            $upload = StoreManagerUpload::create([
 
-                'store_manager_name' => $user->first_name.' '.$user->last_name,
+            StoreManagerUpload::create([
+
+                'store_manager_name' => $user->first_name . ' ' . $user->last_name,
                 'store_manager_id'   => $user->id,
-            
+
                 'invoice_no'         => $row[0] ?? null,
                 'customer_name'      => $row[1] ?? null,
                 'customer_mobile'    => $row[2] ?? null,
-            
+
                 'product_name'       => $row[3] ?? null,
                 'product_id'         => $row[4] ?? null,
-            
+
                 'product_category'   => $row[5] ?? null,
                 'product_sub_category' => $row[6] ?? null,
-            
+
                 'product_price'      => $row[7] ?? null,
-            
+
                 'size'               => $row[8] ?? null,
                 'packsize'           => $row[9] ?? null,
-            
-                'qty'       => !empty($row[10]) ? $row[10] : null,
+
+                'qty'                => !empty($row[10]) ? $row[10] : null,
                 'stock'              => !empty($row[11]) ? $row[11] : null,
-            
+
                 'location'           => $row[12] ?? null,
-            
-                'product_created_time' =>
-                    !empty($row[13]) ? $row[13] : null,
-            
-                'product_modified_time' =>
-                    !empty($row[14]) ? $row[14] : null,
-            
-                'type' => 'CSV',
-            
+
+                // Format: 15/06/2026, 04:27 PM
+                'product_created_time' => !empty($row[13])
+                    ? Carbon::createFromFormat('d/m/Y, h:i A', trim($row[13]))
+                    : null,
+
+                // Format: 15/06/2026, 04:27 PM
+                'product_modified_time' => !empty($row[14])
+                    ? Carbon::createFromFormat('d/m/Y, h:i A', trim($row[14]))
+                    : null,
+
+                // Format: 2026-06-15
                 'date' => !empty($row[15])
-                    ? Carbon::parse($row[15])->format('Y-m-d')
-                    : Carbon::today()
+                    ? Carbon::createFromFormat('Y-m-d', trim($row[15]))->format('Y-m-d')
+                    : Carbon::today()->format('Y-m-d'),
+
+                'type' => 'CSV',
             ]);
-
-            $upload = StoreManagerUpload::create;
-
         }
 
-
-        return redirect()->route('store-manager.uploads')
-            ->with('success','CSV Uploaded Successfully');
+        return redirect()
+            ->route('store-manager.uploads')
+            ->with('success', 'CSV Uploaded Successfully');
     }
 
 

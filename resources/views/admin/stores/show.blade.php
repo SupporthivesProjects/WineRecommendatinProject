@@ -207,6 +207,16 @@
                         Analytics
                     </button>
 
+                    <button
+                        id="apiData-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#APIData"
+                        type="button"
+                        role="tab">
+                        API Data
+                    </button>
+
 
                 </div>
             </div>
@@ -1316,14 +1326,56 @@
                             </table>
                         </div>
                         </div>
+                    </div>   
+            </div>
+
+            <!-- API Data tab -->
+            <div class="tab-pane fade" id="APIData" role="tabpanel" aria-labelledby="apiData-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-3">API Uploaded Data</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                        <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($apiUploads as $row)
+                                        <tr>
+                                            <td>{{ $row->invoice_no }}</td>
+                                            <td>{{ $row->customer_name }}</td>
+                                            <td>{{ $row->product_name }}</td>
+                                            <td>{{ $row->qty }}</td>
+                                            <td>{{ $row->stock }}</td>
+                                            <td>{{ $row->product_price }}</td>
+                                            <td>{{ $row->date }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="text-center">
+                                                No API data found
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
-           
-
-
-
+                </div>
+            </div>
        
        
+
+
+
        
        
         </div>
@@ -1563,6 +1615,11 @@
             </div>
         </div>
 </div>
+
+
+
+
+
 @if ($errors->has('duplicate'))
     <script>
         Swal.fire({

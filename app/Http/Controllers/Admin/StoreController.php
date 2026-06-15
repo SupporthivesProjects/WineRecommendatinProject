@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\StoreManagerUpload;
 use App\Models\CheeseProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -236,6 +237,7 @@ class StoreController extends Controller
         $lowStockWines = collect();
         $highStockLowMovement = collect();
         $priceBandAnalytics = collect();
+        $apiUploads = collect();
 
         if ($storeManager) {
 
@@ -378,6 +380,11 @@ class StoreController extends Controller
                 $range
             );
 
+        $apiUploads = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+            ->where('type', 'API')
+            ->latest()
+            ->get();
+
 
         }
 
@@ -416,7 +423,8 @@ class StoreController extends Controller
                 'tastePreferences',
                 'topVarieties',
                 'budgetStats',
-                'occasionBudgetPreferences'
+                'occasionBudgetPreferences',
+                'apiUploads',
                 
                 
                 
