@@ -1165,6 +1165,11 @@
                             <div class="analytics-card p-4 text-center">
                                 <h6 class="text-muted">
                                     Premium Customers
+                                    <i class="fas fa-info-circle text-secondary ms-1"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Customers whose preferred budget is ₹25,000 or higher">
+                                    </i>
                                 </h6>
                                 <h2 class="fw-bold text-warning">
                                     {{ $budgetStats['premium_percent'] }}%
@@ -1172,9 +1177,8 @@
                             </div>
                         </div>
                     </div>
-                </div>                                   
-            </div>
 
+                
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="analytics-card p-4">
@@ -1192,7 +1196,7 @@
                             🍷 Wine Type Preferences
                         </h4>
                         <div style="height:400px">
-                            <canvas id="wineTypeChart"></canvas>
+                            <canvas id="wineTypePreferencesChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1205,7 +1209,7 @@
                             🌍 Country Preferences
                         </h4>
                         <div style="height:400px">
-                            <canvas id="countryChart"></canvas>
+                            <canvas id="countryChartCustomer"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1249,6 +1253,11 @@
                     <div class="analytics-card p-4">
                         <h4 class="fw-bold text-dark mb-4">
                             🍇 Top Requested Varieties
+                            <i class="fas fa-info-circle text-secondary ms-1"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Most frequently requested wine grape varieties based on customer questionnaire responses">
+                            </i>
                         </h4>
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -2248,21 +2257,16 @@
 
     </script>
     <script>
-
     new Chart(
-        document.getElementById('wineTypeChart'),
+        document.getElementById('wineTypePreferencesChart'),
         {
             type: 'doughnut',
-
             data: {
-
                 labels:
                 @json(
                     $wineTypePreferences->pluck('answer')
                 ),
-
                 datasets: [{
-
                     data:
                     @json(
                         $wineTypePreferences->pluck('total')
@@ -2287,7 +2291,7 @@
     <script>
 
         new Chart(
-            document.getElementById('countryChart'),
+            document.getElementById('countryChartCustomer'),
             {
                 type: 'bar',
 

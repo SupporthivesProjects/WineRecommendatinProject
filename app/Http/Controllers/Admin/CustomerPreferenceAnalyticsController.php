@@ -17,105 +17,80 @@ class CustomerPreferenceAnalyticsController
 
     private static function applyDateFilter(
         $query,
-        $range
+        $range,
+        $dateColumn = 'created_at'
     )
     {
         switch ($range) {
-
+    
             case 'today':
-
                 $query->whereDate(
-                    'created_at',
+                    $dateColumn,
                     today()
                 );
-
                 break;
-
+    
             case '7days':
-
                 $query->where(
-                    'created_at',
+                    $dateColumn,
                     '>=',
                     now()->subDays(7)
                 );
-
                 break;
-
+    
             case '30days':
-
                 $query->where(
-                    'created_at',
+                    $dateColumn,
                     '>=',
                     now()->subDays(30)
                 );
-
                 break;
-
+    
             case 'month':
-
                 $query->whereMonth(
-                    'created_at',
+                    $dateColumn,
                     now()->month
                 )->whereYear(
-                    'created_at',
+                    $dateColumn,
                     now()->year
                 );
-
                 break;
-
+    
             case 'year':
-
                 $query->whereYear(
-                    'created_at',
+                    $dateColumn,
                     now()->year
                 );
-
                 break;
-
+    
             case 'custom':
-
                 if (
-                    request('from') &&
+                    request('from')
+                    &&
                     request('to')
                 ) {
-
                     $query->whereBetween(
-                        'created_at',
+                        $dateColumn,
                         [
                             request('from') . ' 00:00:00',
                             request('to') . ' 23:59:59'
                         ]
                     );
                 }
-
                 break;
         }
-
+    
         return $query;
     }
 
-    public static function getQuestionnaireStats(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getQuestionnaireStats($storeId,$range = 'all')
     {
-        $userIds =
-            self::getStoreUserIds(
-                $storeId
-            );
+        $userIds =self::getStoreUserIds($storeId);
 
-        $query = DB::table(
-            'question_responses'
-        )
-        ->whereIn(
-            'user_id',
-            $userIds
-        );
+        $query = DB::table('question_responses')
+        ->whereIn('user_id',$userIds);
 
-        self::applyDateFilter(
-            $query,
-            $range
-        );
+        self::applyDateFilter($query,$range);
 
         $completed = (clone $query)
             ->distinct('submission_id')
@@ -136,31 +111,23 @@ class CustomerPreferenceAnalyticsController
             )
             ->first();
 
-        return [
-
-            'completed' =>
-                $completed,
-
+        return ['completed' =>$completed,
             'popular_template' =>
                 $popularTemplate->template_id ?? '-',
 
             'popular_template_count' =>
                 $popularTemplate->total ?? 0
-
         ];
     }
 
 
-    public static function getQuestionnaireUsage(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getQuestionnaireUsage($storeId,$range = 'all')
     {
         $userIds =
             self::getStoreUserIds(
                 $storeId
             );
-    
+
         $query = DB::table(
             'question_responses as qr'
         )
@@ -177,7 +144,8 @@ class CustomerPreferenceAnalyticsController
     
         self::applyDateFilter(
             $query,
-            $range
+            $range,
+            'qr.created_at'
         );
     
         return $query
@@ -196,93 +164,42 @@ class CustomerPreferenceAnalyticsController
             ->get();
     }
 
-    public static function getWineTypePreferences(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getWineTypePreferences($storeId,$range = 'all')
     {
-        $userIds =
-            self::getStoreUserIds(
-                $storeId
-            );
-    
-        $query = DB::table(
-            'question_responses as qr'
-        )
-        ->join(
-            'questions as q',
-            function ($join) {
-    
-                $join->on(
-                    'q.template_id',
-                    '=',
-                    'qr.template_id'
-                );
-    
-            }
-        )
-        ->whereIn(
-            'qr.user_id',
-            $userIds
-        )
-        ->where(function ($q) {
-    
-            $q->where(
-                'q.question',
-                'like',
-                '%type of wine%'
-            )
-            ->orWhere(
-                'q.question',
-                'like',
-                '%wine are you looking%'
-            )
-            ->orWhere(
-                'q.question',
-                'like',
-                '%wine are you in the mood%'
-            );
-    
-        });
-    
+        $userIds = self::getStoreUserIds($storeId);
+
+        $mappings = self::getQuestionMappings('wine_type');
+
+        $query = DB::table('question_responses as qr')
+            ->whereIn('qr.user_id', $userIds);
+
         self::applyDateFilter(
             $query,
-            $range
+            $range,
+            'qr.created_at'
         );
-    
-        return $query
-            ->select(
-                'qr.answer',
-                DB::raw(
-                    'COUNT(*) as total'
-                )
-            )
-            ->groupBy(
-                'qr.answer'
-            )
-            ->orderByDesc(
-                'total'
-            )
-            ->get();
-    }
 
-    public static function getCountryPreferences(
-        $storeId,
-        $range = 'all'
-    )
-    {
-        $userIds = self::getStoreUserIds($storeId);
-    
-        $query = DB::table('question_responses as qr')
-            ->join('questions as q', function ($join) {
-                $join->on('q.template_id', '=', 'qr.template_id');
-            })
-            ->whereIn('qr.user_id', $userIds)
-            ->where('q.question', 'like', '%country%');
-    
-        self::applyDateFilter($query, $range);
-    
-        return $query
+        $query->where(function ($q) use ($mappings) {
+
+            foreach ($mappings as $mapping) {
+
+                $q->orWhere(function ($sub) use ($mapping) {
+
+                    $sub->where(
+                        'qr.template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'qr.question_key',
+                        $mapping->question_key
+                    );
+
+                });
+            }
+        });
+
+
+        $results = $query
             ->select(
                 'qr.answer',
                 DB::raw('COUNT(*) as total')
@@ -290,30 +207,56 @@ class CustomerPreferenceAnalyticsController
             ->groupBy('qr.answer')
             ->orderByDesc('total')
             ->get();
+
+        $results->transform(function ($item) {
+
+            $decoded = json_decode($item->answer, true);
+
+            if (is_array($decoded) && count($decoded)) {
+                $item->answer = $decoded[0];
+            }
+
+            return $item;
+        });
+
+        return $results;
     }
 
-    public static function getBudgetDistribution(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getCountryPreferences($storeId,$range = 'all')
     {
         $userIds = self::getStoreUserIds($storeId);
-    
+
+        $mappings = self::getQuestionMappings('country');
+
         $query = DB::table('question_responses as qr')
-            ->join('questions as q', function ($join) {
-                $join->on('q.template_id', '=', 'qr.template_id');
-            })
-            ->whereIn('qr.user_id', $userIds)
-            ->where(function ($q) {
-    
-                $q->where('q.question', 'like', '%budget%')
-                  ->orWhere('q.question', 'like', '%price range%');
-    
-            });
-    
-        self::applyDateFilter($query, $range);
-    
-        return $query
+            ->whereIn('qr.user_id', $userIds);
+
+        self::applyDateFilter(
+            $query,
+            $range,
+            'qr.created_at'
+        );
+
+        $query->where(function ($q) use ($mappings) {
+
+            foreach ($mappings as $mapping) {
+
+                $q->orWhere(function ($sub) use ($mapping) {
+
+                    $sub->where(
+                        'qr.template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'qr.question_key',
+                        $mapping->question_key
+                    );
+
+                });
+            }
+        });
+
+        $results = $query
             ->select(
                 'qr.answer',
                 DB::raw('COUNT(*) as total')
@@ -321,25 +264,112 @@ class CustomerPreferenceAnalyticsController
             ->groupBy('qr.answer')
             ->orderByDesc('total')
             ->get();
+
+        $results->transform(function ($item) {
+
+            $decoded = json_decode(
+                $item->answer,
+                true
+            );
+
+            if (
+                is_array($decoded)
+                && count($decoded)
+            ) {
+                $item->answer = $decoded[0];
+            }
+
+            return $item;
+        });
+
+        return $results;
+    }
+    public static function getBudgetDistribution($storeId,$range = 'all')
+    {
+        $answers = self::getAnswersByType(
+            $storeId,
+            'budget',
+            $range
+        )->pluck('answer');
+
+        $bands = [
+            '0-25K'      => 0,
+            '25K-50K'    => 0,
+            '50K-75K'    => 0,
+            '75K-100K'   => 0,
+            '100K+'      => 0,
+        ];
+
+        foreach ($answers as $answer) {
+
+            $value = (float) preg_replace(
+                '/[^\d.]/',
+                '',
+                (string) $answer
+            );
+
+            if ($value <= 25000) {
+                $bands['0-25K']++;
+            }
+            elseif ($value <= 50000) {
+                $bands['25K-50K']++;
+            }
+            elseif ($value <= 75000) {
+                $bands['50K-75K']++;
+            }
+            elseif ($value <= 100000) {
+                $bands['75K-100K']++;
+            }
+            else {
+                $bands['100K+']++;
+            }
+        }
+
+        return collect($bands)
+            ->map(function ($total, $range) {
+                return (object) [
+                    'answer' => $range,
+                    'total'  => $total
+                ];
+            })
+            ->values();
     }
 
-    public static function getOccasionPreferences(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getOccasionPreferences($storeId,$range = 'all')
     {
         $userIds = self::getStoreUserIds($storeId);
-    
+
+        $mappings = self::getQuestionMappings('occasion');
+
         $query = DB::table('question_responses as qr')
-            ->join('questions as q', function ($join) {
-                $join->on('q.template_id', '=', 'qr.template_id');
-            })
-            ->whereIn('qr.user_id', $userIds)
-            ->where('q.question', 'like', '%occasion%');
-    
-        self::applyDateFilter($query, $range);
-    
-        return $query
+            ->whereIn('qr.user_id', $userIds);
+
+        self::applyDateFilter(
+            $query,
+            $range,
+            'qr.created_at'
+        );
+
+        $query->where(function ($q) use ($mappings) {
+
+            foreach ($mappings as $mapping) {
+
+                $q->orWhere(function ($sub) use ($mapping) {
+
+                    $sub->where(
+                        'qr.template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'qr.question_key',
+                        $mapping->question_key
+                    );
+
+                });
+            }
+        });
+
+        $results = $query
             ->select(
                 'qr.answer',
                 DB::raw('COUNT(*) as total')
@@ -347,31 +377,62 @@ class CustomerPreferenceAnalyticsController
             ->groupBy('qr.answer')
             ->orderByDesc('total')
             ->get();
+
+        $results->transform(function ($item) {
+
+            $decoded = json_decode(
+                $item->answer,
+                true
+            );
+
+            if (
+                is_array($decoded)
+                && count($decoded)
+            ) {
+                $item->answer = implode(', ', $decoded);
+            }
+
+            return $item;
+        });
+
+        return $results;
     }
 
-    public static function getTastePreferences(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getTastePreferences($storeId,$range = 'all')
     {
         $userIds = self::getStoreUserIds($storeId);
-    
+
+        $mappings = self::getQuestionMappings('taste');
+
         $query = DB::table('question_responses as qr')
-            ->join('questions as q', function ($join) {
-                $join->on('q.template_id', '=', 'qr.template_id');
-            })
-            ->whereIn('qr.user_id', $userIds)
-            ->where(function ($q) {
-    
-                $q->where('q.question', 'like', '%taste%')
-                  ->orWhere('q.question', 'like', '%sweet%')
-                  ->orWhere('q.question', 'like', '%dry%');
-    
-            });
-    
-        self::applyDateFilter($query, $range);
-    
-        return $query
+            ->whereIn('qr.user_id', $userIds);
+
+        self::applyDateFilter(
+            $query,
+            $range,
+            'qr.created_at'
+        );
+
+        $query->where(function ($q) use ($mappings) {
+
+            foreach ($mappings as $mapping) {
+
+                $q->orWhere(function ($sub) use ($mapping) {
+
+                    $sub->where(
+                        'qr.template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'qr.question_key',
+                        $mapping->question_key
+                    );
+
+                });
+            }
+        });
+
+        $results = $query
             ->select(
                 'qr.answer',
                 DB::raw('COUNT(*) as total')
@@ -379,30 +440,64 @@ class CustomerPreferenceAnalyticsController
             ->groupBy('qr.answer')
             ->orderByDesc('total')
             ->get();
+
+        $results->transform(function ($item) {
+
+            $decoded = json_decode(
+                $item->answer,
+                true
+            );
+
+            if (
+                is_array($decoded)
+                && count($decoded)
+            ) {
+                $item->answer = implode(', ', $decoded);
+            }
+
+            return $item;
+        });
+
+        return $results;
     }
 
-    public static function getTopVarieties(
-        $storeId,
-        $range = 'all'
-    )
+    public static function getTopVarieties($storeId,$range = 'all')
     {
         $userIds = self::getStoreUserIds($storeId);
-    
+
+        $mappings = self::getQuestionMappings('variety');
+
         $query = DB::table('question_responses as qr')
-            ->join('questions as q', function ($join) {
-                $join->on('q.template_id', '=', 'qr.template_id');
-            })
-            ->whereIn('qr.user_id', $userIds)
-            ->where(function ($q) {
-    
-                $q->where('q.question', 'like', '%grape%')
-                  ->orWhere('q.question', 'like', '%variet%');
-    
-            });
-    
-        self::applyDateFilter($query, $range);
-    
-        return $query
+            ->whereIn('qr.user_id', $userIds);
+
+        self::applyDateFilter(
+            $query,
+            $range,
+            'qr.created_at'
+        );
+
+        $query->where(function ($q) use ($mappings) {
+
+            foreach ($mappings as $mapping) {
+
+                $q->orWhere(function ($sub) use ($mapping) {
+
+                    $sub->where(
+                        'qr.template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'qr.question_key',
+                        $mapping->question_key
+                    );
+
+                });
+
+            }
+
+        });
+
+        $results = $query
             ->select(
                 'qr.answer',
                 DB::raw('COUNT(*) as total')
@@ -411,87 +506,71 @@ class CustomerPreferenceAnalyticsController
             ->orderByDesc('total')
             ->limit(10)
             ->get();
+
+        $results->transform(function ($item) {
+
+            $decoded = json_decode(
+                $item->answer,
+                true
+            );
+
+            if (
+                is_array($decoded)
+                && count($decoded)
+            ) {
+                $item->answer = implode(', ', $decoded);
+            }
+
+            return $item;
+        });
+
+        return $results;
     }
 
     public static function getBudgetStats($storeId,$range = 'all')
     {
-        $userIds =
-            self::getStoreUserIds(
-                $storeId
-            );
+        $userIds =self::getStoreUserIds($storeId);
     
-        $query = DB::table(
-            'question_responses as qr'
-        )
-        ->join(
-            'questions as q',
-            function ($join) {
-    
-                $join->on(
-                    'q.template_id',
-                    '=',
-                    'qr.template_id'
-                );
-    
+        $mappings = self::getQuestionMappings('budget');
+
+        $query = DB::table('question_responses')
+            ->whereIn('user_id', $userIds);
+        
+        self::applyDateFilter($query,$range);
+
+        
+        
+        $query->where(function ($q) use ($mappings) {
+            foreach ($mappings as $mapping) {
+                $q->orWhere(function ($sub) use ($mapping) {
+                    $sub->where(
+                        'template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'question_key',
+                        $mapping->question_key
+                    );
+                });
             }
-        )
-        ->whereIn(
-            'qr.user_id',
-            $userIds
-        )
-        ->where(function ($q) {
-    
-            $q->where(
-                'q.question',
-                'like',
-                '%budget%'
-            )
-            ->orWhere(
-                'q.question',
-                'like',
-                '%price range%'
-            );
-    
         });
-    
 
-
-        self::applyDateFilter(
-            $query,
-            $range
-        );
-    
-        $answers =
-            $query->pluck(
-                'qr.answer'
-            );
-    
+        $answers = $query->pluck('answer');
         $values = [];
-    
-        foreach ($answers as $answer) {
-    
-            preg_match_all(
-                '/\d+/',
-                $answer,
-                $matches
+        $values = collect($answers)
+        ->map(function ($answer) {
+            $value = preg_replace(
+                '/[^\d.]/',
+                '',
+                (string) $answer
             );
-    
-            $numbers =
-                $matches[0] ?? [];
-    
-            if (
-                count($numbers) >= 2
-            ) {
-    
-                $values[] =
-                    (
-                        $numbers[0]
-                        +
-                        $numbers[1]
-                    ) / 2;
-            }
-        }
-    
+            return is_numeric($value)
+                ? (float) $value
+                : 0;
+        })
+        ->filter(fn ($value) => $value > 0)
+        ->values()
+        ->toArray();
         $average =
             count($values)
                 ? round(
@@ -503,7 +582,7 @@ class CustomerPreferenceAnalyticsController
         $premium =
             collect($values)
             ->filter(
-                fn($v) => $v >= 5000
+                fn($v) => $v >= 25000
             )
             ->count();
     
@@ -517,14 +596,76 @@ class CustomerPreferenceAnalyticsController
                 )
                 : 0;
     
+        
+            
         return [
-    
             'average_budget' =>
                 $average,
     
             'premium_percent' =>
                 $premiumPercent
-    
         ];
+    }
+
+    private static function getQuestionMappings($questionType)
+    {
+        return DB::table('question_mappings')
+            ->where('question_type', $questionType)
+            ->where('is_active', 1)
+            ->get();
+    }
+
+
+    private static function getAnswersByType(
+        $storeId,
+        $questionType,
+        $range = 'all'
+    )
+    {
+        $userIds =
+            self::getStoreUserIds(
+                $storeId
+            );
+    
+        $mappings =
+            self::getQuestionMappings(
+                $questionType
+            );
+    
+        $query = DB::table(
+            'question_responses'
+        )
+        ->whereIn(
+            'user_id',
+            $userIds
+        );
+    
+        self::applyDateFilter(
+            $query,
+            $range
+        );
+    
+        $query->where(function ($q) use ($mappings) {
+    
+            foreach ($mappings as $mapping) {
+    
+                $q->orWhere(function ($sub) use ($mapping) {
+    
+                    $sub->where(
+                        'template_id',
+                        $mapping->template_id
+                    )
+                    ->where(
+                        'question_key',
+                        $mapping->question_key
+                    );
+    
+                });
+    
+            }
+    
+        });
+    
+        return $query;
     }
 }
