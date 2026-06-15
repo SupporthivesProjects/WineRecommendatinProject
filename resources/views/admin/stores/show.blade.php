@@ -1396,6 +1396,7 @@
                                         <th>Product</th>
                                         <th>Qty</th>
                                         <th>Stock</th>
+                                        <th>type</th>
                                         <th>Price</th>
                                         <th>Date</th>
                                     </tr>
@@ -1408,6 +1409,7 @@
                                             <td>{{ $row->product_name }}</td>
                                             <td>{{ $row->qty }}</td>
                                             <td>{{ $row->stock }}</td>
+                                            <td>{{ $row->type }}</td>
                                             <td>{{ $row->product_price }}</td>
                                             <td>{{ $row->date }}</td>
                                         </tr>
