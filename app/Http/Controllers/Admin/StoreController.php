@@ -372,13 +372,6 @@ class StoreController extends Controller
             );
 
 
-        $occasionBudgetPreferences =
-            CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences(
-                $store->id,
-                $range
-            );
-
-
         }
 
 
