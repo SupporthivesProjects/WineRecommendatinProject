@@ -1,5 +1,55 @@
 @extends('layouts.bootdashboard')
 @section('admindashboardcontent')
+
+
+@push('styles')
+
+<style>
+      /* Users */
+        .card-users {
+            border-top: 4px solid #3b82f6 !important;
+        }
+
+        /* Featured Products */
+        .card-featured {
+            border-top: 4px solid #8b5cf6 !important;
+        }
+
+        /* Stores */
+        .card-stores {
+            border-top: 4px solid #06b6d4!important;
+        }
+
+        /* Products */
+        .card-products {
+            border-top: 4px solid #f97316 !important;
+        }
+
+        /* Cheese */
+        .card-cheese {
+            border-top: 4px solid #10b981 !important;
+        }
+
+        /* Templates */
+        .card-template {
+            border-top: 4px solid #6366f1 !important;
+        }
+
+        /* Reviews */
+        .card-review {
+            border-top: 4px solid #f59e0b !important;
+        }
+
+        /* Questionnaires */
+        .card-questionnaire {
+            border-top: 4px solid #ec4899 !important;
+        }
+</style>
+
+@endpush
+
+
+
 <!-- Start::app-content -->
     <div class="main-content app-content">
         <div class="container-fluid">
@@ -43,7 +93,7 @@
             <!-- Start::row -->
             <div class="row row-sm">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="card custom-card">
+                    <div class="card custom-card card-users">
                         <div class="card-body">
                             <div class="card-item">
                                 <div class="card-item-icon card-icon">
@@ -77,7 +127,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="card custom-card">
+                    <div class="card custom-card card-featured">
                         <div class="card-body">
                             <div class="card-item">
                                 <div class="card-item-icon card-icon">
@@ -112,7 +162,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                    <div class="card custom-card">
+                    <div class="card custom-card card-stores">
                         <div class="card-body">
                             <div class="card-item">
                                 <div class="card-item-icon card-icon">
@@ -157,7 +207,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                    <div class="card custom-card">
+                    <div class="card custom-card card-products">
                         <div class="card-body">
                             <div class="card-item">
                                 <div class="card-item-icon card-icon">
@@ -192,6 +242,120 @@
                 </div>
             </div>
             <!-- End::row -->    
+
+            <!-- Second row starts -->
+
+             <!-- Start::row -->
+             <div class="row row-sm">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card custom-card card-cheese">
+                        <div class="card-body">
+                            <div class="card-item">
+                                <div class="card-item-icon card-icon">
+                                    <i class="bi bi-triangle-fill text-primary"></i>  
+                                </div>
+                                <div class="card-item-title mb-2">
+                                    <label class="main-content-label fs-13 fw-bold mb-1">Cheese Products</label>
+                                    <span class="d-block fs-12 mb-0 text-muted">Total Cheese Products</span>
+                                </div>
+                                <div class="card-item-body">
+                                    <div class="card-item-stat">
+                                        <h4 class="fw-bold">{{ $activeCheeseProductsCount }}</h4>
+                                        <a href="{{ route('admin.cheese-products.index') }}" class="btn btn-sm btn-outline-primary mt-2">View
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card custom-card card-template">
+                        <div class="card-body">
+                            <div class="card-item">
+                                <div class="card-item-icon card-icon">
+                                    <i class="bi bi-layout-text-window text-primary"></i> 
+                                </div>
+                                <div class="card-item-title mb-2">
+                                    <label class="main-content-label fs-13 fw-bold mb-1">
+                                        Templates 
+                                    </label>
+                                    <span class="d-block fs-12 mb-0 text-muted">Total Templates</span>
+                                </div>
+                                <div class="card-item-body">
+                                    <div class="card-item-stat">
+                                        <h4 class="fw-bold">{{ $activeTemplatesCount }}</h4>
+                                        <a href="{{ route('admin.templates.index') }}" class="btn btn-sm btn-outline-primary mt-2">View
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card custom-card card-review">
+                        <div class="card-body">
+                            <div class="card-item">
+                                <div class="card-item-icon card-icon">
+                                    <i class="bi bi-star-fill text-primary"></i>
+                                </div>
+                                <div class="card-item-title mb-2">
+                                    <label class="main-content-label fs-13 fw-bold mb-1">
+                                        Reviews
+                                    </label>
+                                    <span class="d-block fs-12 mb-0 text-muted">Reviews</span>
+                                </div>
+                                <div class="card-item-body">
+                                    <div class="card-item-stat">
+                                        <h4 class="fw-bold">{{ $activeReviewsCount }}</h4>
+                                        <a href="{{ route('admin.reviews.index') }}" class="btn btn-sm btn-outline-primary mt-2">View
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3">
+                    <div class="card custom-card card-questionnaire">
+                        <div class="card-body">
+                            <div class="card-item">
+                                <div class="card-item-icon card-icon">
+                                    <i class="bi bi-ui-checks text-primary"></i>  
+                                </div>
+                                <div class="card-item-title  mb-2">
+                                    <label class="main-content-label fs-13 fw-bold mb-1">Questionnaires
+                                        </label>
+                                    <span class="d-block fs-12 mb-0 text-muted">All Questionnaires</span>
+                                </div>
+                                <div class="card-item-body">
+                                    <div class="card-item-stat">
+                                        <h4 class="fw-bold">{{ $activeQuestionnairesCount }}</h4>
+                                        <a href="{{ route('admin.questionnaires.index') }}" class="btn btn-sm btn-outline-primary mt-2">View
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End::row -->    
+
+            <!-- Second Row ends -->
 
             <!-- Start::row-1 -->
             <div class="row row-sm">

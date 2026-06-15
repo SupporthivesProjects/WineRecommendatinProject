@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\CheeseProduct;
+use App\Models\Template;
+use App\Models\Review;
 use App\Models\QuestionnaireTemplate;
 use App\Models\QuestionnaireLog;
 use App\Models\ModalImage;
@@ -114,7 +117,18 @@ class DashboardController extends Controller
         // Get users for the table with pagination
         $usersCount = $usersQuery->count();
         $users = $usersQuery->orderBy('id', 'desc')->paginate(10);
-        
+
+
+
+        //Get total cheese count
+        $activeProductsCount = Product::where('status', 'active')->count();
+        $activeCheeseProductsCount = CheeseProduct::where('is_active', 1)->count();
+        //Get total Questionnaires Count
+        $activeQuestionnairesCount = QuestionnaireTemplate::where('is_active', 1)->count();
+        //Get total Templates Counts
+        $activeTemplatesCount = Template::where('status', 1)->count();
+        //Get Reviews Count
+        $activeReviewsCount = Review::where('status', 'approved')->count();
 
         // PRODUCTS DATA FOR PIE CHART (COMBINED LOGIC)
         // ----------------------
@@ -385,7 +399,11 @@ class DashboardController extends Controller
             'defaultStartDate',
             'defaultEndDate',
             'displayStartDate',
-            'displayEndDate'
+            'displayEndDate',
+            'activeCheeseProductsCount',
+            'activeQuestionnairesCount',
+            'activeTemplatesCount',
+            'activeReviewsCount',
         ));
     }
 
