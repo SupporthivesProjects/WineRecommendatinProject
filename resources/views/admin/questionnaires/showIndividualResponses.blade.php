@@ -11,9 +11,12 @@
         </style>
     @endpush
     @php
+        if(!function_exists('mapQuestionKeyToIndex')) 
+        {
             function mapQuestionKeyToIndex($key) {
-                return intval(substr($key, 8)) - 1;  // "question1" → 0, "question2" → 1, etc.
-            }
+                        return intval(substr($key, 8)) - 1;  // "question1" → 0, "question2" → 1, etc.
+                    }
+        }
     @endphp
 
     <!-- Products Section -->
@@ -56,8 +59,9 @@
                         </div>
                         <div class="card-body">
                             <p><strong>Name:</strong> {{ $store->store_name }}</p>
-                            <p><strong>Email:</strong> {{ $store->address }}</p>
-                            <p><strong>Phone:</strong> {{ $store->state }}</p>
+                            <p><strong>Address:</strong> {{ $store->address1 }}</p>
+                            <p><strong>Location:</strong> {{ $store->location }}</p>
+                            <p><strong>State:</strong> {{ $store->state }}</p>
                             
                         </div>
                     </div>
