@@ -100,13 +100,13 @@
                                                     <button type="submit" class="btn btn-success">
                                                         <i class="fas fa-check me-1"></i> Approve
                                                     </button>
-                                                </form> --}}
+                                                </form> 
                                                 <form action="#" method="POST" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success">
                                                         <i class="fas fa-check me-1"></i> Approve
                                                     </button>
-                                                </form>
+                                                </form>--}}
                                             @endif
 
                                             @if($review->status !== 'rejected')
