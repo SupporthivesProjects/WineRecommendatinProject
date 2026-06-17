@@ -228,6 +228,29 @@ class StoreController extends Controller
         $storeManager = $store->users
         ->where('role', 'store_manager')
         ->first();
+        
+
+        if (!$storeManager) {
+
+            \Log::warning('Store has no manager', [
+                'store_id' => $store->id,
+            ]);
+        
+            return view(
+                'admin.stores.show',
+                compact(
+                    'store',
+                    'activeProducts',
+                    'storeProducts',
+                    'availableProducts',
+                    'cheeseProducts',
+                    'availableCheeses',
+                    'features'
+                )
+            );
+        }
+        
+        
         $analyticsSummary = null;
         $topSellingWines = collect();
         $revenueTrend = collect();
@@ -239,7 +262,10 @@ class StoreController extends Controller
         $priceBandAnalytics = collect();
         $apiUploads = collect();
 
-        if ($storeManager) {
+        if ($storeManager) 
+        {
+        try
+        {
 
             $analyticsSummary = StoreAnalyticsController::getStoreSummary(
                 $storeManager->id,
@@ -276,122 +302,157 @@ class StoreController extends Controller
                 $range
             );
 
-        $lowStockWines =
-            StoreAnalyticsController::getLowStockWines(
-                $storeManager->id
-            );
+            $lowStockWines =
+                StoreAnalyticsController::getLowStockWines(
+                    $storeManager->id
+                );
 
-        $highStockLowMovement =
-            StoreAnalyticsController::getHighStockLowMovement(
-                $storeManager->id,
-                $range
-            );
+            $highStockLowMovement =
+                StoreAnalyticsController::getHighStockLowMovement(
+                    $storeManager->id,
+                    $range
+                );
 
-        $priceBandAnalytics =
-            StoreAnalyticsController::getPriceBandAnalytics(
-                $storeManager->id,
-                $range
-            );
+            $priceBandAnalytics =
+                StoreAnalyticsController::getPriceBandAnalytics(
+                    $storeManager->id,
+                    $range
+                );
 
-        $domesticImportedSplit =
-            StoreAnalyticsController::getDomesticImportedSplit(
-                $storeManager->id,
-                $range
-            );
-        
-        $averageBottleValueTrend =
-            StoreAnalyticsController::getAverageBottleValueTrend(
-                $storeManager->id,
-                $range
-            );
-        
-        $reorderAttentionList =
-            StoreAnalyticsController::getReorderAttentionList(
-                $storeManager->id,
-                $range
-            );
-        
-        $promotionList =
-            StoreAnalyticsController::getPromotionList(
-                $storeManager->id,
-                $range
-            );
-        
-        $questionnaireStats =
-            CustomerPreferenceAnalyticsController::getQuestionnaireStats(
-                $store->id,
-                $range
-            );
+            $domesticImportedSplit =
+                StoreAnalyticsController::getDomesticImportedSplit(
+                    $storeManager->id,
+                    $range
+                );
+            
+            $averageBottleValueTrend =
+                StoreAnalyticsController::getAverageBottleValueTrend(
+                    $storeManager->id,
+                    $range
+                );
+            
+            $reorderAttentionList =
+                StoreAnalyticsController::getReorderAttentionList(
+                    $storeManager->id,
+                    $range
+                );
+            
+            $promotionList =
+                StoreAnalyticsController::getPromotionList(
+                    $storeManager->id,
+                    $range
+                );
+            
+            $questionnaireStats =
+                CustomerPreferenceAnalyticsController::getQuestionnaireStats(
+                    $store->id,
+                    $range
+                );
 
-        $questionnaireUsage =
-            CustomerPreferenceAnalyticsController::getQuestionnaireUsage(
-                $store->id,
-                $range
-            );
-
-
-        $wineTypePreferences =
-            CustomerPreferenceAnalyticsController::getWineTypePreferences(
-                $store->id,
-                $range
-            );
-        
-            $countryPreferences =
-            CustomerPreferenceAnalyticsController::getCountryPreferences(
-                $store->id,
-                $range
-            );
-        
-        $budgetDistribution =
-            CustomerPreferenceAnalyticsController::getBudgetDistribution(
-                $store->id,
-                $range
-            );
-        
-        $occasionPreferences =
-            CustomerPreferenceAnalyticsController::getOccasionPreferences(
-                $store->id,
-                $range
-            );
-        
-        $tastePreferences =
-            CustomerPreferenceAnalyticsController::getTastePreferences(
-                $store->id,
-                $range
-            );
-        
-        $topVarieties =
-            CustomerPreferenceAnalyticsController::getTopVarieties(
-                $store->id,
-                $range
-            );
+            $questionnaireUsage =
+                CustomerPreferenceAnalyticsController::getQuestionnaireUsage(
+                    $store->id,
+                    $range
+                );
 
 
-        $budgetStats =
-            CustomerPreferenceAnalyticsController::getBudgetStats(
-                $store->id,
-                $range
-            );
+            $wineTypePreferences =
+                CustomerPreferenceAnalyticsController::getWineTypePreferences(
+                    $store->id,
+                    $range
+                );
+            
+                $countryPreferences =
+                CustomerPreferenceAnalyticsController::getCountryPreferences(
+                    $store->id,
+                    $range
+                );
+            
+            $budgetDistribution =
+                CustomerPreferenceAnalyticsController::getBudgetDistribution(
+                    $store->id,
+                    $range
+                );
+            
+            $occasionPreferences =
+                CustomerPreferenceAnalyticsController::getOccasionPreferences(
+                    $store->id,
+                    $range
+                );
+            
+            $tastePreferences =
+                CustomerPreferenceAnalyticsController::getTastePreferences(
+                    $store->id,
+                    $range
+                );
+            
+            $topVarieties =
+                CustomerPreferenceAnalyticsController::getTopVarieties(
+                    $store->id,
+                    $range
+                );
 
 
-        $occasionBudgetPreferences =
-            CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences(
-                $store->id,
-                $range
-            );
-
-        $apiUploads = StoreManagerUpload::where('store_manager_id', $storeManager->id)
-            ->where('type', 'API')
-            ->latest()
-            ->get();
-        
-        $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
-            ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
-            ->latest()
-            ->get();
+            $budgetStats =
+                CustomerPreferenceAnalyticsController::getBudgetStats(
+                    $store->id,
+                    $range
+                );
 
 
+            $occasionBudgetPreferences =
+                CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences(
+                    $store->id,
+                    $range
+                );
+
+            $apiUploads = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+                ->where('type', 'API')
+                ->latest()
+                ->get();
+            
+            $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+                ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
+                ->latest()
+                ->get();
+
+
+            }
+            catch (\Throwable $e) {
+
+                \Log::error($e);
+            
+                $analyticsSummary = null;
+                $topSellingWines = collect();
+                $revenueTrend = collect();
+                $wineTypeDistribution = collect();
+                $countryDistribution = collect();
+                $slowMovingWines = collect();
+                $lowStockWines = collect();
+                $highStockLowMovement = collect();
+                $priceBandAnalytics = collect();
+                $domesticImportedSplit = collect();
+                $averageBottleValueTrend = collect();
+                $reorderAttentionList = collect();
+                $promotionList = collect();
+            
+                $questionnaireStats = [];
+                $questionnaireUsage = collect();
+                $wineTypePreferences = collect();
+                $countryPreferences = collect();
+                $budgetDistribution = collect();
+                $occasionPreferences = collect();
+                $tastePreferences = collect();
+                $topVarieties = collect();
+                $budgetStats = [];
+                $occasionBudgetPreferences = collect();
+            
+                $apiUploads = collect();
+                $invoiceData = collect();
+            }
+            
         }
+                
 
 
         
