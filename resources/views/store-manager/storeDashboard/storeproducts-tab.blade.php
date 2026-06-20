@@ -126,8 +126,11 @@
                                                             'still' => '<i class="fas fa-tint text-primary" title="Still Wine"></i>',
                                                             'rosé' => '<i class="fas fa-wine-glass" style="color:#ff69b4;" title="Rosé Wine"></i>',
                                                         ];
+
+                                                        $type = \Illuminate\Support\Str::lower(trim($product->type));
                                                     @endphp
-                                                    {!! $icons[$product->type] ?? '<i class="fas fa-question-circle"></i>' !!}
+
+                                                    {!! $icons[$type] ?? '<i class="fas fa-question-circle"></i>' !!}
                                                     {{ ucfirst($product->type) }}
                                                     </td>
                                                     <td>{{ $product->vintage_year }}</td>

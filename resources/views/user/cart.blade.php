@@ -469,7 +469,7 @@
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Order Placed Successfully!',
-                                    text: 'Thank you for your purchase.',
+                                    text: 'Thank you for your purchase. Please move to the cashier desk.',
                                     confirmButtonText: 'Continue Shopping'
                                 }).then(() => {
                                     window.location.href = '{{ route('user.products') }}';

@@ -360,6 +360,15 @@ class DashboardController extends Controller
             }
         }
 
+        //adminfeatured count
+        $adminfeaturedcount = DB::table('products')
+                        ->where('admin_featured_product',1)
+                        ->where('status','active')
+                        ->count();
+
+        
+
+
         // Send list of all featured products
         $featuredCount = DB::table('store_products')
                     ->where('is_featured', 1)
@@ -404,6 +413,7 @@ class DashboardController extends Controller
             'activeQuestionnairesCount',
             'activeTemplatesCount',
             'activeReviewsCount',
+            'adminfeaturedcount'
         ));
     }
 
