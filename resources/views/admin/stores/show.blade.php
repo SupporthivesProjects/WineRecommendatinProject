@@ -609,35 +609,35 @@
                     @php
                         $currentRange = request('range', 'all');
                     @endphp
-                        <div class="analytics-filters mb-4">
-
+                    <div class="analytics-filters mb-4 d-flex justify-content-between align-items-center">
+                        <div>
                             <a href="{{ request()->url() }}?range=all"
-                            class="btn btn-sm {{ $currentRange == 'all' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                class="btn btn-sm {{ $currentRange == 'all' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 All Time
                             </a>
 
                             <a href="{{ request()->url() }}?range=today"
-                            class="btn btn-sm {{ $currentRange == 'today' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                class="btn btn-sm {{ $currentRange == 'today' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 Today
                             </a>
 
                             <a href="{{ request()->url() }}?range=7days"
-                            class="btn btn-sm {{ $currentRange == '7days' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                class="btn btn-sm {{ $currentRange == '7days' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 7 Days
                             </a>
 
                             <a href="{{ request()->url() }}?range=30days"
-                            class="btn btn-sm {{ $currentRange == '30days' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                class="btn btn-sm {{ $currentRange == '30days' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 30 Days
                             </a>
 
                             <a href="{{ request()->url() }}?range=month"
-                            class="btn btn-sm {{ $currentRange == 'month' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                class="btn btn-sm {{ $currentRange == 'month' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 Month
                             </a>
 
                             <a href="{{ request()->url() }}?range=year"
-                            class="btn btn-sm {{ $currentRange == 'year' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                class="btn btn-sm {{ $currentRange == 'year' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 Year
                             </a>
 
@@ -648,6 +648,12 @@
                                 data-bs-target="#customRangeFilter">
                                 Custom Range
                             </button>
+                        </div>
+
+                        <a href="{{ route('admin.stores.analytics.export', $store->id) }}" class="btn btn-success">
+                            Download Excel
+                        </a>
+
                     </div>
                     <div class="collapse my-3" id="customRangeFilter">
                         <form method="GET" action="{{ request()->url() }}">

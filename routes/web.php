@@ -257,6 +257,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //Analytics data
     Route::get('/analytics/store/{storeManagerId}/top-wines',[StoreAnalyticsController::class, 'topSellingWines']);
 
+    //dowload analyitcs reports 
+    Route::get('/stores/{store}/analytics/export',[StoreController::class, 'exportAnalytics'])->name('stores.analytics.export');
+
 });
 
 // Admin Questionnaire Routes

@@ -15,6 +15,8 @@ use App\Models\Template;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Admin\StoreAnalyticsController;
 use App\Http\Controllers\Admin\CustomerPreferenceAnalyticsController;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AnalyticsExport;
 
 
 class StoreController extends Controller
@@ -494,6 +496,104 @@ class StoreController extends Controller
                 'invoiceData',
             
             )
+        );
+    }
+
+    // Analytics download report
+    public function exportAnalytics(Store $store)
+    {
+        $range = request('range', 'all');
+
+        $store->load('users');
+
+        $storeManager = $store->users
+            ->where('role', 'store_manager')
+            ->first();
+
+        if (!$storeManager) {
+            abort(404, 'Store manager not found.');
+        }
+
+        // Store Analytics
+
+        $analyticsSummary = StoreAnalyticsController::getStoreSummary($storeManager->id, $range);
+
+        $topSellingWines = StoreAnalyticsController::getTopSellingWines($storeManager->id, $range);
+
+        $revenueTrend = StoreAnalyticsController::getRevenueTrend($storeManager->id, $range);
+
+        $wineTypeDistribution = StoreAnalyticsController::getWineTypeDistribution($storeManager->id, $range);
+
+        $countryDistribution = StoreAnalyticsController::getCountryDistribution($storeManager->id, $range);
+
+        $priceBandAnalytics = StoreAnalyticsController::getPriceBandAnalytics($storeManager->id, $range);
+
+        $domesticImportedSplit = StoreAnalyticsController::getDomesticImportedSplit($storeManager->id, $range);
+
+        $averageBottleValueTrend = StoreAnalyticsController::getAverageBottleValueTrend($storeManager->id, $range);
+
+        $slowMovingWines = StoreAnalyticsController::getSlowMovingWines($storeManager->id, $range);
+
+        $lowStockWines = StoreAnalyticsController::getLowStockWines($storeManager->id);
+
+        $highStockLowMovement = StoreAnalyticsController::getHighStockLowMovement($storeManager->id, $range);
+
+        $reorderAttentionList = StoreAnalyticsController::getReorderAttentionList($storeManager->id, $range);
+
+        $promotionList = StoreAnalyticsController::getPromotionList($storeManager->id, $range);
+
+        // Customer Preferences
+
+        $questionnaireStats = CustomerPreferenceAnalyticsController::getQuestionnaireStats($store->id, $range);
+
+        $questionnaireUsage = CustomerPreferenceAnalyticsController::getQuestionnaireUsage($store->id, $range);
+
+        $wineTypePreferences = CustomerPreferenceAnalyticsController::getWineTypePreferences($store->id, $range);
+
+        $countryPreferences = CustomerPreferenceAnalyticsController::getCountryPreferences($store->id, $range);
+
+        $budgetDistribution = CustomerPreferenceAnalyticsController::getBudgetDistribution($store->id, $range);
+
+        $occasionPreferences = CustomerPreferenceAnalyticsController::getOccasionPreferences($store->id, $range);
+
+        $tastePreferences = CustomerPreferenceAnalyticsController::getTastePreferences($store->id, $range);
+
+        $topVarieties = CustomerPreferenceAnalyticsController::getTopVarieties($store->id, $range);
+
+        $budgetStats = CustomerPreferenceAnalyticsController::getBudgetStats($store->id, $range);
+
+        $occasionBudgetPreferences = CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences($store->id, $range);
+
+        return Excel::download(
+            new AnalyticsExport(
+                $analyticsSummary,
+                $questionnaireStats,
+                $budgetStats,
+
+                $questionnaireUsage,
+                $wineTypePreferences,
+                $countryPreferences,
+                $budgetDistribution,
+                $occasionPreferences,
+                $tastePreferences,
+                $topVarieties,
+                $occasionBudgetPreferences,
+
+                $topSellingWines,
+                $revenueTrend,
+                $wineTypeDistribution,
+                $countryDistribution,
+                $priceBandAnalytics,
+                $domesticImportedSplit,
+                $averageBottleValueTrend,
+
+                $slowMovingWines,
+                $lowStockWines,
+                $highStockLowMovement,
+                $reorderAttentionList,
+                $promotionList
+            ),
+            'Store Analytics Report.xlsx'
         );
     }
 
