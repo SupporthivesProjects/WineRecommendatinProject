@@ -600,18 +600,17 @@
     <!-- Questionnaire Usage -->
     <script>
         var usageDates = @json($dates); 
-        var graphData = @json($graphData);
+        var seriesData = @json($graphData);
 
         // Calculate max value for Y-axis
-        var maxValue = Math.max(...graphData);
+        var maxValue = Math.max(
+            ...seriesData.flatMap(series => series.data)
+        );
         var roundedMax = Math.ceil(maxValue / 5) * 5; // Round to nearest 5
         var tickCount = roundedMax / 5;
 
         var options = {
-            series: [{
-                name: "Total Submissions",
-                data: graphData
-            }],
+            series: seriesData,
             chart: {
                 height: 320,
                 type: 'line',
@@ -641,7 +640,16 @@
             grid: {
                 borderColor: '#f2f6f7'
             },
-            colors: ["#3B82F6"],
+            colors: [
+                '#E53935', // Red
+                '#1565C0', // Dark Blue
+                '#000000', // Black
+                '#2E7D32', // Dark Green
+                '#8E24AA', // Purple
+                '#00838F', // Teal
+                '#6D4C41', // Brown
+                '#D81B60'  // Deep Pink
+            ],
             yaxis: {
                 min: 0,
                 max: roundedMax,
@@ -748,4 +756,7 @@
         }
     }
 </style>
+
+
+
 @endpush

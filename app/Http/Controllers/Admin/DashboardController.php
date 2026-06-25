@@ -337,28 +337,43 @@ class DashboardController extends Controller
         })->toArray();
 
         // QUESTIONNAIRE CHART DATA within date range
-        // Fetch counts of unique submissions grouped by day within date range
-        $responseData = DB::table('question_responses')
+        // Dashboard Questionnaire Trend
+        $templates = QuestionnaireTemplate::orderBy('level')->get();
+
+        $rawData = DB::table('question_responses')
             ->select(
                 DB::raw('DATE(created_at) as date'),
+                'template_id',
                 DB::raw('COUNT(DISTINCT submission_id) as count')
             )
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy('date')
+            ->groupBy('template_id', DB::raw('DATE(created_at)'))
             ->get();
 
-        // Initialize graph data with zeros
-        $graphData = array_fill(0, count($dates), 0);
+        $graphData = [];
 
-        // Map the result to corresponding dates
-        foreach ($responseData as $row) {
-            $dateLabel = Carbon::parse($row->date)->format('d M');
-            $index = array_search($dateLabel, $dates);
-            if ($index !== false) {
-                $graphData[$index] = $row->count;
+        foreach ($templates as $template) {
+
+            $series = [];
+
+            foreach ($dateRange as $date) {
+
+                $match = $rawData->first(function ($item) use ($template, $date) {
+                    return $item->template_id == $template->id
+                        && $item->date == $date;
+                });
+
+                $series[] = $match ? $match->count : 0;
             }
+
+            $graphData[] = [
+                'name' => $template->name,
+                'data' => $series
+            ];
         }
+
+
+
 
         //adminfeatured count
         $adminfeaturedcount = DB::table('products')

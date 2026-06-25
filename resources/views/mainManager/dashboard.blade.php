@@ -285,9 +285,7 @@
                                         </small>
                                     </div>
                                     <div id="project">
-                                        <!-- <canvas id="questionnaireChart" class="chartjs-chart"></canvas> -->
-                                        <canvas id="sales-last-7-days"></canvas>
-
+                                       
                                     </div>
                                 </div>
                             </div>

@@ -52,13 +52,6 @@
     </div>
 </div>
 
-<!-- Questionnaire Usage Chart -->
-<div class="bg-white p-4 rounded shadow mb-6">
-    <h4 class="text-center mb-2">Questionnaire Usage in Last Week</h4>
-    <div class="chart-container" style="height: 300px;">
-        <canvas id="questionnaireChart"></canvas>
-    </div>
-</div>
 
 <!-- Recent Products Table -->
 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">

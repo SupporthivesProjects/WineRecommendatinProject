@@ -278,12 +278,16 @@
 
         // Define consistent colors for each dataset
         const colors = [
-            '#28a745', // Green for First Sip
-            '#007bff', // Blue for Savy Sipper  
-            '#6f42c1', // Purple for Pro
-            '#17a2b8', // Teal for Quick Pour
-            '#fd7e14', // Orange
-            '#dc3545'  // Red
+            '#E53935', // Red
+            '#1565C0', // Dark Blue
+            '#000000', // Black
+            '#2E7D32', // Dark Green
+            '#8E24AA', // Purple
+            '#00838F', // Teal
+            '#6D4C41', // Brown
+            '#D81B60', // Deep Pink
+            '#455A64', // Blue Grey
+            '#F57C00', // Black
         ];
 
         const chart = new Chart(ctx, {
