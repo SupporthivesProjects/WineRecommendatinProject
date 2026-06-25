@@ -245,6 +245,38 @@
                 padding: 50px 20px;
             }
         }
+
+        @media (max-width: 720px) 
+        {
+            .navbar-toggler {
+                display: none !important;
+            }
+
+            #navbarNav {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #navbarNav .navbar-nav {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            #navbarNav.collapse:not(.show) {
+                display: flex !important;
+            }
+
+            #navbarNav .nav-link {
+                font-size: 11px;
+                padding: .2rem .35rem;
+            }
+
+            .transparent-navbar {
+                padding: 8px 0;
+            }
+        }
         
         </style>
 
