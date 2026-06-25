@@ -266,6 +266,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
 
 
+    //Donwload documentation route
+    Route::get('/admin/api/documentation',[UploadApiController::class, 'downloadApiDocumentation'])->name('api.documentation');
+
+
 });
 
 // Admin Questionnaire Routes

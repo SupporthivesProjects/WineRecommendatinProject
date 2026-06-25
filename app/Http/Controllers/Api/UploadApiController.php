@@ -227,6 +227,19 @@ class UploadApiController extends Controller
         );
     }
 
+    public function downloadApiDocumentation()
+    {
+        $path = public_path('docs/API-Documentation.pdf');
+
+        if (!file_exists($path)) {
+            abort(404, 'Documentation not found.');
+        }
+
+        return response()->download(
+            $path,
+            'Wine_API_Documentation.pdf'
+        );
+    }
 
 
 }

@@ -130,22 +130,35 @@
                         </li> -->
                         <li class="slide">
                             <a href="{{ route('admin.templates.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <i class="side-menu__icon fe fe-file-text" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Templates</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.features.index') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <i class="side-menu__icon fe fe-layers" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Features</span>
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.users.loginhistory') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <i class="side-menu__icon fe fe-clock" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">User Login History</span>
                             </a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.api.documentation') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-clock" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">API Documentation</span>
+                            </a>
+                        </li>
+                        
+
+
+
+
+
+   
                         {{--
                         <li class="slide">
                             <a href="{{ route('admin.settings.index') }}" class="side-menu__item">
