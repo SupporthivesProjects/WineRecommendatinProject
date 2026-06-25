@@ -29,6 +29,7 @@ class User extends Authenticatable
         'group_name',
         'last_login_at',
         'previous_login_at',
+        'api_key',
     ];
 
     const ROLE_ADMIN = 'admin';

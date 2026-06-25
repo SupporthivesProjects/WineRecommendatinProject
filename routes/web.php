@@ -260,6 +260,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //dowload analyitcs reports 
     Route::get('/stores/{store}/analytics/export',[StoreController::class, 'exportAnalytics'])->name('stores.analytics.export');
 
+
+    //API key routes
+    Route::post('/admin/users/{user}/generate-api-key',[UserController::class, 'generateApiKey'])->name('users.generateApiKey');
+
+
+
 });
 
 // Admin Questionnaire Routes

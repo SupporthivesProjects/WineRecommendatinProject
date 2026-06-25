@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ProductMaster;
 use App\Models\ProductStock;
 use App\Services\T3ApiService;
+use App\Models\User;
+
 
 class UploadApiController extends Controller
 {
@@ -20,6 +22,18 @@ class UploadApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'API key missing'
+            ], 401);
+        }
+
+        $user = User::where('api_key', $apiKey)
+            ->where('role', 'store_manager')
+            ->where('status', 'active')
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid API key'
             ], 401);
         }
 
@@ -68,6 +82,18 @@ class UploadApiController extends Controller
             'uploads.*.product_created_time' => 'nullable',
             'uploads.*.product_modified_time' => 'nullable',
         ]);
+
+        foreach ($data['uploads'] as $upload) {
+
+            if ($upload['store_manager_id'] != $user->id) {
+        
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Store Manager ID does not match API key.'
+                ], 403);
+            }
+        
+        }
     
         $rows = [];
     

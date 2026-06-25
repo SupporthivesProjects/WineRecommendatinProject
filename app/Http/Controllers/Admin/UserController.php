@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 // use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -104,6 +105,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+    
         return view('admin.users.show', compact('user'));
     }
 
@@ -203,6 +205,19 @@ class UserController extends Controller
             ->get();
 
         return view('admin.users.loginhistory', compact('users'));
+    }
+
+
+    public function generateApiKey(User $user)
+    {
+        $user->api_key = Str::random(64);
+
+        $user->save();
+
+        return back()->with(
+            'success',
+            'API Key generated successfully.'
+        );
     }
 
 
