@@ -136,30 +136,58 @@ class StoreDashboardController extends Controller
 
 
         // QUESTIONNAIRE CHART DATA (filtered by users of current store)
+        // QUESTIONNAIRE CHART DATA (4 lines)
         $dates = [];
+        $dateRange = [];
+
         for ($i = 6; $i >= 0; $i--) {
-            $dates[] = Carbon::now()->subDays($i)->format('d M');
+
+            $date = Carbon::now()->subDays($i);
+
+            $dates[] = $date->format('d M');
+
+            $dateRange[] = $date->format('Y-m-d');
         }
 
-        $responseData = DB::table('question_responses')
+        $templates = QuestionnaireTemplate::orderBy('level')->get();
+
+        $rawData = DB::table('question_responses')
             ->join('users', 'question_responses.user_id', '=', 'users.id')
             ->select(
                 DB::raw('DATE(question_responses.created_at) as date'),
+                'question_responses.template_id',
                 DB::raw('COUNT(DISTINCT question_responses.submission_id) as count')
             )
             ->where('question_responses.created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
             ->where('users.store_id', $storeId)
-            ->groupBy(DB::raw('DATE(question_responses.created_at)'))
-            ->orderBy('date')
+            ->groupBy(
+                'question_responses.template_id',
+                DB::raw('DATE(question_responses.created_at)')
+            )
             ->get();
 
-        $graphData = array_fill(0, count($dates), 0);
-        foreach ($responseData as $row) {
-            $dateLabel = Carbon::parse($row->date)->format('d M');
-            $index = array_search($dateLabel, $dates);
-            if ($index !== false) {
-                $graphData[$index] = $row->count;
+        $graphData = [];
+
+        foreach ($templates as $template) {
+
+            $series = [];
+
+            foreach ($dateRange as $date) {
+
+                $match = $rawData->first(function ($item) use ($template, $date) {
+
+                    return $item->template_id == $template->id
+                        && $item->date == $date;
+
+                });
+
+                $series[] = $match ? $match->count : 0;
             }
+
+            $graphData[] = [
+                'name' => $template->name,
+                'data' => $series
+            ];
         }
 
 
@@ -456,6 +484,98 @@ class StoreDashboardController extends Controller
     }
 
 
+    public function showRespnses()
+    {
+
+        $storeId = auth()->user()->store_id;
+
+        $submissions = DB::table('question_responses')
+            ->join('questionnaire_usage', 'question_responses.customerID', '=', 'questionnaire_usage.id')
+            ->join('users', 'question_responses.user_id', '=', 'users.id')
+            ->join('stores', 'users.store_id', '=', 'stores.id')
+        
+            ->where('users.store_id', $storeId)
+        
+            ->select(
+                'question_responses.submission_id',
+                'question_responses.customerID',
+                DB::raw('MIN(question_responses.created_at) as created_at'),
+        
+                'questionnaire_usage.cust_name',
+                'questionnaire_usage.cust_email',
+                'questionnaire_usage.cust_phone',
+        
+                'stores.store_name',
+                'stores.contact_number',
+                'stores.address1'
+            )
+        
+            ->groupBy(
+                'question_responses.submission_id',
+                'question_responses.customerID',
+        
+                'questionnaire_usage.cust_name',
+                'questionnaire_usage.cust_email',
+                'questionnaire_usage.cust_phone',
+        
+                'stores.store_name',
+                'stores.contact_number',
+                'stores.address1'
+            )
+        
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('store-manager.showResponsestable', compact('submissions'));
+    }
    
+    //show individual responses
+    public function showIndividualResponses($submission_id)
+    {
+        // Fetch customer info from `questionnaire_usage`
+        $customer = DB::table('questionnaire_usage')
+            ->where('submission_id', $submission_id)
+            ->first();
+
+        // Fetch all responses for this submission
+        $responses = DB::table('question_responses')
+            ->where('submission_id', $submission_id)
+            ->get();
+
+        // Get template ID from one of the responses
+        $templateId = optional($responses->first())->template_id;
+
+        // Get all questions for that template
+        $questions = DB::table('questions')
+            ->where('template_id', $templateId)
+            ->orderBy('question_order')
+            ->pluck('question');  
+
+        // Get template name (assuming you have a `templates` table)
+        $templateName = DB::table('questionnaire_templates')
+            ->where('id', $templateId)
+            ->value('name');
+
+        // Get user_id from one of the responses
+        $userId = optional($responses->first())->user_id;
+
+        // Fetch store_id from users table
+        $storeId = DB::table('users')
+            ->where('id', $userId)
+            ->value('store_id');
+
+        // Fetch store details
+        $store = DB::table('stores')
+            ->where('id', $storeId)
+            ->first();
+
+        return view('store-manager.showIndividualResponses', compact(
+            'customer',
+            'responses',
+            'questions',
+            'templateName',
+            'store'
+        ));
+    }
 
 }

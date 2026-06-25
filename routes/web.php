@@ -323,6 +323,13 @@ Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'sto
     Route::get('/store-cheese-products', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'index'])->name('cheese-products.index');
     Route::post('/store-cheese-products/update-status', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'updateStatus'])->name('cheese-products.update-status');
     Route::post('/store-cheese-products/update-featured', [\App\Http\Controllers\StoreManager\StoreManagerCheeseProductController::class, 'updateFeatured'])->name('cheese-products.update-featured');
+
+    //view all responses
+    Route::get('/questionnaire/responses', [StoreDashboardController::class, 'showRespnses'])->name('questionnaire.responses');
+
+    // View individual submission details
+    Route::get('/questionnaire/responses/{submission_id}', [StoreDashboardController::class, 'showIndividualResponses'])->name('questionnaire.responses.show');
+
 });
 
 // Add these routes for user product viewing

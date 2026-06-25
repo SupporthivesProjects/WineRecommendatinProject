@@ -182,12 +182,21 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-12 col-xl-12">
                             <div class="card custom-card overflow-hidden">
-                                <div class="card-header border-bottom-0">
-                                    <div>
-                                        <label class="card-title">Questionnaire </label> <span
-                                            class="d-block fs-12 mb-0 text-muted">Number of times the Questionnaire was used in last 7 days</span>
-                                    </div>
+                            <div class="card-header border-bottom-0 d-flex justify-content-between">
+                                <div>
+                                    <label class="card-title">Questionnaire</label>
+                                    <span class="d-block fs-12 mb-0 text-muted">
+                                        Number of times the Questionnaire was used in last 7 days
+                                    </span>
                                 </div>
+
+                                <div>
+                                    <a href="{{ route('store-manager.questionnaire.responses') }}"
+                                    class="btn btn-sm btn-outline-primary">
+                                        View all responses
+                                    </a>
+                                </div>
+                            </div>
                                 <div class="card-body">
                                     <div id="project2">
                                         
@@ -377,18 +386,17 @@
     <!-- Questionnaire Usage -->
         <script>
             var usageDates = @json($dates); 
-            var graphData = @json($graphData);
+            var seriesData = @json($graphData);
 
             // Calculate max value for Y-axis
-            var maxValue = Math.max(...graphData);
+            var maxValue = Math.max(
+                ...seriesData.flatMap(series => series.data)
+            );
             var roundedMax = Math.ceil(maxValue / 5) * 5; // Round to nearest 5
             var tickCount = roundedMax / 5;
 
             var options = {
-                series: [{
-                    name: "Total Submissions",
-                    data: graphData
-                }],
+                series: seriesData,
                 chart: {
                     height: 320,
                     type: 'line',
@@ -418,7 +426,16 @@
                 grid: {
                     borderColor: '#f2f6f7'
                 },
-                colors: ["#3B82F6"],
+                colors: [
+                    '#E53935',
+                    '#1565C0',
+                    '#000000',
+                    '#2E7D32',
+                    '#8E24AA',
+                    '#00838F',
+                    '#6D4C41',
+                    '#D81B60'
+                ],
                 yaxis: {
                     min: 0,
                     max: roundedMax,
