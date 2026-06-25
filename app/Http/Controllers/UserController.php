@@ -505,10 +505,35 @@ class UserController extends Controller
 
     public function getMatchingProducts($responses)
     {
+
         Log::info("=== START PRODUCT MATCHING ===");
 
         $templateId = $responses['template_id'];
         $answers = $responses['answers'];
+
+        Log::info("=== Fetching type for featured prodcuts ===");
+        $wineType = null;
+
+        switch ($templateId) {
+            case 1:
+            case 2:
+                $wineType = $answers['question4'] ?? null;
+                break;
+
+            case 3:
+            case 4:
+                $wineType = $answers['question5'] ?? null;
+                break;
+        }
+
+        if (is_array($wineType)) {
+            $wineType = $wineType[0] ?? null;
+        }
+
+        Log::info("Got it Wine type is:$wineType");
+
+
+
 
         Log::info("Template ID Received: $templateId");
         Log::info("Raw Answers:", $answers);
@@ -597,10 +622,26 @@ class UserController extends Controller
         Log::info("Normal candidates: " . $normal->count());
 
         // ---- FALLBACK: If NO featured products found ----
-        if ($featured->isEmpty()) {
-            Log::info("No featured products found in final products. Fetching fallback featured products.");
+        // if ($featured->isEmpty()) {
+        //     Log::info("No featured products found in final products. Fetching fallback featured products.");
 
+        //     $featured = Product::where('admin_featured_product', true)
+        //         ->inRandomOrder()
+        //         ->limit(5)
+        //         ->get();
+        // }
+        if ($featured->isEmpty()) 
+        {
+
+            Log::info("No featured products found in final products. Fetching fallback featured products.");
             $featured = Product::where('admin_featured_product', true)
+                ->when($wineType, function ($q) use ($wineType) {
+                    $q->where(function ($x) use ($wineType) {
+                        $x->where('type', 'like', "%{$wineType}%")
+                          ->orWhere('method', 'like', "%{$wineType}%");
+                    });
+                })
+        
                 ->inRandomOrder()
                 ->limit(5)
                 ->get();
