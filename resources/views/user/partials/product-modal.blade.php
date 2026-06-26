@@ -1,9 +1,18 @@
+<style>
+    @media (max-width: 720px) 
+    {
+        #questionnaire-modal-jeets {
+            height: 40vh !important;
+        }
+    }
+</style>
 <div class="modal-product-wrapper">
     <div class="container-fluid p-4">
         <div class="row">
             {{-- LEFT SIDE IMAGE --}}
             <div class="col-lg-5">
                 <div
+                    id="questionnaire-modal-jeets"
                     style="
                         position: sticky;
                         top: 20px;
