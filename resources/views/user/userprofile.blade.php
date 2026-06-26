@@ -74,6 +74,11 @@
                                             </div>
                                         @endif
 
+                                        <div class="mb-3">
+                                            <label class="form-label"><strong>ID</strong></label>
+                                            <p class="form-control">{{ $user->id }}</p>
+                                        </div>
+
 
                                         <div class="row mb-3">
                                             <div class="col-md-6">
@@ -96,6 +101,10 @@
                                             <p class="form-control">{{ $user->mobile }}</p>
                                         </div>
                                         <div class="mb-3">
+                                            <label class="form-label"><strong>API key</strong></label>
+                                            <p class="form-control">{{ $user->api_key }}</p>
+                                        </div>
+                                        <!-- <div class="mb-3">
                                             <label class="form-label"><strong>Password</strong></label>
                                             <p class="form-control">*********</p>
                                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
@@ -103,7 +112,7 @@
                                                 aria-controls="passwordFields">
                                                 Update Password
                                             </button>
-                                        </div>
+                                        </div> -->
 
                                         <div class="collapse mt-3" id="passwordFields">
                                             <form method="POST" action="{{ route('profile.update.password') }}">

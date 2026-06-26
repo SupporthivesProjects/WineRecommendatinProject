@@ -389,10 +389,6 @@
                                 <div class="row mb-4">
                                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                         <h4 class="fw-bold mb-3">Types</h4>
-                                        @php
-                                            $types = $products->pluck('type')->unique()->sort();
-                                        @endphp
-
                                         @foreach ($allTypes as $type)
                                             @php
                                                 $lowerType = strtolower($type);
@@ -408,12 +404,14 @@
                                             @endphp
 
                                             <div class="form-check form-check-inline">
-                                                <input
-                                                    class="form-check-input wine-type-filter"
-                                                    type="checkbox"
-                                                    value="{{ $lowerType }}"
-                                                    id="type-inline-{{ $lowerType }}"
-                                                    style="display: none;">
+                                            <input
+                                                class="form-check-input wine-type-filter"
+                                                type="checkbox"
+                                                value="{{ $lowerType }}"
+                                                id="type-inline-{{ $lowerType }}"
+                                                style="display:none;"
+                                                {{ in_array($lowerType, request()->input('types', [])) ? 'checked' : '' }}
+                                            >
                                                 
                                                 <label class="form-check-label fs-15 filter-checkbox" for="type-inline-{{ $lowerType }}">
                                                     <span class="emoji">{!! $emoji !!}</span> {{ ucfirst($type) }}
@@ -424,11 +422,8 @@
                                     </div>
                                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                         <h4 class="fw-bold mb-3">Country</h4>
-                                        @php
-                                            $countries = $products->pluck('country')->unique()->sort();
-                                        @endphp
-
-                                        @foreach ($countries as $country)
+                        
+                                        @foreach ($allCountries as $country)
                                             @php
                                                 $lowerCountry = strtolower($country);
                                                 $emoji = match($lowerCountry) {
@@ -446,12 +441,14 @@
                                             @endphp
 
                                             <div class="form-check form-check-inline">
-                                                <input
+                                            <input
                                                     class="form-check-input wine-country-filter"
                                                     type="checkbox"
                                                     value="{{ $lowerCountry }}"
                                                     id="country-inline-{{ $lowerCountry }}"
-                                                    style="display: none;">
+                                                    style="display:none;"
+                                                    {{ in_array($lowerCountry, request()->input('countries', [])) ? 'checked' : '' }}
+                                                >
                                                 
                                                 <label class="form-check-label fs-15 filter-checkbox" for="country-inline-{{ $lowerCountry }}">
                                                     <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
@@ -462,11 +459,9 @@
                                     </div>
                                 </div>
                                 <div class="row mb-4">
-                                    <div class="col-12">
+                                    <div class="col-10">
                                         <form method="GET" action="{{ route('user.products') }}">
-
                                             <div class="input-group">
-
                                                 <input type="text"
                                                     name="search"
                                                     class="form-control"
@@ -476,11 +471,13 @@
                                                 <button class="btn btn-dark" type="submit">
                                                     Search
                                                 </button>
-
                                             </div>
-
                                         </form>
-
+                                    </div>
+                                    <div class="col-2">
+                                    <a href="{{ route('user.products') }}" class="btn btn-outline-secondary">
+                                        Clear Filters
+                                    </a>
                                     </div>
                                 </div>
                                 <div class="row row-sm">
@@ -695,49 +692,50 @@
     </script>
 
     <script>
-        // Wait for the DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function () {
 
-            function filterCards() {
-                const selectedTypes = Array.from(document.querySelectorAll('.wine-type-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-                const selectedVintageYears = Array.from(document.querySelectorAll('.wine-vintage-year-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-                const selectedWineries = Array.from(document.querySelectorAll('.wine-winery-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-                const selectedPrices = Array.from(document.querySelectorAll('.wine-retail-price-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-                const selectedCountries = Array.from(document.querySelectorAll('.wine-country-filter:checked')).map(cb => cb.value.trim().toLowerCase());
+            const filters = document.querySelectorAll(
+                '.wine-type-filter, .wine-country-filter'
+            );
 
-                document.querySelectorAll('.wine-card-container').forEach(card => {
-                    const cardType = (card.getAttribute('data-type') || '').trim().toLowerCase();
-                    const cardVintageYear = (card.getAttribute('data-vintage-year') || '').trim().toLowerCase();
-                    const cardWinery = (card.getAttribute('data-winery') || '').trim().toLowerCase();
-                    const cardRetailPrice = (card.getAttribute('data-retail-price') || '').trim().toLowerCase();
-                    const cardCountry = (card.getAttribute('data-country') || '').trim().toLowerCase();
+            filters.forEach(filter => {
 
-                    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
-                    const matchesVintageYear = selectedVintageYears.length === 0 || selectedVintageYears.includes(cardVintageYear);
-                    const matchesWinery = selectedWineries.length === 0 || selectedWineries.includes(cardWinery);
-                    const matchesPrice = selectedPrices.length === 0 || selectedPrices.includes(cardRetailPrice);
-                    const matchesCountry = selectedCountries.length === 0 || selectedCountries.includes(cardCountry);
+                filter.addEventListener('change', function () {
 
-                    if (matchesType && matchesVintageYear && matchesWinery && matchesPrice && matchesCountry) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
+                    const params = new URLSearchParams(window.location.search);
+
+                    // Remove old values
+                    params.delete('types[]');
+                    params.delete('countries[]');
+
+                    // Selected Types
+                    document.querySelectorAll('.wine-type-filter:checked').forEach(item => {
+                        params.append('types[]', item.value);
+                    });
+
+                    // Selected Countries
+                    document.querySelectorAll('.wine-country-filter:checked').forEach(item => {
+                        params.append('countries[]', item.value);
+                    });
+
+                    // Preserve search text
+                    const searchInput = document.querySelector('input[name="search"]');
+                    if (searchInput && searchInput.value.trim() !== '') {
+                        params.set('search', searchInput.value.trim());
                     }
+
+                    // Always return to first page after filtering
+                    params.delete('page');
+
+                    window.location.href = window.location.pathname + '?' + params.toString();
+
                 });
-            }
 
-            // Attach the event listener to all filter checkboxes
-            document.querySelectorAll(
-                '.wine-type-filter, .wine-vintage-year-filter, .wine-winery-filter, .wine-retail-price-filter, .wine-country-filter'
-            ).forEach(checkbox => {
-                checkbox.addEventListener('change', filterCards);
             });
-
-            // Run filter once on load (optional)
-            filterCards();
 
         });
     </script>
+
     <script>
     window.addEventListener("scroll", function () {
         const navbar = document.getElementById("mainNavbar");

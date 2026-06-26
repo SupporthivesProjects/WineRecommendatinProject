@@ -182,6 +182,7 @@ class UserController extends Controller
     
     public function products(Request $request)
     {
+
         $store = Auth::user()->store;
 
         $storeProducts = DB::table('store_products')
@@ -210,10 +211,27 @@ class UserController extends Controller
             });
         }
 
+        if ($request->filled('types')) {
+            $productsQuery->whereIn('type', $request->types);
+        }
+
+        if ($request->filled('countries')) {
+            $productsQuery->whereIn('country', $request->countries);
+        }
+
 
         $allTypes = Product::whereIn('id', $storeProducts->pluck('product_id'))
         ->pluck('type')
         ->map(fn($type) => ucfirst(strtolower(trim($type))))
+        ->unique()
+        ->sort()
+        ->values();
+
+
+        $allCountries = Product::whereIn('id', $storeProducts->pluck('product_id'))
+        ->pluck('country')
+        ->filter()
+        ->map(fn($country) => ucfirst(strtolower(trim($country))))
         ->unique()
         ->sort()
         ->values();
@@ -230,7 +248,7 @@ class UserController extends Controller
 
         $cart = session()->get('cart', []);
 
-        return view('user.products', compact('products', 'cart', 'allTypes'));
+        return view('user.products', compact('products', 'cart', 'allTypes', 'allCountries'));
     }
 
     public function matchedproducts($submissionId)
