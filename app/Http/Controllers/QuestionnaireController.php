@@ -12,6 +12,7 @@ use App\Models\UserQuestionnaireResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Services\Questionnaire\QuestionnaireRuleService;
 
 
 class QuestionnaireController extends Controller
@@ -21,6 +22,15 @@ class QuestionnaireController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    protected QuestionnaireRuleService $ruleService;
+
+    public function __construct(QuestionnaireRuleService $ruleService)
+    {
+        $this->ruleService = $ruleService;
+    }
+
     public function index()
     {
         
@@ -367,6 +377,7 @@ class QuestionnaireController extends Controller
     // }
     private function getRecommendedProducts(array $preferences)
     {
+
         // Log the received preferences
         Log::info('User Preferences:', $preferences);
 
@@ -440,32 +451,50 @@ class QuestionnaireController extends Controller
     public function getQuestions($id)
     {
         try {
-            $questions = Question::where('template_id', $id)->where('status', 1)->orderBy('question_order', 'asc')->get()->map(function ($q) {
-                $options = [];
 
-                for ($i = 1; $i <= 15; $i++) {
-                    $key = "option_$i";
-                    if (!is_null($q->$key)) {
-                        $options[] = $q->$key;
+            $questions = Question::where('template_id', $id)
+                ->where('status', 1)
+                ->orderBy('question_order', 'asc')
+                ->get()
+                ->map(function ($q) {
+
+                    $options = [];
+
+                    for ($i = 1; $i <= 15; $i++) {
+
+                        $key = "option_$i";
+
+                        if (!is_null($q->$key)) {
+                            $options[] = $q->$key;
+                        }
                     }
-                }
 
-                return [
-                    'question' => $q->question,
-                    'type' => $q->type,
-                    'options' => $options,
-                    'min_value' => $q->min_value,
-                    'max_value' => $q->max_value,
-                    'step' => $q->step,
-                    'default' => $q->default,
-                ];
-            });
+                    return [
+                        'id' => $q->id,
+                        'key' => $q->question_key,
+                        'question_order' => $q->question_order,
+                        'question' => $q->question,
+                        'type' => $q->type,
+                        'options' => $options,
+                        'min_value' => $q->min_value,
+                        'max_value' => $q->max_value,
+                        'step' => $q->step,
+                        'default' => $q->default,
+                    ];
+                });
 
-            return response()->json($questions);
+            return response()->json([
+                'questions' => $questions,
+                'rules' => $this->ruleService->getRules($id),
+            ]);
 
         } catch (\Exception $e) {
+
             Log::error('Error in getQuestions: ' . $e->getMessage());
-            return response()->json(['error' => 'Something went wrong.'], 500);
+
+            return response()->json([
+                'error' => 'Something went wrong.'
+            ], 500);
         }
     }
 

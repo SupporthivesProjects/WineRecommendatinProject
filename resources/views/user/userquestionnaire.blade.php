@@ -488,36 +488,10 @@
 <script>
             let questions = [];
             let currentStep = 0;
-            let responses = {};  
+            let responses = {};
+            let ruleResponses = {};  
+            let questionnaireRules = {};
             let selectedQuestionnaireId = null;
-            const subRegionMap = {
-                "France": ["Burgundy (France)", "Champagne (France)", "Rhône Valley (France)"],
-                "Germany": [],
-                "Italy": ["Tuscany (Italy)", "Piedmont (Italy)", "Veneto (Italy)"],
-                "Spain": ["Rioja (Spain)", "Ribera del Duero (Spain)"],
-                "Australia": ["Barossa Valley (Australia)", "Margaret River (Australia)"],
-                "USA": ["Napa Valley (USA)", "Sonoma (USA)"],
-                "Rest of the World": ["Marlborough (New Zealand)"],
-                "India": ["India"],
-            };
-            window.selectedCountries = [];
-
-            const wineRegionMap = 
-            {
-                "Domestic Indian": ["India"],
-                "Old World (France, Germany, Italy, Spain, Portugal, Austria)": [
-                    "France", "Germany", "Italy", "Spain", "Portugal", "Austria"
-                ],
-                "New World (USA, Chile, Australia, Argentina,)": [
-                    "USA", "Chile", "Australia", "Argentina", "South Africa", "New Zealand"
-                ],
-                "No Preference": "ALL"
-            };
-            window.selectedRegionGroup = null;
-            window.skipSubRegion = false;
-
-
-
             const emojiMap = 
             {
                 "Red": "Red",
@@ -660,8 +634,112 @@
 
             };
 
+            const QuestionnaireEngine = {
+                state: {
+                    selectedCountries: [],
+                    selectedRegionGroup: null,
+                    skipSubRegion: false
+                },
+                rules: {},
+                process(question){
+                    let processed = JSON.parse(JSON.stringify(question));
+                    processed.options = this.filterOptions(processed);
+                    console.log("Processing:", processed.key, processed.options);
+                    return processed;
+                },
+
+                filterOptions(question) {
+                    let options = [...question.options];
+                    const rules = this.rules.filter(rule => rule.target === question.key);
+                    console.log("Global questionnaireRules:", questionnaireRules);
+                    console.log("Question:", question.key);
+                    console.log("Rules:", rules);
+                    rules.forEach(rule => {
+                        switch (rule.action) {
+                            case "filter":
+                                const currentValue = ruleResponses[rule.source];
+                                console.log("Source:", rule.source);
+                                console.log("Current Value:", currentValue);
+                                if (!currentValue) return;
+                                let allowed = [];
+                                if (Array.isArray(currentValue)) {
+                                    currentValue.forEach(value => {
+                                        if (rule.mapping[value]) {
+                                            allowed = allowed.concat(rule.mapping[value]);
+                                        }
+                                    });
+                                } else {
+                                    allowed = rule.mapping[currentValue] || [];
+                                }
+                                if (allowed.length && allowed !== "ALL") {
+
+                                    options = options.filter(option => allowed.includes(option));
+
+                                }
+                            break;
+                            case "hide_option":
+                                options = this.applyHideOptionRule(rule, options);
+                                break;
+                        }
+                    });
+                    console.log("Final Options:", options);
+                    return options;
+                    },
+
+                
+                    applyHideOptionRule(rule, options) {
+                        const selectedValue = ruleResponses[rule.source];
+                        if (!selectedValue) {
+                            return options;
+                        }
+                        const selectedValues = Array.isArray(selectedValue)
+                            ? selectedValue
+                            : [selectedValue];
+                        if (selectedValues.includes(rule.when)) {
+
+                            options = options.filter(option =>
+                                !rule.options.includes(option)
+                            );
+
+                        }
+
+                        return options;
+                    },
+
+                    shouldSkipQuestion(questionKey) {
+                        console.log("Checking:", questionKey);
+                        console.log("All Rules:", this.rules);
+                        this.rules = questionnaireRules;
+                        const rules = this.rules.filter(rule =>
+                            rule.target === questionKey &&
+                            rule.action === "skip_question"
+                        );
+
+                        for (const rule of rules) {
+
+                            const selectedValue = ruleResponses[rule.source];
+
+                            if (!selectedValue) {
+                                continue;
+                            }
+
+                            const selectedValues = Array.isArray(selectedValue)
+                                ? selectedValue
+                                : [selectedValue];
+
+                            if (selectedValues.includes(rule.when)) {
+                                console.log("Skipping:", questionKey, rule);
+                                return true;
+                            }
+                        }
+
+                        return false;
+                        }
 
 
+            };
+
+            
             document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
                 button.addEventListener('click', function () {
                     selectedQuestionnaireId = this.getAttribute('data-questionnaire-id');
@@ -694,16 +772,21 @@
                             .then(data => {
                                 console.log('Raw question data received:', data);
 
-                                if (!Array.isArray(data) || data.length === 0) {
+                                if (!data.questions || data.questions.length === 0) { 
                                     console.warn('No questions returned or data format is incorrect:', data);
                                     alert('No questions available for this questionnaire.');
                                     return;
                                 }
 
                                 // Store and use the data
-                                questions = data;
+                                questions = data.questions;
+                                questionnaireRules = data.rules || {};
+                                console.log("Loaded Rules:", questionnaireRules);
+                                QuestionnaireEngine.rules = questionnaireRules;
                                 currentStep = 0;
-                                console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+                                console.log("Questions :", questions);
+                                console.log("Rules :", questionnaireRules);
+                                console.log(`Loaded ${questions.length} questions.`);
 
                                 renderQuestion();
                                 new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
@@ -740,10 +823,13 @@
                 questions = [];
                 currentStep = 0;
                 responses = {};
+                ruleResponses = {};
                 selectedQuestionnaireId = null;
+                QuestionnaireEngine.state.selectedCountries=[];
+                QuestionnaireEngine.state.selectedRegionGroup=null;
+                QuestionnaireEngine.state.skipSubRegion=false;
 
-                window.selectedCountries = [];
-                window.selectedRegionGroup = null;
+                
 
                 localStorage.removeItem('userResponses');
 
@@ -849,6 +935,8 @@
 
             function renderQuestionHTML(q, qIndex) 
             {
+                q = QuestionnaireEngine.process(q);
+                
                 if (q.type === 'slider') {
                     const bands = q.bands ?? [
                         { min: 0, max: 5000, label: "₹ 0 – ₹ 5,000" },
@@ -901,38 +989,7 @@
 
                 if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) 
                 {
-                    let options = [...q.options];
-
-                    // ⭐ FILTER SUB-REGION OPTIONS
-                    if (q.question.toLowerCase().includes("sub-region")) {
-                        let allowed = [];
-
-                        window.selectedCountries.forEach(country => {
-                            if (subRegionMap[country]) {
-                                allowed = allowed.concat(subRegionMap[country]);
-                            }
-                        });
-
-                        options = options.filter(opt => allowed.includes(opt));
-                    }
-                    // FILTER COUNTRY SELECTION
-                    if (q.question.toLowerCase().includes("country selection")) {
-                        let allowed = [];
-
-                        if (window.selectedRegionGroup && wineRegionMap[window.selectedRegionGroup]) {
-                            const selected = wineRegionMap[window.selectedRegionGroup];
-
-                            if (selected === "ALL") {
-                                allowed = q.options; // show all
-                            } else {
-                                allowed = selected;  // mapped list
-                            }
-                        }
-
-                        options = options.filter(opt => allowed.includes(opt));
-                    }
-
-
+                    let options = q.options;
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
@@ -1091,13 +1148,13 @@
 
                             if (q.question.toLowerCase().includes("preferred wine country")) {
 
-                                window.selectedCountries = Array.from(
+                                QuestionnaireEngine.state.selectedCountries = Array.from(
                                     document.querySelectorAll(`input[name="answer${index}"]:checked`)
                                 ).map(i => i.value);
 
-                                window.skipSubRegion = window.selectedCountries.includes("No Preference");
+                                QuestionnaireEngine.state.skipSubRegion = QuestionnaireEngine.state.selectedCountries.includes("No Preference");
 
-                                updateSubRegionOptions();
+                                // renderQuestion();
                             }
 
                             /* ===============================
@@ -1107,119 +1164,80 @@
                             if (q.question.toLowerCase().includes("wine region group")) {
 
                                 const selected = document.querySelector(`input[name="answer${index}"]:checked`);
-                                window.selectedRegionGroup = selected ? selected.value : null;
+                                QuestionnaireEngine.state.selectedRegionGroup = selected ? selected.value : null;
 
-                                updateCountryOptions();
+                                // renderQuestion();
                             }
 
                         });
                     });
                     }
 
-
-                    // if (q.type === 'single' || q.type === 'multiple') {
-                    //     const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
-                    //     inputs.forEach(input => {
-                    //         input.addEventListener('change', () => {
-
-                    //             if (q.type === 'single') 
-                    //             {
-                    //                 inputs.forEach(i => {
-                    //                     const label = document.querySelector(`label[for="${i.id}"]`);
-                    //                     if (label) label.classList.remove('active');
-                    //                 });
-                    //             }
-
-                    //             const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
-                    //             if (selectedLabel) {
-                    //                 if (q.type === 'multiple') 
-                    //                 {
-                                        
-                    //                     selectedLabel.classList.toggle('active', input.checked);
-                    //                 } else {
-                    //                     selectedLabel.classList.add('active');
-                    //                 }
-                    //             }
-
-                    //             if (q.question.toLowerCase().includes("preferred wine country")) 
-                    //             {
-                    //                 window.selectedCountries = Array.from(
-                    //                     document.querySelectorAll(`input[name="answer${index}"]:checked`)
-                    //                 ).map(i => i.value);
-
-                    //                 window.skipSubRegion = window.selectedCountries.includes("No Preference");
-                    //                 updateSubRegionOptions();
-                    //             }
-
-                    //             if (q.question.toLowerCase().includes("wine region group")) 
-                    //             {
-                    //                     const selected = document.querySelector(`input[name="answer${index}"]:checked`);
-                    //                     window.selectedRegionGroup = selected ? selected.value : null;
-
-                    //                     updateCountryOptions();
-                    //                 }
-
-
-                    //         });
-                    //     });
-                    // }
-
-
-
-
                 });
             }
 
 
-            function updateSubRegionOptions() {
-                const index = questions.findIndex(q =>
-                    q.question.toLowerCase().includes("sub-region")
-                );
-
-                if (index === -1) return;
-
-                if (currentStep === index || currentStep === 0) {
-                    renderQuestion();
-                }
-            }
-
-
-           
-            function captureResponse() 
+            function captureResponse()
             {
                 const isBatch = currentStep === 0;
                 const indexes = isBatch ? [0, 1, 2] : [currentStep];
 
                 indexes.forEach(index => {
+
                     const q = questions[index];
-                    if (!q.id) {
-                        q.id = `question${index + 1}`;
-                    }
+
+                    let answer = 'no response';
 
                     if (q.type === 'slider') {
+
                         const slider = document.getElementById(`budgetSlider${index}`);
-                        responses[q.id] = slider ? slider.value : 'no response';
-                    } 
-                    else if (q.type === 'single') {
-                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
-                        responses[q.id] = selected ? selected.value : 'no response';
-                    } 
-                    else if (q.type === 'multiple') {
-                        const selected = document.querySelectorAll(`input[name="answer${index}"]:checked`);
-                        responses[q.id] = selected.length ? Array.from(selected).map(el => el.value) : 'no response';
-                    } 
-                    else if (q.type === 'input') {
-                        const input = document.getElementById(`textInputAnswer${index}`);
-                        responses[q.id] = input ? input.value.trim() || 'no response' : 'no response';
+                        answer = slider ? slider.value : 'no response';
+
                     }
+                    else if (q.type === 'single') {
+
+                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                        answer = selected ? selected.value : 'no response';
+
+                    }
+                    else if (q.type === 'multiple') {
+
+                        const selected = document.querySelectorAll(`input[name="answer${index}"]:checked`);
+                        answer = selected.length
+                            ? Array.from(selected).map(el => el.value)
+                            : 'no response';
+
+                    }
+                    else if (q.type === 'input') {
+
+                        const input = document.getElementById(`textInputAnswer${index}`);
+                        answer = input ? (input.value.trim() || 'no response') : 'no response';
+
+                    }
+
+                    // ===== OLD FORMAT (DO NOT CHANGE) =====
+                    responses[`question${index + 1}`] = answer;
+
+                    // ===== NEW RULE ENGINE FORMAT =====
+                    if (q.key) {
+                        console.log("Saving:", q.key, answer);
+                        ruleResponses[q.key] = answer;
+                    }
+
                 });
 
                 localStorage.setItem('userResponses', JSON.stringify(responses));
             }
-
+            
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
                 captureResponse();
+                // Refresh rule state from latest answers
+                QuestionnaireEngine.state.selectedCountries =
+                    ruleResponses.preferred_country || [];
+
+                QuestionnaireEngine.state.selectedRegionGroup =
+                    ruleResponses.wine_region_group || null;
 
                 // find index of "country selection" question
                 const countryIndex = questions.findIndex(q =>
@@ -1227,15 +1245,15 @@
                 );
 
                 // Jump directly to step 3 after batch questions
-                if (currentStep === 0) {
+                if (currentStep === 0) 
+                {
                     currentStep = 3;
                 } else {
-
                     // ⭐ SKIP country question if "No Preference" selected
                     if (
-                        window.selectedRegionGroup === "No Preference" &&
-                        currentStep + 1 === countryIndex
-                    ) {
+                            QuestionnaireEngine.state.skipSubRegion &&
+                            currentStep + 1 === countryIndex
+                        ) {
                         currentStep = countryIndex + 1; // skip country question
                     } else {
                         // currentStep++;
@@ -1243,10 +1261,18 @@
                                 q.question.toLowerCase().includes("sub-region")
                             );
 
-                            if (window.skipSubRegion && currentStep + 1 === subRegionIndex) {
+                            if (QuestionnaireEngine.state.skipSubRegion && currentStep + 1 === subRegionIndex) {
                                 currentStep = subRegionIndex + 2; // skip sub-region
                             } else {
                                 currentStep++;
+                                while (
+                                    currentStep < questions.length &&
+                                    QuestionnaireEngine.shouldSkipQuestion(
+                                        questions[currentStep].key
+                                    )
+                                ) {
+                                    currentStep++;
+                                }
                             }
 
                     }
@@ -1323,7 +1349,7 @@
                         q.question.toLowerCase().includes("country selection")
                     );
 
-                    if (window.selectedRegionGroup === "No Preference" &&
+                    if (QuestionnaireEngine.state.skipSubRegion === "No Preference" &&
                         currentStep - 1 === countryIndex) {
                         currentStep = countryIndex - 1;
                     } else {
@@ -1454,21 +1480,7 @@
             }
         }
     </script>
-    <script>
-        function updateCountryOptions() 
-        {
-            const index = questions.findIndex(q =>
-                q.question.toLowerCase().includes("country selection")
-            );
-
-            if (index === -1) return;
-
-            if (currentStep === index || currentStep === 0) {
-                renderQuestion();
-            }
-        }
-
-    </script>
+    
 
 
 @endpush

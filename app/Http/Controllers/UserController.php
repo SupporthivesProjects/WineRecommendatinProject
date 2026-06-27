@@ -19,6 +19,8 @@ use App\Models\CartCheckout;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use App\Models\CheckoutItem;
+use App\Services\Questionnaire\QuestionnaireRuleService;
+
 
 class UserController extends Controller
 {
@@ -27,6 +29,15 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected QuestionnaireRuleService $ruleService;
+
+    public function __construct(QuestionnaireRuleService $ruleService)
+    {
+         $this->ruleService = $ruleService;
+    }
+
+
     public function dashboard()
     {
         $user = Auth::user();
