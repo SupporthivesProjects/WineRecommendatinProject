@@ -821,9 +821,6 @@
                 resetQuestionnaireState();
             });
 
-
-
-
             function resetQuestionnaireState() 
             {
                 questions = [];
@@ -834,8 +831,6 @@
                 QuestionnaireEngine.state.selectedCountries=[];
                 QuestionnaireEngine.state.selectedRegionGroup=null;
                 QuestionnaireEngine.state.skipSubRegion=false;
-
-                
 
                 localStorage.removeItem('userResponses');
 
@@ -894,7 +889,6 @@
                 }
             }
 
-
             function renderQuestion() 
             {
                 const container = document.getElementById('question-container');
@@ -936,8 +930,6 @@
                 setupEventsForBatch([currentStep]);
                 backBtn.style.display = 'inline-block';
             }
-
-
 
             function renderQuestionHTML(q, qIndex) 
             {
@@ -1300,14 +1292,8 @@
                 }
             });
 
-
-
-            
             function submitResponses() {
-
                 console.log("check api:- ",selectedQuestionnaireId, responses);
-                
-    
                 fetch('/submit-response', {
                     method: 'POST',
                     headers: {
@@ -1362,11 +1348,6 @@
                         currentStep--;
                     }
 
-                    
-
-
-
-                    
                     renderQuestion();
                 }
             });
@@ -1393,26 +1374,7 @@
             }
         });
     </script>
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const images = [
-                "{{ asset('images/QuestModal1.jpg') }}",
-                "{{ asset('images/QuestModal2.jpg') }}",
-                "{{ asset('images/QuestModal3.jpg') }}",
-            ];
-
-            const modal = document.getElementById('questionnaireModal');
-            const container = document.getElementById('leftModalImageContainer');
-
-            modal.addEventListener('shown.bs.modal', function () {
-                const randomIndex = Math.floor(Math.random() * images.length);
-                container.style.backgroundImage = `url('${images[randomIndex]}')`;
-                container.style.backgroundSize = 'cover';
-                container.style.backgroundPosition = 'center';
-                container.style.backgroundRepeat = 'no-repeat';
-            });
-        });
-    </script> -->
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
