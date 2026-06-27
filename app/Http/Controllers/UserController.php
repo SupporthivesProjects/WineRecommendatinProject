@@ -561,14 +561,17 @@ class UserController extends Controller
 
         Log::info("Got it Wine type is:$wineType");
 
-
-
-
         Log::info("Template ID Received: $templateId");
         Log::info("Raw Answers:", $answers);
 
         // Preserve order of answers
         $orderedAnswers = collect($answers)->filter();
+        $orderedAnswers = collect(
+            $this->replaceSurpriseMeAnswers(
+                $templateId,
+                $orderedAnswers->toArray()
+            )
+        );
         Log::info("Ordered Answers:", $orderedAnswers->toArray());
 
         // Store
@@ -650,15 +653,6 @@ class UserController extends Controller
         Log::info("Featured candidates (from final products): " . $featured->count());
         Log::info("Normal candidates: " . $normal->count());
 
-        // ---- FALLBACK: If NO featured products found ----
-        // if ($featured->isEmpty()) {
-        //     Log::info("No featured products found in final products. Fetching fallback featured products.");
-
-        //     $featured = Product::where('admin_featured_product', true)
-        //         ->inRandomOrder()
-        //         ->limit(5)
-        //         ->get();
-        // }
         if ($featured->isEmpty()) 
         {
 
@@ -692,28 +686,37 @@ class UserController extends Controller
         return $result;
 
 
-        // // Final matched product records
-        // $finalProducts = Product::whereIn('id', $currentProductIds)->get();
+    }
 
-        // Log::info("Total products AFTER all filters: " . $finalProducts->count());
+    //Surprise Me
+    private function replaceSurpriseMeAnswers($templateId, $answers)
+    {
+        $config = config('questionnaire_surprise_me');
 
-        // // ---- FINAL LOGIC: 10 normal + 5 featured ----
-        // $featured = $finalProducts->where('admin_featured_product', true)->shuffle();
-        // $normal   = $finalProducts->where('admin_featured_product', false)->shuffle();
+        if (!isset($config[$templateId])) {
+            return $answers;
+        }
 
-        // Log::info("Featured candidates: " . $featured->count());
-        // Log::info("Normal candidates: " . $normal->count());
+        foreach ($answers as $key => $value) {
 
-        // $takeFeatured = $featured->take(5);
-        // $remaining    = 15 - $takeFeatured->count();
-        // $takeNormal   = $normal->take($remaining);
+            $values = is_array($value) ? $value : [$value];
 
-        // $result = $takeFeatured->merge($takeNormal)->shuffle()->values();
+            if (!in_array('SurpriseMe', $values)) {
+                continue;
+            }
 
-        // Log::info("=== FINAL RESULT COUNT: " . $result->count() . " ===");
-        // Log::info("=== END PRODUCT MATCHING ===");
+            if (!isset($config[$templateId][$key])) {
+                continue;
+            }
 
-        // return $result;
+            $choices = $config[$templateId][$key];
+
+            $answers[$key] = [
+                $choices[array_rand($choices)]
+            ];
+        }
+
+        return $answers;
     }
 
     // 
@@ -753,20 +756,6 @@ class UserController extends Controller
             case '1':
                 switch ($key) 
                 {
-                    // case 'question4': 
-                    //     $q->where(function($x) use ($values) {
-                    //         foreach ($values as $v) {
-                    //             $x->orWhere('type', 'like', "%$v%")
-                    //               ->orWhere('method', 'like', "%$v%");
-                    //         }
-                    //     });
-                    //     break;
-        
-                    // case 'question5': 
-                    //     $q->where(function($x) use ($values) {
-                    //         $x->whereIn('closure_type', $values);
-                    //     });
-                    //     break;
                     case 'question4': 
 
                         foreach ($values as $v) {
@@ -808,25 +797,6 @@ class UserController extends Controller
                         }
                     
                         break;
-                        
-                    
-                    // case 'question5': 
-
-                    //     $mappedValues = [];
-                    
-                    //     foreach ($values as $value) {
-                    //         if (strtolower($value) === 'yes') {
-                    //             $mappedValues[] = 'Cork';
-                    //         } elseif (strtolower($value) === 'no') {
-                    //             $mappedValues[] = 'Screwtop';
-                    //         }
-                    //     }
-                    
-                    //     $q->where(function($x) use ($mappedValues) {
-                    //         $x->whereIn('closure_type', $mappedValues);
-                    //     });
-                    
-                    //     break;
         
                     case 'question6': 
                         $q->where(function($x) use ($values) {

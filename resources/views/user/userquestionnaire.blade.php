@@ -664,17 +664,23 @@
                                 let allowed = [];
                                 if (Array.isArray(currentValue)) {
                                     currentValue.forEach(value => {
-                                        if (rule.mapping[value]) {
-                                            allowed = allowed.concat(rule.mapping[value]);
+                                        const mapped = rule.mapping[value];
+                                        if (mapped === "ALL") {
+                                            allowed = "ALL";
+                                            return;
+                                        }
+                                        if (mapped) {
+                                            allowed = allowed.concat(mapped);
                                         }
                                     });
-                                } else {
+                                    } else {
                                     allowed = rule.mapping[currentValue] || [];
-                                }
-                                if (allowed.length && allowed !== "ALL") {
-
+                                    }
+                                if (allowed !== "ALL" && allowed.length) {
+                                    console.log("Current Value:", currentValue);
+                                    console.log("Allowed:", allowed);
+                                    console.log("Options Before Filter:", options);
                                     options = options.filter(option => allowed.includes(option));
-
                                 }
                             break;
                             case "hide_option":

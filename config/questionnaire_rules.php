@@ -85,6 +85,41 @@ return [
                 'high'
             ]
         ],
+        [
+            'source' => 'region',
+        
+            'target' => 'country',
+        
+            'action' => 'filter',
+        
+            'mapping' => [
+        
+                'Domestic Indian' => [
+                    'India'
+                ],
+        
+                'Old World (France, Germany, Italy, Spain, Portugal, Austria)' => [
+                    'France',
+                    'Germany',
+                    'Italy',
+                    'Spain',
+                    'Portugal',
+                    'Austria'
+                ],
+        
+                'New World (USA, Chile, Australia, Argentina,)' => [
+                    'USA',
+                    'Chile',
+                    'Australia',
+                    'Argentina',
+                    'South Africa',
+                    'New Zealand'
+                ],
+        
+                'No Preference' => 'ALL',
+        
+            ]
+        ],
 
     ],
 
