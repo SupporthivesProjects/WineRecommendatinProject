@@ -492,6 +492,11 @@
             let ruleResponses = {};  
             let questionnaireRules = {};
             let selectedQuestionnaireId = null;
+            const questionLayouts = {
+                country: 2,
+                sub_region:2,
+                region:2,
+            };
             const emojiMap = 
             {
                 "Red": "Red",
@@ -532,6 +537,9 @@
                 "Spain": "Spain",
                 "Australia": "Australia",
                 "USA": "USA",
+                "Austria": "Austria",
+                "Crotia": "Croatia",
+                "Greece": "Greece",
                 "Rest of the World": "RestofTheWorld",
                 "Budget": "Budget",
                 "Everyday sipping": "Everydaysipping",
@@ -641,6 +649,15 @@
                     skipSubRegion: false
                 },
                 rules: {},
+                getSelectedValues(sourceKey) {
+                    const value = ruleResponses[sourceKey];
+
+                    if (!value) {
+                        return [];
+                    }
+
+                    return Array.isArray(value) ? value : [value];
+                },
                 process(question){
                     let processed = JSON.parse(JSON.stringify(question));
                     processed.options = this.filterOptions(processed);
@@ -694,53 +711,34 @@
 
                 
                     applyHideOptionRule(rule, options) {
-                        const selectedValue = ruleResponses[rule.source];
-                        if (!selectedValue) {
+                        const selectedValues = this.getSelectedValues(rule.source);
+                        if (!selectedValues.length) {
                             return options;
                         }
-                        const selectedValues = Array.isArray(selectedValue)
-                            ? selectedValue
-                            : [selectedValue];
                         if (selectedValues.includes(rule.when)) {
-
                             options = options.filter(option =>
                                 !rule.options.includes(option)
                             );
-
                         }
-
                         return options;
                     },
 
                     shouldSkipQuestion(questionKey) {
-                        console.log("Checking:", questionKey);
-                        console.log("All Rules:", this.rules);
                         this.rules = questionnaireRules;
                         const rules = this.rules.filter(rule =>
                             rule.target === questionKey &&
                             rule.action === "skip_question"
                         );
-
                         for (const rule of rules) {
-
-                            const selectedValue = ruleResponses[rule.source];
-
-                            if (!selectedValue) {
-                                continue;
-                            }
-
-                            const selectedValues = Array.isArray(selectedValue)
-                                ? selectedValue
-                                : [selectedValue];
+                            const selectedValues = this.getSelectedValues(rule.source);
 
                             if (selectedValues.includes(rule.when)) {
-                                console.log("Skipping:", questionKey, rule);
                                 return true;
                             }
                         }
 
                         return false;
-                        }
+                    }
 
 
             };
@@ -991,6 +989,13 @@
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
+                    const columns = questionLayouts[q.key] || 0;
+                    let bootstrapCol = "col-md-6";
+
+                    if (columns === 2) {
+                        bootstrapCol = "col-6";
+                    }
+                    
 
                     options.forEach((opt, idx) => {
                         const basePath = '/questionnaire';
@@ -1007,7 +1012,7 @@
                             : '';
 
                         rowHtml += `
-                            <div class="col-md-6 mb-3">
+                            <div class="${bootstrapCol} mb-3">
                                 <input class="d-none" type="${inputType}" name="answer${qIndex}" id="option${qIndex}_${idx}" value="${opt}">
                                 <label 
                                     for="option${qIndex}_${idx}" 
