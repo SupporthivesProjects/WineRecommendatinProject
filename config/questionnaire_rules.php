@@ -18,40 +18,103 @@ return [
             'mapping' => [
 
                 'France' => [
-                    'Burgundy (France)',
-                    'Champagne (France)',
-                    'Rhône Valley (France)',
+                    'Loire Valley',
+                    'Bordeaux',
+                    'Burgundy',
+                    'Rhone Valley',
+                    'Languedoc-Roussillon',
+                    'Provence',
+                    'Alsace',
+                    'Champagne',
                 ],
-
+                'Germany' => [
+                    'Franken',
+                    'Nahe',
+                    'Pfalz',
+                    'Mosel',
+                    'Rheingau',
+                    'Rheinhessen',
+                ],
                 'Italy' => [
-                    'Tuscany (Italy)',
-                    'Piedmont (Italy)',
-                    'Veneto (Italy)',
+                    'Tuscany',
+                    'Veneto',
+                    'Piedmont',
+                    'Sicily',
+                    'Umbria',
+                    'Abruzzo',
+                    'Friuli Venezia Giulia',
+                    'Emilia-Romagna',
+                    'Puglia',
                 ],
 
                 'Spain' => [
-                    'Rioja (Spain)',
-                    'Ribera del Duero (Spain)',
+                    'Rioja',
+                    'Ribera Del Duero',
+                    'Penedes',
+                    'Jerez',
+                    'Castilla-La Mancha',
                 ],
-
-                'USA' => [
-                    'Napa Valley (USA)',
-                    'Sonoma (USA)',
-                ],
-
                 'Australia' => [
-                    'Barossa Valley (Australia)',
-                    'Margaret River (Australia)',
+                    'South Eastern Australia',
+                    'Barossa Valley',
+                    'South Australia',
+                    'Eden Valley',
+                    'Mclaren Vale',
+                    'Margaret River',
                 ],
-
+                'USA' => [
+                    'Oregon',
+                    'Washington',
+                    'Livermore Valley',
+                    'Sonoma County',
+                    'Napa Valley',
+                    'Russian River Valley',
+                    'Central Coast',
+                ],
                 'India' => [
-                    'India',
+                    'Nashik',
+                    'Nandi Hills',
+                    'Akluj',
+                    'Sahyadri Valley',
+                    'Karnataka',
+                ],
+                'Chile' => [                    
+                    'Maipo Valley',
+                    'Central Valley',
+                    'Elqui Valley',
+                    'Curico Valley',
+                    'Maule Valley',
+                    'Colchagua Valley',
                 ],
 
-                'Rest of the World' => [
-                    'Marlborough (New Zealand)',
-                ]
+                'Portugal' => [
+                    'Madeira',
+                    'Douro',
+                    'Dao',
+                    'Lisboa',
+                    'Setubal',
+                    'Vinho Verde',
+                ],
 
+                'New Zealand' => [
+                    'Marlborough',
+                    'Martinborough',
+                    'Central Otago',
+                ],
+
+                'South Africa' => [
+                    'Swartland',
+                    'Stellenbosch',
+                    'Paarl',
+                    'Western Cape',
+                    'Robertson Valley',
+                    'Cape Town',
+                ],
+                'Argentina' => [
+                    'Cafayate',
+                    'Mendoza',
+                    'Lujan De Cuyo',
+                ]
             ]
 
         ],
@@ -61,7 +124,7 @@ return [
             'action' => 'hide_option',
             'when' => 'Red',
             'options' => [
-                'Champagne (France)'
+                'Champagne'
             ]
         ],
        
@@ -87,13 +150,9 @@ return [
         ],
         [
             'source' => 'region',
-        
             'target' => 'country',
-        
             'action' => 'filter',
-        
             'mapping' => [
-        
                 'Domestic Indian' => [
                     'India'
                 ],

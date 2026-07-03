@@ -460,7 +460,7 @@ class QuestionnaireController extends Controller
 
                     $options = [];
 
-                    for ($i = 1; $i <= 15; $i++) {
+                    for ($i = 1; $i <= 71; $i++) {
 
                         $key = "option_$i";
 
