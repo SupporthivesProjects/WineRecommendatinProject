@@ -639,6 +639,7 @@
                 "light bodied":"lightbodied",
                 "medium bodied":"MediumBodied",
                 "full bodied":"fullbodied",
+                "medium":"medium",
 
             };
 
@@ -986,6 +987,7 @@
                 if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) 
                 {
                     let options = q.options;
+                    console.log ("on line 989", options);
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
