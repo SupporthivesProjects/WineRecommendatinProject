@@ -420,41 +420,44 @@
                                         @endforeach
 
                                     </div>
-                                    <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
+                                    <div class="col-12 col-lg-6 mb-3 filter-group">
                                         <h4 class="fw-bold mb-3">Country</h4>
-                        
-                                        @foreach ($allCountries as $country)
-                                            @php
-                                                $lowerCountry = strtolower($country);
-                                                $emoji = match($lowerCountry) {
-                                                    'france' => '🇫🇷',
-                                                    'italy' => '🇮🇹',
-                                                    'spain' => '🇪🇸',
-                                                    'australia' => '🇦🇺',
-                                                    'united states' => '🇺🇸',
-                                                    'germany' => '🇩🇪',
-                                                    'new zealand' => '🇳🇿',
-                                                    'bulgaria' => '🇧🇬',
-                                                    default => '🌍'
-                                                };
+                                        <div class="wine-type-scroll">
+                                            @foreach ($allCountries as $country)
+                                                @php
+                                                    $lowerCountry = strtolower($country);
+                                                    $emoji = match($lowerCountry) {
+                                                        'france' => '🇫🇷',
+                                                        'italy' => '🇮🇹',
+                                                        'spain' => '🇪🇸',
+                                                        'australia' => '🇦🇺',
+                                                        'united states' => '🇺🇸',
+                                                        'germany' => '🇩🇪',
+                                                        'new zealand' => '🇳🇿',
+                                                        'bulgaria' => '🇧🇬',
+                                                        default => '🌍'
+                                                    };
 
-                                            @endphp
+                                                @endphp
 
-                                            <div class="form-check form-check-inline">
-                                            <input
-                                                    class="form-check-input wine-country-filter"
-                                                    type="checkbox"
-                                                    value="{{ $lowerCountry }}"
-                                                    id="country-inline-{{ $lowerCountry }}"
-                                                    style="display:none;"
-                                                    {{ in_array($lowerCountry, request()->input('countries', [])) ? 'checked' : '' }}
-                                                >
-                                                
-                                                <label class="form-check-label fs-15 filter-checkbox" for="country-inline-{{ $lowerCountry }}">
-                                                    <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
-                                                </label>
-                                            </div>
-                                        @endforeach
+                                                <div class="form-check form-check-inline">
+                                                <input
+                                                        class="form-check-input wine-country-filter"
+                                                        type="checkbox"
+                                                        value="{{ $lowerCountry }}"
+                                                        id="country-inline-{{ $lowerCountry }}"
+                                                        style="display:none;"
+                                                        {{ in_array($lowerCountry, request()->input('countries', [])) ? 'checked' : '' }}
+                                                    >
+                                                    
+                                                    <label class="form-check-label fs-15 filter-checkbox" for="country-inline-{{ $lowerCountry }}">
+                                                        <span class="emoji">{{ $emoji }}</span> {{ ucfirst($country) }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+
+                                        </div>
+                                        
 
                                     </div>
                                 </div>
