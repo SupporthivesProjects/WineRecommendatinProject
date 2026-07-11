@@ -157,7 +157,7 @@ return [
                     'India'
                 ],
         
-                'Old World (France, Germany, Italy, Spain, Portugal, Austria)' => [
+                'Old World' => [
                     'France',
                     'Germany',
                     'Italy',
@@ -166,7 +166,7 @@ return [
                     'Austria'
                 ],
         
-                'New World (USA, Chile, Australia, Argentina,)' => [
+                'New World' => [
                     'USA',
                     'Chile',
                     'Australia',

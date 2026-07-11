@@ -918,14 +918,19 @@
 
 @endsection
 @push('scripts')
-    
 
-    <script>
+<script>
             let questions = [];
             let currentStep = 0;
-            let responses = {};  
+            let responses = {};
+            let ruleResponses = {};  
+            let questionnaireRules = {};
             let selectedQuestionnaireId = null;
-
+            const questionLayouts = {
+                country: 2,
+                sub_region:2,
+                region:2,
+            };
             const emojiMap = 
             {
                 "Red": "Red",
@@ -962,9 +967,13 @@
                 "India": "India",
                 "France": "France",
                 "Italy": "Italy",
+                "Germany": "Germany",
                 "Spain": "Spain",
                 "Australia": "Australia",
                 "USA": "USA",
+                "Austria": "Austria",
+                "Crotia": "Croatia",
+                "Greece": "Greece",
                 "Rest of the World": "RestofTheWorld",
                 "Budget": "Budget",
                 "Everyday sipping": "Everydaysipping",
@@ -1015,8 +1024,8 @@
                 "Noble Grapes": "NobleGrapes",
                 "Regional Hero Grapes": "RegionalHeroGrapes",
                 "Domestic Indian": "DomesticIndian",
-                "Old World (France, Germany, Italy, Spain, Portugal, Austria)": "OldWorld",
-                "New World (USA, Chile, Australia, Argentina,)": "NewWorld",
+                "Old World": "OldWorld",
+                "New World": "NewWorld",
                 "Brut": "Brut",
                 "Dry": "Dry",
                 "Off-Dry": "OffDry",
@@ -1056,11 +1065,120 @@
                 "Argentina" : "Argentina",
                 "England": "England",
                 "South Africa" : "SouthAfrica",
-                "New Zealand" : "NewZealand"
+                "New Zealand" : "NewZealand",
+                "low":"low",
+                "light to medium":"lighttomedium",
+                "medium to high":"mediumtohigh",
+                "high":"high",
+                "light bodied":"lightbodied",
+                "medium bodied":"MediumBodied",
+                "full bodied":"fullbodied",
+                "medium":"medium",
+
             };
 
+            const QuestionnaireEngine = {
+                state: {
+                    selectedCountries: [],
+                    selectedRegionGroup: null,
+                    skipSubRegion: false
+                },
+                rules: {},
+                getSelectedValues(sourceKey) {
+                    const value = ruleResponses[sourceKey];
+
+                    if (!value) {
+                        return [];
+                    }
+
+                    return Array.isArray(value) ? value : [value];
+                },
+                process(question){
+                    let processed = JSON.parse(JSON.stringify(question));
+                    processed.options = this.filterOptions(processed);
+                    console.log("Processing:", processed.key, processed.options);
+                    return processed;
+                },
+
+                filterOptions(question) {
+                    let options = [...question.options];
+                    const rules = this.rules.filter(rule => rule.target === question.key);
+                    console.log("Global questionnaireRules:", questionnaireRules);
+                    console.log("Question:", question.key);
+                    console.log("Rules:", rules);
+                    rules.forEach(rule => {
+                        switch (rule.action) {
+                            case "filter":
+                                const currentValue = ruleResponses[rule.source];
+                                console.log("Source:", rule.source);
+                                console.log("Current Value:", currentValue);
+                                if (!currentValue) return;
+                                let allowed = [];
+                                if (Array.isArray(currentValue)) {
+                                    currentValue.forEach(value => {
+                                        const mapped = rule.mapping[value];
+                                        if (mapped === "ALL") {
+                                            allowed = "ALL";
+                                            return;
+                                        }
+                                        if (mapped) {
+                                            allowed = allowed.concat(mapped);
+                                        }
+                                    });
+                                    } else {
+                                    allowed = rule.mapping[currentValue] || [];
+                                    }
+                                if (allowed !== "ALL" && allowed.length) {
+                                    console.log("Current Value:", currentValue);
+                                    console.log("Allowed:", allowed);
+                                    console.log("Options Before Filter:", options);
+                                    options = options.filter(option => allowed.includes(option));
+                                }
+                            break;
+                            case "hide_option":
+                                options = this.applyHideOptionRule(rule, options);
+                                break;
+                        }
+                    });
+                    console.log("Final Options:", options);
+                    return options;
+                    },
+
+                
+                    applyHideOptionRule(rule, options) {
+                        const selectedValues = this.getSelectedValues(rule.source);
+                        if (!selectedValues.length) {
+                            return options;
+                        }
+                        if (selectedValues.includes(rule.when)) {
+                            options = options.filter(option =>
+                                !rule.options.includes(option)
+                            );
+                        }
+                        return options;
+                    },
+
+                    shouldSkipQuestion(questionKey) {
+                        this.rules = questionnaireRules;
+                        const rules = this.rules.filter(rule =>
+                            rule.target === questionKey &&
+                            rule.action === "skip_question"
+                        );
+                        for (const rule of rules) {
+                            const selectedValues = this.getSelectedValues(rule.source);
+
+                            if (selectedValues.includes(rule.when)) {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }
 
 
+            };
+
+            
             document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
                 button.addEventListener('click', function () {
                     selectedQuestionnaireId = this.getAttribute('data-questionnaire-id');
@@ -1077,47 +1195,137 @@
                 button.addEventListener('click', function () {
                     const questionnaireId = this.getAttribute('data-questionnaire-id');
 
-                    fetch(`/get-questions/${questionnaireId}`)
-                        .then(response => {
-                            console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
-                            console.log('Response status:', response.status);
+                    if ($(this).hasClass("hover")) {
+                        fetch(`/get-questions/${questionnaireId}`)
+                            .then(response => {
+                                console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
+                                console.log('Response status:', response.status);
 
-                            if (!response.ok) {
-                                console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
-                                throw new Error('Failed to fetch questions.');
-                            }
+                                if (!response.ok) {
+                                    console.error(`Error fetching questions: ${response.status} ${response.statusText}`);
+                                    throw new Error('Failed to fetch questions.');
+                                }
 
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Raw question data received:', data);
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Raw question data received:', data);
 
-                            if (!Array.isArray(data) || data.length === 0) {
-                                console.warn('No questions returned or data format is incorrect:', data);
-                                alert('No questions available for this questionnaire.');
-                                return;
-                            }
+                                if (!data.questions || data.questions.length === 0) { 
+                                    console.warn('No questions returned or data format is incorrect:', data);
+                                    alert('No questions available for this questionnaire.');
+                                    return;
+                                }
 
-                            // Store and use the data
-                            questions = data;
-                            currentStep = 0;
-                            console.log(`Loaded ${questions.length} questions. Initializing questionnaire modal...`);
+                                // Store and use the data
+                                questions = data.questions;
+                                questionnaireRules = data.rules || {};
+                                console.log("Loaded Rules:", questionnaireRules);
+                                QuestionnaireEngine.rules = questionnaireRules;
+                                currentStep = 0;
+                                console.log("Questions :", questions);
+                                console.log("Rules :", questionnaireRules);
+                                console.log(`Loaded ${questions.length} questions.`);
 
-                            renderQuestion();
-                            new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
-                        })
-                        .catch(error => {
-                            console.error('An error occurred while loading questions:', error);
-                            alert('Something went wrong while loading the questionnaire. Please try again.');
-                        });
+                                renderQuestion();
+                                new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
+
+
+                            })
+                            .catch(error => {
+                                console.error('An error occurred while loading questions:', error);
+                                alert('Something went wrong while loading the questionnaire. Please try again.');
+                            });
+                    } else {
+                        $(this).addClass("hover");
+
+                        setTimeout(() => {
+                            $(this).removeClass("hover");
+                        }, 30000);
+                    }
+
+
 
                 });
             });
 
-    
+            document.getElementById('questionnaireModal')
+            .addEventListener('hidden.bs.modal', function () {
+                resetQuestionnaireState();
+            });
+
+            function resetQuestionnaireState() 
+            {
+                questions = [];
+                currentStep = 0;
+                responses = {};
+                ruleResponses = {};
+                selectedQuestionnaireId = null;
+                QuestionnaireEngine.state.selectedCountries=[];
+                QuestionnaireEngine.state.selectedRegionGroup=null;
+                QuestionnaireEngine.state.skipSubRegion=false;
+
+                localStorage.removeItem('userResponses');
+
+                document.getElementById('question-container').innerHTML = '';
+                document.getElementById('backBtn').style.display = 'none';
+
+                const nextBtn = document.getElementById('nextBtn');
+                nextBtn.textContent = 'Next';
+            }
+
+
+            function forLog(min, max) {
+                let sliderValue = max - min;
+                let bars;
+                if (sliderValue < 5001) {
+                    bars = sliderValue / 1000;
+                } else if (sliderValue > 49999) {
+                    bars = sliderValue / 10000;
+                } else {
+                    bars = sliderValue / 5000;
+                }
+                let step = sliderValue / bars;
+                console.log("number of bars:-", bars);
+                console.log("bars breakpoints:-", step);
+
+                let barValues = []
+                for (let i = 0; i <= bars; i++) {
+                    barValues.push(min + (step * i));
+                }
+
+                console.log("bar values:-", barValues);
+
+
+                return {barCount: bars + 1, barValues: barValues};
+            }
+
+            function renderBars(container, barsInfo) {
+                container.innerHTML = ""; 
+
+                for (let i = 0; i < barsInfo.barCount; i++) {
+
+                    const barDiv = document.createElement("div");
+                    barDiv.className = "barDiv";
+
+                    const singleBar = document.createElement("div");
+                    singleBar.className = "single-bar";
+
+                    const priceText = document.createElement("p");
+                    priceText.className = "barValuesPrice";
+                    priceText.textContent = `₹${barsInfo.barValues[i]}`;
+
+                    barDiv.appendChild(priceText);
+                    barDiv.appendChild(singleBar);
+
+                    container.appendChild(barDiv);
+                }
+            }
+
             function renderQuestion() 
             {
                 const container = document.getElementById('question-container');
+                const backBtn = document.getElementById('backBtn');
 
                 // First screen: render 3 questions together
                 if (currentStep === 0) {
@@ -1135,11 +1343,11 @@
 
                     container.innerHTML = combinedHtml;
                     setupEventsForBatch([0, 1, 2]);
-                    document.getElementById('backBtn').disabled = true;
+
+                    backBtn.style.display = 'none';
                     return;
                 }
 
-                // For questions beyond the first 3
                 if (currentStep >= questions.length) return;
 
                 const q = questions[currentStep];
@@ -1153,52 +1361,75 @@
                 `;
 
                 setupEventsForBatch([currentStep]);
-                document.getElementById('backBtn').disabled = currentStep === 3;
+                backBtn.style.display = 'inline-block';
             }
 
             function renderQuestionHTML(q, qIndex) 
             {
+                q = QuestionnaireEngine.process(q);
+                
                 if (q.type === 'slider') {
-                    const min = q.min_value ?? 0;
-                    const max = q.max_value ?? 10000;
-                    const step = q.step ?? 100;
-                    const defaultValue = q.default ?? min;
+                    const bands = q.bands ?? [
+                        { min: 0, max: 5000, label: "₹ 0 – ₹ 5,000" },
+                        { min: 5000, max: 25000, label: "₹ 5,000 – ₹ 25,000" },
+                        { min: 25000, max: 50000, label: "₹ 25,000 – ₹ 50,000" },
+                        { min: 50000, max: 100000, label: "₹ 50,000 – ₹ 1,00,000" }
+                    ];
 
-                    let tickMarks = '';
-                    for (let i = min; i <= max; i += step) {
-                        tickMarks += `<option value="${i}"></option>`;
-                    }
+                    const defaultValue = bands[0].min;
+
+                    let optionsHtml = '';
+                    bands.forEach(b => {
+                        optionsHtml += `<option value="${b.max}" data-min="${b.min}" data-max="${b.max}">${b.label}</option>`;
+                    });
 
                     return `
+                        <select class="form-select mb-3" id="budgetDropdown${qIndex}">
+                            ${optionsHtml}
+                        </select>
+
+                        <div class="sliderInputWrapper">
+
                         <input 
                             type="range" 
-                            class="form-range" 
-                            id="budgetSlider${qIndex}" 
-                            min="${min}" 
-                            max="${max}" 
-                            step="${step}" 
-                            value="${defaultValue}" 
-                            list="tickmarks${qIndex}"
+                            class="form-range"
+                            id="budgetSlider${qIndex}"
+                            min="${bands[0].min}"
+                            max="${bands[0].max}"
+                            step="100"
+                            value="${defaultValue}"
                         >
-                        <datalist id="tickmarks${qIndex}">${tickMarks}</datalist>
-                        <div class="d-flex justify-content-between text-muted mt-2">
-                            <small>₹${min}</small>
-                            <small>Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span></small>
-                            <small>₹${max}</small>
+
+                        </div>
+
+                        <div class="mt-2 fw-bold" style="color:white">
+                            Selected: ₹<span id="sliderValue${qIndex}" style="color:white">${defaultValue}</span>
                         </div>
                     `;
                 }
+
 
                 if (q.type === 'input') {
                     return `<input type="text" class="form-control" id="textInputAnswer${qIndex}" placeholder="Enter your answer">`;
                 }
 
-                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) {
+
+                if ((q.type === 'single' || q.type === 'multiple') && Array.isArray(q.options)) 
+                {
+                    let options = q.options;
+                    console.log ("on line 989", options);
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
+                    const columns = questionLayouts[q.key] || 0;
+                    let bootstrapCol = "col-md-6";
 
-                    q.options.forEach((opt, idx) => {
+                    if (columns === 2) {
+                        bootstrapCol = "col-6";
+                    }
+                    
+
+                    options.forEach((opt, idx) => {
                         const basePath = '/questionnaire';
                         const emoji = emojiMap[opt]
                             ? `<div class="emoji-icon mb-1">
@@ -1208,13 +1439,12 @@
                                         data-color="${basePath}/${emojiMap[opt]}-colo.svg"
                                         alt="${opt}"
                                         class="emoji-img switchable-img"
-                                        onclick="selectOption(this)"
                                     />
                             </div>`
                             : '';
 
                         rowHtml += `
-                            <div class="col-md-6 mb-3">
+                            <div class="${bootstrapCol} mb-3">
                                 <input class="d-none" type="${inputType}" name="answer${qIndex}" id="option${qIndex}_${idx}" value="${opt}">
                                 <label 
                                     for="option${qIndex}_${idx}" 
@@ -1229,7 +1459,7 @@
                             </div>
                         `;
 
-                        if ((idx + 1) % 2 === 0 || idx === q.options.length - 1) {
+                        if ((idx + 1) % 2 === 0 || idx === options.length - 1) {
                             optionsHtml += `<div class="row">${rowHtml}</div>`;
                             rowHtml = '';
                         }
@@ -1248,87 +1478,246 @@
 
                     if (q.type === 'slider') {
                         const slider = document.getElementById(`budgetSlider${index}`);
+                        const dropdown = document.getElementById(`budgetDropdown${index}`);
                         const output = document.getElementById(`sliderValue${index}`);
-                        if (slider && output) {
-                            slider.addEventListener('input', (e) => {
-                                output.textContent = e.target.value;
-                            });
-                        }
+                        const barsDiv = slider.closest(".sliderInputWrapper").querySelector(".barsDiv");
+
+                        // ⭐ INITIAL RENDER
+                        const firstOption = dropdown.options[dropdown.selectedIndex];
+                        const initMin = Number(firstOption.dataset.min);
+                        const initMax = Number(firstOption.dataset.max);
+
+                        const initBars = forLog(initMin, initMax);
+                        renderBars(barsDiv, initBars);
+
+                        // SLIDER INPUT
+                        slider.addEventListener('input', () => {
+                            output.textContent = slider.value;
+                        });
+
+                        // DROPDOWN CHANGE
+                        dropdown.addEventListener('change', () => {
+                            const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+                            const min = Number(selectedOption.dataset.min);
+                            const max = Number(selectedOption.dataset.max);
+
+                            slider.min = min;
+                            slider.max = max;
+                            slider.value = min;
+
+                            output.textContent = min;
+
+                            const barsInfo = forLog(min, max);
+                            renderBars(barsDiv, barsInfo);
+                        });
                     }
 
                     if (q.type === 'single' || q.type === 'multiple') {
-                        const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
-                        inputs.forEach(input => {
-                            input.addEventListener('change', () => {
-                                if (q.type === 'single') {
+
+                    const inputs = document.querySelectorAll(`input[name="answer${index}"]`);
+
+                    inputs.forEach(input => {
+
+                        input.addEventListener('change', () => {
+
+                            /* ===============================
+                            ⭐ SURPRISE ME LOGIC (MULTIPLE)
+                            =============================== */
+
+                            if (q.type === 'multiple') {
+
+                                if (input.value === "SurpriseMe" && input.checked) {
+
+                                    // If SurpriseMe selected → uncheck all others
                                     inputs.forEach(i => {
-                                        const label = document.querySelector(`label[for="${i.id}"]`);
-                                        if (label) label.classList.remove('active');
+                                        if (i !== input) {
+                                            i.checked = false;
+
+                                            const lbl = document.querySelector(`label[for="${i.id}"]`);
+                                            if (lbl) lbl.classList.remove('active');
+                                        }
+                                    });
+
+                                } else if (input.value !== "SurpriseMe" && input.checked) {
+
+                                    // If any other selected → uncheck SurpriseMe
+                                    inputs.forEach(i => {
+                                        if (i.value === "SurpriseMe") {
+                                            i.checked = false;
+
+                                            const lbl = document.querySelector(`label[for="${i.id}"]`);
+                                            if (lbl) lbl.classList.remove('active');
+                                        }
                                     });
                                 }
+                            }
 
-                                const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
-                                if (selectedLabel) {
-                                    if (q.type === 'multiple') {
-                                        selectedLabel.classList.toggle('active', input.checked);
-                                    } else {
-                                        selectedLabel.classList.add('active');
-                                    }
+                            /* ===============================
+                            SINGLE SELECTION ACTIVE RESET
+                            =============================== */
+
+                            if (q.type === 'single') {
+                                inputs.forEach(i => {
+                                    const label = document.querySelector(`label[for="${i.id}"]`);
+                                    if (label) label.classList.remove('active');
+                                });
+                            }
+
+                            /* ===============================
+                            APPLY ACTIVE CLASS
+                            =============================== */
+
+                            const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
+                            if (selectedLabel) {
+                                if (q.type === 'multiple') {
+                                    selectedLabel.classList.toggle('active', input.checked);
+                                } else {
+                                    selectedLabel.classList.add('active');
                                 }
-                            });
+                            }
+
+                            /* ===============================
+                            COUNTRY LOGIC
+                            =============================== */
+
+                            if (q.question.toLowerCase().includes("preferred wine country")) {
+
+                                QuestionnaireEngine.state.selectedCountries = Array.from(
+                                    document.querySelectorAll(`input[name="answer${index}"]:checked`)
+                                ).map(i => i.value);
+
+                                QuestionnaireEngine.state.skipSubRegion = QuestionnaireEngine.state.selectedCountries.includes("No Preference");
+
+                                // renderQuestion();
+                            }
+
+                            /* ===============================
+                            REGION GROUP LOGIC
+                            =============================== */
+
+                            if (q.question.toLowerCase().includes("wine region group")) {
+
+                                const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                                QuestionnaireEngine.state.selectedRegionGroup = selected ? selected.value : null;
+
+                                // renderQuestion();
+                            }
+
                         });
+                    });
                     }
+
                 });
             }
 
-            function captureResponse() 
+
+            function captureResponse()
             {
                 const isBatch = currentStep === 0;
                 const indexes = isBatch ? [0, 1, 2] : [currentStep];
 
                 indexes.forEach(index => {
+
                     const q = questions[index];
-                    if (!q.id) {
-                        q.id = `question${index + 1}`;
-                    }
+
+                    let answer = 'no response';
 
                     if (q.type === 'slider') {
+
                         const slider = document.getElementById(`budgetSlider${index}`);
-                        responses[q.id] = slider ? slider.value : 'no response';
-                    } 
-                    else if (q.type === 'single') {
-                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
-                        responses[q.id] = selected ? selected.value : 'no response';
-                    } 
-                    else if (q.type === 'multiple') {
-                        const selected = document.querySelectorAll(`input[name="answer${index}"]:checked`);
-                        responses[q.id] = selected.length ? Array.from(selected).map(el => el.value) : 'no response';
-                    } 
-                    else if (q.type === 'input') {
-                        const input = document.getElementById(`textInputAnswer${index}`);
-                        responses[q.id] = input ? input.value.trim() || 'no response' : 'no response';
+                        answer = slider ? slider.value : 'no response';
+
                     }
+                    else if (q.type === 'single') {
+
+                        const selected = document.querySelector(`input[name="answer${index}"]:checked`);
+                        answer = selected ? selected.value : 'no response';
+
+                    }
+                    else if (q.type === 'multiple') {
+
+                        const selected = document.querySelectorAll(`input[name="answer${index}"]:checked`);
+                        answer = selected.length
+                            ? Array.from(selected).map(el => el.value)
+                            : 'no response';
+
+                    }
+                    else if (q.type === 'input') {
+
+                        const input = document.getElementById(`textInputAnswer${index}`);
+                        answer = input ? (input.value.trim() || 'no response') : 'no response';
+
+                    }
+
+                    // ===== OLD FORMAT (DO NOT CHANGE) =====
+                    responses[`question${index + 1}`] = answer;
+
+                    // ===== NEW RULE ENGINE FORMAT =====
+                    if (q.key) {
+                        console.log("Saving:", q.key, answer);
+                        ruleResponses[q.key] = answer;
+                    }
+
                 });
 
                 localStorage.setItem('userResponses', JSON.stringify(responses));
             }
-
+            
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
-                captureResponse(); // Save current step response(s)
+                captureResponse();
+                // Refresh rule state from latest answers
+                QuestionnaireEngine.state.selectedCountries =
+                    ruleResponses.preferred_country || [];
+
+                QuestionnaireEngine.state.selectedRegionGroup =
+                    ruleResponses.wine_region_group || null;
+
+                // find index of "country selection" question
+                const countryIndex = questions.findIndex(q =>
+                    q.question.toLowerCase().includes("country selection")
+                );
 
                 // Jump directly to step 3 after batch questions
-                if (currentStep === 0) {
+                if (currentStep === 0) 
+                {
                     currentStep = 3;
                 } else {
-                    currentStep++;
+                    // ⭐ SKIP country question if "No Preference" selected
+                    if (
+                            QuestionnaireEngine.state.skipSubRegion &&
+                            currentStep + 1 === countryIndex
+                        ) {
+                        currentStep = countryIndex + 1; // skip country question
+                    } else {
+                        // currentStep++;
+                        const subRegionIndex = questions.findIndex(q =>
+                                q.question.toLowerCase().includes("sub-region")
+                            );
+
+                            if (QuestionnaireEngine.state.skipSubRegion && currentStep + 1 === subRegionIndex) {
+                                currentStep = subRegionIndex + 2; // skip sub-region
+                            } else {
+                                currentStep++;
+                                while (
+                                    currentStep < questions.length &&
+                                    QuestionnaireEngine.shouldSkipQuestion(
+                                        questions[currentStep].key
+                                    )
+                                ) {
+                                    currentStep++;
+                                }
+                            }
+
+                    }
                 }
 
                 if (currentStep < questions.length) {
                     renderQuestion();
-                    nextBtn.textContent = (currentStep === questions.length - 1) ? 'Finish' : 'Next';
+                    nextBtn.textContent =
+                        (currentStep === questions.length - 1) ? 'Finish' : 'Next';
                 } else {
-                    nextBtn.textContent = 'Finish';
                     localStorage.setItem('userResponses', JSON.stringify(responses));
                     submitResponses();
 
@@ -1339,9 +1728,9 @@
                     }
                 }
             });
-            
+
             function submitResponses() {
-    
+                console.log("check api:- ",selectedQuestionnaireId, responses);
                 fetch('/submit-response', {
                     method: 'POST',
                     headers: {
@@ -1384,69 +1773,47 @@
 
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (currentStep > 0) {
-                    currentStep--;
+
+                    const countryIndex = questions.findIndex(q =>
+                        q.question.toLowerCase().includes("country selection")
+                    );
+
+                    if (QuestionnaireEngine.state.skipSubRegion === "No Preference" &&
+                        currentStep - 1 === countryIndex) {
+                        currentStep = countryIndex - 1;
+                    } else {
+                        currentStep--;
+                    }
+
                     renderQuestion();
                 }
             });
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var lottieAnimation;
-
-            // Array of Lottie animation paths (replace these with your actual paths)
-            var animationPaths = [
-                '{{ asset('Lottie/Lottie2.json') }}',
-                '{{ asset('Lottie/Lottie3.json') }}',
-                '{{ asset('Lottie/Lottie5.json') }}',
-              
-            ];
-
-            // Function to get a random animation path
-            function getRandomAnimationPath() {
-                var randomIndex = Math.floor(Math.random() * animationPaths.length); // Get a random index
-                return animationPaths[randomIndex]; // Return the random animation path
+        window.addEventListener("scroll", function () {
+            const navbar = document.getElementById("mainNavbar");
+            if (window.scrollY > 50) 
+            {
+                navbar.classList.add("scrolled"); 
+            } else {
+                navbar.classList.remove("scrolled");
             }
-
-            // Set up the Lottie player on modal open
-            document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
-                button.addEventListener('click', function () {
-                    // Destroy previous animation if any
-                    if (lottieAnimation) {
-                        lottieAnimation.destroy();
-                    }
-
-                    // Get a random animation path
-                    var animationPath = getRandomAnimationPath();
-
-                    // Initialize Lottie animation inside the modal
-                    lottieAnimation = lottie.loadAnimation({
-                        container: document.getElementById('lottieAnimation'), // Container for the Lottie animation
-                        renderer: 'svg', // Use SVG renderer for better scalability
-                        loop: true, // Set to true if you want the animation to loop
-                        autoplay: true, // Set to true to autoplay the animation
-                        path: animationPath // Path to the Lottie animation JSON file
-                    });
-                });
-            });
-        });   
+        });
     </script>
 
-<script>
-  window.addEventListener("scroll", function () {
-    const navbar = document.getElementById("mainNavbar");
-    if (window.scrollY > 50) 
-    {
-        navbar.classList.add("scrolled"); 
-        
-    } else {
-        navbar.classList.remove("scrolled");
-        
-    }
-  });
-</script>
+    <script>
+        document.addEventListener("scroll", function () {
+            const scrolled = window.scrollY;
+            const parallax = document.querySelector(".parallax-bg");
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.4}px)`; // adjust 0.4 for speed
+            }
+        });
+    </script>
+    
 
-<script>
+    <script>
         function switchToColor(img) {
             img.src = img.dataset.color;
         }
@@ -1491,5 +1858,8 @@
             }
         }
     </script>
+    
+
+
    
 @endpush

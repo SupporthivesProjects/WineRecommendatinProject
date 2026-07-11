@@ -855,9 +855,9 @@ class UserController extends Controller
                         });
                         break;
         
-                    case 'question5': 
-                        $q->where(function($x) use ($value) {
-                            $x->where('nature', $value);
+                    case 'question5':
+                        $q->where(function($x) use ($values) {
+                            $x->whereIn('nature', $values);
                         });
                         break;
         
@@ -966,8 +966,10 @@ class UserController extends Controller
                         break;
         
                     case 'question10': 
-                        $q->where(function($x) use ($value) {
-                            $x->where('nature', 'like', "%$value%");
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('nature', 'like', "%{$v}%");
+                            }
                         });
                         break;
         
@@ -979,8 +981,10 @@ class UserController extends Controller
                         });
                         break;
                     case 'question12': 
-                        $q->where(function($x) use ($value) {
-                            $x->where('acidity', 'like', "%$value%");
+                        $q->where(function($x) use ($values) {
+                            foreach ($values as $v) {
+                                $x->orWhere('acidity', 'like', "%{$v}%");
+                            }
                         });
                         break;
                     case 'question13': 
@@ -1016,9 +1020,15 @@ class UserController extends Controller
             case '4':
                 switch ($key) 
                 {
-                    case 'question4': 
-                        $q->where(function($x) use ($value) {
-                            $x->orWhere('categories', 'like', "%$value%");
+                    case 'question4':
+                        $q->where(function ($x) use ($value) {
+                    
+                            $values = is_array($value) ? $value : [$value];
+                    
+                            foreach ($values as $answer) {
+                                $x->orWhere('categories', 'like', "%{$answer}%");
+                            }
+                    
                         });
                         break;
         
