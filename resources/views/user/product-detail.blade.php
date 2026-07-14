@@ -285,7 +285,7 @@
                                                 data-product-name="{{ $product->wine_name }}"
                                                 data-product-price="{{ $product->retail_price }}">
 
-                                                {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Buy Now' }}
+                                                {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
 
                                             </button>
                                         </div>
@@ -781,7 +781,7 @@
                                                     data-product-name="{{ $product->wine_name }}"
                                                     data-product-price="{{ $product->retail_price }}">
 
-                                                    {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Buy Now' }}
+                                                    {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
 
                                                 </button>
 
@@ -885,7 +885,7 @@
                     if (isInCart) {
                         this.classList.remove('btn-dark');
                         this.classList.add('btn-light');
-                        this.textContent = 'Buy Now';
+                        this.textContent = 'Add to Cart';
                         toastr.warning('Product removed from cart!', 'Removed', {
                             closeButton: true,
                             progressBar: true,
