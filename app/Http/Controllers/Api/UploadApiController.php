@@ -9,13 +9,14 @@ use App\Models\ProductMaster;
 use App\Models\ProductStock;
 use App\Services\T3ApiService;
 use App\Models\User;
+use App\Models\Store;
 
 
 class UploadApiController extends Controller
 {
     public function bulkUpload(Request $request)
     {
-    
+
         $apiKey = $request->header('X-API-KEY');
 
         if (!$apiKey) {
@@ -24,13 +25,10 @@ class UploadApiController extends Controller
                 'message' => 'API key missing'
             ], 401);
         }
+        
+        $store = Store::where('api_key', $apiKey)->first();
 
-        $user = User::where('api_key', $apiKey)
-            ->where('role', 'store_manager')
-            ->where('status', 'active')
-            ->first();
-
-        if (!$user) {
+        if (!$store) {
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid API key'
@@ -85,14 +83,19 @@ class UploadApiController extends Controller
 
         foreach ($data['uploads'] as $upload) {
 
-            if ($upload['store_manager_id'] != $user->id) {
+            $manager = User::where('id', $upload['store_manager_id'])
+                ->where('role', 'store_manager')
+                ->where('status', 'active')
+                ->where('store_id', $store->id)
+                ->first();
+        
+            if (!$manager) {
         
                 return response()->json([
                     'status' => false,
-                    'message' => 'Store Manager ID does not match API key.'
+                    'message' => 'Invalid Store Manager for this store.'
                 ], 403);
             }
-        
         }
     
         $rows = [];

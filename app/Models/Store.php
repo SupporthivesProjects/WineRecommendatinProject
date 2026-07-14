@@ -31,6 +31,7 @@ class Store extends Model
         'gst_vat',
         'status',
         'template_id',
+        'api_key',
     ];
 
     /**

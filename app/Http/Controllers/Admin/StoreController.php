@@ -13,6 +13,7 @@ use App\Models\Feature;
 use App\Models\StoreFeature;
 use App\Models\Template;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Admin\StoreAnalyticsController;
 use App\Http\Controllers\Admin\CustomerPreferenceAnalyticsController;
 use Maatwebsite\Excel\Facades\Excel;
@@ -911,6 +912,19 @@ class StoreController extends Controller
             'success' => true,
             'enabled' => $enabled,
         ]);
+    }
+
+    // Generate API Key
+    public function generateApiKey(Store $store)
+    {
+        $store->api_key = Str::random(64);
+
+        $store->save();
+
+        return back()->with(
+            'success',
+            'Store API Key generated successfully.'
+        );
     }
 
 

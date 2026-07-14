@@ -262,8 +262,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
 
     //API key routes
-    Route::post('/admin/users/{user}/generate-api-key',[UserController::class, 'generateApiKey'])->name('users.generateApiKey');
-
+    Route::post('/admin/stores/{store}/generate-api-key',[StoreController::class, 'generateApiKey'])->name('stores.generateApiKey');
+    
 
 
     //Donwload documentation route

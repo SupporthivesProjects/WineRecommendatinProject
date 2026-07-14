@@ -208,17 +208,7 @@ class UserController extends Controller
     }
 
 
-    public function generateApiKey(User $user)
-    {
-        $user->api_key = Str::random(64);
-
-        $user->save();
-
-        return back()->with(
-            'success',
-            'API Key generated successfully.'
-        );
-    }
+    
 
 
 }

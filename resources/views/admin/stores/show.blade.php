@@ -227,6 +227,16 @@
                         Invoice Data
                     </button>
 
+                    <button
+                        id="apikey-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#APIKey"
+                        type="button"
+                        role="tab">
+                        API Key
+                    </button>
+
 
                 </div>
             </div>
@@ -1433,7 +1443,33 @@
                 </div>
             </div>
        
-       
+            <!-- Generate API Key Tab -->
+            <div class="tab-pane fade" id="APIKey" role="tabpanel" aria-labelledby="apikey-tab">
+            <h5 class="mb-3 text-dark">
+                API Key
+            </h5>
+
+            <div class="input-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    readonly
+                    value="{{ $store->api_key ?? 'Not Generated' }}">
+
+                <form
+                    action="{{ route('admin.stores.generateApiKey', $store) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">
+                        {{ $store->api_key ? 'Regenerate API Key' : 'Generate API Key' }}
+                    </button>
+                </form>
+            </div>
+
+            <small class="text-muted mt-2 d-block">
+                This API key is used by all Store Managers belonging to this store.
+                Regenerating it will immediately invalidate the previous key.
+            </small>
+            </div>
 
 
 
