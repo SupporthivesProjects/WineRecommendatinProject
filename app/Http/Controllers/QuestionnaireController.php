@@ -482,10 +482,13 @@ class QuestionnaireController extends Controller
                         'default' => $q->default,
                     ];
                 });
+            
+            $validation = config('questionnaire_validation')[$id] ?? [];
 
             return response()->json([
                 'questions' => $questions,
                 'rules' => $this->ruleService->getRules($id),
+                'validation' => $validation,
             ]);
 
         } catch (\Exception $e) {
