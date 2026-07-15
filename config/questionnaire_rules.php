@@ -179,6 +179,12 @@ return [
         
             ]
         ],
+        [
+            'source' => 'grape_category',
+            'target' => 'grape_varietal',
+            'action' => 'skip_question',
+            'when' => 'Blends'
+        ],
 
     ],
 

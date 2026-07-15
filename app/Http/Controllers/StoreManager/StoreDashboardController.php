@@ -278,39 +278,72 @@ class StoreDashboardController extends Controller
             "invoice_no",
             "customer_name",
             "customer_mobile",
-        
+
             "product_name",
             "product_id",
-        
+
             "product_category",
             "product_sub_category",
-        
+
             "product_price",
-        
+
             "size",
             "packsize",
-        
+
             "qty",
             "stock",
-        
+
             "location",
-        
+
             "product_created_time",
             "product_modified_time",
-        
+
             "date"
         ];
 
-        $callback = function() use ($headers) {
+        $sampleData = [
+            "INV10001",
+            "John Doe",
+            "9876543210",
+
+            "Pepsi",
+            "PRD001",
+
+            "Wine",
+            "Red Wine",
+
+            "50.00",
+
+            "500",
+            "Bottle",
+
+            "5",
+            "100",
+
+            "Mumbai Store",
+
+            "15/06/2026, 04:27 PM",
+            "15/06/2026, 04:27 PM",
+
+            "2026-07-11"
+        ];
+
+        $callback = function () use ($headers, $sampleData) {
 
             $file = fopen('php://output', 'w');
-            fputcsv($file, $headers);
-            fclose($file);
 
+            // Header row
+            fputcsv($file, $headers);
+
+            // Sample row
+            fputcsv($file, $sampleData);
+
+            fclose($file);
         };
 
-        return response()->streamDownload($callback,$filename);
+        return response()->streamDownload($callback, $filename);
     }
+    
     // Upload CSV
     public function StoreManageruploadCSV(Request $request)
     {
