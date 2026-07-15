@@ -926,6 +926,7 @@
             let ruleResponses = {};  
             let questionnaireRules = {};
             let selectedQuestionnaireId = null;
+            let questionnaireValidation = {};
             const questionLayouts = {
                 country: 2,
                 sub_region:2,
@@ -1194,6 +1195,7 @@
             document.querySelectorAll('.open-questionnaire-modal').forEach(button => {
                 button.addEventListener('click', function () {
                     const questionnaireId = this.getAttribute('data-questionnaire-id');
+                    $(this).addClass("hover");
 
                     if ($(this).hasClass("hover")) {
                         fetch(`/get-questions/${questionnaireId}`)
@@ -1220,7 +1222,9 @@
                                 // Store and use the data
                                 questions = data.questions;
                                 questionnaireRules = data.rules || {};
+                                questionnaireValidation = data.validation || {};
                                 console.log("Loaded Rules:", questionnaireRules);
+                                console.log("Loaded Validation", questionnaireValidation)
                                 QuestionnaireEngine.rules = questionnaireRules;
                                 currentStep = 0;
                                 console.log("Questions :", questions);
@@ -1236,7 +1240,8 @@
                                 console.error('An error occurred while loading questions:', error);
                                 alert('Something went wrong while loading the questionnaire. Please try again.');
                             });
-                    } else {
+                    } 
+                    else {
                         $(this).addClass("hover");
 
                         setTimeout(() => {
@@ -1253,6 +1258,34 @@
             .addEventListener('hidden.bs.modal', function () {
                 resetQuestionnaireState();
             });
+
+
+            function validateCurrentQuestion() 
+            {
+                const question = questions[currentStep];
+                if (!question) {
+                    return true;
+                }
+                const validation = questionnaireValidation[question.key];
+
+                if (!validation) {
+                    return true;
+                }
+                const answer = ruleResponses[question.key];
+                const selected = Array.isArray(answer)
+                    ? answer
+                    : (answer ? [answer] : []);
+
+                if (validation.min_selection && selected.length < validation.min_selection) 
+                {
+                    //alert(validation.message);
+                    toastr.warning(validation.message, 'Selection Required');
+                    return false;
+                }
+                return true;
+            }
+
+
 
             function resetQuestionnaireState() 
             {
@@ -1390,6 +1423,10 @@
 
                         <div class="sliderInputWrapper">
 
+                        <div class="barsDiv">
+
+                        </div>
+
                         <input 
                             type="range" 
                             class="form-range"
@@ -1402,8 +1439,8 @@
 
                         </div>
 
-                        <div class="mt-2 fw-bold" style="color:white">
-                            Selected: ₹<span id="sliderValue${qIndex}" style="color:white">${defaultValue}</span>
+                        <div class="mt-2 fw-bold">
+                            Selected: ₹<span id="sliderValue${qIndex}">${defaultValue}</span>
                         </div>
                     `;
                 }
@@ -1667,6 +1704,12 @@
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
                 captureResponse();
+
+                if (!validateCurrentQuestion()) 
+                {
+                    return;
+                }
+
                 // Refresh rule state from latest answers
                 QuestionnaireEngine.state.selectedCountries =
                     ruleResponses.preferred_country || [];
