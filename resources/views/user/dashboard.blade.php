@@ -931,6 +931,7 @@
                 country: 2,
                 sub_region:2,
                 region:2,
+                taste:2,
             };
             const emojiMap = 
             {
