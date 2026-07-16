@@ -102,15 +102,18 @@
     .analytics-label {
         display: block;
         color: #6b7280;
-        font-size: 14px;
+        font-size: 14px; 
         margin-bottom: 6px;
     }
 
+   
     .analytics-value {
         margin: 0;
-        font-size: 32px;
+        font-size: clamp(18px, 2vw, 32px);
         font-weight: 700;
     }
+
+  
 
 </style>
 

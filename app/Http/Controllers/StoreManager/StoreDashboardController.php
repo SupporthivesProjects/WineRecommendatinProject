@@ -302,11 +302,11 @@ class StoreDashboardController extends Controller
         ];
 
         $sampleData = [
-            "INV10001",
+            "SampleInvoice",
             "John Doe",
-            "9876543210",
+            "9900000000",
 
-            "Pepsi",
+            "Red Label",
             "PRD001",
 
             "Wine",
@@ -320,7 +320,7 @@ class StoreDashboardController extends Controller
             "5",
             "100",
 
-            "Mumbai Store",
+            "Sample Store",
 
             "15/06/2026, 04:27 PM",
             "15/06/2026, 04:27 PM",
