@@ -27,7 +27,7 @@ class AdminMiddleware
             'is_ajax' => $request->ajax()
         ]);
 
-        if (Auth::check() && $user->role === 'admin') {
+        if (Auth::check() && $user->role === 'admin' || $user->role === 'sub_admin') {
             return $next($request);
         }
 

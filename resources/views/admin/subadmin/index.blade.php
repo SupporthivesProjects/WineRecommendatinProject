@@ -1,28 +1,40 @@
-@extends('layouts.bootdashboard')
-@section('admindashboardcontent')
 
+@extends('layouts.bootdashboard')
+
+@section('admindashboardcontent')
     @push('styles')
     <style>
         .dataTables_filter input[type="search"] {
-            width: 300px !important;
+            width: 300px !important; 
             margin-bottom: 20px;
+        }
+        .product-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .action-btns .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1.5;
         }
     </style>
     @endpush
 
-    <!-- Users Section -->
+    <!-- Templates Section -->
     <div class="main-content app-content">
         <div class="container-fluid">
             <!-- Start::page-header -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
                 <div>
-                    <h2 class="main-content-title fs-24 mb-1">Users</h2>
+                    <h2 class="main-content-title fs-24 mb-1">Welcome To Sub Admin's DashBoard</h2>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Users</li>
+                        <li class="breadcrumb-item active" aria-current="page">Sub Admin List</li>
                     </ol>
                 </div>
-                <div>
+                <div class="d-flex gap-2">
                     <button onclick="openAssignUserModal()" class="btn btn-danger">
                         <i class="bi bi-person-plus"></i> Add Admin
                     </button>
@@ -37,43 +49,58 @@
                         <div class="card-body">
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table id="file-export" class="table table-bordered" style="width:100%">
+                                <table id="templates" class="table table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Contact</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            <th class="text-center">Actions</th>
+                                            <th class="text-start">SR No.</th>
+                                            <th class="text-start">Name</th>
+                                            <th class="text-start">email</th>
+                                            <th class="text-start">contact</th>
+                                            <th class="text-start">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($users as $user)
+                                        @forelse ($subAdmins as $index => $admins)
                                             <tr>
-                                                <td>{{ $user->first_name }} {{ $user->last_name }}</td>
-                                                <td>{{ $user->mobile }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{ ucfirst($user->role) }}</td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('admin.users.show', $user) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                                <td class="align-middle">{{ $index + 1 }}</td>
+                                                <td class="align-middle">{{ $admins->first_name }}{{ $admins->last_name }}</td>
+                                                <td class="align-middle">{{ $admins->email }}</td>
+                                                <td class="align-middle">{{ $admins->mobile }}</td>
+                                                <td class="align-middle action-btns">
+                                                    <div class="d-flex">
+                                                        <a href="{{ route('admin.subadmin.features.edit', $admins->id) }}"
+                                                           class="btn btn-sm btn-primary me-1"
+                                                           data-bs-toggle="tooltip" 
+                                                           title="Edit">
+                                                            <i class="fe fe-edit"></i>
+                                                        </a>
+                                                        
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center">No users found</td>
+                                                <td colspan="6" class="text-center">No cheese products found</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- End Table -->
+                            
+                            {{-- @if($features->hasPages())
+                            <div class="mt-3">
+                                {{ $features->links() }}
+                            </div>
+                            @endif --}}
                         </div>
                     </div>
                 </div>
             </div>
             <!-- End::row -->
-
         </div>
     </div>
+    <!-- End::Cheese Products Section -->
 
      <!-- Add User Modal -->
      <div class="modal fade" id="addAdminModal" tabindex="-1" aria-labelledby="addAdminModalLabel" aria-hidden="true">
@@ -168,8 +195,6 @@
                 });
             </script>
         @endif
-
-
 @endsection
 
 @push('scripts')
@@ -201,4 +226,5 @@
                 eyeIcon.classList.toggle('bi-eye-slash');
             });
     </script>
+    
 @endpush

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\IsFeaturedController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\QuestionnaireController;
 use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\SubAdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController as UserDashboardController;
 use App\Http\Controllers\StoreManager\StoreDashboardController;
@@ -80,7 +81,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.subm
 
 Route::get('/dashboard', function () {
     // Add success message in the session
-    if (auth()->user()->role === 'admin') {
+    if (auth()->user()->role === 'admin' || auth()->user()->role === 'sub_admin') {
         return redirect()->route('admin.dashboard')->with('success', 'Login successful!');
     } elseif (auth()->user()->role === 'store_manager') {
         return redirect()->route('store-manager.dashboard')->with('success', 'Login successful!');
@@ -130,6 +131,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Stores management
     Route::resource('stores', StoreController::class);
+
+    //Create SubAdmin
+    Route::post('users/create-adming', [UserController::class, 'AdminCreate'])->name('users.admincreate');
+
+    //SubAdmin Routes
+    Route::get('/admin/subadmin', [SubAdminController::class, 'index'])->name('subadmin.home');
+    Route::get('/admin/subadmin/{id}/features',[SubAdminController::class, 'edit'])->name('subadmin.features.edit');
+    Route::post('/admin/subadmin/{id}/features',[SubAdminController::class, 'update'])->name('subadmin.features.update');
+
+
 
     Route::get('/users/loginhistory', [UserController::class, 'loginhistory'])->name('users.loginhistory');
 

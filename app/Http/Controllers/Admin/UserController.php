@@ -38,16 +38,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'first_name' => ['required', 'string', 'max:255'],
-        //     'last_name' => ['required', 'string', 'max:255'],
-        //     'email' => ['required', 'string', 'email', 'max:255'],
-        //     'password' => ['required', 'string', 'min:8'],
-        //     'mobile' => ['required', 'string', 'max:20'],
-        //     'role' => ['required', 'in:store_manager,customer,user,main_manager'],
-        //     'status' => ['required', 'in:active,inactive'],
-        //     'store_id' => ['nullable', 'exists:stores,id'],
-        // ]);
+    
         $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -98,6 +89,54 @@ class UserController extends Controller
 
         return redirect()->route('admin.dashboard', ['tab' => 'users'])
             ->with('success', 'User created successfully.');
+    }
+
+    public function AdminCreate(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8'],
+            'mobile' => ['required', 'string', 'max:20', 'unique:users,mobile'],
+            'role' => ['required', 'in:sub_admin'],
+            'status' => ['required', 'in:active,inactive'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Check for duplicate user by email AND mobile
+        $existingUser = User::where('email', $request->email)
+                            ->where('mobile', $request->mobile)
+                            ->first();
+       
+        if ($existingUser) {
+            return redirect()->back()
+                ->withErrors(['duplicate' => 'A user with this email and mobile already exists.'])
+                ->withInput();
+        }
+
+        // Store manager must have a store assigned
+        
+        // Create the user
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'mobile' => $request->mobile,
+            'role' => $request->role,
+            'status' => $request->status,
+            
+        ]);
+
+        return redirect()->route('admin.dashboard', ['tab' => 'users'])
+            ->with('success', 'Admin created successfully.');
     }
 
     /**

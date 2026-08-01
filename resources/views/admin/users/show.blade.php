@@ -75,9 +75,13 @@
                                 <form action="{{ route('admin.users.toggleStatus', $user) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-sm btn-{{ $user->status === 'active' ? 'danger' : 'success' }}">
-                                        {{ $user->status === 'active' ? 'Deactivate' : 'Activate' }}
-                                    </button>
+                                    @if ($user->role=="admin")
+
+                                    @else
+                                        <button type="submit" class="btn btn-sm btn-{{ $user->status === 'active' ? 'danger' : 'success' }}">
+                                            {{ $user->status === 'active' ? 'Deactivate' : 'Activate' }}
+                                        </button>
+                                    @endif
                                 </form>
                             </div>
                         </div>

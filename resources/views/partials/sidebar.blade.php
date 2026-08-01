@@ -19,11 +19,25 @@
     }
 </style>
 
-@if(Auth::check() && (
-    Auth::user()->role === 'admin' || 
-    Auth::user()->role === 'store_manager' || 
-    Auth::user()->role === 'main_manager'
-))
+
+    @if(Auth::check() && (
+        Auth::user()->role === 'admin' || 
+        Auth::user()->role === 'store_manager' || 
+        Auth::user()->role === 'main_manager' ||
+        Auth::user()->role === 'sub_admin'
+
+    ))
+    @php
+        $subAdminPermissions = [];
+
+        if (Auth::check() && Auth::user()->role === 'sub_admin') {
+
+            $subAdminPermissions = \App\Models\SubadminFeaturePermission::where('sub_admin_id', Auth::id())
+                ->join('subadmin_features', 'subadmin_features.id', '=', 'subadmin_feature_permissions.feature_id')
+                ->pluck('subadmin_features.feature_key')
+                ->toArray();
+        }
+    @endphp
     <!-- Start::app-sidebar -->
     <aside class="app-sidebar sticky" id="sidebar" style="transition: all 1s ease;">
         <!-- Start::main-sidebar-header -->
@@ -93,6 +107,13 @@
                             </a>
                         </li>
                         <li class="slide">
+                            <a href="{{ route('admin.subadmin.home') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-user" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Sub Admin</span>
+                            </a>
+                        </li>
+
+                        <li class="slide">
                             <a href="{{ route('admin.main_manager') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-users" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Store Parent</span>
@@ -152,13 +173,6 @@
                                 <span class="side-menu__label">API Documentation</span>
                             </a>
                         </li>
-                        
-
-
-
-
-
-   
                         {{--
                         <li class="slide">
                             <a href="{{ route('admin.settings.index') }}" class="side-menu__item">
@@ -166,6 +180,143 @@
                                 <span class="side-menu__label">Settings</span>
                             </a>
                         </li>--}}
+                    @elseif(Auth::user()->role === 'sub_admin')   
+                        <!--Sub Admin sidebar links -->
+                        @if(in_array('dashboard', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.dashboard') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-home" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Dashboard</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('wine_products', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.products.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-droplet" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Wine Products</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('cheese_products', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.cheese-products.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-box" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Cheese Products</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('testimonials', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.testimonials.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-message-square" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Testimonials</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('reviews', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.reviews.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-star" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Reviews</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('stores', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.stores.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-shopping-cart" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Stores</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('users', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.users.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-users" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Users</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('store_parent', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.main_manager') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-users" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Store Parent</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('questionnaires', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.questionnaires.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-edit" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Questionnaires</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('questionnaire_images', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.questionnaires.images') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-edit" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Questionnaire Images</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('invoices', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.invoice.uploads') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Invoices</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('templates', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.templates.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-file-text" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Templates</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('features', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.features.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-layers" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Features</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('user_login_history', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.users.loginhistory') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-clock" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">User Login History</span>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(in_array('api_documentation', $subAdminPermissions))
+                        <li class="slide">
+                            <a href="{{ route('admin.api.documentation') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-clock" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">API Documentation</span>
+                            </a>
+                        </li>
+                        @endif
+                        
                     @elseif(Auth::user()->role === 'store_manager')
                         <!-- Store Manager sidebar links -->
                         <li class="slide">
