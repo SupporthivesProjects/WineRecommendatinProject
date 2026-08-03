@@ -80,7 +80,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center">No cheese products found</td>
+                                                <td colspan="6" class="text-center">No Sub Admins found</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
