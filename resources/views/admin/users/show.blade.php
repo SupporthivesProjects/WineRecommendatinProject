@@ -94,31 +94,7 @@
             </div>
 
             <!-- API KEYS -->
-            <!-- @if($user->role == 'store_manager')
-                <hr class="my-4">
-                <div class="row">
-                    <div class="col-12">
-                        <h5 class="mb-3 text-dark">
-                            API Key
-                        </h5>
-                        <div class="input-group">
-                            <input type="text" class="form-control" readonly value="{{ optional($user->store)->api_key ?? 'Not Generated' }}">
-                            <form
-                                action="{{ route('admin.users.generateApiKey', $user) }}"
-                                method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">
-                                    {{ $user->api_key ? 'Regenerate API Key' : 'Generate API Key' }}
-                                </button>
-                            </form> 
-                        </div>
-                        <small class="text-muted mt-2 d-block">
-                            This API key is used by the Store Manager's POS system to authenticate API requests.
-                            Regenerating the key will immediately invalidate the previous key.
-                        </small>
-                    </div>
-                </div>
-            @endif -->
+            
 
             <!-- Action Buttons -->
             <div class="card-footer bg-white text-end">
