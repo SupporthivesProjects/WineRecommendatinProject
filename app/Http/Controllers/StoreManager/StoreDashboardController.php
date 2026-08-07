@@ -224,9 +224,9 @@ class StoreDashboardController extends Controller
     // }
     public function checkouts()
     {
-        $managerId = Auth::id();
-
-        $orders = CartCheckout::where('store_manager_id', $managerId)
+        // $managerId = Auth::id();
+        $storeId = Auth::user()->store_id;
+        $orders = CartCheckout::where('store_id', $storeId)
                     ->latest()
                     ->get()
                     ->map(function ($order) {

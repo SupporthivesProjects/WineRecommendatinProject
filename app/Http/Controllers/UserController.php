@@ -1150,13 +1150,19 @@ class UserController extends Controller
 
         $user = auth()->user();
 
-        $manager = User::where('store_id', $user->store_id)
-                        ->where('role', 'store_manager')
-                        ->first();
+        // $manager = User::where('store_id', $user->store_id)
+        //                 ->where('role', 'store_manager')
+        //                 ->first();
 
-        $managerId = $manager ? $manager->id : null;
+        // $managerId = $manager ? $manager->id : null;
 
-        Log::info('Manager ID: ' . $managerId);
+        // Log::info('Manager ID: ' . $managerId);
+
+
+
+
+
+
         Log::info('Checkout started for submission_id: ' . $submissionId);
         Log::info('Checkout started for user_id: ' . $userId);
 
@@ -1197,9 +1203,12 @@ class UserController extends Controller
         }
 
         // Save the checkout
+        // $checkout = new CartCheckout();
+        // $checkout->user_id = $userId;
+        // $checkout->store_manager_id = $managerId;
         $checkout = new CartCheckout();
         $checkout->user_id = $userId;
-        $checkout->store_manager_id = $managerId;
+        $checkout->store_id = $user->store_id;
         $checkout->username = $username;
         $checkout->email = $email;
         $checkout->phone = $phone;
@@ -1219,7 +1228,8 @@ class UserController extends Controller
                     'checkout_id'      => $checkout->id,
                     'product_id'       => $item['id'],
                     'user_id'          => $userId,
-                    'store_manager_id' => $managerId,
+                    'store_manager_id' => NULL,
+                    'store_id'          => $checkout->store_id,
                     'product_name'     => $item['name'],
                     'price'            => $item['retail_price'],
                     'quantity'         => $item['quantity'],
