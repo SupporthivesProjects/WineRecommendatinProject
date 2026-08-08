@@ -5,10 +5,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CheeseProduct;
 use App\Models\Feature;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Store extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

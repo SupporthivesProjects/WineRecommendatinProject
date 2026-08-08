@@ -75,12 +75,15 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white text-end">
-                    <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger me-2">Delete</button>
-                    </form>
+                    @if(auth()->user()->role === 'admin')
+                        <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger me-2">Delete</button>
+                        </form>
+                    @endif
                     <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-primary">Edit</a>
+
                 </div>
             </div>
         </div>

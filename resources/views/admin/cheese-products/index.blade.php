@@ -100,19 +100,21 @@
                                                            title="Edit">
                                                             <i class="fe fe-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('admin.cheese-products.destroy', $product->id) }}" 
-                                                              method="POST" 
-                                                              class="d-inline"
-                                                              onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" 
-                                                                    class="btn btn-sm btn-danger"
-                                                                    data-bs-toggle="tooltip" 
-                                                                    title="Delete">
-                                                                <i class="fe fe-trash-2"></i>
-                                                            </button>
-                                                        </form>
+                                                        @if(auth()->user()->role === 'admin')
+                                                            <form action="{{ route('admin.cheese-products.destroy', $product->id) }}" 
+                                                                method="POST" 
+                                                                class="d-inline"
+                                                                onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" 
+                                                                        class="btn btn-sm btn-danger"
+                                                                        data-bs-toggle="tooltip" 
+                                                                        title="Delete">
+                                                                    <i class="fe fe-trash-2"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
