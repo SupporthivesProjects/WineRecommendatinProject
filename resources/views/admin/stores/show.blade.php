@@ -1405,7 +1405,7 @@
              <div class="tab-pane fade" id="InvoicesData" role="tabpanel" aria-labelledby="invoicesData-tab">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="mb-3">API Uploaded Data</h5>
+                        <h5 class="mb-3">Invoice Uploaded Data</h5>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped" id="invoiceData">
                                 <thead>
@@ -1769,7 +1769,8 @@
          <script>
               $(document).ready(function () {
                 $('#invoiceData').DataTable({
-                    pageLength: 25
+                    pageLength: 25,
+                    ordering: false
                 });
             });
            

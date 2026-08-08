@@ -702,9 +702,13 @@ class StoreController extends Controller
                     ->latest()
                     ->get();
 
+                // $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+                //     ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
+                //     ->latest()
+                //     ->get();
                 $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
                     ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
-                    ->latest()
+                    ->orderBy('created_at', 'desc')
                     ->get();
 
             } catch (\Throwable $e) {
