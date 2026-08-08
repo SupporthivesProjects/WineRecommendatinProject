@@ -199,10 +199,310 @@ class StoreController extends Controller
     }
 
 
+    // public function show(Store $store)
+    // {
+
+    //     $range = request('range', 'all');
+    //     $store->load('users', 'manager');
+
+    //     $activeProducts = $store->products()
+    //         ->wherePivot('status', 'active')
+    //         ->get();
+
+    //     $storeProducts = $store->products()->get();
+
+    //     $cheeseProducts = $store->cheeseProducts()
+    //         ->withPivot(['quantity', 'is_available'])
+    //         ->get();
+
+    //     $assignedCheeseIds = $cheeseProducts->pluck('id');
+
+    //     $availableCheeses = CheeseProduct::whereNotIn('id', $assignedCheeseIds)
+    //         ->orderBy('name')
+    //         ->get();
+
+    //     $assignedProductIds = $storeProducts->pluck('id');
+
+    //     $availableProducts = Product::whereNotIn('id', $assignedProductIds)
+    //         ->orderBy('wine_name')
+    //         ->get();
+
+    //     $features = $store->features()->orderBy('name')->get();
+    //     $storeManager = $store->users
+    //     ->where('role', 'store_manager')
+    //     ->first();
+        
+
+    //     if (!$storeManager) {
+
+    //         \Log::warning('Store has no manager', [
+    //             'store_id' => $store->id,
+    //         ]);
+        
+    //         return view(
+    //             'admin.stores.show',
+    //             compact(
+    //                 'store',
+    //                 'activeProducts',
+    //                 'storeProducts',
+    //                 'availableProducts',
+    //                 'cheeseProducts',
+    //                 'availableCheeses',
+    //                 'features'
+    //             )
+    //         );
+    //     }
+        
+        
+    //     $analyticsSummary = null;
+    //     $topSellingWines = collect();
+    //     $revenueTrend = collect();
+    //     $wineTypeDistribution = collect();
+    //     $countryDistribution = collect();
+    //     $slowMovingWines = collect();
+    //     $lowStockWines = collect();
+    //     $highStockLowMovement = collect();
+    //     $priceBandAnalytics = collect();
+    //     $apiUploads = collect();
+
+    //     if ($storeManager) 
+    //     {
+    //     try
+    //     {
+
+    //         $analyticsSummary = StoreAnalyticsController::getStoreSummary(
+    //             $storeManager->id,
+    //             $range
+    //         );
+        
+    //         $topSellingWines = StoreAnalyticsController::getTopSellingWines(
+    //             $storeManager->id,
+    //             $range
+    //         );
+
+    //         \Log::info($topSellingWines->toArray());
+
+    //         $revenueTrend = StoreAnalyticsController::getRevenueTrend(
+    //             $storeManager->id,
+    //             $range
+    //         );
+
+    //         $wineTypeDistribution =
+    //         StoreAnalyticsController::getWineTypeDistribution(
+    //             $storeManager->id,
+    //             $range
+    //         );
+
+    //         $countryDistribution =
+    //         StoreAnalyticsController::getCountryDistribution(
+    //             $storeManager->id,
+    //             $range
+    //         );
+
+    //         $slowMovingWines =
+    //         StoreAnalyticsController::getSlowMovingWines(
+    //             $storeManager->id,
+    //             $range
+    //         );
+
+    //         $lowStockWines =
+    //             StoreAnalyticsController::getLowStockWines(
+    //                 $storeManager->id
+    //             );
+
+    //         $highStockLowMovement =
+    //             StoreAnalyticsController::getHighStockLowMovement(
+    //                 $storeManager->id,
+    //                 $range
+    //             );
+
+    //         $priceBandAnalytics =
+    //             StoreAnalyticsController::getPriceBandAnalytics(
+    //                 $storeManager->id,
+    //                 $range
+    //             );
+
+    //         $domesticImportedSplit =
+    //             StoreAnalyticsController::getDomesticImportedSplit(
+    //                 $storeManager->id,
+    //                 $range
+    //             );
+            
+    //         $averageBottleValueTrend =
+    //             StoreAnalyticsController::getAverageBottleValueTrend(
+    //                 $storeManager->id,
+    //                 $range
+    //             );
+            
+    //         $reorderAttentionList =
+    //             StoreAnalyticsController::getReorderAttentionList(
+    //                 $storeManager->id,
+    //                 $range
+    //             );
+            
+    //         $promotionList =
+    //             StoreAnalyticsController::getPromotionList(
+    //                 $storeManager->id,
+    //                 $range
+    //             );
+            
+    //         $questionnaireStats =
+    //             CustomerPreferenceAnalyticsController::getQuestionnaireStats(
+    //                 $store->id,
+    //                 $range
+    //             );
+
+    //         $questionnaireUsage =
+    //             CustomerPreferenceAnalyticsController::getQuestionnaireUsage(
+    //                 $store->id,
+    //                 $range
+    //             );
+
+
+    //         $wineTypePreferences =
+    //             CustomerPreferenceAnalyticsController::getWineTypePreferences(
+    //                 $store->id,
+    //                 $range
+    //             );
+            
+    //             $countryPreferences =
+    //             CustomerPreferenceAnalyticsController::getCountryPreferences(
+    //                 $store->id,
+    //                 $range
+    //             );
+            
+    //         $budgetDistribution =
+    //             CustomerPreferenceAnalyticsController::getBudgetDistribution(
+    //                 $store->id,
+    //                 $range
+    //             );
+            
+    //         $occasionPreferences =
+    //             CustomerPreferenceAnalyticsController::getOccasionPreferences(
+    //                 $store->id,
+    //                 $range
+    //             );
+            
+    //         $tastePreferences =
+    //             CustomerPreferenceAnalyticsController::getTastePreferences(
+    //                 $store->id,
+    //                 $range
+    //             );
+            
+    //         $topVarieties =
+    //             CustomerPreferenceAnalyticsController::getTopVarieties(
+    //                 $store->id,
+    //                 $range
+    //             );
+
+
+    //         $budgetStats =
+    //             CustomerPreferenceAnalyticsController::getBudgetStats(
+    //                 $store->id,
+    //                 $range
+    //             );
+
+
+    //         $occasionBudgetPreferences =
+    //             CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences(
+    //                 $store->id,
+    //                 $range
+    //             );
+
+    //         $apiUploads = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+    //             ->where('type', 'API')
+    //             ->latest()
+    //             ->get();
+            
+    //         $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+    //             ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
+    //             ->latest()
+    //             ->get();
+
+
+    //         }
+    //         catch (\Throwable $e) {
+
+    //             \Log::error($e);
+            
+    //             $analyticsSummary = null;
+    //             $topSellingWines = collect();
+    //             $revenueTrend = collect();
+    //             $wineTypeDistribution = collect();
+    //             $countryDistribution = collect();
+    //             $slowMovingWines = collect();
+    //             $lowStockWines = collect();
+    //             $highStockLowMovement = collect();
+    //             $priceBandAnalytics = collect();
+    //             $domesticImportedSplit = collect();
+    //             $averageBottleValueTrend = collect();
+    //             $reorderAttentionList = collect();
+    //             $promotionList = collect();
+            
+    //             $questionnaireStats = [];
+    //             $questionnaireUsage = collect();
+    //             $wineTypePreferences = collect();
+    //             $countryPreferences = collect();
+    //             $budgetDistribution = collect();
+    //             $occasionPreferences = collect();
+    //             $tastePreferences = collect();
+    //             $topVarieties = collect();
+    //             $budgetStats = [];
+    //             $occasionBudgetPreferences = collect();
+            
+    //             $apiUploads = collect();
+    //             $invoiceData = collect();
+    //         }
+            
+    //     }
+                
+
+
+        
+
+    //     return view(
+    //         'admin.stores.show',
+    //         compact(
+    //             'store',
+    //             'activeProducts',
+    //             'storeProducts',
+    //             'availableProducts',
+    //             'cheeseProducts',
+    //             'availableCheeses',
+    //             'features',
+    //             'analyticsSummary',
+    //             'topSellingWines',
+    //             'revenueTrend',
+    //             'wineTypeDistribution',
+    //             'countryDistribution',
+    //             'slowMovingWines',
+    //             'lowStockWines',
+    //             'highStockLowMovement',
+    //             'priceBandAnalytics',
+    //             'averageBottleValueTrend',
+    //             'domesticImportedSplit',
+    //             'reorderAttentionList',
+    //             'promotionList',
+    //             'questionnaireStats',
+    //             'questionnaireUsage',
+    //             'wineTypePreferences',
+    //             'countryPreferences',
+    //             'budgetDistribution',
+    //             'occasionPreferences',
+    //             'tastePreferences',
+    //             'topVarieties',
+    //             'budgetStats',
+    //             'occasionBudgetPreferences',
+    //             'apiUploads',
+    //             'invoiceData',
+            
+    //         )
+    //     );
+    // }
     public function show(Store $store)
     {
-
         $range = request('range', 'all');
+
         $store->load('users', 'manager');
 
         $activeProducts = $store->products()
@@ -228,32 +528,17 @@ class StoreController extends Controller
             ->get();
 
         $features = $store->features()->orderBy('name')->get();
+
         $storeManager = $store->users
-        ->where('role', 'store_manager')
-        ->first();
-        
+            ->where('role', 'store_manager')
+            ->first();
 
-        if (!$storeManager) {
+        /*
+        |--------------------------------------------------------------------------
+        | Default Analytics Values
+        |--------------------------------------------------------------------------
+        */
 
-            \Log::warning('Store has no manager', [
-                'store_id' => $store->id,
-            ]);
-        
-            return view(
-                'admin.stores.show',
-                compact(
-                    'store',
-                    'activeProducts',
-                    'storeProducts',
-                    'availableProducts',
-                    'cheeseProducts',
-                    'availableCheeses',
-                    'features'
-                )
-            );
-        }
-        
-        
         $analyticsSummary = null;
         $topSellingWines = collect();
         $revenueTrend = collect();
@@ -263,202 +548,176 @@ class StoreController extends Controller
         $lowStockWines = collect();
         $highStockLowMovement = collect();
         $priceBandAnalytics = collect();
+        $domesticImportedSplit = collect();
+        $averageBottleValueTrend = collect();
+        $reorderAttentionList = collect();
+        $promotionList = collect();
+
+        $questionnaireStats = [];
+        $questionnaireUsage = collect();
+        $wineTypePreferences = collect();
+        $countryPreferences = collect();
+        $budgetDistribution = collect();
+        $occasionPreferences = collect();
+        $tastePreferences = collect();
+        $topVarieties = collect();
+        $budgetStats = [];
+        $occasionBudgetPreferences = collect();
+
         $apiUploads = collect();
+        $invoiceData = collect();
 
-        if ($storeManager) 
-        {
-        try
-        {
+        /*
+        |--------------------------------------------------------------------------
+        | Load Analytics Only If Store Has Manager
+        |--------------------------------------------------------------------------
+        */
 
-            $analyticsSummary = StoreAnalyticsController::getStoreSummary(
-                $storeManager->id,
-                $range
-            );
-        
-            $topSellingWines = StoreAnalyticsController::getTopSellingWines(
-                $storeManager->id,
-                $range
-            );
+        if (!$storeManager) {
 
-            \Log::info($topSellingWines->toArray());
+            \Log::warning('Store has no manager', [
+                'store_id' => $store->id,
+            ]);
 
-            $revenueTrend = StoreAnalyticsController::getRevenueTrend(
-                $storeManager->id,
-                $range
-            );
+        } else {
 
-            $wineTypeDistribution =
-            StoreAnalyticsController::getWineTypeDistribution(
-                $storeManager->id,
-                $range
-            );
+            try {
 
-            $countryDistribution =
-            StoreAnalyticsController::getCountryDistribution(
-                $storeManager->id,
-                $range
-            );
+                $analyticsSummary = StoreAnalyticsController::getStoreSummary(
+                    $storeManager->id,
+                    $range
+                );
 
-            $slowMovingWines =
-            StoreAnalyticsController::getSlowMovingWines(
-                $storeManager->id,
-                $range
-            );
+                $topSellingWines = StoreAnalyticsController::getTopSellingWines(
+                    $storeManager->id,
+                    $range
+                );
 
-            $lowStockWines =
-                StoreAnalyticsController::getLowStockWines(
+                $revenueTrend = StoreAnalyticsController::getRevenueTrend(
+                    $storeManager->id,
+                    $range
+                );
+
+                $wineTypeDistribution = StoreAnalyticsController::getWineTypeDistribution(
+                    $storeManager->id,
+                    $range
+                );
+
+                $countryDistribution = StoreAnalyticsController::getCountryDistribution(
+                    $storeManager->id,
+                    $range
+                );
+
+                $slowMovingWines = StoreAnalyticsController::getSlowMovingWines(
+                    $storeManager->id,
+                    $range
+                );
+
+                $lowStockWines = StoreAnalyticsController::getLowStockWines(
                     $storeManager->id
                 );
 
-            $highStockLowMovement =
-                StoreAnalyticsController::getHighStockLowMovement(
+                $highStockLowMovement = StoreAnalyticsController::getHighStockLowMovement(
                     $storeManager->id,
                     $range
                 );
 
-            $priceBandAnalytics =
-                StoreAnalyticsController::getPriceBandAnalytics(
+                $priceBandAnalytics = StoreAnalyticsController::getPriceBandAnalytics(
                     $storeManager->id,
                     $range
                 );
 
-            $domesticImportedSplit =
-                StoreAnalyticsController::getDomesticImportedSplit(
+                $domesticImportedSplit = StoreAnalyticsController::getDomesticImportedSplit(
                     $storeManager->id,
                     $range
                 );
-            
-            $averageBottleValueTrend =
-                StoreAnalyticsController::getAverageBottleValueTrend(
+
+                $averageBottleValueTrend = StoreAnalyticsController::getAverageBottleValueTrend(
                     $storeManager->id,
                     $range
                 );
-            
-            $reorderAttentionList =
-                StoreAnalyticsController::getReorderAttentionList(
+
+                $reorderAttentionList = StoreAnalyticsController::getReorderAttentionList(
                     $storeManager->id,
                     $range
                 );
-            
-            $promotionList =
-                StoreAnalyticsController::getPromotionList(
+
+                $promotionList = StoreAnalyticsController::getPromotionList(
                     $storeManager->id,
                     $range
                 );
-            
-            $questionnaireStats =
-                CustomerPreferenceAnalyticsController::getQuestionnaireStats(
+
+                $questionnaireStats = CustomerPreferenceAnalyticsController::getQuestionnaireStats(
                     $store->id,
                     $range
                 );
 
-            $questionnaireUsage =
-                CustomerPreferenceAnalyticsController::getQuestionnaireUsage(
+                $questionnaireUsage = CustomerPreferenceAnalyticsController::getQuestionnaireUsage(
                     $store->id,
                     $range
                 );
 
-
-            $wineTypePreferences =
-                CustomerPreferenceAnalyticsController::getWineTypePreferences(
-                    $store->id,
-                    $range
-                );
-            
-                $countryPreferences =
-                CustomerPreferenceAnalyticsController::getCountryPreferences(
-                    $store->id,
-                    $range
-                );
-            
-            $budgetDistribution =
-                CustomerPreferenceAnalyticsController::getBudgetDistribution(
-                    $store->id,
-                    $range
-                );
-            
-            $occasionPreferences =
-                CustomerPreferenceAnalyticsController::getOccasionPreferences(
-                    $store->id,
-                    $range
-                );
-            
-            $tastePreferences =
-                CustomerPreferenceAnalyticsController::getTastePreferences(
-                    $store->id,
-                    $range
-                );
-            
-            $topVarieties =
-                CustomerPreferenceAnalyticsController::getTopVarieties(
+                $wineTypePreferences = CustomerPreferenceAnalyticsController::getWineTypePreferences(
                     $store->id,
                     $range
                 );
 
-
-            $budgetStats =
-                CustomerPreferenceAnalyticsController::getBudgetStats(
+                $countryPreferences = CustomerPreferenceAnalyticsController::getCountryPreferences(
                     $store->id,
                     $range
                 );
 
-
-            $occasionBudgetPreferences =
-                CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences(
+                $budgetDistribution = CustomerPreferenceAnalyticsController::getBudgetDistribution(
                     $store->id,
                     $range
                 );
 
-            $apiUploads = StoreManagerUpload::where('store_manager_id', $storeManager->id)
-                ->where('type', 'API')
-                ->latest()
-                ->get();
-            
-            $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
-                ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
-                ->latest()
-                ->get();
+                $occasionPreferences = CustomerPreferenceAnalyticsController::getOccasionPreferences(
+                    $store->id,
+                    $range
+                );
 
+                $tastePreferences = CustomerPreferenceAnalyticsController::getTastePreferences(
+                    $store->id,
+                    $range
+                );
 
+                $topVarieties = CustomerPreferenceAnalyticsController::getTopVarieties(
+                    $store->id,
+                    $range
+                );
+
+                $budgetStats = CustomerPreferenceAnalyticsController::getBudgetStats(
+                    $store->id,
+                    $range
+                );
+
+                $occasionBudgetPreferences = CustomerPreferenceAnalyticsController::getOccasionBudgetPreferences(
+                    $store->id,
+                    $range
+                );
+
+                $apiUploads = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+                    ->where('type', 'API')
+                    ->latest()
+                    ->get();
+
+                $invoiceData = StoreManagerUpload::where('store_manager_id', $storeManager->id)
+                    ->whereIn(DB::raw('LOWER(type)'), ['csv', 'manual'])
+                    ->latest()
+                    ->get();
+
+            } catch (\Throwable $e) {
+
+                \Log::error('Store analytics failed', [
+                    'store_id' => $store->id,
+                    'manager_id' => $storeManager->id,
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]);
             }
-            catch (\Throwable $e) {
-
-                \Log::error($e);
-            
-                $analyticsSummary = null;
-                $topSellingWines = collect();
-                $revenueTrend = collect();
-                $wineTypeDistribution = collect();
-                $countryDistribution = collect();
-                $slowMovingWines = collect();
-                $lowStockWines = collect();
-                $highStockLowMovement = collect();
-                $priceBandAnalytics = collect();
-                $domesticImportedSplit = collect();
-                $averageBottleValueTrend = collect();
-                $reorderAttentionList = collect();
-                $promotionList = collect();
-            
-                $questionnaireStats = [];
-                $questionnaireUsage = collect();
-                $wineTypePreferences = collect();
-                $countryPreferences = collect();
-                $budgetDistribution = collect();
-                $occasionPreferences = collect();
-                $tastePreferences = collect();
-                $topVarieties = collect();
-                $budgetStats = [];
-                $occasionBudgetPreferences = collect();
-            
-                $apiUploads = collect();
-                $invoiceData = collect();
-            }
-            
         }
-                
-
-
-        
 
         return view(
             'admin.stores.show',
@@ -494,8 +753,7 @@ class StoreController extends Controller
                 'budgetStats',
                 'occasionBudgetPreferences',
                 'apiUploads',
-                'invoiceData',
-            
+                'invoiceData'
             )
         );
     }

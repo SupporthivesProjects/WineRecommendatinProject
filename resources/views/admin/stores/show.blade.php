@@ -1175,7 +1175,7 @@
                                     Questionnaires Completed
                                 </h6>
                                 <h2 class="fw-bold text-primary">
-                                    {{ number_format($questionnaireStats['completed']) }}
+                                    {{ number_format(data_get($questionnaireStats, 'completed', 0)) }}
                                 </h2>
                             </div>
                         </div>
@@ -1185,7 +1185,7 @@
                                     Most Popular Template
                                 </h6>
                                 <h2 class="fw-bold text-success">
-                                    {{ $questionnaireStats['popular_template'] }}
+                                    {{ $questionnaireStats['popular_template'] ?? 'None' }}
                                 </h2>
                             </div>
                         </div>
@@ -1195,7 +1195,7 @@
                                     Average Preferred Budget
                                 </h6>
                                 <h2 class="fw-bold text-info">
-                                    ₹{{ number_format($budgetStats['average_budget']) }}
+                                    ₹{{ number_format($budgetStats['average_budget'] ?? 0) }}
                                 </h2>
                             </div>
                         </div>
@@ -1211,7 +1211,7 @@
                                     </i>
                                 </h6>
                                 <h2 class="fw-bold text-warning">
-                                    {{ $budgetStats['premium_percent'] }}%
+                                    {{ $budgetStats['premium_percent'] ?? 0 }}%
                                 </h2>
                             </div>
                         </div>
