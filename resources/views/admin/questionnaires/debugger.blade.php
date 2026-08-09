@@ -31,10 +31,14 @@
     <div class="main-content app-content">
         <div class="container-fluid">
             <div class="card shadow">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">
                         Questionnaire Debugger
                     </h3>
+                    <button class="btn btn-danger" id="clearLog">
+                        <i class="fas fa-trash me-2"></i>
+                            Clear Log
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -136,7 +140,7 @@
 
                             <div class="card shadow-sm">
 
-                                <div class="card-header">
+                                <div class="card-header d-flex justify-content-between align-items-center">
 
                                     <h5 class="mb-0">
                                         Matching Products
@@ -251,5 +255,51 @@
 
         });
 
+    </script>
+    <script>
+       $('#clearLog').click(function () {
+        Swal.fire({
+            title: 'Clear Log File?',
+            text: 'This will permanently remove all log entries.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, Clear It',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                return;
+            }
+            $.ajax({
+                url: "{{ route('admin.questionnaire.clearLog') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Log file cleared successfully.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Unable to clear the log file.'
+                    });
+                }
+
+            });
+
+        });
+
+        });
     </script>
     @endpush

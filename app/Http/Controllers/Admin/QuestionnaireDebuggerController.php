@@ -210,4 +210,18 @@ class QuestionnaireDebuggerController extends Controller
             ]);
         }
     }
+    public function clearLog()
+    {
+        $logFile = storage_path('logs/laravel.log');
+
+        if (file_exists($logFile)) {
+
+            file_put_contents($logFile, '');
+
+        }
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
 }

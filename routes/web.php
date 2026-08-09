@@ -285,7 +285,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //Questionnaire Debugging
     Route::get('/questionnaire-debugger',[QuestionnaireDebuggerController::class, 'index'])->name('questionnaire.debugger');
     Route::post('/admin/questionnaire/execute-query',[QuestionnaireDebuggerController::class,'executeQuery'])->name('questionnaire.executeQuery');
-
+    Route::post('/admin/questionnaire/clear-log',[QuestionnaireDebuggerController::class, 'clearLog'])->name('questionnaire.clearLog');
 
 
 });
