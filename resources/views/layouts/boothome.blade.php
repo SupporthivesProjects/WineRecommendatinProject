@@ -745,7 +745,13 @@
                         </div>
                     @else
                         <div class="text-center py-12">
-                            <p class="text-gray-500">No featured wines available at the moment. Check back soon!</p>
+                            <p class="text-gray-500">No featured wines available at the moment. Browse Wines!</p>
+                        </div>
+                        <div class="text-center mt-12">
+                            <a href="{{ route('homeBrowseWines') }}"
+                                class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-md text-lg font-medium transition">
+                                View All Wines
+                            </a>
                         </div>
                     @endif
                 </div>
