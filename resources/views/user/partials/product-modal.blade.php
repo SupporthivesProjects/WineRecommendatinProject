@@ -62,7 +62,7 @@
                 $extraIcons = [
                     'sp_mentions' => '<i class="fas fa-comment-alt text-muted"></i>',
                     'vintage_year' => '<i class="fas fa-calendar-alt text-secondary"></i>',
-                    'alcohol_vol' => '<i class="fas fa-percentage text-danger"></i>',
+                    'alcohol_vol' => '<i class="fas fa-flask text-danger"></i>',
                     'nature' => '<i class="fas fa-leaf text-success"></i>',
                     'body' => '<i class="fas fa-balance-scale text-info"></i>',
                     'time_spent_aging' => '<i class="fas fa-hourglass-half text-warning"></i>',
@@ -184,7 +184,7 @@
                             </tr>
                             <tr>
                                 <th>Alcohol Volume</th>
-                                <td>{!! $extraIcons['alcohol_vol'] ?? $defaultIcon !!} {{ $product->alcohol_vol }}%</td>
+                                <td>{!! $extraIcons['alcohol_vol'] ?? $defaultIcon !!} {{ $product->alcohol_vol }}</td>
                             </tr>
                             <tr>
                                 <th>Nature</th>
