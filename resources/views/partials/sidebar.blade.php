@@ -173,6 +173,12 @@
                                 <span class="side-menu__label">API Documentation</span>
                             </a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.questionnaire.debugger') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Questionnaire Debug</span>
+                            </a>
+                        </li>
                         {{--
                         <li class="slide">
                             <a href="{{ route('admin.settings.index') }}" class="side-menu__item">

@@ -29,6 +29,7 @@ use App\Http\Controllers\StoreProfileController;
 use App\Http\Controllers\Api\UploadApiController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\StoreAnalyticsController;
+use App\Http\Controllers\Admin\QuestionnaireDebuggerController;
 
 use Illuminate\Support\Facades\Log;
 
@@ -279,6 +280,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     //Donwload documentation route
     Route::get('/admin/api/documentation',[UploadApiController::class, 'downloadApiDocumentation'])->name('api.documentation');
+
+
+    //Questionnaire Debugging
+    Route::get('/questionnaire-debugger',[QuestionnaireDebuggerController::class, 'index'])->name('questionnaire.debugger');
+    Route::post('/admin/questionnaire/execute-query',[QuestionnaireDebuggerController::class,'executeQuery'])->name('questionnaire.executeQuery');
+
 
 
 });
