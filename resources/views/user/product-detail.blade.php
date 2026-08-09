@@ -352,7 +352,7 @@
                                         ];
 
                                         $type = strtolower($product->type ?? 'n/a');
-                                        $method = strtolower($product->method ?? 'n/a');
+                                        $method = strtolower($product->Method ?? 'n/a');
                                     @endphp
 
                                     <table class="table mb-0 border table-bordered text-nowrap align-middle">
@@ -363,7 +363,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope="row">Method</th>
-                                                <td>{!! $methodIcons[$method] ?? $defaultIcon !!} {{ ucfirst($product->method) ?? 'N/A' }}</td>
+                                                <td>{!! $methodIcons[$method] ?? $defaultIcon !!} {{ ucfirst($product->Method) ?? 'N/A' }}</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">SP Mentions</th>
