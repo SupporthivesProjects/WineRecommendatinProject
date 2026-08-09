@@ -310,12 +310,25 @@ class UserController extends Controller
         }
 
         // Fetch 3 related products based on matching type or country, excluding the current product
+        // $relatedProducts = Product::with('images')
+        //     ->where('id', '!=', $product->id)
+        //     ->where(function ($query) use ($product) {
+        //         $query->where('type', $product->type)
+        //             ->orWhere('country', $product->country);
+        //     })
+        //     ->inRandomOrder()
+        //     ->limit(3)
+        //     ->get();
+        $price = $product->retail_price;
+
         $relatedProducts = Product::with('images')
             ->where('id', '!=', $product->id)
-            ->where(function ($query) use ($product) {
-                $query->where('type', $product->type)
-                    ->orWhere('country', $product->country);
-            })
+            ->whereBetween('retail_price', [
+                max(0, $price - 1500),
+                $price + 1500
+            ])
+            ->where('grape_variety', $product->grape_variety)
+            ->where('type', $product->type)
             ->inRandomOrder()
             ->limit(3)
             ->get();
