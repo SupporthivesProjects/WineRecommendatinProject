@@ -83,6 +83,12 @@
                             </a>
                         </li>
                         <li class="slide">
+                            <a href="{{ route('admin.products.bulk-qr') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-grid" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Bulk QR</span>
+                            </a>
+                        </li>
+                        <li class="slide">
                             <a href="{{ route('admin.testimonials.index') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-message-square" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Testimonials</span>

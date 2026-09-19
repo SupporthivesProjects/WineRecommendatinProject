@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\PngWriter;
+
 
 class ProductController extends Controller
 {
@@ -838,6 +842,81 @@ class ProductController extends Controller
 
         }
     }
+
+    public function generateQr(Product $product)
+    {
+        $url = url('/products/' . $product->id);
+
+        return view('admin.products.qr', [
+            'product' => $product,
+            'url' => $url,
+        ]);
+    }
+
+    public function bulkQr()
+    {
+        $products = Product::orderBy('wine_name', 'asc')->get();
+
+        return view('admin.products.bulk-qr', [
+            'products' => $products,
+        ]);
+    }
+
+    // public function generateBulkQrPdf(Request $request)
+    // {
+    //     $request->validate([
+    //         'product_ids' => 'required|array|min:1',
+    //         'product_ids.*' => 'integer|exists:products,id',
+    //     ]);
+
+    //     $products = Product::whereIn('id', $request->product_ids)
+    //         ->orderBy('wine_name', 'asc')
+    //         ->get();
+
+    //     $pdf = Pdf::loadView('admin.products.bulk-qr-pdf', [
+    //         'products' => $products,
+    //     ]);
+
+    //     return $pdf->stream('bulk-product-qr-codes.pdf');
+    // }
+
+    public function generateBulkQrPdf(Request $request)
+    {
+        $request->validate([
+            'product_ids' => 'required|array|min:1',
+            'product_ids.*' => 'integer|exists:products,id',
+        ]);
+
+        $products = Product::whereIn('id', $request->product_ids)
+            ->orderBy('wine_name', 'asc')
+            ->get();
+
+        $qrCodes = [];
+
+        foreach ($products as $product) {
+
+            $url = url('/products/' . $product->id);
+
+            $result = Builder::create()
+                ->writer(new PngWriter())
+                ->data($url)
+                ->size(180)
+                ->margin(10)
+                ->build();
+
+            $qrCodes[$product->id] = base64_encode(
+                $result->getString()
+            );
+        }
+
+        $pdf = Pdf::loadView('admin.products.bulk-qr-pdf', [
+            'products' => $products,
+            'qrCodes' => $qrCodes,
+        ]);
+
+        return $pdf->stream('bulk-product-qr-codes.pdf');
+    }
+
 
 
 }

@@ -280,6 +280,7 @@ class UserController extends Controller
 
     public function productDetails($id)
     {
+        dd("I am here");
         // Fetch the current product with images and reviews
         $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
 

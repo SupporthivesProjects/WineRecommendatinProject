@@ -85,6 +85,9 @@
                                                         <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-info">
                                                             <i class="fe fe-edit"></i>
                                                         </a>
+                                                        <a href="{{ route('admin.products.qr', $product) }}" class="btn btn-sm btn-danger">
+                                                            <i class="fe fe-grid"></i>
+                                                        </a>
                                                     </div>
                                                 </td>
                                             </tr>
