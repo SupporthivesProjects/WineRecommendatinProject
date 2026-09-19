@@ -219,9 +219,45 @@ class ProductController extends Controller
             ]);
         });
 
-        // Create product
-        $product = Product::create($productData);
-        Log::debug('Product created successfully', ['product_id' => $product->id]);
+        // Create product and assign the next permanent TWID
+        $product = \DB::transaction(function () use ($productData) {
+
+            // Lock the sequence row to prevent duplicate TWIDs
+            $sequence = \DB::table('twid_sequences')
+                ->where('id', 1)
+                ->lockForUpdate()
+                ->first();
+
+            $nextNumber = $sequence->last_number + 1;
+
+            $twid = 'TW' . str_pad(
+                $nextNumber,
+                6,
+                '0',
+                STR_PAD_LEFT
+            );
+
+            // Add automatically generated TWID
+            $productData['twid'] = $twid;
+
+            // Create product
+            $product = Product::create($productData);
+
+            // Update permanent counter
+            \DB::table('twid_sequences')
+                ->where('id', 1)
+                ->update([
+                    'last_number' => $nextNumber,
+                    'updated_at' => now(),
+                ]);
+
+            return $product;
+        });
+
+        Log::debug('Product created successfully', [
+            'product_id' => $product->id,
+            'twid' => $product->twid,
+        ]);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully.');
@@ -460,7 +496,8 @@ class ProductController extends Controller
     }
 
     // Prepare product data without the image
-    $productData = $request->except(['product_image_replace']);
+    // $productData = $request->except(['product_image_replace']);
+    $productData = $request->except(['product_image_replace', 'twid']);
 
     // Convert cheese_pairing array to string if exists
     if ($request->has('cheese_pairing') && is_array($request->cheese_pairing)) {

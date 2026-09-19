@@ -17,6 +17,7 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'twid',
         'wine_name',
         'type',
         'sp_mentions',
