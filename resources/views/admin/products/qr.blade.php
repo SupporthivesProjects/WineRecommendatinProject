@@ -65,21 +65,10 @@
                         {{ $product->wine_name }}
                     </h3>
 
-                    <p class="text-muted">
-                        Product ID: {{ $product->id }}
-                    </p>
-
                     <div class="my-4">
                         {!! QrCode::size(300)->generate($url) !!}
                     </div>
 
-                    <p class="mb-1">
-                        <strong>QR URL:</strong>
-                    </p>
-
-                    <p class="text-muted">
-                        {{ $url }}
-                    </p>
 
                 </div>
 

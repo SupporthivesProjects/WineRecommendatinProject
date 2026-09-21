@@ -7,7 +7,8 @@
 
     <style>
         @page {
-            margin: 20px;
+            size: A4;
+            margin: 18px;
         }
 
         body {
@@ -21,28 +22,39 @@
         }
 
         .qr-item {
-            width: 48%;
+            width: 20%;
             display: inline-block;
             vertical-align: top;
             text-align: center;
-            margin-bottom: 30px;
-            padding: 15px;
             box-sizing: border-box;
-            border: 1px solid #ddd;
+            height: 125px;
+            padding: 5px 3px;
         }
 
         .qr-item h3 {
-            font-size: 16px;
-            margin: 0 0 8px;
-        }
-
-        .qr-item p {
-            font-size: 11px;
-            margin: 5px 0;
+            font-size: 8px;
+            line-height: 10px;
+            height: 20px;
+            margin: 0 0 4px 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         .qr-code {
-            margin: 10px 0;
+            width: 72pt;
+            height: 72pt;
+            margin: 0 auto;
+        }
+
+        .qr-code img {
+            width: 72pt;
+            height: 72pt;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .qr-item p {
+            display: none;
         }
     </style>
 </head>
@@ -71,8 +83,8 @@
                 <img
                     src="data:image/png;base64,{{ $qrCodes[$product->id] }}"
                     alt="QR Code"
-                    width="180"
-                    height="180"
+                    width="72"
+                    height="72"
                 >
             </div>
 

@@ -911,5 +911,10 @@
         });
     });
 </script>
+<script>
+    setTimeout(function () {
+        window.location.href = "{{ route('user.showQuestionnaire') }}";
+    }, 180000);
+</script>
 
 @endpush
