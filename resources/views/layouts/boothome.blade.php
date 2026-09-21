@@ -1070,7 +1070,43 @@
         </div>
 
 
+        <!-- QR Code Modal -->
+         <!-- QR Product Modal -->
+        <div class="modal fade" id="qrProductModal" tabindex="-1" aria-labelledby="qrProductModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
 
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="qrProductModalLabel">
+                            Product Details
+                        </h5>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <div class="modal-body p-0" id="qrProductModalBody">
+
+                        <div class="text-center py-5">
+                            <div
+                                class="spinner-border"
+                                role="status"
+                            >
+                                <span class="visually-hidden">
+                                    Loading...
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <!-- Start:: Section-11 -->
         @include('layouts.footer')
@@ -1463,6 +1499,73 @@
 
         $(document).on('click', 'button, a, .btn, input, select, textarea, label, td, th, .nav-link, .dropdown-item, .form-check-input, .form-select, .card, .list-group-item, .badge, .close, .alert, [data-bs-toggle], [role="button"], [tabindex]', function () {
             playTak();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product');
+
+            if (!productId) {
+                return;
+            }
+
+            const modalElement = document.getElementById('qrProductModal');
+            const modalBody = document.getElementById('qrProductModalBody');
+
+            if (!modalElement || !modalBody) {
+                return;
+            }
+
+            // Show loading state
+            modalBody.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 mb-0">Loading product details...</p>
+                </div>
+            `;
+
+            // Fetch product modal HTML
+            fetch(`/qr-product-modal/${productId}`)
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error('Unable to load product details.');
+                    }
+
+                    return response.text();
+                })
+                .then(html => {
+
+                    modalBody.innerHTML = html;
+
+                    const qrModal = new bootstrap.Modal(modalElement);
+
+                    qrModal.show();
+
+                })
+                .catch(error => {
+
+                    console.error('QR Product Modal Error:', error);
+
+                    modalBody.innerHTML = `
+                        <div class="text-center py-5 px-3">
+                            <h5>Unable to load product details.</h5>
+                            <p class="text-muted mb-0">
+                                Please try again later.
+                            </p>
+                        </div>
+                    `;
+
+                    const qrModal = new bootstrap.Modal(modalElement);
+
+                    qrModal.show();
+
+                });
+
         });
     </script>
 

@@ -447,6 +447,73 @@ class UserController extends Controller
         );
     }
 
+    public function qrProductModal($id)
+{
+    $product = Product::with(['images', 'reviews.user'])
+        ->findOrFail($id);
+
+    $reviews = $product->reviews()
+        ->with('user')
+        ->where('status', 'approved')
+        ->latest()
+        ->paginate(5, ['*'], 'reviews_page');
+
+    $averageRating = $product->reviews()
+        ->where('status', 'approved')
+        ->avg('rating');
+
+    $totalReviews = $product->reviews()
+        ->where('status', 'approved')
+        ->count();
+
+    $ratingDistribution = [];
+
+    for ($i = 5; $i >= 1; $i--) {
+        $ratingDistribution[$i] = $product->reviews()
+            ->where('status', 'approved')
+            ->where('rating', $i)
+            ->count();
+    }
+
+    $relatedProducts = Product::with('images')
+        ->where('id', '!=', $product->id)
+        ->where(function ($query) use ($product) {
+            $query->where('type', $product->type)
+                ->orWhere('country', $product->country);
+        })
+        ->inRandomOrder()
+        ->limit(3)
+        ->get();
+
+    if ($relatedProducts->count() < 3) {
+        $excludeIds = $relatedProducts->pluck('id')
+            ->push($product->id)
+            ->toArray();
+
+        $additionalProducts = Product::with('images')
+            ->whereNotIn('id', $excludeIds)
+            ->inRandomOrder()
+            ->limit(3 - $relatedProducts->count())
+            ->get();
+
+        $relatedProducts = $relatedProducts->merge(
+            $additionalProducts
+        );
+    }
+
+    return view(
+        'user.partials.qr-product-modal',
+        compact(
+            'product',
+            'relatedProducts',
+            'reviews',
+            'averageRating',
+            'totalReviews',
+            'ratingDistribution'
+        )
+    );
+}
+    
 
 
 
