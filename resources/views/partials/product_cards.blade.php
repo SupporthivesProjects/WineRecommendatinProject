@@ -20,7 +20,7 @@
              data-type="{{ strtolower($product->type) }}"
              data-vintage-year="{{ $product->vintage_year }}" 
              data-winery="{{ $product->winery }}"
-             data-retail-price="{{ $product->getDisplayPrice() }}"
+             data-retail-price="{{ $product->retail_price }}"
              data-country="{{ $product->country }}"
              data-featured="{{ $product->admin_featured_product ? 'true' : 'false' }}">
             <!-- <div class="card custom-card wine-card">

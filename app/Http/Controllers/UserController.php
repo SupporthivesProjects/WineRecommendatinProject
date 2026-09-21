@@ -326,21 +326,7 @@ class UserController extends Controller
         //     ->limit(3)
         //     ->get();
         
-        // $price = $product->retail_price;
-        // $relatedProducts = Product::with('images')
-        //     ->where('id', '!=', $product->id)
-        //     ->whereBetween('retail_price', [
-        //         max(0, $price - 1500),
-        //         $price + 1500
-        //     ])
-        //     ->where('grape_variety', $product->grape_variety)
-        //     ->where('type', $product->type)
-        //     ->inRandomOrder()
-        //     ->limit(3)
-        //     ->get();
-
-        $price = $product->getDisplayPrice();
-
+        $price = $product->retail_price;
         $relatedProducts = Product::with('images')
             ->where('id', '!=', $product->id)
             ->whereBetween('retail_price', [
