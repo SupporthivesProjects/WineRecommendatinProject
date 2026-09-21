@@ -76,8 +76,8 @@ Route::get('/services', function () {
 })->name('services');
 
 //open qr code route- open for all no login required
-Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])
-    ->name('qr.product.redirect');
+Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])->name('qr.product.redirect');
+Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 
 
 

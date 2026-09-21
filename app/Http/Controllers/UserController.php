@@ -280,6 +280,11 @@ class UserController extends Controller
 
     public function productDetails($id)
     {
+        if (!auth()->check()) {
+            return redirect()->route('home', [
+                'product' => $id
+            ]);
+        }
         
         // Fetch the current product with images and reviews
         $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
