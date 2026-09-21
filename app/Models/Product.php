@@ -44,6 +44,8 @@ class Product extends Model
         'sweetness_level',
         'glass_ware',
         'retail_price',
+        'retail_price_maharashtra',
+        'retail_price_kolkata',
         'discounts',
         'optimal_drinking',
         'style',
@@ -121,6 +123,32 @@ class Product extends Model
             Template::class,
             'template_products'
         )->withTimestamps();
+    }
+
+    public function getDisplayPrice()
+    {
+        $store = auth()->check() ? auth()->user()->store : null;
+
+        if ($store) 
+        {
+            $state = strtolower(trim($store->state));
+
+            if (
+                $state === 'maharashtra' &&
+                $this->retail_price_maharashtra !== null
+            ) {
+                return $this->retail_price_maharashtra;
+            }
+
+            if (
+                $state === 'west bengal' &&
+                $this->retail_price_kolkata !== null
+            ) {
+                return $this->retail_price_kolkata;
+            }
+        }
+
+        return $this->retail_price;
     }
 
 

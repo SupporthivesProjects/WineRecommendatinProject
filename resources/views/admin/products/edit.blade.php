@@ -774,6 +774,17 @@
                                     </div>
 
                                     <div class="col-md-6">
+                                        <label for="retail_price_maharashtra" class="form-label">Retail Price - Maharashtra (₹)&nbsp;</label>
+                                        <input type="number" step="0.01" class="form-control" name="retail_price_maharashtra" id="retail_price_maharashtra"
+                                        value="{{ old('retail_price_maharashtra', $product->retail_price_maharashtra) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="retail_price_kolkatta" class="form-label">Retail Price - Kolkata (₹)&nbsp;</label>
+                                        <input type="number" step="0.01" class="form-control" name="retail_price_kolkata" id="retail_price_kolkata"
+                                        value="{{ old('retail_price_kolkata', $product->retail_price_kolkata) }}">
+                                    </div>
+                                    <div class="col-md-6">
                                         <label for="discounts" class="form-label">Discounts</label>
                                         <input type="text" class="form-control" name="discounts" id="discounts"
                                             value="{{ old('discounts', $product->discounts) }}">

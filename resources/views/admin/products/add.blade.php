@@ -204,6 +204,14 @@
                                         <input type="number" class="form-control" name="retail_price" id="retail_price" step="0.01" placeholder="Enter Retail Price(number)">
                                     </div>
                                     <div class="col-md-6">
+                                        <label for="retail_price_maharashtra" class="form-label">Retail Price - Maharashtra</label>
+                                        <input type="number" class="form-control" name="retail_price_maharashtra" id="retail_price_maharashtra" step="0.01" placeholder="Enter Maharashtra Retail Price(number)">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="retail_price_kolkatta" class="form-label">Retail Price - Kolkata</label>
+                                        <input type="number" class="form-control" name="retail_price_kolkata" id="retail_price_kolkata" step="0.01" placeholder="Enter Kolkatta Retail Price(number)">
+                                    </div>
+                                    <div class="col-md-6">
                                         <label for="discounts" class="form-label">Discounts</label>
                                         <input type="text" class="form-control" name="discounts" id="discounts" placeholder="Enter Discount(number)">
                                     </div>
