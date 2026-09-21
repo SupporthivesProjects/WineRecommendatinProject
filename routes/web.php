@@ -75,6 +75,12 @@ Route::get('/services', function () {
     return view('services');
 })->name('services');
 
+//open qr code route- open for all no login required
+Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])
+    ->name('qr.product.redirect');
+
+
+
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');

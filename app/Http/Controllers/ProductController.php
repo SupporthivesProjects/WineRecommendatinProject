@@ -340,4 +340,15 @@ class ProductController extends Controller
             return back()->with('error', 'An error occurred while filtering products.');
         }
     }
+
+    public function qrProductRedirect($id)
+    {
+        Product::findOrFail($id);
+
+        return redirect()->route('home', [
+            'product' => $id
+        ]);
+    }
+
+
 }
