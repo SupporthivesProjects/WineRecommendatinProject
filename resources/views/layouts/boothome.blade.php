@@ -1568,6 +1568,89 @@
 
         });
     </script>
+    <script>
+    document.addEventListener('click', function (event) {
+
+        const button = event.target.closest('.related-product-btn');
+
+        if (!button) {
+            return;
+        }
+
+        const productId = button.dataset.productId;
+
+        if (!productId) {
+            return;
+        }
+
+        const modalBody = document.getElementById('qrProductModalBody');
+
+        if (!modalBody) {
+            return;
+        }
+
+        // Show loading state
+        modalBody.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">
+                        Loading...
+                    </span>
+                </div>
+
+                <p class="mt-3 mb-0">
+                    Loading product details...
+                </p>
+            </div>
+        `;
+
+        // Load the selected related product
+        fetch(`/qr-product-modal/${productId}`)
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error('Unable to load product details.');
+                }
+
+                return response.text();
+            })
+            .then(html => {
+
+                // Replace current product with the new product
+                modalBody.innerHTML = html;
+
+                // Keep the same modal open
+                const modalElement = document.getElementById('qrProductModal');
+
+                if (!modalElement) {
+                    return;
+                }
+
+                const qrModal = bootstrap.Modal.getOrCreateInstance(modalElement);
+
+                qrModal.show();
+
+            })
+            .catch(error => {
+
+                console.error('Related Product Modal Error:', error);
+
+                modalBody.innerHTML = `
+                    <div class="text-center py-5 px-3">
+                        <h5>
+                            Unable to load product details.
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            Please try again later.
+                        </p>
+                    </div>
+                `;
+
+            });
+
+    });
+</script>
 
 
 </body>

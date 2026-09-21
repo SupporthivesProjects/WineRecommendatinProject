@@ -528,16 +528,3 @@
     </div>
 
 </div>
-<script>
-    document.addEventListener('click', function (event) {
-        const button = event.target.closest('.related-product-btn');
-
-        if (!button) {
-            return;
-        }
-
-        const productId = button.dataset.productId;
-
-        // load new product...
-    });
-</script>
