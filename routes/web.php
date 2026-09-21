@@ -76,8 +76,8 @@ Route::get('/services', function () {
 })->name('services');
 
 //open qr code route- open for all no login required
-Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])
-    ->name('qr.product.redirect');
+Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])->name('qr.product.redirect');
+Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 
 
 
@@ -116,7 +116,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/cart', [UserDashboardController::class, 'getCart'])->name('user.cart.get');
     Route::post('/user/checkout', [UserDashboardController::class, 'checkout'])->name('user.checkout');
 
-    Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
+    
     Route::get('/product-modal/{id}',[UserDashboardController::class, 'productModal'])->name('user.product.modal');
     Route::get('/user/featuredproducts', [UserDashboardController::class, 'featuredproducts'])->name('user.featuredproducts');
     Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
