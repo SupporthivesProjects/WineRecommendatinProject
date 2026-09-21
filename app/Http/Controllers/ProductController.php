@@ -344,10 +344,8 @@ class ProductController extends Controller
     public function qrProductRedirect($id)
     {
         Product::findOrFail($id);
-
-        return redirect()->route('home', [
-            'product' => $id
-        ]);
+    
+        return redirect()->route('home');
     }
 
 
