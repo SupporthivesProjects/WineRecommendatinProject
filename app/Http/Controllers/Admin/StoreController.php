@@ -1189,5 +1189,14 @@ class StoreController extends Controller
         );
     }
 
+    public function generateSandboxApiKey(Store $store)
+    {
+        $store->update([
+            'sandbox_api_key' => Str::random(40),
+        ]);
+
+        return back()->with('success', 'Sandbox API key generated successfully.');
+    }
+
 
 }

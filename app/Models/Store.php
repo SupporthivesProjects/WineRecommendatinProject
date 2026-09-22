@@ -34,6 +34,7 @@ class Store extends Model
         'status',
         'template_id',
         'api_key',
+        'sandbox_api_key',
     ];
 
     /**

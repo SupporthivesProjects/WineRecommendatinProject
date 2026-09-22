@@ -26,7 +26,10 @@ class UploadApiController extends Controller
             ], 401);
         }
         
-        $store = Store::where('api_key', $apiKey)->first();
+        // $store = Store::where('api_key', $apiKey)->first();
+        $store = Store::where('api_key', $apiKey)
+        ->orWhere('sandbox_api_key', $apiKey)
+        ->first();
 
         if (!$store) {
             return response()->json([
@@ -34,6 +37,15 @@ class UploadApiController extends Controller
                 'message' => 'Invalid API key'
             ], 401);
         }
+
+        $isSandbox = $store->sandbox_api_key === $apiKey;
+        $uploadsTable = $isSandbox
+            ? 'sandbox_store_manager_uploads'
+            : 'store_manager_uploads';
+
+        $checkoutItemsTable = $isSandbox
+            ? 'sandbox_checkout_items'
+            : 'checkout_items';
 
         if (!$request->has('uploads')) {
             return response()->json([
@@ -177,9 +189,12 @@ class UploadApiController extends Controller
 
 
 
-        DB::table('store_manager_uploads')->insert($rows);
-        DB::table('checkout_items')
-        ->insert($checkoutRows);
+        // DB::table('store_manager_uploads')->insert($rows);
+        // DB::table('checkout_items')
+        // ->insert($checkoutRows);
+
+        DB::table($uploadsTable)->insert($rows);
+        DB::table($checkoutItemsTable)->insert($checkoutRows);
     
         return response()->json([
             'status' => true,

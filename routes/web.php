@@ -292,6 +292,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     //API key routes
     Route::post('/admin/stores/{store}/generate-api-key',[StoreController::class, 'generateApiKey'])->name('stores.generateApiKey');
+    Route::post('/stores/{store}/generate-sandbox-api-key', [StoreController::class, 'generateSandboxApiKey'])->name('stores.generateSandboxApiKey');
     
 
 

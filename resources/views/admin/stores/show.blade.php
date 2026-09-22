@@ -1448,36 +1448,87 @@
        
             <!-- Generate API Key Tab -->
             <div class="tab-pane fade" id="APIKey" role="tabpanel" aria-labelledby="apikey-tab">
-            <h5 class="mb-3 text-dark">
-                API Key
-            </h5>
+                <h5 class="mb-3 text-dark">
+                    Live API Key
+                </h5>
 
-            <div class="input-group">
-                <input
-                    type="text"
-                    class="form-control"
-                    readonly
-                    value="{{ $store->api_key ?? 'Not Generated' }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="storeApiKey" readonly
+                        value="{{ $store->api_key ?? 'Not Generated' }}">
 
-                <form
-                    action="{{ route('admin.stores.generateApiKey', $store) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">
-                        {{ $store->api_key ? 'Regenerate API Key' : 'Generate API Key' }}
-                    </button>
-                </form>
+                    @if($store->api_key)
+                        <button type="button" class="btn btn-outline-secondary" onclick="copyApiKey()" title="Copy API Key" style="
+                            min-width: 50px;
+                            border: 1px solid #ced4da;
+                            color: #6c757d;
+                            background-color: #fff;">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            fill="currentColor"
+                            viewBox="0 0 16 16">
+                            <path d="M10 1.5A1.5 1.5 0 0 1 11.5 3v1H12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-.5h1V13a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-.5V3a.5.5 0 0 0-.5-.5H5A.5.5 0 0 0 4.5 3v1H3V3A1.5 1.5 0 0 1 5 1.5h5z"/>
+                            <path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h6A1.5 1.5 0 0 1 11 5.5v7A1.5 1.5 0 0 1 9.5 14h-6A1.5 1.5 0 0 1 2 12.5v-7z"/>
+                        </svg>
+                        </button>
+                    @endif
+
+                    <form action="{{ route('admin.stores.generateApiKey', $store) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">
+                            {{ $store->api_key ? 'Regenerate API Key' : 'Generate API Key' }}
+                        </button>
+                    </form>
+
+                </div>
+
+                <small class="text-muted mt-2 d-block">
+                    This API key is used by all Store Managers belonging to this store.
+                    Regenerating it will immediately invalidate the previous key.
+                </small>
+
+                <!-- Sandbox API key generation code -->
+                <h5 class="mb-3 text-dark mt-3">
+                        Sandbox API Key
+                </h5>
+
+                <div class="input-group">
+                    <input type="text" class="form-control" id="sandboxApiKey" readonly
+                        value="{{ $store->sandbox_api_key ?? 'Not Generated' }}">
+
+                    @if($store->sandbox_api_key)
+                        <button type="button" class="btn" onclick="copySandboxApiKey(this)" title="Copy Sandbox API Key"
+                            style="min-width: 50px;border: 1px solid #ced4da;color: #6c757d;background-color: #fff;">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                fill="currentColor"
+                                viewBox="0 0 16 16">
+                                <path d="M10 1.5A1.5 1.5 0 0 1 11.5 3v1H12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-.5h1V13a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-.5V3a.5.5 0 0 0-.5-.5H5A.5.5 0 0 0 4.5 3v1H3V3A1.5 1.5 0 0 1 5 1.5h5z"/>
+                                <path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h6A1.5 1.5 0 0 1 11 5.5v7A1.5 1.5 0 0 1 9.5 14h-6A1.5 1.5 0 0 1 2 12.5v-7A1.5 1.5 0 0 1 2 5.5z"/>
+                            </svg>
+
+                        </button>
+                    @endif
+
+                    <form
+                        action="{{ route('admin.stores.generateSandboxApiKey', $store) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">
+                            {{ $store->sandbox_api_key ? 'Regenerate Sandbox API Key' : 'Generate Sandbox API Key' }}
+                        </button>
+                    </form>
+                </div>
+                <small class="text-muted mt-2 d-block">
+                    This Sandbox API key is used for testing and development.
+                </small>
+
+
             </div>
 
-            <small class="text-muted mt-2 d-block">
-                This API key is used by all Store Managers belonging to this store.
-                Regenerating it will immediately invalidate the previous key.
-            </small>
-            </div>
-
-
-
-       
-       
+            
         </div>
     </div>
 
@@ -2709,6 +2760,41 @@
             }
         );
 
+    </script>
+    <script>
+        function copyApiKey() {
+            const apiKeyInput = document.getElementById('storeApiKey');
+
+            if (!apiKeyInput || apiKeyInput.value === 'Not Generated') {
+                return;
+            }
+
+            navigator.clipboard.writeText(apiKeyInput.value).then(function () {
+
+                const button = event.currentTarget;
+                const icon = button.querySelector('i');
+
+                icon.classList.remove('bi-copy');
+                icon.classList.add('bi-check2');
+
+                setTimeout(function () {
+                    icon.classList.remove('bi-check2');
+                    icon.classList.add('bi-copy');
+                }, 1500);
+
+            });
+        }
+    </script>
+    <script>
+        function copySandboxApiKey(button) {
+            const apiKeyInput = document.getElementById('sandboxApiKey');
+
+            if (!apiKeyInput || apiKeyInput.value === 'Not Generated') {
+                return;
+            }
+
+            navigator.clipboard.writeText(apiKeyInput.value);
+        }
     </script>
     
     @endpush
