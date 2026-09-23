@@ -321,15 +321,25 @@ class MainManagerController extends Controller
     {
         $managerId = Auth::id();
 
-        $storeIds = Store::where('manager_id', $managerId)
-            ->pluck('id');
+        // Find Analytics feature
+        $analyticsFeature = DB::table('features')
+            ->where('key', 'analytics')
+            ->first();
 
-        $analyticsEnabled = DB::table('store_parent_features')
-            ->join('features', 'features.id', '=', 'store_parent_features.feature_id')
-            ->whereIn('store_parent_features.store_id', $storeIds)
-            ->where('features.key', 'analytics')
-            ->where('store_parent_features.enabled', 1)
-            ->exists();
+        $analyticsEnabled = false;
+
+        if ($analyticsFeature) {
+
+            $storeIds = DB::table('stores')
+                ->where('manager_id', $managerId)
+                ->pluck('id');
+
+            $analyticsEnabled = DB::table('store_parent_features')
+                ->whereIn('store_id', $storeIds)
+                ->where('feature_id', $analyticsFeature->id)
+                ->where('enabled', 1)
+                ->exists();
+        }
 
         return view('mainManager.analytics', [
             'analyticsEnabled' => $analyticsEnabled,

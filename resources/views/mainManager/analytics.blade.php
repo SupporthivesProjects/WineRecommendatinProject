@@ -34,7 +34,9 @@
                             <div class="main-content app-content">
                                 <div class="container-fluid">
 
-                                    <!-- your Analytics content here -->
+                                    <div class="alert alert-warning">
+                                        Analytics is enabled for your store.
+                                    </div>
 
                                 </div>
                             </div>
