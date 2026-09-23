@@ -1194,6 +1194,7 @@ class StoreController extends Controller
 
     public function toggleParentFeature(Request $request, Store $store, Feature $feature)
     {
+
         $enabled = (bool) $request->enabled;
 
         DB::table('store_parent_features')
