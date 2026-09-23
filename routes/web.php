@@ -271,6 +271,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     //toggle features for a store
     Route::post('/stores/{store}/features/{feature}/toggle',[StoreController::class, 'toggleFeature'])->name('stores.feature.toggle');
+    Route::post('/stores/{store}/parent-feature/{feature}/toggle',[StoreController::class, 'toggleParentFeature'])->name('stores.parentFeature.toggle');
 
 
     //template route

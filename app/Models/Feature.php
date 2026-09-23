@@ -14,6 +14,7 @@ class Feature extends Model
         'key',
         'description',
         'status',
+        'user_type',
     ];
 
     public function stores()

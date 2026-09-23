@@ -89,6 +89,34 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            <div class="form-group mb-3">
+                                                <label for="user_type" class="form-label">
+                                                    User Type <span class="text-danger">*</span>
+                                                </label>
+
+                                                <select
+                                                    name="user_type"
+                                                    id="user_type"
+                                                    class="form-control @error('user_type') is-invalid @enderror"
+                                                    required
+                                                >
+                                                    <option value="manager" {{ old('user_type', 'manager') === 'manager' ? 'selected' : '' }}>
+                                                        Shop Manager
+                                                    </option>
+
+                                                    <option value="parent" {{ old('user_type') === 'parent' ? 'selected' : '' }}>
+                                                        Shop Parent
+                                                    </option>
+
+                                                    <option value="both" {{ old('user_type') === 'both' ? 'selected' : '' }}>
+                                                        Both
+                                                    </option>
+                                                </select>
+
+                                                @error('user_type')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
 
                                             <div class="form-check form-switch mb-3">
                                                 <input type="hidden" name="status" value="0">

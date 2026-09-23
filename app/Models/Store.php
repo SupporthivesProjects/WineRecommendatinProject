@@ -84,6 +84,15 @@ class Store extends Model
     }
 
 
+    public function parentFeatures()
+    {
+        return $this->belongsToMany(
+            Feature::class,
+            'store_parent_features'
+        )->withPivot('enabled')
+        ->withTimestamps();
+    }
+
     public function template()
     {
         return $this->belongsTo(Template::class);

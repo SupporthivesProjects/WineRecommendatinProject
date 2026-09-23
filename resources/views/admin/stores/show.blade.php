@@ -569,49 +569,188 @@
             </div>
 
             <!-- Features Tab -->
+            @php
+                $managerFeatures = $features->filter(function ($feature) {
+                    return in_array($feature->user_type, ['manager', 'both']);
+                });
+
+                $parentFeatures = $features->filter(function ($feature) {
+                    return in_array($feature->user_type, ['parent', 'both']);
+                });
+            @endphp
+            <!-- Features Tab -->
             <div class="tab-pane fade" id="features" role="tabpanel" aria-labelledby="features-tab">
                 <div class="bg-white overflow-hidden shadow-sm rounded p-4 mb-4">
                     <h3 class="h5 text-dark mb-3">Store Features</h3>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Feature</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($features as $feature)
-                                    <tr>
-                                        <td>{{ $feature->name }}</td>
-                                        <td>
-                                            @if($feature->pivot->enabled)
-                                                <button
-                                                    class="btn btn-sm btn-success feature-toggle-btn"
-                                                    data-store="{{ $store->id }}"
-                                                    data-feature="{{ $feature->id }}"
-                                                    data-status="0"
-                                                    data-url="{{ route('admin.stores.feature.toggle', [$store->id, $feature->id]) }}"
-                                                    >
-                                                    Active
-                                                </button>
-                                            @else
-                                                <button
-                                                    class="btn btn-sm btn-danger feature-toggle-btn"
-                                                    data-store="{{ $store->id }}"
-                                                    data-feature="{{ $feature->id }}"
-                                                    data-status="1"
-                                                    data-url="{{ route('admin.stores.feature.toggle', [$store->id, $feature->id]) }}"
-                                                    >
-                                                    Inactive
-                                                </button>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+
+                    <!-- Feature Type Tabs -->
+                    <ul class="nav nav-tabs mb-4" id="storeFeatureTabs" role="tablist">
+
+                        <!-- Store Manager Features -->
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link active"
+                                id="manager-features-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#manager-features"
+                                type="button"
+                                role="tab"
+                                aria-controls="manager-features"
+                                aria-selected="true">
+                                Store Manager Features
+                            </button>
+                        </li>
+
+                        <!-- Store Parent Features -->
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link"
+                                id="parent-features-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#parent-features"
+                                type="button"
+                                role="tab"
+                                aria-controls="parent-features"
+                                aria-selected="false">
+                                Store Parent Features
+                            </button>
+                        </li>
+
+                    </ul>
+
+                    <!-- Feature Type Tab Content -->
+                    <div class="tab-content" id="storeFeatureTabsContent">
+
+                        <!-- Store Manager Features -->
+                        <div
+                            class="tab-pane fade show active"
+                            id="manager-features"
+                            role="tabpanel"
+                            aria-labelledby="manager-features-tab">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Feature</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @foreach($managerFeatures as $feature)
+
+                                            <tr>
+
+                                                <td>{{ $feature->name }}</td>
+
+                                                <td>
+
+                                                    @if($feature->manager_enabled)
+
+                                                        <button
+                                                            class="btn btn-sm btn-success feature-toggle-btn"
+                                                            data-store="{{ $store->id }}"
+                                                            data-feature="{{ $feature->id }}"
+                                                            data-status="0"
+                                                            data-url="{{ route('admin.stores.feature.toggle', [$store->id, $feature->id]) }}">
+                                                            Active
+                                                        </button>
+
+                                                    @else
+
+                                                        <button
+                                                            class="btn btn-sm btn-danger feature-toggle-btn"
+                                                            data-store="{{ $store->id }}"
+                                                            data-feature="{{ $feature->id }}"
+                                                            data-status="1"
+                                                            data-url="{{ route('admin.stores.feature.toggle', [$store->id, $feature->id]) }}">
+                                                            Inactive
+                                                        </button>
+
+                                                    @endif
+
+                                                </td>
+
+                                            </tr>
+
+                                        @endforeach
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- Store Parent Features -->
+                        <div
+                            class="tab-pane fade"
+                            id="parent-features"
+                            role="tabpanel"
+                            aria-labelledby="parent-features-tab">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Feature</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        
+                                        @foreach($parentFeatures as $feature)
+
+                                            <tr>
+
+                                                <td>{{ $feature->name }}</td>
+
+                                                <td>
+
+                                                @if($feature->parent_enabled)
+
+                                                        <button
+                                                            class="btn btn-sm btn-success feature-toggle-btn"
+                                                            data-store="{{ $store->id }}"
+                                                            data-feature="{{ $feature->id }}"
+                                                            data-status="0"
+                                                            data-url="{{ route('admin.stores.parentFeature.toggle', [$store->id, $feature->id]) }}">
+                                                            Active
+                                                        </button>
+
+                                                    @else
+
+                                                        <button
+                                                            class="btn btn-sm btn-danger feature-toggle-btn"
+                                                            data-store="{{ $store->id }}"
+                                                            data-feature="{{ $feature->id }}"
+                                                            data-status="1"
+                                                            data-url="{{ route('admin.stores.parentFeature.toggle', [$store->id, $feature->id]) }}">
+                                                            Inactive
+                                                        </button>
+
+                                                    @endif
+
+                                                </td>
+
+                                            </tr>
+
+                                        @endforeach
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </div>
             </div>
 

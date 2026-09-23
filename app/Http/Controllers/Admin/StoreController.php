@@ -527,7 +527,23 @@ class StoreController extends Controller
             ->orderBy('wine_name')
             ->get();
 
-        $features = $store->features()->orderBy('name')->get();
+        // $features = $store->features()->orderBy('name')->get();
+        $features = Feature::orderBy('name')->get();
+
+        $managerFeatureStatus = $store->features()
+            ->get()
+            ->pluck('pivot.enabled', 'id')
+            ->toArray();
+
+        $parentFeatureStatus = $store->parentFeatures()
+            ->get()
+            ->pluck('pivot.enabled', 'id')
+            ->toArray();
+
+        $features->each(function ($feature) use ($managerFeatureStatus, $parentFeatureStatus) {
+            $feature->manager_enabled = $managerFeatureStatus[$feature->id] ?? 0;
+            $feature->parent_enabled = $parentFeatureStatus[$feature->id] ?? 0;
+        });
 
         $storeManager = $store->users
             ->where('role', 'store_manager')
@@ -1170,6 +1186,24 @@ class StoreController extends Controller
             ]
         );
     
+        return response()->json([
+            'success' => true,
+            'enabled' => $enabled,
+        ]);
+    }
+
+    public function toggleParentFeature(Request $request, Store $store, Feature $feature)
+    {
+        $enabled = (bool) $request->enabled;
+
+        DB::table('store_parent_features')
+            ->where('store_id', $store->id)
+            ->where('feature_id', $feature->id)
+            ->update([
+                'enabled' => $enabled,
+                'updated_at' => now(),
+            ]);
+
         return response()->json([
             'success' => true,
             'enabled' => $enabled,

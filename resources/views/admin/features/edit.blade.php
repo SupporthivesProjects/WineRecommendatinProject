@@ -72,6 +72,38 @@
                                             </div>
 
                                             <div class="form-group mb-3">
+                                                <label for="user_type" class="form-label">
+                                                    User Type <span class="text-danger">*</span>
+                                                </label>
+
+                                                <select
+                                                    name="user_type"
+                                                    id="user_type"
+                                                    class="form-control @error('user_type') is-invalid @enderror"
+                                                    required
+                                                >
+                                                    <option value="manager"
+                                                        {{ old('user_type', $feature->user_type) === 'manager' ? 'selected' : '' }}>
+                                                        Shop Manager
+                                                    </option>
+
+                                                    <option value="parent"
+                                                        {{ old('user_type', $feature->user_type) === 'parent' ? 'selected' : '' }}>
+                                                        Shop Parent
+                                                    </option>
+
+                                                    <option value="both"
+                                                        {{ old('user_type', $feature->user_type) === 'both' ? 'selected' : '' }}>
+                                                        Both
+                                                    </option>
+                                                </select>
+
+                                                @error('user_type')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group mb-3">
                                                 <label for="key" class="form-label">Key <span class="text-danger">*</span></label>
                                                 <input type="text" name="key" id="key" 
                                                     class="form-control @error('key') is-invalid @enderror" 

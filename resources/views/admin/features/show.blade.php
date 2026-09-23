@@ -59,6 +59,11 @@
                                             rows="4" class="form-control" readonly>{{ $feature->description }}
                                         </textarea>
                                     </div>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">User Type</label>
+                                        <input
+                                            type="text" class="form-control" value="{{ $feature->user_type }}" readonly>
+                                    </div>
 
                                     <div class="form-group mb-3">
                                         <label class="form-label">Status</label>

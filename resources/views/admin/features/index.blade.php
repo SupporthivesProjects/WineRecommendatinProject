@@ -57,6 +57,7 @@
                                             <th class="text-start">Key</th>
                                             <th class="text-start">Description</th>
                                             <th class="text-start">Status</th>
+                                            <th class="text-start">Assinged to</th>
                                             <th class="text-start">Actions</th>
                                         </tr>
                                     </thead>
@@ -78,6 +79,7 @@
                                                         </span>
                                                     @endif
                                                 </td>
+                                                <td class="align-middle">{{ $feature->user_type }}</td>
                                                 <td class="align-middle action-btns">
                                                     <div class="d-flex">
                                                         <a href="{{ route('admin.features.show', $feature->id)}}" 
