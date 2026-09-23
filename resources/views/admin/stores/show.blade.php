@@ -703,659 +703,1078 @@
                         </form>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="analytics-card revenue-card">
-                            <div class="analytics-icon">
-                                <i class="bi bi-currency-rupee"></i>
-                            </div>
+                    <!-- Admin tab starts -->
+                    <!-- Admin -->
+                    <div class="mb-3" >
+                        <button
+                            class="btn btn-light border w-100 d-flex justify-content-between align-items-center text-start py-3 px-4"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#adminAnalyticsSection"
+                            aria-expanded="false"
+                            aria-controls="adminAnalyticsSection">
 
-                            <div class="analytics-content">
-                                <span class="analytics-label">
-                                    Total Revenue
-                                </span>
-
-                                <h2 class="analytics-value">
-                                    ₹{{ number_format($analyticsSummary['total_revenue'] ?? 0, 2) }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="analytics-card orders-card">
-                            <div class="analytics-icon">
-                                <i class="bi bi-cart-check"></i>
-                            </div>
-
-                            <div class="analytics-content">
-                                <span class="analytics-label">
-                                    Total Orders
-                                </span>
-
-                                <h2 class="analytics-value">
-                                    {{ $analyticsSummary['total_orders'] ?? 0 }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="analytics-card bottles-card">
-                            <div class="analytics-icon">
-                                <i class="bi bi-cup-straw"></i>
-                            </div>
-
-                            <div class="analytics-content">
-                                <span class="analytics-label">
-                                    Total Bottles
-                                </span>
-
-                                <h2 class="analytics-value">
-                                    {{ $analyticsSummary['total_bottles'] ?? 0 }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="analytics-card avg-card">
-                            <div class="analytics-icon">
-                                <i class="bi bi-receipt"></i>
-                            </div>
-
-                            <div class="analytics-content">
-                                <span class="analytics-label">
-                                    Avg Order Value
-                                </span>
-
-                                <h2 class="analytics-value">
-                                    ₹{{ number_format($analyticsSummary['avg_order_value'] ?? 0, 2) }}
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- top selling wines -->
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h4 class="mb-0">
-                                    🍷 Top Selling Wines
-                                </h4>
-
-                                <span class="badge bg-primary">
-                                    {{ $topSellingWines->count() }} Wines
-                                </span>
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div >
+                                        <h4 class="mb-0">
+                                            Admin
+                                        </h4>
+                                    </div>
                                 </div>
-                                    @foreach($topSellingWines as $index => $wine)
-                                        <div class="mb-4">
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <div>
+                            </div>
+
+                            <span class="fs-4">+</span>
+
+                        </button>
+
+                        <div class="collapse" id="adminAnalyticsSection">
+                            <div class="row">
+                                <!-- Total Revenue -->
+                                <div class="col-md-3">
+                                    <div class="analytics-card revenue-card">
+                                        <div class="analytics-icon">
+                                            <i class="bi bi-currency-rupee"></i>
+                                        </div>
+
+                                        <div class="analytics-content">
+                                            <span class="analytics-label">
+                                                Total Revenue
+                                            </span>
+
+                                            <h2 class="analytics-value">
+                                                ₹{{ number_format($analyticsSummary['total_revenue'] ?? 0, 2) }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total Orders -->
+                                <div class="col-md-3">
+                                    <div class="analytics-card orders-card">
+                                        <div class="analytics-icon">
+                                            <i class="bi bi-cart-check"></i>
+                                        </div>
+
+                                        <div class="analytics-content">
+                                            <span class="analytics-label">
+                                                Total Orders
+                                            </span>
+
+                                            <h2 class="analytics-value">
+                                                {{ $analyticsSummary['total_orders'] ?? 0 }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total Bottles -->
+                                <div class="col-md-3">
+                                    <div class="analytics-card bottles-card">
+                                        <div class="analytics-icon">
+                                            <i class="bi bi-cup-straw"></i>
+                                        </div>
+
+                                        <div class="analytics-content">
+                                            <span class="analytics-label">
+                                                Total Bottles
+                                            </span>
+
+                                            <h2 class="analytics-value">
+                                                {{ $analyticsSummary['total_bottles'] ?? 0 }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Avg Order Value -->
+                                <div class="col-md-3">
+                                    <div class="analytics-card avg-card">
+                                        <div class="analytics-icon">
+                                            <i class="bi bi-receipt"></i>
+                                        </div>
+
+                                        <div class="analytics-content">
+                                            <span class="analytics-label">
+                                                Avg Order Value
+                                            </span>
+
+                                            <h2 class="analytics-value">
+                                                ₹{{ number_format($analyticsSummary['avg_order_value'] ?? 0, 2) }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Top Selling Wines -->
+                                <div class="card mt-4">
+                                    <div class="card-body">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h4 class="mb-0">
+                                                🍷 Top Selling Wines
+                                            </h4>
+
+                                            <span class="badge bg-primary">
+                                                {{ $topSellingWines->count() }} Wines
+                                            </span>
+                                        </div>
+
+                                        @foreach($topSellingWines as $index => $wine)
+
+                                            <div class="mb-4">
+
+                                                <div class="d-flex justify-content-between mb-1">
+
+                                                    <div>
+
+                                                        @php
+                                                            $badge = match($index) {
+                                                                0 => '🥇',
+                                                                1 => '🥈',
+                                                                2 => '🥉',
+                                                                default => '#'.($index + 1)
+                                                            };
+                                                        @endphp
+
+                                                        <span class="wine-rank">
+                                                            {{ $badge }}
+                                                        </span>
+
+                                                        {{ $wine->product_name }}
+
+                                                    </div>
+
+                                                    <div>
+                                                        {{ $wine->total_sold }} bottles
+                                                    </div>
+
+                                                </div>
+
                                                 @php
-                                                    $badge = match($index) {
-                                                        0 => '🥇',
-                                                        1 => '🥈',
-                                                        2 => '🥉',
-                                                        default => '#'.($index + 1)
+                                                    $barColor = match($index) {
+                                                        0 => '#f59e0b',
+                                                        1 => '#9ca3af',
+                                                        2 => '#b45309',
+                                                        default => '#6366f1'
                                                     };
                                                 @endphp
 
-                                                <span class="wine-rank">
-                                                    {{ $badge }}
-                                                </span>
-                                                    {{ $wine->product_name }}
+                                                <div class="progress" style="height:10px;">
+
+                                                    <div
+                                                        class="progress-bar"
+                                                        style="
+                                                            background: {{ $barColor }};
+                                                            width: {{ ($wine->total_sold / $topSellingWines->max('total_sold')) * 100 }}%;
+                                                        ">
+                                                    </div>
+
                                                 </div>
-                                                <div>
-                                                    {{ $wine->total_sold }} bottles
-                                                </div>
+
                                             </div>
-                                            @php
-                                                $barColor = match($index) {
-                                                    0 => '#f59e0b',
-                                                    1 => '#9ca3af',
-                                                    2 => '#b45309',
-                                                    default => '#6366f1'
-                                                };
-                                            @endphp
-                                            <div class="progress" style="height:10px;">
-                                            <div class="progress-bar"
-                                                    style="
-                                                        background: {{ $barColor }};
-                                                        width: {{ ($wine->total_sold / $topSellingWines->max('total_sold')) * 100 }}%;
-                                                    ">
-                                                </div>
-                                            </div>
+
+                                        @endforeach
+
+                                    </div>
+                                </div>
+
+
+                                <!-- Revenue Chart -->
+                                <div class="card mt-4">
+
+                                    <div class="card-body">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                                            <h4 class="mb-0">
+                                                📈 Revenue Trend
+                                            </h4>
+
                                         </div>
-                                    @endforeach
+
+                                        <div style="height:350px;">
+                                            <canvas id="revenueTrendChart"></canvas>
+                                        </div>
+
+                                    </div>
+
                                 </div>
+
+
+                                <!-- Wine and Country Distribution -->
+
+                                @php
+
+                                    $wineTypeLabels = $wineTypeDistribution
+                                        ->pluck('type');
+
+                                    $wineTypeValues = $wineTypeDistribution
+                                        ->pluck('total_sold');
+
+                                @endphp
+
+
+                                <div class="row mt-4">
+
+                                    <!-- Wine Type -->
+                                    <div class="col-md-6">
+
+                                        <div class="card shadow-sm border-0">
+
+                                            <div class="card-header bg-white">
+
+                                                <h5 class="mb-0">
+                                                    🍷 Wine Type Distribution
+                                                </h5>
+
+                                            </div>
+
+                                            <div class="card-body">
+
+                                                <canvas
+                                                    id="wineTypeChart"
+                                                    height="250">
+                                                </canvas>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Country -->
+                                    <div class="col-md-6">
+
+                                        <div class="card shadow-sm border-0">
+
+                                            <div class="card-header bg-white">
+
+                                                <h5 class="mb-0">
+                                                    🌍 Country Distribution
+                                                </h5>
+
+                                            </div>
+
+                                            <div class="card-body">
+
+                                                <canvas
+                                                    id="countryChart"
+                                                    height="250">
+                                                </canvas>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- End Admin .row -->
+
                         </div>
+                        <!-- End Admin collapse -->
+
                     </div>
+                    <!-- End Admin -->
 
-                    <!-- Revenue Chart  -->
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h4 class="mb-0">
-                                    📈 Revenue Trend
-                                </h4>
+                    <!-- Inventory Intelligence -->
+                    <div class="mb-3">
+
+                        <button
+                            class="btn btn-light border w-100 d-flex justify-content-between align-items-center text-start py-3 px-4"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#inventoryIntelligenceSection"
+                            aria-expanded="false"
+                            aria-controls="inventoryIntelligenceSection">
+
+                            <span class="fw-bold fs-5">
+                                Inventory Intelligence
+                            </span>
+
+                            <span class="fs-4">+</span>
+
+                        </button>
+
+                        <div class="collapse" id="inventoryIntelligenceSection">
+
+                            <!-- Slow Moving Wines + Low Stock Alert -->
+                            <div class="row mt-3">
+
+                                {{-- Slow Moving Wines --}}
+                                <div class="col-md-6">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-primary">
+                                            🍷 Slow Moving Wines
+                                        </h4>
+
+                                        <div class="table-responsive">
+
+                                            <table class="table table-sm table-hover">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Wine</th>
+                                                        <th class="text-end">Sold</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @forelse($slowMovingWines as $wine)
+
+                                                        <tr>
+                                                            <td>
+                                                                {{ $wine->product_name }}
+                                                            </td>
+
+                                                            <td class="text-end">
+                                                                {{ $wine->total_sold }}
+                                                            </td>
+                                                        </tr>
+
+                                                    @empty
+
+                                                        <tr>
+                                                            <td colspan="2" class="text-center text-muted">
+                                                                No data found
+                                                            </td>
+                                                        </tr>
+
+                                                    @endforelse
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Low Stock Alert --}}
+                                <div class="col-md-6">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-danger">
+                                            ⚠️ Low Stock Alert
+                                        </h4>
+
+                                        <div class="table-responsive">
+
+                                            <table class="table table-sm table-hover">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Wine</th>
+                                                        <th class="text-end">Stock</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @forelse($lowStockWines as $wine)
+
+                                                        <tr>
+                                                            <td>
+                                                                {{ $wine->product_name }}
+                                                            </td>
+
+                                                            <td class="text-end fw-bold text-danger">
+                                                                {{ $wine->stock }}
+                                                            </td>
+                                                        </tr>
+
+                                                    @empty
+
+                                                        <tr>
+                                                            <td colspan="2" class="text-center text-muted">
+                                                                No low stock wines
+                                                            </td>
+                                                        </tr>
+
+                                                    @endforelse
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                             </div>
-                            <div style="height:350px;">
-                                <canvas id="revenueTrendChart"></canvas>
+
+
+                            <!-- High Stock + Low Movement -->
+                            <div class="row mt-3">
+
+                                <div class="col-12">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-warning">
+                                            📦 High Stock + Low Movement
+                                        </h4>
+
+                                        <div class="table-responsive">
+
+                                            <table class="table table-sm table-hover">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Wine</th>
+                                                        <th class="text-end">Stock</th>
+                                                        <th class="text-end">Sold</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @forelse($highStockLowMovement as $wine)
+
+                                                        <tr>
+
+                                                            <td>
+                                                                {{ $wine->product_name }}
+                                                            </td>
+
+                                                            <td class="text-end">
+                                                                {{ $wine->stock }}
+                                                            </td>
+
+                                                            <td class="text-end">
+                                                                {{ $wine->sold }}
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @empty
+
+                                                        <tr>
+                                                            <td colspan="3" class="text-center text-muted">
+                                                                No overstocked wines found
+                                                            </td>
+                                                        </tr>
+
+                                                    @endforelse
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                             </div>
+
+
+                            <!-- Price Band Performance -->
+                            <div class="row mt-3">
+
+                                <div class="col-12">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-success">
+                                            💰 Price Band Performance
+                                        </h4>
+
+                                        <div style="height:500px; position:relative;">
+                                            <canvas id="priceBandChart"></canvas>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Domestic and Imported -->
+                            <div class="row mt-4">
+
+                                {{-- Domestic vs Imported --}}
+                                <div class="col-md-6">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-info">
+                                            🌍 Domestic vs Imported
+                                        </h4>
+
+                                        <div style="height:350px; position:relative;">
+                                            <canvas id="domesticImportedChart"></canvas>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Average Bottle Value Trend --}}
+                                <div class="col-md-6">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-success">
+                                            📈 Average Bottle Value Trend
+                                        </h4>
+
+                                        <div style="height:350px; position:relative;">
+                                            <canvas id="avgBottleValueChart"></canvas>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Reorder Attention + Promotion -->
+                            <div class="row mt-3">
+
+                                {{-- Reorder Attention --}}
+                                <div class="col-md-6">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-danger">
+                                            🚨 Suggested Reorder Attention
+                                        </h4>
+
+                                        <div class="table-responsive">
+
+                                            <table class="table table-sm table-hover">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Wine</th>
+
+                                                        <th class="text-end">
+                                                            Stock
+                                                        </th>
+
+                                                        <th class="text-end">
+                                                            Sold
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @forelse($reorderAttentionList as $wine)
+
+                                                        <tr>
+
+                                                            <td>
+                                                                {{ $wine->product_name }}
+                                                            </td>
+
+                                                            <td class="text-end text-danger fw-bold">
+                                                                {{ $wine->stock }}
+                                                            </td>
+
+                                                            <td class="text-end">
+                                                                {{ $wine->sold }}
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @empty
+
+                                                        <tr>
+
+                                                            <td
+                                                                colspan="3"
+                                                                class="text-center text-muted">
+
+                                                                No wines require reordering
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @endforelse
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Promotion List --}}
+                                <div class="col-md-6">
+
+                                    <div class="analytics-card p-4">
+
+                                        <h4 class="mb-4 fw-bold text-warning">
+                                            🎯 Suggested Display / Promotion
+                                        </h4>
+
+                                        <div class="table-responsive">
+
+                                            <table class="table table-sm table-hover">
+
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>
+                                                            Wine
+                                                        </th>
+
+                                                        <th class="text-end">
+                                                            Stock
+                                                        </th>
+
+                                                        <th class="text-end">
+                                                            Sold
+                                                        </th>
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    @forelse($promotionList as $wine)
+
+                                                        <tr>
+
+                                                            <td>
+                                                                {{ $wine->product_name }}
+                                                            </td>
+
+                                                            <td class="text-end">
+                                                                {{ $wine->stock }}
+                                                            </td>
+
+                                                            <td class="text-end">
+                                                                {{ $wine->sold }}
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @empty
+
+                                                        <tr>
+
+                                                            <td
+                                                                colspan="3"
+                                                                class="text-center text-muted">
+
+                                                                No promotion opportunities found
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    @endforelse
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
+                        <!-- End Inventory Intelligence collapse -->
+
                     </div>
+                    <!-- End Inventory Intelligence -->
 
+                    <!-- Customer Preference Analytics -->
+                    <div class="mb-3">
+                    <button
+                        class="btn btn-light border w-100 d-flex justify-content-between align-items-center text-start py-3 px-4"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#customerPreferenceSection"
+                        aria-expanded="false"
+                        aria-controls="customerPreferenceSection">
 
-                    <!-- Wine and country distribution -->
-                    @php
-                    $wineTypeLabels = $wineTypeDistribution
-                        ->pluck('type');
+                        <span class="fw-bold fs-5">
+                            Customer Preference Analytics
+                        </span>
 
-                    $wineTypeValues = $wineTypeDistribution
-                        ->pluck('total_sold');
+                        <span class="fs-4">+</span>
 
-                    @endphp
-                    <div class="row mt-4">
-                        {{-- Wine Type --}}
-                        <div class="col-md-6">
-                            <div class="card shadow-sm border-0">
-                                <div class="card-header bg-white">
-                                    <h5 class="mb-0">
-                                        🍷 Wine Type Distribution
-                                    </h5>
+                    </button>
+                    <div class="collapse" id="customerPreferenceSection">
+
+                        <!-- Questionnaire Summary -->
+                        <div class="row mt-3">
+
+                            <div class="col-md-3">
+
+                                <div class="analytics-card p-4 text-center">
+
+                                    <h6 class="text-muted">
+                                        Questionnaires Completed
+                                    </h6>
+
+                                    <h2 class="fw-bold text-primary">
+                                        {{ number_format(data_get($questionnaireStats, 'completed', 0)) }}
+                                    </h2>
+
                                 </div>
-                                <div class="card-body">
-                                    <canvas
-                                        id="wineTypeChart"
-                                        height="250">
-                                    </canvas>
-                                </div>
+
                             </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="analytics-card p-4 text-center">
+
+                                    <h6 class="text-muted">
+                                        Most Popular Template
+                                    </h6>
+
+                                    <h2 class="fw-bold text-success">
+                                        {{ $questionnaireStats['popular_template'] ?? 'None' }}
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="analytics-card p-4 text-center">
+
+                                    <h6 class="text-muted">
+                                        Average Preferred Budget
+                                    </h6>
+
+                                    <h2 class="fw-bold text-info">
+                                        ₹{{ number_format($budgetStats['average_budget'] ?? 0) }}
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="analytics-card p-4 text-center">
+
+                                    <h6 class="text-muted">
+                                        Premium Customers
+
+                                        <i
+                                            class="fas fa-info-circle text-secondary ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Customers whose preferred budget is ₹25,000 or higher">
+                                        </i>
+
+                                    </h6>
+
+                                    <h2 class="fw-bold text-warning">
+                                        {{ $budgetStats['premium_percent'] ?? 0 }}%
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        {{-- Country --}}
-                        <div class="col-md-6">
-                            <div class="card shadow-sm border-0">
-                                <div class="card-header bg-white">
-                                    <h5 class="mb-0">
-                                        🌍 Country Distribution
-                                    </h5>
+
+                        <!-- Questionnaire Usage + Wine Type Preferences -->
+                        <div class="row mt-3">
+
+                            <div class="col-md-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-primary mb-4">
+                                        📋 Questionnaire Usage
+                                    </h4>
+
+                                    <div style="height:400px">
+                                        <canvas id="questionnaireUsageChart"></canvas>
+                                    </div>
+
                                 </div>
-                                <div class="card-body">
-                                    <canvas
-                                        id="countryChart"
-                                        height="250">
-                                    </canvas>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-danger mb-4">
+                                        🍷 Wine Type Preferences
+                                    </h4>
+
+                                    <div style="height:400px">
+                                        <canvas id="wineTypePreferencesChart"></canvas>
+                                    </div>
+
                                 </div>
+
                             </div>
+
                         </div>
-                    </div>
 
 
-                    <!-- Intelligence Report -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="analytics-card">
-                                <h4 class="mb-0">
-                                    Inventory Intelligence
-                                </h4>
+                        <!-- Country Preferences + Budget Distribution -->
+                        <div class="row mt-3">
+
+                            <div class="col-md-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-success mb-4">
+                                        🌍 Country Preferences
+                                    </h4>
+
+                                    <div style="height:400px">
+                                        <canvas id="countryChartCustomer"></canvas>
+                                    </div>
+
+                                </div>
+
                             </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-info mb-4">
+                                        💰 Budget Distribution
+                                    </h4>
+
+                                    <div style="height:400px">
+                                        <canvas id="budgetChart"></canvas>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
-                    </div>
 
 
-                    <div class="row mt-3">
-                        {{-- Slow Moving Wines --}}
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-primary">
-                                    🍷 Slow Moving Wines
-                                </h4>
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
+                        <!-- Occasion Preferences + Taste Preferences -->
+                        <div class="row mt-3">
+
+                            <div class="col-md-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-warning mb-4">
+                                        🎉 Occasion Preferences
+                                    </h4>
+
+                                    <div style="height:400px">
+                                        <canvas id="occasionChart"></canvas>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-secondary mb-4">
+                                        😋 Taste Preferences
+                                    </h4>
+
+                                    <div style="height:400px">
+                                        <canvas id="tasteChart"></canvas>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Top Requested Varieties + Occasion vs Budget -->
+                        <div class="row mt-3">
+
+                            <!-- Top Requested Varieties -->
+                            <div class="col-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-dark mb-4">
+
+                                        🍇 Top Requested Varieties
+
+                                        <i
+                                            class="fas fa-info-circle text-secondary ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Most frequently requested wine grape varieties based on customer questionnaire responses">
+                                        </i>
+
+                                    </h4>
+
+
+                                    <div class="table-responsive">
+
+                                        <table class="table table-hover">
+
+                                            <thead>
+
+                                                <tr>
+
+                                                    <th>
+                                                        Variety
+                                                    </th>
+
+                                                    <th class="text-end">
+                                                        Requests
+                                                    </th>
+
+                                                </tr>
+
+                                            </thead>
+
+
+                                            <tbody>
+
+                                                @forelse($topVarieties as $variety)
+
+                                                    <tr>
+
+                                                        <td>
+                                                            {{ $variety->answer }}
+                                                        </td>
+
+                                                        <td class="text-end">
+                                                            {{ $variety->total }}
+                                                        </td>
+
+                                                    </tr>
+
+                                                @empty
+
+                                                    <tr>
+
+                                                        <td
+                                                            colspan="2"
+                                                            class="text-center">
+
+                                                            No data found
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                @endforelse
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Occasion vs Budget Preferences -->
+                            <div class="col-6">
+
+                                <div class="analytics-card p-4">
+
+                                    <h4 class="fw-bold text-dark mb-4">
+                                        🎁 Occasion vs Budget Preferences
+                                    </h4>
+
+
+                                    <table class="table table-sm">
+
                                         <thead>
+
                                             <tr>
-                                                <th>Wine</th>
-                                                <th class="text-end">Sold</th>
+
+                                                <th>
+                                                    Occasion
+                                                </th>
+
+                                                <th>
+                                                    Preferred Budget
+                                                </th>
+
                                             </tr>
+
                                         </thead>
+
+
                                         <tbody>
-                                            @forelse($slowMovingWines as $wine)
-                                                <tr>
-                                                    <td>{{ $wine->product_name }}</td>
-                                                    <td class="text-end">
-                                                        {{ $wine->total_sold }}
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="2" class="text-center text-muted">
-                                                        No data found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
 
-                        {{-- Low Stock Alert --}}
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-danger">
-                                    ⚠️ Low Stock Alert
-                                </h4>
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Wine</th>
-                                                <th class="text-end">Stock</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($lowStockWines as $wine)
-                                                <tr>
-                                                    <td>{{ $wine->product_name }}</td>
+                                            @foreach($occasionBudgetPreferences as $row)
 
-                                                    <td class="text-end fw-bold text-danger">
-                                                        {{ $wine->stock }}
-                                                    </td>
-                                                </tr>
-                                            @empty
                                                 <tr>
-                                                    <td colspan="2" class="text-center text-muted">
-                                                        No low stock wines
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-warning">
-                                    📦 High Stock + Low Movement
-                                </h4>
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Wine</th>
-                                                <th class="text-end">Stock</th>
-                                                <th class="text-end">Sold</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($highStockLowMovement as $wine)
-                                                <tr>
                                                     <td>
-                                                        {{ $wine->product_name }}
+                                                        {{ $row->occasion }}
                                                     </td>
-                                                    <td class="text-end">
-                                                        {{ $wine->stock }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ $wine->sold }}
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="3" class="text-center text-muted">
-                                                        No overstocked wines found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-success">
-                                    💰 Price Band Performance
-                                </h4>
-                                <div style="height:500px; position:relative;">
-                                    <canvas id="priceBandChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- Domestic and Imported -->
-                    <div class="row mt-4">
-                        {{-- Domestic vs Imported --}}
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-info">
-                                    🌍 Domestic vs Imported
-                                </h4>
-                                <div style="height:350px; position:relative;">
-                                    <canvas id="domesticImportedChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Average Bottle Value Trend --}}
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-success">
-                                    📈 Average Bottle Value Trend
-                                </h4>
-                                <div style="height:350px; position:relative;">
-                                    <canvas id="avgBottleValueChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        {{-- Reorder Attention --}}
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-danger">
-                                    🚨 Suggested Reorder Attention
-                                </h4>
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Wine</th>
-                                                <th class="text-end">
-                                                    Stock
-                                                </th>
-                                                <th class="text-end">
-                                                    Sold
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($reorderAttentionList as $wine)
-                                                <tr>
                                                     <td>
-                                                        {{ $wine->product_name }}
+                                                        {{ $row->budget_band }}
                                                     </td>
-                                                    <td class="text-end text-danger fw-bold">
-                                                        {{ $wine->stock }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ $wine->sold }}
-                                                    </td>
+
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="3"
-                                                        class="text-center text-muted">
-                                                        No wines require reordering
-                                                    </td>
-                                                </tr>
-                                            @endforelse
+
+                                            @endforeach
+
                                         </tbody>
+
                                     </table>
+
                                 </div>
+
                             </div>
-                        </div>
-                        {{-- Promotion List --}}
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="mb-4 fw-bold text-warning">
-                                    🎯 Suggested Display / Promotion
-                                </h4>
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Wine</th>
-                                                <th class="text-end">
-                                                    Stock
-                                                </th>
-                                                <th class="text-end">
-                                                    Sold
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($promotionList as $wine)
-                                                <tr>
-                                                    <td>
-                                                        {{ $wine->product_name }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ $wine->stock }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ $wine->sold }}
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="3"
-                                                        class="text-center text-muted">
-                                                        No promotion opportunities found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+
                         </div>
 
                     </div>
+                    <!-- End Customer Preference collapse -->
 
-
-                    <!-- customers -->
-                    <div class="row mt-5">
-                        <div class="col-12">
-                            <div class="analytics-card p-4">
-                                <h2 class="fw-bold text-primary mb-0">
-                                    👥 Customer Preference Analytics
-                                </h2>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-3">
-                            <div class="analytics-card p-4 text-center">
-                                <h6 class="text-muted">
-                                    Questionnaires Completed
-                                </h6>
-                                <h2 class="fw-bold text-primary">
-                                    {{ number_format(data_get($questionnaireStats, 'completed', 0)) }}
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="analytics-card p-4 text-center">
-                                <h6 class="text-muted">
-                                    Most Popular Template
-                                </h6>
-                                <h2 class="fw-bold text-success">
-                                    {{ $questionnaireStats['popular_template'] ?? 'None' }}
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="analytics-card p-4 text-center">
-                                <h6 class="text-muted">
-                                    Average Preferred Budget
-                                </h6>
-                                <h2 class="fw-bold text-info">
-                                    ₹{{ number_format($budgetStats['average_budget'] ?? 0) }}
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="analytics-card p-4 text-center">
-                                <h6 class="text-muted">
-                                    Premium Customers
-                                    <i class="fas fa-info-circle text-secondary ms-1"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="Customers whose preferred budget is ₹25,000 or higher">
-                                    </i>
-                                </h6>
-                                <h2 class="fw-bold text-warning">
-                                    {{ $budgetStats['premium_percent'] ?? 0 }}%
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-primary mb-4">
-                                    📋 Questionnaire Usage
-                                </h4>
-                                <div style="height:400px">
-                                    <canvas id="questionnaireUsageChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-danger mb-4">
-                                    🍷 Wine Type Preferences
-                                </h4>
-                                <div style="height:400px">
-                                    <canvas id="wineTypePreferencesChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-success mb-4">
-                                    🌍 Country Preferences
-                                </h4>
-                                <div style="height:400px">
-                                    <canvas id="countryChartCustomer"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-info mb-4">
-                                    💰 Budget Distribution
-                                </h4>
-                                <div style="height:400px">
-                                    <canvas id="budgetChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-warning mb-4">
-                                    🎉 Occasion Preferences
-                                </h4>
-                                <div style="height:400px">
-                                    <canvas id="occasionChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-secondary mb-4">
-                                    😋 Taste Preferences
-                                </h4>
-                                <div style="height:400px">
-                                    <canvas id="tasteChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="row mt-3">
-                        <div class="col-6">
-                            <div class="analytics-card p-4">
-                                <h4 class="fw-bold text-dark mb-4">
-                                    🍇 Top Requested Varieties
-                                    <i class="fas fa-info-circle text-secondary ms-1"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Most frequently requested wine grape varieties based on customer questionnaire responses">
-                                    </i>
-                                </h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Variety</th>
-                                                <th class="text-end">
-                                                    Requests
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($topVarieties as $variety)
-                                                <tr>
-                                                    <td>
-                                                        {{ $variety->answer }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ $variety->total }}
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="2"
-                                                        class="text-center">
-                                                        No data found
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="analytics-card p-4">
-                            <h4 class="fw-bold text-dark mb-4">
-                                🎁 Occasion vs Budget Preferences
-                            </h4>
-
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Occasion</th>
-                                        <th>Preferred Budget</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($occasionBudgetPreferences as $row)
-                                        <tr>
-                                            <td>{{ $row->occasion }}</td>
-                                            <td>{{ $row->budget_band }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        </div>
-                    </div>   
+                    <!-- End Customer Preference Analytics -->
+                </div>
             </div>
 
             <!-- API Data tab -->
@@ -2796,7 +3215,29 @@
             navigator.clipboard.writeText(apiKeyInput.value);
         }
     </script>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (button) {
+
+                const targetSelector = button.getAttribute('data-bs-target');
+                const target = document.querySelector(targetSelector);
+                const icon = button.querySelector('.fs-4');
+
+                if (!target || !icon) return;
+
+                target.addEventListener('show.bs.collapse', function () {
+                    icon.textContent = '−';
+                });
+
+                target.addEventListener('hide.bs.collapse', function () {
+                    icon.textContent = '+';
+                });
+
+            });
+
+        });
+        </script>
     @endpush
 
 
