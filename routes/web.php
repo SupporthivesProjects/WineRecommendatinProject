@@ -385,6 +385,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'main.manager'])->group(function () {
     Route::get('/main-manager/dashboard', [MainManagerController::class, 'dashboard'])->name('main-manager.dashboard');
     Route::get('/main-manager/stores', [MainManagerController::class, 'MainManagerAllStores'])->name('main-manager.allStores');
+    Route::get('/main-manager/analytics', [MainManagerController::class, 'MainManagerAnalytics'])->name('main-manager.analytics');
     Route::get('/manager/store-details/{storeId}', [MainManagerController::class, 'getStoreDetails'])->name('manager.store.details');
 });
 

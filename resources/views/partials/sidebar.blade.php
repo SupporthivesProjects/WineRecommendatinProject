@@ -375,6 +375,12 @@
                                 <span class="side-menu__label">Stores</span>
                             </a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('main-manager.analytics') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-box" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Analytics</span>
+                            </a>
+                        </li>
                     @endif
                 </ul>
 

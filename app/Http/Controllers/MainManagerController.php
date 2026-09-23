@@ -316,4 +316,27 @@ class MainManagerController extends Controller
             'storeManagers' => $storeManagers,
         ]);
     }
+
+    public function MainManagerAnalytics()
+    {
+        $managerId = Auth::id();
+
+        $storeIds = Store::where('manager_id', $managerId)
+            ->pluck('id');
+
+        $analyticsEnabled = DB::table('store_parent_features')
+            ->join('features', 'features.id', '=', 'store_parent_features.feature_id')
+            ->whereIn('store_parent_features.store_id', $storeIds)
+            ->where('features.key', 'analytics')
+            ->where('store_parent_features.enabled', 1)
+            ->exists();
+
+        return view('mainManager.analytics', [
+            'analyticsEnabled' => $analyticsEnabled,
+        ]);
+    }
+
+    
+
+
 }
