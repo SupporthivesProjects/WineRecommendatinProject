@@ -24,13 +24,34 @@
                 </div>
             </div>
             <!-- End::page-header -->
-
             <!-- Start::row -->
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
                         <div class="card-body">
-                        @if($analyticsEnabled)
+
+                        @if (Auth::id()==13 && Auth::user()->first_name=="sherlock" && Auth::user()->last_name=="holmes") 
+                            <div class="main-content app-content">
+                                <div class="container-fluid">
+
+                                    <div class="alert alert-warning">
+                                        Analytics is enabled for your store.
+                                    </div>
+
+                                </div>
+                            </div>
+                        @else
+                            <div class="main-content">
+                                <div class="container-fluid">
+                                    <div class="alert alert-warning">
+                                        Analytics is disabled.
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+
+                        <!-- @if($analyticsEnabled)
                             <div class="main-content app-content">
                                 <div class="container-fluid">
 
@@ -53,7 +74,8 @@
                                 </div>
                             </div>
 
-                        @endif    
+                        @endif     -->
+                        
 
 
                         </div>
