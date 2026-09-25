@@ -218,6 +218,11 @@
                                             <span class="text-black">Region : {{ ucfirst($product->wine_sub_region) }}
                                             </span>
                                         </h5>
+                                        <h5>
+                                            <span class="text-black">Country : {{ ucfirst($product->country) }}
+                                            </span>
+                                        </h5>
+
 
                                         <p class="text-muted float-start me-3">
                                             @if($totalReviews > 0)

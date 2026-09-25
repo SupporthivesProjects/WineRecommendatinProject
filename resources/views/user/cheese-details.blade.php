@@ -243,7 +243,7 @@
                                         <h5 class="card-title">{{ $wine->wine_name }}</h5>
                                         <p class="card-text text-muted small">
                                             {{ $wine->winery }}<br>
-                                            {{ $wine->vintage_year }} • {{ $wine->wine_sub_region }}
+                                            {{ $wine->vintage_year }} • {{ $wine->wine_sub_region }} • {{ $wine->country }}
                                         </p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="h6 mb-0">₹ &nbsp; {{ number_format($wine->retail_price, 2) }}</span>

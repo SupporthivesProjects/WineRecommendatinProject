@@ -96,6 +96,10 @@
                     <strong>Region:</strong>
                     {{ $product->wine_sub_region ?? 'N/A' }}
                 </p>
+                <p class="mb-2">
+                    <strong>Country:</strong>
+                    {{ $product->country ?? 'N/A' }}
+                </p>
                 @if($totalReviews > 0)
                     <p class="text-muted mb-3">
                         {{ number_format($averageRating, 1) }}/5

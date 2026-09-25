@@ -256,6 +256,16 @@
 
                 </p>
 
+                {{-- country --}}
+
+                <p class="mb-2 product-meta">
+
+                    <strong>Region:</strong>
+
+                    {{ $product->country?? 'N/A' }}
+
+                </p>
+
 
                 {{-- REVIEWS --}}
 
