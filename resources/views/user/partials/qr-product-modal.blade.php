@@ -260,7 +260,7 @@
 
                 <p class="mb-2 product-meta">
 
-                    <strong>Region:</strong>
+                    <strong>Country:</strong>
 
                     {{ $product->country?? 'N/A' }}
 
