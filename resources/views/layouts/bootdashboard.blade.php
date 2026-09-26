@@ -108,8 +108,6 @@
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
 
-    
-   
         <!-- Your existing content -->
 
         @if(auth()->check() && auth()->user()->role === 'user')
@@ -122,5 +120,37 @@
                 });
             </script>
         @endif
+
+
+        <script>
+            $(document).ready(function () {
+
+                $.extend(true, $.fn.dataTable.defaults, {
+                    pageLength: 10,
+
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+
+                    dom:
+                        '<"row mb-3"' +
+                            '<"col-md-6"l>' +
+                            '<"col-md-6 d-flex justify-content-end"p>' +
+                        '>' +
+                        't' +
+                        '<"row mt-3"' +
+                            '<"col-md-6"i>' +
+                            '<"col-md-6 d-flex justify-content-end"p>' +
+                        '>',
+
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_",
+                    }
+                });
+
+            });
+            </script>
 </body>
 </html>
