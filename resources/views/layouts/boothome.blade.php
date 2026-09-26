@@ -1543,18 +1543,6 @@
                     modalBody.innerHTML = html;
 
                     const qrModal = new bootstrap.Modal(modalElement);
-                    // Only open QR modal if age has been verified
-                    const ageStatus = sessionStorage.getItem("ageVerified");
-
-                    if (ageStatus === "true") {
-
-                        const qrModal = bootstrap.Modal.getOrCreateInstance(modalElement);
-
-                        qrModal.show();
-
-                    }
-
-
 
                     qrModal.show();
 
@@ -1574,16 +1562,6 @@
 
                     const qrModal = new bootstrap.Modal(modalElement);
 
-                    // Only open QR modal if age has been verified
-                    const ageStatus = sessionStorage.getItem("ageVerified");
-
-                    if (ageStatus === "true") {
-
-                        const qrModal = bootstrap.Modal.getOrCreateInstance(modalElement);
-
-                        qrModal.show();
-
-                    }
                     qrModal.show();
 
                 });
