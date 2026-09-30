@@ -46,15 +46,47 @@ $(function (e) {
     // responsive modal datatable
 
     // file export datatable
+    // $('#file-export').DataTable({
+    //     dom: 'Bfrtip',
+    //     buttons: [
+    //         'copy', 'csv', 'excel', 'pdf', 'print'
+    //     ],
+    //     language: {
+    //         searchPlaceholder: 'Search...',
+    //         sSearch: '',
+    //     },
+    // });
     $('#file-export').DataTable({
-        dom: 'Bfrtip',
+
+        dom:
+            '<"dt-top-row"<"dt-left"lB><"dt-search"f>>' +
+            '<"dt-top-pagination"p>' +
+            'rt' +
+            '<"dt-bottom-row"<"dt-info"i><"dt-bottom-pagination"p>>',
+    
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            'copy',
+            'csv',
+            'excel',
+            'pdf',
+            'print'
         ],
+    
+        pageLength: 10,
+    
+        lengthMenu: [
+            [10, 25, 50, 100],
+            [10, 25, 50, 100]
+        ],
+    
+        lengthChange: true,
+    
         language: {
             searchPlaceholder: 'Search...',
             sSearch: '',
-        },
+            lengthMenu: 'Show _MENU_ entries'
+        }
+    
     });
     // file export datatable
 

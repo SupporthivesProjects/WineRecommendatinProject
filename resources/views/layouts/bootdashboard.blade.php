@@ -8,6 +8,226 @@
 
 <!-- Sweet Alert  -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    /* ================================
+        DataTables Global Styling
+        ================================ */
+
+        .dataTables_wrapper {
+            width: 100%;
+        }
+
+        /* ---------- TOP ROW ---------- */
+
+        .dt-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .dt-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .dt-search {
+            margin-left: auto;
+        }
+
+        .dt-search .dataTables_filter {
+            margin: 0;
+        }
+
+        .dt-search .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        .dt-search input {
+            width: 320px !important;
+            height: 38px;
+            margin-left: 0 !important;
+            padding: 8px 14px;
+            border: 1px solid #e1e5ef;
+            border-radius: 6px;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .dt-search input:focus {
+            border-color: #7367f0;
+            box-shadow: 0 0 0 2px rgba(115, 103, 240, 0.08);
+        }
+
+        /* ---------- SHOW ENTRIES ---------- */
+
+        .dt-left .dataTables_length {
+            margin: 0;
+        }
+
+        .dataTables_length label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .dataTables_length select {
+            min-width: 75px;
+            height: 38px;
+            padding: 5px 28px 5px 10px;
+            border: 1px solid #e1e5ef;
+            border-radius: 6px;
+            background-color: #fff;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* ---------- BUTTONS ---------- */
+
+        .dt-left .dt-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dt-left .dt-button {
+            margin: 0 !important;
+            padding: 8px 14px !important;
+            border: none !important;
+            border-radius: 6px !important;
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+        }
+
+        /* ---------- TOP PAGINATION ---------- */
+
+        .dt-top-pagination {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .dt-top-pagination .dataTables_paginate {
+            margin: 0;
+        }
+
+        /* ---------- BOTTOM ROW ---------- */
+
+        .dt-bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .dt-info {
+            font-size: 13px;
+        }
+
+        .dt-bottom-pagination {
+            margin-left: auto;
+        }
+
+        .dt-bottom-pagination .dataTables_paginate {
+            margin: 0;
+        }
+
+        /* ---------- PAGINATION ---------- */
+
+        .dataTables_paginate {
+            display: flex;
+            align-items: center;
+        }
+
+        .dataTables_paginate .paginate_button {
+            min-width: 38px;
+            height: 36px;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px !important;
+            margin: 0 2px !important;
+            border: 1px solid #e1e5ef !important;
+            border-radius: 5px !important;
+            background: #fff !important;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+
+        .dataTables_paginate .paginate_button:hover {
+            background: #f4f3ff !important;
+            border-color: #7367f0 !important;
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background: #7367f0 !important;
+            border-color: #7367f0 !important;
+            color: #fff !important;
+        }
+
+        .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* ---------- TABLE ---------- */
+
+        .dataTables_wrapper table {
+            width: 100% !important;
+        }
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 768px) {
+
+            .dt-top-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dt-left {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dt-left .dt-buttons {
+                flex-wrap: wrap;
+            }
+
+            .dt-search {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .dt-search input {
+                width: 100% !important;
+            }
+
+            .dt-top-pagination {
+                justify-content: center;
+            }
+
+            .dt-bottom-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .dt-bottom-pagination {
+                margin-left: 0;
+            }
+        }
+</style>
 
 @stack('styles')
 </head>
@@ -151,6 +371,26 @@
                 });
 
             });
-            </script>
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('table').each(function () {
+
+                    if ($.fn.DataTable.isDataTable(this)) {
+                        return;
+                    }
+
+                    $(this).DataTable({
+                        searching: true,
+                        lengthChange: true,
+                        pageLength: 10,
+                        lengthMenu: [10, 25, 50, 100],
+                        dom: 'lBfrtip'
+                    });
+
+                });
+
+                });
+        </script>
 </body>
 </html>
