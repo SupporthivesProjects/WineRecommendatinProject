@@ -1429,7 +1429,7 @@
         });
 
     </script>
-    <script>
+    <!-- <script>
         document.addEventListener("DOMContentLoaded", function () {
 
         const modalEl = document.getElementById('ageModal');
@@ -1478,7 +1478,7 @@
         });
 
         });
-    </script>
+    </script> -->
     <script>
         function playTak() {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1501,7 +1501,7 @@
             playTak();
         });
     </script>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -1567,7 +1567,7 @@
                 });
 
         });
-    </script>
+    </script> -->
     <script>
     document.addEventListener('click', function (event) {
 
@@ -1650,6 +1650,180 @@
             });
 
     });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const modalEl = document.getElementById('ageModal');
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const noMessage = document.getElementById("noMessage");
+
+    const qrModalElement = document.getElementById('qrProductModal');
+    const qrModalBody = document.getElementById('qrProductModalBody');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product');
+
+    const ageStatus = sessionStorage.getItem("ageVerified");
+
+    const ageModal = new bootstrap.Modal(modalEl);
+
+    /*
+     * Function to open QR Product Modal
+     */
+    function openQrProductModal(productId) {
+
+        if (!productId || !qrModalElement || !qrModalBody) {
+            return;
+        }
+
+        // Show loading state
+        qrModalBody.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 mb-0">Loading product details...</p>
+            </div>
+        `;
+
+        fetch(`/qr-product-modal/${productId}`)
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error('Unable to load product details.');
+                }
+
+                return response.text();
+            })
+            .then(html => {
+
+                qrModalBody.innerHTML = html;
+
+                const qrModal = bootstrap.Modal.getOrCreateInstance(qrModalElement);
+
+                qrModal.show();
+
+            })
+            .catch(error => {
+
+                console.error('QR Product Modal Error:', error);
+
+                qrModalBody.innerHTML = `
+                    <div class="text-center py-5 px-3">
+                        <h5>Unable to load product details.</h5>
+                        <p class="text-muted mb-0">
+                            Please try again later.
+                        </p>
+                    </div>
+                `;
+
+                const qrModal = bootstrap.Modal.getOrCreateInstance(qrModalElement);
+
+                qrModal.show();
+            });
+    }
+
+
+    /*
+     * Function to handle QR product after age verification
+     */
+    function handleQrProduct() {
+
+        if (!productId) {
+            return;
+        }
+
+        const currentAgeStatus = sessionStorage.getItem("ageVerified");
+
+        if (currentAgeStatus === "true") {
+            // User is already verified
+            openQrProductModal(productId);
+        }
+
+        // If false or anything else, DO NOT open QR modal.
+    }
+
+
+    /*
+     * CASE 1:
+     * User already verified
+     */
+    if (ageStatus === "true") {
+
+        handleQrProduct();
+
+        return;
+    }
+
+
+    /*
+     * CASE 2:
+     * User previously rejected
+     */
+    if (ageStatus === "false") {
+
+        ageModal.show();
+
+        noMessage.classList.remove("d-none");
+
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+
+        document.body.classList.add("disabled-page");
+
+        return;
+    }
+
+
+    /*
+     * CASE 3:
+     * First time visitor
+     */
+    ageModal.show();
+
+
+    /*
+     * User confirms legal age
+     */
+    yesBtn.addEventListener("click", function () {
+
+        sessionStorage.setItem("ageVerified", "true");
+
+        ageModal.hide();
+
+        /*
+         * IMPORTANT:
+         * Only now do we open the QR product modal.
+         */
+        if (productId) {
+            openQrProductModal(productId);
+        }
+
+    });
+
+
+    /*
+     * User is not old enough
+     */
+    noBtn.addEventListener("click", function () {
+
+        sessionStorage.setItem("ageVerified", "false");
+
+        noMessage.classList.remove("d-none");
+
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+
+        document.body.classList.add("disabled-page");
+
+        /*
+         * Do NOT open QR modal.
+         */
+    });
+
+});
 </script>
 
 
