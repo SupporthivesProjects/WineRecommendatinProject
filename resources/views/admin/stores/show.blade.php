@@ -240,6 +240,16 @@
                         API Key
                     </button>
 
+                    <button
+                        id="sales-tab"
+                        class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#allSalesTab"
+                        type="button"
+                        role="tab">
+                        All Sales
+                    </button>
+
 
                 </div>
             </div>
@@ -1922,7 +1932,7 @@
                     <div class="card-body">
                         <h5 class="mb-3">API Uploaded Data</h5>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped" id="apiData">
+                            <table class="table table-bordered table-striped" id="apiDatatable">
                                 <thead>
                                     <tr>
                                         <th>Invoice</th>
@@ -2085,6 +2095,56 @@
 
 
             </div>
+
+            <!-- Sales tab -->
+            <div class="tab-pane fade" id="allSalesTab" role="tabpanel" aria-labelledby="sales-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-3">Sales</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" id="sales">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @forelse($checkoutProducts as $index => $item)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $item['product_name'] }}</td>
+                                            <td>₹{{ $item['retail_price'] }}</td>
+                                            <td>{{ $item['quantity'] }}</td>
+                                            <td>{{ $item['created_at'] }}</td>
+                                            <td>
+                                                @if (str_starts_with($item['submission_id'], 'PRODUCT_'))
+                                                    Store
+                                                @else
+                                                    Questionnaire
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">
+                                                No sales data found
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             
         </div>
@@ -2352,38 +2412,27 @@
 @endsection
 
     @push('scripts')
-        <script>
-            $(document).ready(function () {
-                $('#store-products-table').DataTable({
-                    pageLength: 25
+    <script>
+        $(document).ready(function () {
+
+            $('#store-products-table, #store-cheese-table, #apiDatatable, #invoiceData, #sales')
+                .each(function () {
+
+                    let options = {
+                        pageLength: 25
+                    };
+
+                    if (this.id === 'invoiceData') {
+                        options.ordering = false;
+                    }
+
+                    if (!$.fn.DataTable.isDataTable(this)) {
+                        $(this).DataTable(options);
+                    }
                 });
-            });
-        </script>
-        <script>
-              $(document).ready(function () {
-                $('#store-cheese-table').DataTable({
-                    pageLength: 25
-                });
-            });
-           
-        </script>
-         <script>
-              $(document).ready(function () {
-                $('#apiData').DataTable({
-                    pageLength: 25
-                });
-            });
-           
-        </script>
-         <script>
-              $(document).ready(function () {
-                $('#invoiceData').DataTable({
-                    pageLength: 25,
-                    ordering: false
-                });
-            });
-           
-        </script>
+
+        });
+    </script>
 
         <script>
             // Store ID for use in JavaScript

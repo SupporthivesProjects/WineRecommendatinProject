@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AnalyticsExport;
 
 
+
 class StoreController extends Controller
 {
     /**
@@ -739,6 +740,55 @@ class StoreController extends Controller
             }
         }
 
+        $checkoutRecords = DB::table('cart_checkouts')
+            ->where('store_id', $store->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $checkoutProducts = collect();
+
+        foreach ($checkoutRecords as $checkout) {
+
+            // Decode the products JSON
+            $products = json_decode($checkout->products, true);
+
+            // Handle JSON that has been encoded more than once
+            if (is_string($products)) {
+                $products = json_decode($products, true);
+            }
+
+            // Skip empty or invalid product data
+            if (!is_array($products)) {
+                continue;
+            }
+
+            // Handle a possible nested products structure
+            if (isset($products['products']) && is_array($products['products'])) {
+                $products = $products['products'];
+            }
+
+            foreach ($products as $product) {
+
+                // Skip entries that are not product arrays
+                if (!is_array($product)) {
+                    continue;
+                }
+
+                $checkoutProducts->push([
+                    'submission_id' => $checkout->submission_id ?? '',
+                    'product_name'  => $product['name'] ?? '',
+                    'retail_price'  => $product['retail_price'] ?? 0,
+                    'quantity'      => $product['quantity'] ?? 0,
+                    'created_at'    => $checkout->created_at ?? null,
+                    'type'          => !empty($checkout->submission_id)
+                        && !str_starts_with($checkout->submission_id, 'PRODUCT_')
+                            ? 'Questionnaire'
+                            : 'Store',
+                ]);
+            }
+        }
+
+
         return view(
             'admin.stores.show',
             compact(
@@ -773,7 +823,8 @@ class StoreController extends Controller
                 'budgetStats',
                 'occasionBudgetPreferences',
                 'apiUploads',
-                'invoiceData'
+                'invoiceData',
+                'checkoutProducts'
             )
         );
     }
