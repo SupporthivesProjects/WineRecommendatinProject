@@ -282,13 +282,13 @@
                 @endif
 
 
-                {{-- PRICE --}}
+                {{-- PRICE 
 
                 <h4 class="fw-bold mb-4">
 
                     ₹{{ number_format($product->retail_price, 2) }}
 
-                </h4>
+                </h4>--}}
 
 
                 {{-- ========================================= --}}
@@ -506,9 +506,9 @@
                                         </p>
 
 
-                                        <p class="fw-bold">
+                                        {{--<p class="fw-bold">
                                             ₹{{ number_format($related->retail_price, 2) }}
-                                        </p>
+                                        </p>--}}
 
 
                                         <button

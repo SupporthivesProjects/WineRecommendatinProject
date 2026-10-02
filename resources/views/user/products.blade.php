@@ -278,7 +278,7 @@
             }
         }
         
-        </style>
+    </style>
 
     
 
@@ -294,7 +294,7 @@
                 <div class="collapse navbar-collapse justify-content-between w-100" id="navbarNav">
                     <!-- Nav links (left aligned) -->
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboarsd</a></li>
+                        <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
                         <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
                         <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                         <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
@@ -455,10 +455,7 @@
                                                     </label>
                                                 </div>
                                             @endforeach
-
                                         </div>
-                                        
-
                                     </div>
                                 </div>
                                 <div class="row mb-4">
@@ -488,7 +485,7 @@
                                         <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
                                         data-winery="{{ $product->winery }}"
-                                        data-retail-price="{{ $product->retail_price }}"
+                                        data-retail-price="{{ $product->display_price }}"
                                         data-country="{{ $product->country }}">
                                             <div class="card custom-card wine-card">
                                                 <!-- Image at the top -->
@@ -522,7 +519,7 @@
                                                         @endif
                                                     </p>
 
-                                                    <p><strong>MRP:</strong> {{ $product->retail_price }}</p>
+                                                    <p><strong>MRP:</strong> {{ $product->display_price }}</p>
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
                                                         Read More !!
                                                     </a>
@@ -530,7 +527,7 @@
                                                         class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                         data-product-id="{{ $product->id }}"
                                                         data-product-name="{{ $product->wine_name }}"
-                                                        data-product-price="{{ $product->retail_price }}">
+                                                        data-product-price="{{ $product->display_price }}">
 
                                                         {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
                                                     </button>
@@ -645,7 +642,7 @@
 @push('scripts')
     <script>
         $(function () {
-            const prices = @json($products->pluck('retail_price')->unique()->sort()->values());
+            const prices = @json($products->pluck('display_price')->unique()->sort()->values());
             const min = Math.floor(Math.min(...prices));
             const max = Math.ceil(Math.max(...prices));
 

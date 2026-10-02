@@ -242,14 +242,14 @@
                                             @if ($product->discounts)
                                                 @php
                                                     $discountAmount =
-                                                        $product->retail_price * ($product->discounts / 100);
-                                                    $discountedPrice = $product->retail_price - $discountAmount;
+                                                        $product->display_price * ($product->discounts / 100);
+                                                    $discountedPrice = $product->display_price - $discountAmount;
                                                 @endphp
-                                                <span class="text-muted me-2"><del>₹{{ number_format($product->retail_price, 2) }}
+                                                <span class="text-muted me-2"><del>₹{{ number_format($product->display_price, 2) }}
                                                         INR</del></span>
                                                 <b>₹{{ number_format($discountedPrice, 2) }} INR</b>
                                             @else
-                                                <b>₹{{ number_format($product->retail_price, 2) }} INR</b>
+                                                <b>₹{{ number_format($product->display_price, 2) }} INR</b>
                                             @endif
 
                                         </h5>
@@ -288,7 +288,7 @@
                                                 class="btn border border-dark w-100 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                 data-product-id="{{ $product->id }}"
                                                 data-product-name="{{ $product->wine_name }}"
-                                                data-product-price="{{ $product->retail_price }}">
+                                                data-product-price="{{ $product->display_price }}">
 
                                                 {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
 
@@ -743,7 +743,7 @@
                                         data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
                                         data-winery="{{ $product->winery }}"
-                                        data-retail-price="{{ $product->retail_price }}"
+                                        data-retail-price="{{ $product->display_price }}"
                                         data-country="{{ $product->country }}">
                                         <div class="card custom-card wine-card">
                                             <!-- Image -->
@@ -784,7 +784,7 @@
                                                     class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                     data-product-id="{{ $product->id }}"
                                                     data-product-name="{{ $product->wine_name }}"
-                                                    data-product-price="{{ $product->retail_price }}">
+                                                    data-product-price="{{ $product->display_price }}">
 
                                                     {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
 

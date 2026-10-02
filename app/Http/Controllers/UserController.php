@@ -254,6 +254,9 @@ class UserController extends Controller
 
             $product->is_featured = $storeProducts[$product->id]->is_featured;
 
+            // Get the price applicable to this store
+            $product->display_price = $product->getDisplayPrice();
+
             return $product;
         });
 
@@ -288,6 +291,7 @@ class UserController extends Controller
         
         // Fetch the current product with images and reviews
         $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
+        $product->display_price = $product->getDisplayPrice();
 
         // Get approved reviews with user data
         $reviews = $product->reviews()
@@ -326,7 +330,7 @@ class UserController extends Controller
         //     ->limit(3)
         //     ->get();
         
-        $price = $product->retail_price;
+        $price = $product->display_price;
         $relatedProducts = Product::with('images')
             ->where('id', '!=', $product->id)
             ->whereBetween('retail_price', [
@@ -353,6 +357,10 @@ class UserController extends Controller
             $relatedProducts = $relatedProducts->merge($additionalProducts);
         }
 
+        $relatedProducts->transform(function ($relatedProduct) {
+            $relatedProduct->display_price = $relatedProduct->getDisplayPrice();
+            return $relatedProduct;
+        });
 
         $cart = session()->get('cart', []);
 
