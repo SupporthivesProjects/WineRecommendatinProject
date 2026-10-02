@@ -84,7 +84,7 @@
                 <div class="hover-overlay">
                     <a href="{{ route('user.productdetails', $product->id) }}" 
                     class="btn btn-dark rounded-0 overlay-btn">
-                    I want to try Now !!
+                    Tell me more !!
                     </a>
                 </div>
             </div>
