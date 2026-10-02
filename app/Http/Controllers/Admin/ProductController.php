@@ -903,21 +903,21 @@ class ProductController extends Controller
 
             $url = url('/products/' . $product->id);
 
-            $result = Builder::create()
-                ->writer(new PngWriter())
-                ->data($url)
-                ->size(180)
-                ->margin(10)
-                ->build();
-
             // $result = Builder::create()
-            // ->writer(new PngWriter())
-            // ->data($url)
-            // ->size(180)
-            // ->margin(10)
-            // ->logoPath(public_path('images/logoblackred.png'))
-            // ->logoResizeToWidth(100)
-            // ->build();
+            //     ->writer(new PngWriter())
+            //     ->data($url)
+            //     ->size(180)
+            //     ->margin(10)
+            //     ->build();
+
+            $result = Builder::create()
+            ->writer(new PngWriter())
+            ->data($url)
+            ->size(180)
+            ->margin(10)
+            ->logoPath(public_path('images/QRCodeImage.png'))
+            ->logoResizeToWidth(100)
+            ->build();
 
             $qrCodes[$product->id] = base64_encode(
                 $result->getString()
