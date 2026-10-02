@@ -493,6 +493,8 @@
             let questionnaireRules = {};
             let selectedQuestionnaireId = null;
             let questionnaireValidation = {};
+            const surpriseMeConfig = @json(config('surprise_me'));
+            let surpriseMeActive = {};
             const questionLayouts = {
                 country: 2,
                 sub_region:2,
@@ -832,6 +834,12 @@
                     return true;
                 }
                 const validation = questionnaireValidation[question.key];
+                if (
+                    question.key === 'taste' &&
+                    surpriseMeActive[question.key]
+                ) {
+                    return true;
+                }
 
                 if (!validation) {
                     return true;
@@ -1127,33 +1135,72 @@
                             ⭐ SURPRISE ME LOGIC (MULTIPLE)
                             =============================== */
 
-                            if (q.type === 'multiple') {
+                            if (q.type === 'multiple') 
+                            {
+                                const isTasteQuestion = q.key === 'taste';
 
-                                if (input.value === "SurpriseMe" && input.checked) {
+                                if (input.value === "SurpriseMe" && input.checked && isTasteQuestion) {
 
-                                    // If SurpriseMe selected → uncheck all others
+                                    // Get predefined options for this template and question
+                                    const templateId = selectedQuestionnaireId;
+                                    const questionId = q.id;
+
+                                    const surpriseOptions =
+                                        surpriseMeConfig?.[templateId]?.[questionId] || [];
+
+                                    // Clear all selections first
                                     inputs.forEach(i => {
-                                        if (i !== input) {
-                                            i.checked = false;
+                                        i.checked = false;
 
-                                            const lbl = document.querySelector(`label[for="${i.id}"]`);
-                                            if (lbl) lbl.classList.remove('active');
+                                        const label = document.querySelector(`label[for="${i.id}"]`);
+                                        if (label) {
+                                            label.classList.remove('active');
                                         }
                                     });
 
+                                    // Select the predefined Surprise Me options
+                                    inputs.forEach(i => {
+                                        if (surpriseOptions.includes(i.value)) {
+                                            i.checked = true;
+
+                                            const label = document.querySelector(`label[for="${i.id}"]`);
+                                            if (label) {
+                                                label.classList.add('active');
+                                            }
+                                        }
+                                    });
+
+                                    // Remember that Surprise Me was used
+                                    surpriseMeActive[q.key] = true;
+                                    // Highlight the SurpriseMe option
+                                    const surpriseLabel = document.querySelector(
+                                        `label[for="${input.id}"]`
+                                    );
+
+                                    if (surpriseLabel) {
+                                        surpriseLabel.classList.add('active');
+                                    }
+
                                 } else if (input.value !== "SurpriseMe" && input.checked) {
 
-                                    // If any other selected → uncheck SurpriseMe
+                                    // Manual selection turns off Surprise Me mode
                                     inputs.forEach(i => {
                                         if (i.value === "SurpriseMe") {
                                             i.checked = false;
 
-                                            const lbl = document.querySelector(`label[for="${i.id}"]`);
-                                            if (lbl) lbl.classList.remove('active');
+                                            const label = document.querySelector(`label[for="${i.id}"]`);
+                                            if (label) {
+                                                label.classList.remove('active');
+                                            }
                                         }
                                     });
+
+                                    if (isTasteQuestion) {
+                                        surpriseMeActive[q.key] = false;
+                                    }
                                 }
-                            }
+
+                                }
 
                             /* ===============================
                             SINGLE SELECTION ACTIVE RESET
