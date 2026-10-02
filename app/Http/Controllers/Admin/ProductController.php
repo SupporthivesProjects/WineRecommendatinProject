@@ -629,28 +629,193 @@ class ProductController extends Controller
         return response()->stream($callback, 200, $headers);
     }
 
+    // public function uploadCSV(Request $request)
+    // {
+    //     try {
+
+    //         $file = $request->file('csv_file');
+    //         $handle = fopen($file->getRealPath(), "r");
+
+    //         $header = fgetcsv($handle);
+
+    //         while (($row = fgetcsv($handle)) !== false) {
+    //             $data = array_combine($header, $row);
+    //             DB::table('products')->insert($data);
+    //         }
+
+    //         fclose($handle);
+
+    //         return back()->with('success','Products imported successfully');
+
+    //     } catch (\Exception $e) {
+
+    //         return back()->with('error','Import failed: '.$e->getMessage());
+
+    //     }
+    // }
+
+    // public function uploadCSV(Request $request)
+    // {
+    //     try {
+    //         $file = $request->file('csv_file');
+    //         $handle = fopen($file->getRealPath(), "r");
+
+    //         $header = fgetcsv($handle);
+
+    //         // Fields that should be treated as NULL when empty
+    //         $nullableFields = [
+    //             'retail_price_maharashtra',
+    //             'retail_price_kolkata',
+    //         ];
+
+    //         while (($row = fgetcsv($handle)) !== false) {
+    //             $data = array_combine($header, $row);
+
+    //             // Convert empty strings and "NULL" text to actual NULL
+    //             foreach ($data as $key => $value) {
+    //                 if (
+    //                     $value === '' ||
+    //                     strtoupper(trim($value)) === 'NULL'
+    //                 ) {
+    //                     $data[$key] = null;
+    //                 }
+    //             }
+
+    //             DB::table('products')->insert($data);
+    //         }
+
+    //         fclose($handle);
+
+    //         return back()->with(
+    //             'success',
+    //             'Products imported successfully'
+    //         );
+
+    //     } catch (\Exception $e) {
+    //         return back()->with(
+    //             'error',
+    //             'Import failed: ' . $e->getMessage()
+    //         );
+    //     }
+    // }
+
+
+    
     public function uploadCSV(Request $request)
     {
-        try {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt',
+        ]);
 
+        try {
             $file = $request->file('csv_file');
             $handle = fopen($file->getRealPath(), "r");
 
+            if (!$handle) {
+                throw new \Exception('Unable to open CSV file.');
+            }
+
             $header = fgetcsv($handle);
 
-            while (($row = fgetcsv($handle)) !== false) {
-                $data = array_combine($header, $row);
-                DB::table('products')->insert($data);
+            if (!$header) {
+                fclose($handle);
+                throw new \Exception('CSV file is empty.');
             }
+
+            // Clean column names
+            $header = array_map('trim', $header);
+
+            $importedCount = 0;
+
+            DB::transaction(function () use ($handle, $header, &$importedCount) {
+
+                // Lock the sequence row for the entire import
+                $sequence = DB::table('twid_sequences')
+                    ->where('id', 1)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$sequence) {
+                    throw new \Exception('TWID sequence record not found.');
+                }
+
+                $nextNumber = (int) $sequence->last_number;
+
+                while (($row = fgetcsv($handle)) !== false) {
+
+                    // Skip completely empty rows
+                    if (count(array_filter($row, function ($value) {
+                        return trim((string) $value) !== '';
+                    })) === 0) {
+                        continue;
+                    }
+
+                    if (count($header) !== count($row)) {
+                        throw new \Exception(
+                            'CSV row has a different number of columns than the header.'
+                        );
+                    }
+
+                    $data = array_combine($header, $row);
+
+                    // Remove database-generated fields
+                    unset($data['id'], $data['twid']);
+
+                    // Convert empty strings and "NULL" to actual NULL
+                    foreach ($data as $key => $value) {
+                        if (
+                            $value === null ||
+                            trim((string) $value) === '' ||
+                            strtoupper(trim((string) $value)) === 'NULL'
+                        ) {
+                            $data[$key] = null;
+                        }
+                    }
+
+                    // Generate the next TWID
+                    $nextNumber++;
+
+                    $twid = 'TW' . str_pad(
+                        $nextNumber,
+                        6,
+                        '0',
+                        STR_PAD_LEFT
+                    );
+
+                    $data['twid'] = $twid;
+
+                    // Insert product
+                    DB::table('products')->insert($data);
+
+                    $importedCount++;
+                }
+
+                // Update sequence once after all products are inserted
+                DB::table('twid_sequences')
+                    ->where('id', 1)
+                    ->update([
+                        'last_number' => $nextNumber,
+                        'updated_at' => now(),
+                    ]);
+            });
 
             fclose($handle);
 
-            return back()->with('success','Products imported successfully');
+            return back()->with(
+                'success',
+                $importedCount . ' products imported successfully.'
+            );
 
         } catch (\Exception $e) {
 
-            return back()->with('error','Import failed: '.$e->getMessage());
+            if (isset($handle) && is_resource($handle)) {
+                fclose($handle);
+            }
 
+            return back()->with(
+                'error',
+                'Import failed: ' . $e->getMessage()
+            );
         }
     }
 
