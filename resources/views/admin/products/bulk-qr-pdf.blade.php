@@ -27,30 +27,30 @@
             vertical-align: top;
             text-align: center;
             box-sizing: border-box;
-            height: 125px;
+            height: 160px;
             padding: 5px 3px;
+        }
+
+        .logo {
+            width: 100%;
+            height: 35px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .logo img {
+            width: 55px;
+            height: 35px;
+            object-fit: contain;
         }
 
         .qr-item h3 {
             font-size: 8px;
             line-height: 10px;
             height: 20px;
-            margin: 0 0 4px 0;
+            margin: 5px 0 0;
             padding: 0;
             overflow: hidden;
-        }
-
-        .qr-code {
-            width: 72pt;
-            height: 72pt;
-            margin: 0 auto;
-        }
-
-        .qr-code img {
-            width: 72pt;
-            height: 72pt;
-            display: block;
-            margin: 0 auto;
         }
 
         .qr-item p {
@@ -71,26 +71,19 @@
 
         <div class="qr-item">
 
-            <h3>
+            <div class="logo">
+                <img src="{{ public_path('images/logoredwhite.jpg') }}" alt="Logo">
+            </div>
+
+            <div class="qr-code">
+                <img src="data:image/png;base64,{{ $qrCodes[$product->id] }}" alt="QR Code" width="72" height="72">
+            </div>
+
+            <h3 style="height:200px">
                 {{ $product->wine_name }}
             </h3>
 
-            <p>
-                Product ID: {{ $product->id }}
-            </p>
-
-            <div class="qr-code">
-                <img
-                    src="data:image/png;base64,{{ $qrCodes[$product->id] }}"
-                    alt="QR Code"
-                    width="72"
-                    height="72"
-                >
-            </div>
-
-            <p>
-                {{ $url }}
-            </p>
+            
 
         </div>
 

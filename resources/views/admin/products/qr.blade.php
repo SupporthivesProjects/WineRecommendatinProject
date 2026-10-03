@@ -2,8 +2,39 @@
 
 @section('admindashboardcontent')
 <style>
-    @media print {
+    .qr-print-area {
+        text-align: center;
+        padding: 15px;
+    }
 
+    .qr-logo {
+        margin-bottom: 10px;
+    }
+
+    .qr-logo img {
+        max-width: 100px;
+        max-height: 50px;
+        width: auto;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .qr-code svg {
+        width: 1in !important;
+        height: 1in !important;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .qr-product-name {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    @media print {
         @page {
             margin: 0;
         }
@@ -30,7 +61,6 @@
         }
     }
 </style>
-
 <div class="main-content app-content">
     <div class="container-fluid">
 
@@ -59,16 +89,24 @@
         <div class="card shadow-sm border-0">
             <div class="card-body text-center">
 
-                <div class="qr-print-area">
+            <div class="qr-print-area">
+                {{-- Logo --}}
+                <div class="qr-logo">
+                    <img
+                        src="{{ asset('images/logoredwhite.jpg') }}"
+                        alt="Logo"
+                    >
+                </div>
 
-                    <h3 class="mb-3">
-                        {{ $product->wine_name }}
-                    </h3>
+                {{-- QR Code --}}
+                <div class="qr-code">
+                    {!! QrCode::size(96)->generate($url) !!}
+                </div>
 
-                    <div class="my-4">
-                        {!! QrCode::size(300)->generate($url) !!}
-                    </div>
-
+                {{-- Product Name --}}
+                <div class="qr-product-name">
+                    {{ $product->wine_name }}
+                </div>
 
                 </div>
 

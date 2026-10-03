@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\UploadApiController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\StoreAnalyticsController;
 use App\Http\Controllers\Admin\QuestionnaireDebuggerController;
+use App\Http\Controllers\PopupEnquiryController;
 
 use Illuminate\Support\Facades\Log;
 
@@ -80,7 +81,8 @@ Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])
 Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 Route::get('/qr-product-modal/{id}', [UserDashboardController::class, 'qrProductModal'])->name('qr.product.modal');
 
-
+//popup enquery
+Route::post('/popup-enquiry', [PopupEnquiryController::class, 'store'])->name('popup.enquiry.store');
 
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
 

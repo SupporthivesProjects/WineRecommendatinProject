@@ -1070,43 +1070,162 @@
         </div>
 
 
-        <!-- QR Code Modal -->
-         <!-- QR Product Modal -->
-        <div class="modal fade" id="qrProductModal" tabindex="-1" aria-labelledby="qrProductModalLabel" aria-hidden="true">
+        <!-- QR Product Modal -->
+        <div class="modal fade" id="qrProductModal" tabindex="-1"
+            aria-labelledby="qrProductModalLabel" aria-hidden="true">
+
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="qrProductModalLabel">
-                            Product Details
-                        </h5>
+                    <!-- Modal Header -->
+                    <div class="modal-header position-relative">
+                        <div class="d-flex align-items-center gap-3">
+                            <h5 class="modal-title mb-0" id="qrProductModalLabel">
+                                Product Details
+                            </h5>
+
+                            <button
+                                type="button"
+                                class="btn btn-danger btn-sm enquire-now-btn"
+                                id="mainEnquireNowBtn">
+                                Enquire Now
+                            </button>
+                        </div>
 
                         <button
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
+                            aria-label="Close">
+                        </button>
                     </div>
 
+                    <!-- Modal Body -->
                     <div class="modal-body p-0" id="qrProductModalBody">
-
                         <div class="text-center py-5">
-                            <div
-                                class="spinner-border"
-                                role="status"
-                            >
-                                <span class="visually-hidden">
-                                    Loading...
-                                </span>
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
             </div>
         </div>
+
+
+        <!-- Product Enquiry Modal -->
+        <div class="modal fade"
+            id="productEnquiryModal"
+            tabindex="-1"
+            aria-labelledby="productEnquiryModalLabel"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productEnquiryModalLabel">
+                            Product Enquiry
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div id="enquirySuccess"
+                            class="alert alert-success d-none">
+                        </div>
+
+                        <div id="enquiryError"
+                            class="alert alert-danger d-none">
+                        </div>
+
+                        <form id="productEnquiryForm">
+                            @csrf
+
+                            <input type="hidden"
+                                name="product_id"
+                                id="enquiryProductId">
+
+                            <div class="mb-3">
+                                <label for="enquiryName" class="form-label">
+                                    Name
+                                </label>
+
+                                <input type="text"
+                                    class="form-control"
+                                    id="enquiryName"
+                                    name="name"
+                                    required
+                                    maxlength="255">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="enquiryGender" class="form-label">
+                                    Gender
+                                </label>
+
+                                <select class="form-select"
+                                        id="enquiryGender"
+                                        name="gender"
+                                        required>
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Prefer not to say">
+                                        Prefer not to say
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="enquiryMobile" class="form-label">
+                                    Mobile Number
+                                </label>
+
+                                <input type="tel"
+                                    class="form-control"
+                                    id="enquiryMobile"
+                                    name="mobile"
+                                    required
+                                    maxlength="20"
+                                    pattern="[0-9+\-\s()]{7,20}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="enquiryDescription" class="form-label">
+                                    Description
+                                </label>
+
+                                <textarea class="form-control"
+                                        id="enquiryDescription"
+                                        name="description"
+                                        rows="4"
+                                        maxlength="2000"
+                                        placeholder="Tell us what you would like to know..."></textarea>
+                            </div>
+
+                            <input type="hidden" name="product_name" id="product_name">
+
+                            <button type="submit"
+                                    class="btn btn-danger w-100"
+                                    id="submitEnquiryBtn">
+                                Submit Enquiry
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Start:: Section-11 -->
         @include('layouts.footer')
@@ -1569,87 +1688,87 @@
         });
     </script> -->
     <script>
-    document.addEventListener('click', function (event) {
+        document.addEventListener('click', function (event) {
 
-        const button = event.target.closest('.related-product-btn');
+            const button = event.target.closest('.related-product-btn');
 
-        if (!button) {
-            return;
-        }
+            if (!button) {
+                return;
+            }
 
-        const productId = button.dataset.productId;
+            const productId = button.dataset.productId;
 
-        if (!productId) {
-            return;
-        }
+            if (!productId) {
+                return;
+            }
 
-        const modalBody = document.getElementById('qrProductModalBody');
+            const modalBody = document.getElementById('qrProductModalBody');
 
-        if (!modalBody) {
-            return;
-        }
+            if (!modalBody) {
+                return;
+            }
 
-        // Show loading state
-        modalBody.innerHTML = `
-            <div class="text-center py-5">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">
-                        Loading...
-                    </span>
-                </div>
-
-                <p class="mt-3 mb-0">
-                    Loading product details...
-                </p>
-            </div>
-        `;
-
-        // Load the selected related product
-        fetch(`/qr-product-modal/${productId}`)
-            .then(response => {
-
-                if (!response.ok) {
-                    throw new Error('Unable to load product details.');
-                }
-
-                return response.text();
-            })
-            .then(html => {
-
-                // Replace current product with the new product
-                modalBody.innerHTML = html;
-
-                // Keep the same modal open
-                const modalElement = document.getElementById('qrProductModal');
-
-                if (!modalElement) {
-                    return;
-                }
-
-                const qrModal = bootstrap.Modal.getOrCreateInstance(modalElement);
-
-                qrModal.show();
-
-            })
-            .catch(error => {
-
-                console.error('Related Product Modal Error:', error);
-
-                modalBody.innerHTML = `
-                    <div class="text-center py-5 px-3">
-                        <h5>
-                            Unable to load product details.
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            Please try again later.
-                        </p>
+            // Show loading state
+            modalBody.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">
+                            Loading...
+                        </span>
                     </div>
-                `;
 
-            });
+                    <p class="mt-3 mb-0">
+                        Loading product details...
+                    </p>
+                </div>
+            `;
 
-    });
+            // Load the selected related product
+            fetch(`/qr-product-modal/${productId}`)
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error('Unable to load product details.');
+                    }
+
+                    return response.text();
+                })
+                .then(html => {
+
+                    // Replace current product with the new product
+                    modalBody.innerHTML = html;
+
+                    // Keep the same modal open
+                    const modalElement = document.getElementById('qrProductModal');
+
+                    if (!modalElement) {
+                        return;
+                    }
+
+                    const qrModal = bootstrap.Modal.getOrCreateInstance(modalElement);
+
+                    qrModal.show();
+
+                })
+                .catch(error => {
+
+                    console.error('Related Product Modal Error:', error);
+
+                    modalBody.innerHTML = `
+                        <div class="text-center py-5 px-3">
+                            <h5>
+                                Unable to load product details.
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Please try again later.
+                            </p>
+                        </div>
+                    `;
+
+                });
+
+        });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -1701,8 +1820,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 qrModalBody.innerHTML = html;
 
-                const qrModal = bootstrap.Modal.getOrCreateInstance(qrModalElement);
+                // Read the product name from the loaded product details.
+                const productTitle = qrModalBody.querySelector('.product-title');
 
+                const enquireButton = document.getElementById('mainEnquireNowBtn');
+
+                if (productTitle && enquireButton) {
+                    enquireButton.dataset.productName = productTitle.textContent.trim();
+                }
+
+                const qrModal = bootstrap.Modal.getOrCreateInstance(qrModalElement);
                 qrModal.show();
 
             })
@@ -1825,6 +1952,140 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const productModalElement =
+            document.getElementById('qrProductModal');
+
+        const enquiryModalElement =
+            document.getElementById('productEnquiryModal');
+
+        const enquiryForm =
+            document.getElementById('productEnquiryForm');
+
+        const enquiryModal =
+            bootstrap.Modal.getOrCreateInstance(enquiryModalElement);
+
+        const productModal =
+            bootstrap.Modal.getOrCreateInstance(productModalElement);
+
+        const submitButton =
+            document.getElementById('submitEnquiryBtn');
+
+        const successMessage =
+            document.getElementById('enquirySuccess');
+
+        const errorMessage =
+            document.getElementById('enquiryError');
+
+
+        /*
+        * Open enquiry modal from dynamically loaded product details.
+        */
+        document.addEventListener('click', function (event) {
+            const button = event.target.closest('#mainEnquireNowBtn');
+
+            if (!button) {
+                return;
+            }
+
+            const productName = button.dataset.productName || '';
+
+            enquiryForm.reset();
+
+            document.getElementById('product_name').value = productName;
+
+            successMessage.classList.add('d-none');
+            errorMessage.classList.add('d-none');
+
+            productModal.hide();
+
+            productModalElement.addEventListener('hidden.bs.modal', function onHidden() {
+                enquiryModal.show();
+            }, { once: true });
+        });
+
+
+        /*
+        * Submit enquiry without reloading the page.
+        */
+        enquiryForm.addEventListener('submit', async function (event) {
+
+            event.preventDefault();
+
+            successMessage.classList.add('d-none');
+            errorMessage.classList.add('d-none');
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+
+            try {
+
+                const response = await fetch(
+                    "{{ route('popup.enquiry.store') }}",
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: new FormData(enquiryForm)
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+
+                    if (response.status === 422 && data.errors) {
+                        const messages = Object.values(data.errors)
+                            .flat()
+                            .join('\n');
+
+                        throw new Error(messages);
+                    }
+
+                    throw new Error(
+                        data.message || 'Unable to submit your enquiry.'
+                    );
+                }
+
+                successMessage.textContent = data.message;
+                successMessage.classList.remove('d-none');
+
+                enquiryForm.reset();
+
+                // Close enquiry modal, then return to product details.
+                enquiryModal.hide();
+
+                enquiryModalElement.addEventListener('hidden.bs.modal', function onHidden() {
+
+                    enquiryModalElement.removeEventListener(
+                        'hidden.bs.modal',
+                        onHidden
+                    );
+
+                    productModal.show();
+
+                }, { once: true });
+
+            } catch (error) {
+
+                errorMessage.textContent = error.message;
+                errorMessage.classList.remove('d-none');
+
+            } finally {
+
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Enquiry';
+
+            }
+
+        });
+
+    });
+    </script>
 
 
 </body>
