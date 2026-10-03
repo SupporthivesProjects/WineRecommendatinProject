@@ -23,6 +23,9 @@
                     </ol>
                 </div>
                 <div class="d-flex gap-2">
+                    <a href="{{ route('admin.products.print-info') }}" type="button" class="btn btn-wave btn-primary my-2 btn-icon-text">
+                            <i class="fe fe-printer me-2"></i>Print Product Info
+                    </a>
                     <a  href="{{ route('admin.products.bulk-upload') }}" type="button" class="btn btn-wave btn-primary my-2 btn-icon-text">
                         <i class="fe fe-plus me-2"></i> Bulk Upload
                     </a>

@@ -133,7 +133,7 @@
                                     <div class="row mt-4">
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-primary me-2">
-                                                <i class="fe fe-save me-2"></i>Create Template
+                                                <i class="fe fe-save me-2"></i>Create Features
                                             </button>
                                             <a href="{{ route('admin.features.index') }}" class="btn btn-light">
                                                 <i class="fe fe-x me-2"></i>Cancel

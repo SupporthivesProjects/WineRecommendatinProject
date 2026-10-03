@@ -1098,5 +1098,89 @@ class ProductController extends Controller
     }
 
 
+    private function productInfoFields()
+    {
+        return [
+            'twid' => 'TWID',
+            'wine_name' => 'Wine Name',
+            'type' => 'Type',
+            'sp_mentions' => 'Special Mentions',
+            'method' => 'Method',
+            'grape_variety' => 'Grape Variety',
+            'varietal_blend' => 'Varietal Blend',
+            'vintage_year' => 'Vintage Year',
+            'wine_sub_region' => 'Wine Sub-region',
+            'winery' => 'Winery',
+            'designation' => 'Designation',
+            'alcohol_vol' => 'Alcohol Volume',
+            'residual_sugar' => 'Residual Sugar',
+            'nature' => 'Nature',
+            'acidity' => 'Acidity',
+            'tannin_level' => 'Tannin Level',
+            'body' => 'Body',
+            'aging' => 'Aging',
+            'barrel_type' => 'Barrel Type',
+            'time_spent_aging' => 'Time Spent Aging',
+            'closure_type' => 'Closure Type',
+            'aroma' => 'Aroma',
+            'palate' => 'Palate',
+            'finish' => 'Finish',
+            'sweetness_level' => 'Sweetness Level',
+            'glass_ware' => 'Glassware',
+            'retail_price' => 'Retail Price',
+            'retail_price_maharashtra' => 'Retail Price Maharashtra',
+            'retail_price_kolkata' => 'Retail Price Kolkata',
+            'discounts' => 'Discounts',
+            'optimal_drinking' => 'Optimal Drinking',
+            'style' => 'Style',
+            'decanting_time' => 'Decanting Time',
+            'ageing_potential' => 'Ageing Potential',
+            'cheese_pairing' => 'Cheese Pairing',
+            'importer_info' => 'Importer Information',
+            'image1' => 'Image 1',
+            'image2' => 'Image 2',
+            'image3' => 'Image 3',
+            'image4' => 'Image 4',
+            'categories' => 'Categories',
+            'wine_story' => 'Wine Story',
+            'country' => 'Country',
+            'tasting_notes' => 'Tasting Notes',
+            'status' => 'Status',
+            'admin_featured_product' => 'Featured Product',
+        ];
+    }
+
+    public function showPrintInfoFields()
+    {
+        $fields = $this->productInfoFields();
+
+        return view('admin.products.print-info-fields', compact('fields'));
+    }
+
+    public function generateProductInfoPdf(Request $request)
+    {
+        $fields = $this->productInfoFields();
+
+        $request->validate([
+            'fields' => 'required|array|min:1',
+            'fields.*' => 'required|string|in:' . implode(',', array_keys($fields)),
+        ]);
+
+        $selectedFields = $request->input('fields');
+
+        $products = Product::select($selectedFields)
+            ->orderBy('wine_name', 'asc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.products.product-info-pdf', [
+            'products' => $products,
+            'selectedFields' => $selectedFields,
+            'fieldLabels' => $fields,
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->stream('product-information.pdf');
+    }
+
+
 
 }

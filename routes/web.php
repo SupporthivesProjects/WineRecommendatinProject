@@ -202,9 +202,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //bulk qr code
     Route::get('/products/bulk-qr', [AdminProductController::class, 'bulkQr'])->name('products.bulk-qr');
     Route::post('/products/bulk-qr/generate', [AdminProductController::class, 'generateBulkQrPdf'])->name('products.bulk-qr.generate');
-
-
-
+    
+    //print product info
+    Route::get('/admin/products/print-info',[AdminProductController::class, 'showPrintInfoFields'])->name('products.print-info');
+    
+    Route::post('/admin/products/print-info/generate',[AdminProductController::class, 'generateProductInfoPdf'])->name('products.print-info.generate');
 
     // Products management
     Route::resource('products', AdminProductController::class);
