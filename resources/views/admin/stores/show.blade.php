@@ -227,7 +227,7 @@
                         data-bs-target="#InvoicesData"
                         type="button"
                         role="tab">
-                        Invoice Data
+                        Manager Uploads [Manual-CSV]
                     </button>
 
                     <button
@@ -247,7 +247,7 @@
                         data-bs-target="#allSalesTab"
                         type="button"
                         role="tab">
-                        All Sales
+                        All Sales - Cart Checkouts
                     </button>
 
 
