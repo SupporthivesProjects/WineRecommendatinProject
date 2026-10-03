@@ -54,6 +54,22 @@
 
     .qr-product-modal-wrapper .related-product-card {
         height: 100%;
+        border: 1px solid #d3d3d3;
+        border-radius: 0;
+        transition: border-color 0.2s ease;
+    }
+    .qr-product-modal-wrapper .related-product-card:hover {
+    border-color: #333;
+    }
+
+    .qr-product-modal-wrapper .related-product-card .card-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .qr-product-modal-wrapper .related-product-card .related-product-btn {
+        margin-top: auto;
     }
 
     .qr-product-modal-wrapper .related-product-image {
@@ -321,7 +337,7 @@
                 {{-- SPECIFICATIONS --}}
                 {{-- ========================================= --}}
 
-                <h4 class="fw-bold mb-3">
+                <h4 class="fw-bold mb-3 mt-2">
                     Specifications
                 </h4>
 
@@ -476,7 +492,7 @@
 
                     <hr class="mt-5">
 
-                    <h4 class="fw-bold mb-4">
+                    <h4 class="fw-bold mb-4 mt-3">
                         Related Products
                     </h4>
 

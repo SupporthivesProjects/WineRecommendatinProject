@@ -1738,8 +1738,19 @@
                     // Replace current product with the new product
                     modalBody.innerHTML = html;
 
+
+                    // Update Enquire Now with the newly loaded product name
+                    const productTitle = modalBody.querySelector('.product-title');
+                    const enquireButton = document.getElementById('mainEnquireNowBtn');
+
+                    if (productTitle && enquireButton) {
+                        enquireButton.dataset.productName = productTitle.textContent.trim();
+                    }
+
+
                     // Keep the same modal open
                     const modalElement = document.getElementById('qrProductModal');
+                    
 
                     if (!modalElement) {
                         return;
