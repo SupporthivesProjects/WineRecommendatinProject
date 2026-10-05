@@ -42,6 +42,19 @@
                     <div class="card custom-card">
                         <div class="card-body">
                             <!-- Table -->
+                            <div class="d-flex justify-content-end mb-3">
+                                <div style="width: 250px;">
+                                    <label for="statePriceSelect" class="form-label fw-semibold">
+                                        Select State
+                                    </label>
+
+                                    <select id="statePriceSelect" class="form-select">
+                                        <option value="retail_price">Default Price</option>
+                                        <option value="retail_price_maharashtra">Maharashtra</option>
+                                        <option value="retail_price_kolkatta">Kolkata</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table id="file-export" class="table table-bordered" style="width:100%">
                                     <thead>
@@ -65,7 +78,15 @@
                                                 <td class="align-middle">{{ ucfirst($product->type) }}</td>
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
-                                                <td class="align-middle">₹&nbsp;{{ number_format($product->retail_price, 2) }}</td>
+
+                                                <td class="align-middle product-price"
+                                                    data-default-price="{{ $product->retail_price }}"
+                                                    data-maharashtra-price="{{ $product->retail_price_maharashtra }}"
+                                                    data-kolkata-price="{{ $product->retail_price_kolkatta }}">
+                                                    
+                                                    ₹&nbsp;{{ number_format($product->retail_price, 2) }}
+                                                </td>
+
                                                 <td class="align-middle text-center">
                                                     <div class="form-check form-switch d-inline-block">
                                                         <input type="checkbox" class="form-check-input featured-toggle" 
@@ -222,5 +243,43 @@
             }
         }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const statePriceSelect = document.getElementById('statePriceSelect');
+            statePriceSelect.addEventListener('change', function () 
+            {
+                
+                const selectedState = this.value;
+
+                document.querySelectorAll('.product-price').forEach(function (priceCell) {
+
+                    let price = priceCell.dataset.defaultPrice;
+
+                    if (selectedState === 'retail_price_maharashtra') {
+                        price = priceCell.dataset.maharashtraPrice;
+                    }
+
+                    if (selectedState === 'retail_price_kolkatta') {
+                        price = priceCell.dataset.kolkataPrice;
+                    }
+
+                    // If state-specific price is empty/null, fall back to default price
+                    if (!price || price === 'null' || price === 'undefined') {
+                        price = priceCell.dataset.defaultPrice;
+                    }
+
+                    priceCell.innerHTML = '₹&nbsp;' + Number(price).toLocaleString('en-IN', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                });
+
+            });
+
+        });
+    </script>
+    
 
 @endpush
