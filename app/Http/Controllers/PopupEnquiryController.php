@@ -16,13 +16,29 @@ class PopupEnquiryController extends Controller
             'description' => 'nullable|string|max:2000',
             'product_name' => 'nullable|string|max:255',
         ]);
-
+        $validated['status'] = 'pending';
         $enquiry = PopupEnquiry::create($validated);
 
         return response()->json([
             'success' => true,
             'message' => 'Your enquiry has been submitted successfully.',
             'enquiry_id' => $enquiry->id,
+        ]);
+    }
+    public function updateStatus(Request $request, PopupEnquiry $enquiry)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,in_progress,closed',
+        ]);
+
+        $enquiry->update([
+            'status' => $validated['status'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Enquiry status updated successfully.',
+            'status' => $enquiry->status,
         ]);
     }
 }

@@ -3,12 +3,8 @@
      <header class="app-header">
          <!-- Start::main-header-container -->
          <div class="main-header-container container-fluid">
-             
-
-
              <!-- Start::header-content-left -->
              <div class="header-content-left">
-
                  <!-- Start::header-element -->
                  <div class="header-element">
                      <div class="horizontal-logo">
@@ -43,7 +39,28 @@
 
              <!-- Start::header-content-right -->
              <div class="header-content-right">
+                {{-- Enquiry Notification - Admin Only --}}
+                @if (Auth::check() && Auth::user()->role === 'admin')
+                    <div class="header-element">
+                        <a href="{{ route('popup.enquiry.store') }}"
+                        class="header-link position-relative"
+                        title="Popup Enquiries">
 
+                            <i class="fe fe-bell header-link-icon"></i>
+
+                            @if ($hasPendingEnquiries ?? false)
+
+                                <span class="enquiry-notification-dot blinking"></span>
+
+                            @elseif ($hasInProgressEnquiries ?? false)
+
+                                <span class="enquiry-notification-dot in-progress"></span>
+
+                            @endif
+
+                        </a>
+                    </div>
+                @endif
                  <!-- Start::header-element -->
                  <div class="header-element header-theme-mode">
                      <!-- Start::header-link|layout-setting -->

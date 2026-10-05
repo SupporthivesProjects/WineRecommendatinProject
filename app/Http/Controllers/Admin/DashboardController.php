@@ -16,6 +16,7 @@ use App\Models\ModalImage;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\PopupEnquiry;
 
 
 class DashboardController extends Controller
@@ -23,6 +24,8 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $activeTab = $request->query('tab', 'dashboard');
+        $hasPendingEnquiries = PopupEnquiry::where('status', 'pending')->exists();
+        $hasInProgressEnquiries = PopupEnquiry::where('status', 'in_progress')->exists();
 
         // Get date range from request or set defaults
         $startDate = $request->input('start_date') 
@@ -428,7 +431,9 @@ class DashboardController extends Controller
             'activeQuestionnairesCount',
             'activeTemplatesCount',
             'activeReviewsCount',
-            'adminfeaturedcount'
+            'adminfeaturedcount',
+            'hasPendingEnquiries',
+            'hasInProgressEnquiries'
         ));
     }
 

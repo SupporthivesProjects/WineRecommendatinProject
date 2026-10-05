@@ -82,6 +82,7 @@ Route::get('/qr-product-modal/{id}', [UserDashboardController::class, 'qrProduct
 
 //popup enquery
 Route::post('/popup-enquiry', [PopupEnquiryController::class, 'store'])->name('popup.enquiry.store');
+Route::patch('popup-enquiries/{enquiry}/status',[PopupEnquiryController::class, 'updateStatus'])->name('popup-enquiries.update-status');
 
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
 

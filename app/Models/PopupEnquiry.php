@@ -12,6 +12,7 @@ class PopupEnquiry extends Model
         'gender',
         'mobile',
         'description',
+        'status',
     ];
 
     public function product()

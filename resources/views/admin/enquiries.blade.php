@@ -44,8 +44,7 @@
                         <div class="card-body">
                             <!-- Table -->
                             <div class="table-responsive">
-                            <div class="table-responsive">
-                                <table id="file-export" class="table table-bordered" style="width:100%">
+                                <table id="Enquiry" class="table table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-start">SR No.</th>
@@ -54,6 +53,7 @@
                                             <th class="text-start">Mobile</th>
                                             <th class="text-start">Description</th>
                                             <th class="text-start">Product Name</th>
+                                            <th class="text-start">Status</th>
                                             <th class="text-start">Date</th>
                                             
                                         </tr>
@@ -67,6 +67,28 @@
                                                 <td class="align-middle">{{ $enquiry->mobile }}</td>
                                                 <td class="align-middle">{{ $enquiry->description }}</td>
                                                 <td class="align-middle">{{ $enquiry->product_name }}</td>
+                                                <td class="align-middle">
+                                                    <select class="form-select form-select-sm enquiry-status"
+                                                            data-id="{{ $enquiry->id }}"
+                                                            style="width: 140px;">
+                                                        
+                                                        <option value="pending"
+                                                            {{ $enquiry->status === 'pending' ? 'selected' : '' }}>
+                                                            Pending
+                                                        </option>
+
+                                                        <option value="in_progress"
+                                                            {{ $enquiry->status === 'in_progress' ? 'selected' : '' }}>
+                                                            In Progress
+                                                        </option>
+
+                                                        <option value="closed"
+                                                            {{ $enquiry->status === 'closed' ? 'selected' : '' }}>
+                                                            Closed
+                                                        </option>
+
+                                                    </select>
+                                                </td>
                                                 <td class="align-middle">{{ $enquiry->created_at }}</td>
                                             </tr>
                                         @empty
@@ -99,6 +121,65 @@
     $(document).ready(function () {
         // Initialize DataTable first
         $('#Enquiry').DataTable();
+    })
+</script>
+<script>
+    $(document).ready(function () {
+
+        $('#Enquiry').DataTable();
+
+        $('.enquiry-status').on('change', function () {
+        const select = $(this);
+        const enquiryId = select.data('id');
+
+        const previousStatus = select.data('previous-status') || select.find('option:selected').val();
+        const newStatus = select.val();
+
+        $.ajax({
+            url: '/popup-enquiries/' + enquiryId + '/status',
+            type: 'PATCH',
+            data: {
+                status: newStatus,
+                _token: '{{ csrf_token() }}'
+            },
+
+            success: function (response) {
+
+                if (response.success) {
+
+                    select.data('previous-status', newStatus);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Status Updated',
+                        text: 'Enquiry status has been updated successfully.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                }
+            },
+
+            error: function (xhr) {
+
+                console.error('Status update failed:', xhr.responseText);
+
+                // Revert dropdown
+                select.val(previousStatus);
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Update Failed',
+                    text: 'Unable to update enquiry status. Please try again.',
+                    confirmButtonText: 'OK'
+                });
+
+            }
+        });
+
+        });
+
+    });
 </script>
     
 @endpush

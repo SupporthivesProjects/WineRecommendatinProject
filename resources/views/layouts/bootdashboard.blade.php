@@ -227,6 +227,36 @@
                 margin-left: 0;
             }
         }
+
+        .enquiry-notification-dot {
+            position: absolute;
+            top: 32px;
+            right: 17px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #dc3545;
+        }
+
+        .enquiry-notification-dot.blinking {
+            animation: enquiryBlink 1s infinite;
+        }
+
+        .enquiry-notification-dot.in-progress {
+            background: #198754;
+        }
+
+        @keyframes enquiryBlink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+
 </style>
 
 @stack('styles')

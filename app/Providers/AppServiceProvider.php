@@ -6,6 +6,7 @@ use App\Services\ProductImageService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PopupEnquiry;
 use App\Models\Store;
 
 
@@ -27,19 +28,39 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // View composer for pending contact requests
+        // View composer for header notifications
         View::composer('*', function ($view) {
+
             $pendingRequests = 0;
+            $hasPendingEnquiries = false;
+            $hasInProgressEnquiries = false;
 
             if (Auth::check() && Auth::user()->role !== 'user') {
+
+                // Existing contact request notification
                 $managerId = Auth::id();
+
                 $pendingRequests = Store::where('manager_id', $managerId)
                     ->where('contact_status', 'pending')
                     ->whereNotNull('new_contact_number')
                     ->count();
+
+                // Popup enquiry notification - ADMIN ONLY
+                if (Auth::user()->role === 'admin') {
+
+                    $hasPendingEnquiries = PopupEnquiry::where('status', 'pending')
+                        ->exists();
+
+                    $hasInProgressEnquiries = PopupEnquiry::where('status', 'in_progress')
+                        ->exists();
+                }
             }
 
-            $view->with('pendingRequests', $pendingRequests);
+            $view->with([
+                'pendingRequests' => $pendingRequests,
+                'hasPendingEnquiries' => $hasPendingEnquiries,
+                'hasInProgressEnquiries' => $hasInProgressEnquiries,
+            ]);
         });
     }
 }
