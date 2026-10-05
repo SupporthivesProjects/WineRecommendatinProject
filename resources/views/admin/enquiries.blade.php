@@ -44,7 +44,8 @@
                         <div class="card-body">
                             <!-- Table -->
                             <div class="table-responsive">
-                                <table id="Enquiry" class="table table-bordered" style="width:100%">
+                            <div class="table-responsive">
+                                <table id="file-export" class="table table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-start">SR No.</th>
@@ -54,6 +55,7 @@
                                             <th class="text-start">Description</th>
                                             <th class="text-start">Product Name</th>
                                             <th class="text-start">Date</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -69,7 +71,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center">No Enquiries found</td>
+                                                <td colspan="9" class="text-center">No products found</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -93,5 +95,10 @@
 @endsection
 
 @push('scripts')
+<script>
+    $(document).ready(function () {
+        // Initialize DataTable first
+        $('#Enquiry').DataTable();
+</script>
     
 @endpush
