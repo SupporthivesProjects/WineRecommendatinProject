@@ -136,7 +136,7 @@
         const newStatus = select.val();
 
         $.ajax({
-            url: '/popup-enquiries/' + enquiryId + '/status',
+            url: '/admin/popup-enquiries/' + enquiryId + '/status',
             type: 'PATCH',
             data: {
                 status: newStatus,

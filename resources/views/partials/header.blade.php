@@ -42,12 +42,11 @@
                 {{-- Enquiry Notification - Admin Only --}}
                 @if (Auth::check() && Auth::user()->role === 'admin')
                     <div class="header-element">
-                        <a href="{{ route('popup.enquiry.store') }}"
+                        <a href="{{ route('admin.popup.enquiry') }}"
                         class="header-link position-relative"
                         title="Popup Enquiries">
 
                             <i class="fe fe-bell header-link-icon"></i>
-
                             @if ($hasPendingEnquiries ?? false)
 
                                 <span class="enquiry-notification-dot blinking"></span>

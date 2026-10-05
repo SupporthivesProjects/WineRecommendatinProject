@@ -231,7 +231,7 @@
         .enquiry-notification-dot {
             position: absolute;
             top: 32px;
-            right: 17px;
+            right: 19px;
             width: 9px;
             height: 9px;
             border-radius: 50%;

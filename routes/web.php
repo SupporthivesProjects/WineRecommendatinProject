@@ -80,9 +80,7 @@ Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])
 Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 Route::get('/qr-product-modal/{id}', [UserDashboardController::class, 'qrProductModal'])->name('qr.product.modal');
 
-//popup enquery
-Route::post('/popup-enquiry', [PopupEnquiryController::class, 'store'])->name('popup.enquiry.store');
-Route::patch('popup-enquiries/{enquiry}/status',[PopupEnquiryController::class, 'updateStatus'])->name('popup-enquiries.update-status');
+
 
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
 
@@ -316,6 +314,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     //popup enquiry
     Route::get('/popup/enquiry', [AdminProductController::class, 'popupEnquiry'])->name('popup.enquiry');
+    Route::patch('popup-enquiries/{enquiry}/status',[PopupEnquiryController::class, 'updateStatus'])->name('popup-enquiries.update-status');
+
 
 
 
