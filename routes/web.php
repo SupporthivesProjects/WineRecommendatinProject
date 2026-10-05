@@ -315,6 +315,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //popup enquiry
     Route::get('/popup/enquiry', [AdminProductController::class, 'popupEnquiry'])->name('popup.enquiry');
     Route::patch('popup-enquiries/{enquiry}/status',[PopupEnquiryController::class, 'updateStatus'])->name('popup-enquiries.update-status');
+    Route::post('/popup-enquiry',[PopupEnquiryController::class, 'store'])->name('popup-enquiry.store');
 
 
 

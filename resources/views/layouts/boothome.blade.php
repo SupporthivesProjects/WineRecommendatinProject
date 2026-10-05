@@ -2034,7 +2034,7 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
 
                 const response = await fetch(
-                    "{{ route('popup.enquiry.store') }}",
+                    "{{ route('admin.popup-enquiry.store') }}",
                     {
                         method: 'POST',
                         headers: {
