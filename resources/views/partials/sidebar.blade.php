@@ -156,6 +156,13 @@
                             </a>
                         </li> -->
                         <li class="slide">
+                            <a href="{{ route('admin.popup.enquiry') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Popup Enquiries</span>
+                            </a>
+                        </li>
+                        
+                        <li class="slide">
                             <a href="{{ route('admin.templates.index') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-file-text" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Templates</span>

@@ -200,6 +200,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     //products QR code route
     Route::get('/products/{product}/qr', [AdminProductController::class, 'generateQr'])->name('products.qr');
 
+    
+
+
+
     //bulk qr code
     Route::get('/products/bulk-qr', [AdminProductController::class, 'bulkQr'])->name('products.bulk-qr');
     Route::post('/products/bulk-qr/generate', [AdminProductController::class, 'generateBulkQrPdf'])->name('products.bulk-qr.generate');
@@ -308,6 +312,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/questionnaire-debugger',[QuestionnaireDebuggerController::class, 'index'])->name('questionnaire.debugger');
     Route::post('/admin/questionnaire/execute-query',[QuestionnaireDebuggerController::class,'executeQuery'])->name('questionnaire.executeQuery');
     Route::post('/admin/questionnaire/clear-log',[QuestionnaireDebuggerController::class, 'clearLog'])->name('questionnaire.clearLog');
+
+    //popup enquiry
+    Route::get('/popup/enquiry', [AdminProductController::class, 'popupEnquiry'])->name('popup.enquiry');
+
+
 
 
 });

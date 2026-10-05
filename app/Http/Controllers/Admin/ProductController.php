@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\popupEnquiry;
 use App\Services\ProductImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -1182,5 +1183,11 @@ class ProductController extends Controller
     }
 
 
+    public function popupEnquiry()
+    {
+        $enquiries = PopupEnquiry::latest()->paginate(20);
+
+        return view('admin.enquiries', compact('enquiries'));
+    }
 
 }
