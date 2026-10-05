@@ -889,6 +889,11 @@
                                         <div class="analytics-content">
                                             <span class="analytics-label">
                                                 Total Revenue
+                                                <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Total sales value calculated as the sum of price × quantity for all items sold.">
+                                                </i>
                                             </span>
 
                                             <h2 class="analytics-value">
@@ -908,6 +913,11 @@
                                         <div class="analytics-content">
                                             <span class="analytics-label">
                                                 Total Orders
+                                                <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Total number of unique orders. Multiple items in the same checkout are counted as one order.">
+                                                </i>
                                             </span>
 
                                             <h2 class="analytics-value">
@@ -927,6 +937,11 @@
                                         <div class="analytics-content">
                                             <span class="analytics-label">
                                                 Total Bottles
+                                                <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Total number of bottles sold , calculated by adding the quantity of all sold items.">
+                                                </i>
                                             </span>
 
                                             <h2 class="analytics-value">
@@ -946,6 +961,11 @@
                                         <div class="analytics-content">
                                             <span class="analytics-label">
                                                 Avg Order Value
+                                                <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Average value of an order. Calculated as Total Revenue ÷ Total Orders.">
+                                                </i>
                                             </span>
 
                                             <h2 class="analytics-value">
@@ -963,6 +983,11 @@
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <h4 class="mb-0">
                                                 🍷 Top Selling Wines
+                                                <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Shows the top 5 wines by bottles sold during the selected period. The progress bar compares each wine's sales with the highest-selling wine.">
+                                                </i>
                                             </h4>
 
                                             <span class="badge bg-primary">
@@ -1039,6 +1064,11 @@
 
                                             <h4 class="mb-0">
                                                 📈 Revenue Trend
+                                                <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Shows daily revenue during the selected period. Revenue is calculated as price × quantity for each sale and grouped by sale date.">
+                                                </i>
                                             </h4>
 
                                         </div>
@@ -1076,6 +1106,11 @@
 
                                                 <h5 class="mb-0">
                                                     🍷 Wine Type Distribution
+                                                    <i class="bi bi-info-circle ms-1"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Shows the number of bottles sold for each wine type during the selected period.">
+                                                    </i>
                                                 </h5>
 
                                             </div>
@@ -1103,6 +1138,11 @@
 
                                                 <h5 class="mb-0">
                                                     🌍 Country Distribution
+                                                    <i class="bi bi-info-circle ms-1"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Shows the number of bottles sold by country during the selected period. The chart displays the top 8 countries by bottles sold.">
+                                                    </i>
                                                 </h5>
 
                                             </div>
@@ -1162,23 +1202,23 @@
 
                                         <h4 class="mb-4 fw-bold text-primary">
                                             🍷 Slow Moving Wines
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows wines with the lowest number of bottles sold during the selected period.">
+                                            </i>
                                         </h4>
 
                                         <div class="table-responsive">
-
                                             <table class="table table-sm table-hover">
-
                                                 <thead>
                                                     <tr>
                                                         <th>Wine</th>
                                                         <th class="text-end">Sold</th>
                                                     </tr>
                                                 </thead>
-
                                                 <tbody>
-
                                                     @forelse($slowMovingWines as $wine)
-
                                                         <tr>
                                                             <td>
                                                                 {{ $wine->product_name }}
@@ -1198,54 +1238,41 @@
                                                         </tr>
 
                                                     @endforelse
-
                                                 </tbody>
-
                                             </table>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                                 {{-- Low Stock Alert --}}
                                 <div class="col-md-6">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-danger">
                                             ⚠️ Low Stock Alert
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows wines with current stock between 1 and 5 bottles. Stock is based on the latest inventory upload and is not affected by the selected date range.">
+                                            </i>
                                         </h4>
-
                                         <div class="table-responsive">
-
                                             <table class="table table-sm table-hover">
-
                                                 <thead>
                                                     <tr>
                                                         <th>Wine</th>
                                                         <th class="text-end">Stock</th>
                                                     </tr>
                                                 </thead>
-
                                                 <tbody>
-
                                                     @forelse($lowStockWines as $wine)
-
                                                         <tr>
                                                             <td>
                                                                 {{ $wine->product_name }}
                                                             </td>
-
                                                             <td class="text-end fw-bold text-danger">
                                                                 {{ $wine->stock }}
                                                             </td>
                                                         </tr>
-
                                                     @empty
-
                                                         <tr>
                                                             <td colspan="2" class="text-center text-muted">
                                                                 No low stock wines
@@ -1253,35 +1280,26 @@
                                                         </tr>
 
                                                     @endforelse
-
                                                 </tbody>
-
                                             </table>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
-
                             <!-- High Stock + Low Movement -->
                             <div class="row mt-3">
-
                                 <div class="col-12">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-warning">
                                             📦 High Stock + Low Movement
+                                            <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Shows wines with at least 20 bottles currently in stock and 5 or fewer bottles sold during the selected period.">
+                                            </i>
                                         </h4>
-
                                         <div class="table-responsive">
-
                                             <table class="table table-sm table-hover">
-
                                                 <thead>
                                                     <tr>
                                                         <th>Wine</th>
@@ -1291,165 +1309,126 @@
                                                 </thead>
 
                                                 <tbody>
-
                                                     @forelse($highStockLowMovement as $wine)
-
                                                         <tr>
-
                                                             <td>
                                                                 {{ $wine->product_name }}
                                                             </td>
-
                                                             <td class="text-end">
                                                                 {{ $wine->stock }}
                                                             </td>
-
                                                             <td class="text-end">
                                                                 {{ $wine->sold }}
                                                             </td>
-
                                                         </tr>
-
                                                     @empty
-
                                                         <tr>
                                                             <td colspan="3" class="text-center text-muted">
                                                                 No overstocked wines found
                                                             </td>
                                                         </tr>
-
                                                     @endforelse
-
                                                 </tbody>
-
                                             </table>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
-
                             <!-- Price Band Performance -->
                             <div class="row mt-3">
-
                                 <div class="col-12">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-success">
                                             💰 Price Band Performance
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows bottles sold across different price bands during the selected period: ₹0–5,000, ₹5,001–25,000, ₹25,001–50,000, ₹50,001–1,00,000 and ₹1,00,000+.">
+                                            </i>
                                         </h4>
 
                                         <div style="height:500px; position:relative;">
                                             <canvas id="priceBandChart"></canvas>
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
-
                             <!-- Domestic and Imported -->
                             <div class="row mt-4">
-
                                 {{-- Domestic vs Imported --}}
                                 <div class="col-md-6">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-info">
                                             🌍 Domestic vs Imported
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Compares bottles sold from India (Domestic) with bottles sold from all other countries (Imported) during the selected period.">
+                                            </i>
                                         </h4>
-
                                         <div style="height:350px; position:relative;">
                                             <canvas id="domesticImportedChart"></canvas>
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                                 {{-- Average Bottle Value Trend --}}
                                 <div class="col-md-6">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-success">
                                             📈 Average Bottle Value Trend
+                                            <i class="bi bi-info-circle ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Shows the average bottle price for each sale date during the selected period.">
+                                                </i>
                                         </h4>
-
                                         <div style="height:350px; position:relative;">
                                             <canvas id="avgBottleValueChart"></canvas>
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
-
                             <!-- Reorder Attention + Promotion -->
                             <div class="row mt-3">
-
                                 {{-- Reorder Attention --}}
                                 <div class="col-md-6">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-danger">
                                             🚨 Suggested Reorder Attention
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows wines with 5 or fewer bottles currently in stock and at least 10 bottles sold during the selected period, indicating a need for possible reordering.">
+                                            </i>
                                         </h4>
-
                                         <div class="table-responsive">
-
                                             <table class="table table-sm table-hover">
-
                                                 <thead>
                                                     <tr>
                                                         <th>Wine</th>
-
                                                         <th class="text-end">
                                                             Stock
                                                         </th>
-
                                                         <th class="text-end">
                                                             Sold
                                                         </th>
                                                     </tr>
                                                 </thead>
-
                                                 <tbody>
-
                                                     @forelse($reorderAttentionList as $wine)
-
                                                         <tr>
-
                                                             <td>
                                                                 {{ $wine->product_name }}
                                                             </td>
-
                                                             <td class="text-end text-danger fw-bold">
                                                                 {{ $wine->stock }}
                                                             </td>
-
                                                             <td class="text-end">
                                                                 {{ $wine->sold }}
                                                             </td>
-
                                                         </tr>
-
                                                     @empty
-
                                                         <tr>
-
                                                             <td
                                                                 colspan="3"
                                                                 class="text-center text-muted">
@@ -1457,470 +1436,349 @@
                                                                 No wines require reordering
 
                                                             </td>
-
                                                         </tr>
-
                                                     @endforelse
-
                                                 </tbody>
-
                                             </table>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
-
                                 {{-- Promotion List --}}
                                 <div class="col-md-6">
-
                                     <div class="analytics-card p-4">
-
                                         <h4 class="mb-4 fw-bold text-warning">
                                             🎯 Suggested Display / Promotion
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows wines with high current stock (20 or more bottles) and low movement (5 or fewer bottles sold during the selected period), which may benefit from additional display or promotion.">
+                                            </i>
                                         </h4>
-
                                         <div class="table-responsive">
-
                                             <table class="table table-sm table-hover">
-
                                                 <thead>
                                                     <tr>
-
                                                         <th>
                                                             Wine
                                                         </th>
-
                                                         <th class="text-end">
                                                             Stock
                                                         </th>
-
                                                         <th class="text-end">
                                                             Sold
                                                         </th>
-
                                                     </tr>
                                                 </thead>
-
                                                 <tbody>
-
                                                     @forelse($promotionList as $wine)
-
                                                         <tr>
-
                                                             <td>
                                                                 {{ $wine->product_name }}
                                                             </td>
-
                                                             <td class="text-end">
                                                                 {{ $wine->stock }}
                                                             </td>
-
                                                             <td class="text-end">
                                                                 {{ $wine->sold }}
                                                             </td>
-
                                                         </tr>
-
                                                     @empty
-
                                                         <tr>
-
                                                             <td
                                                                 colspan="3"
                                                                 class="text-center text-muted">
 
                                                                 No promotion opportunities found
-
                                                             </td>
-
                                                         </tr>
-
                                                     @endforelse
-
                                                 </tbody>
-
                                             </table>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
                         <!-- End Inventory Intelligence collapse -->
-
                     </div>
                     <!-- End Inventory Intelligence -->
 
                     <!-- Customer Preference Analytics -->
                     <div class="mb-3">
-                    <button
-                        class="btn btn-light border w-100 d-flex justify-content-between align-items-center text-start py-3 px-4"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#customerPreferenceSection"
-                        aria-expanded="false"
-                        aria-controls="customerPreferenceSection">
+                        <button
+                            class="btn btn-light border w-100 d-flex justify-content-between align-items-center text-start py-3 px-4"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#customerPreferenceSection"
+                            aria-expanded="false"
+                            aria-controls="customerPreferenceSection">
 
-                        <span class="fw-bold fs-5">
-                            Customer Preference Analytics
-                        </span>
+                            <span class="fw-bold fs-5">
+                                Customer Preference Analytics
+                            </span>
 
-                        <span class="fs-4">+</span>
+                            <span class="fs-4">+</span>
 
-                    </button>
-                    <div class="collapse" id="customerPreferenceSection">
-
-                        <!-- Questionnaire Summary -->
-                        <div class="row mt-3">
-
-                            <div class="col-md-3">
-
-                                <div class="analytics-card p-4 text-center">
-
-                                    <h6 class="text-muted">
-                                        Questionnaires Completed
-                                    </h6>
-
-                                    <h2 class="fw-bold text-primary">
-                                        {{ number_format(data_get($questionnaireStats, 'completed', 0)) }}
-                                    </h2>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-3">
-
-                                <div class="analytics-card p-4 text-center">
-
-                                    <h6 class="text-muted">
-                                        Most Popular Template
-                                    </h6>
-
-                                    <h2 class="fw-bold text-success">
-                                        {{ $questionnaireStats['popular_template'] ?? 'None' }}
-                                    </h2>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-3">
-
-                                <div class="analytics-card p-4 text-center">
-
-                                    <h6 class="text-muted">
-                                        Average Preferred Budget
-                                    </h6>
-
-                                    <h2 class="fw-bold text-info">
-                                        ₹{{ number_format($budgetStats['average_budget'] ?? 0) }}
-                                    </h2>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-3">
-
-                                <div class="analytics-card p-4 text-center">
-
-                                    <h6 class="text-muted">
-                                        Premium Customers
-
-                                        <i
-                                            class="fas fa-info-circle text-secondary ms-1"
+                        </button>
+                        <div class="collapse" id="customerPreferenceSection">
+                            <!-- Questionnaire Summary -->
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="analytics-card p-4 text-center">
+                                        <h6 class="text-muted">
+                                            Questionnaires Completed
+                                            <i class="bi bi-info-circle ms-1"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="top"
-                                            title="Customers whose preferred budget is ₹25,000 or higher">
-                                        </i>
-
-                                    </h6>
-
-                                    <h2 class="fw-bold text-warning">
-                                        {{ $budgetStats['premium_percent'] ?? 0 }}%
-                                    </h2>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Questionnaire Usage + Wine Type Preferences -->
-                        <div class="row mt-3">
-
-                            <div class="col-md-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-primary mb-4">
-                                        📋 Questionnaire Usage
-                                    </h4>
-
-                                    <div style="height:400px">
-                                        <canvas id="questionnaireUsageChart"></canvas>
+                                            title="Number of customer questionnaires completed during the selected period.">
+                                            </i>
+                                        </h6>
+                                        <h2 class="fw-bold text-primary">
+                                            {{ number_format(data_get($questionnaireStats, 'completed', 0)) }}
+                                        </h2>
                                     </div>
-
                                 </div>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-danger mb-4">
-                                        🍷 Wine Type Preferences
-                                    </h4>
-
-                                    <div style="height:400px">
-                                        <canvas id="wineTypePreferencesChart"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Country Preferences + Budget Distribution -->
-                        <div class="row mt-3">
-
-                            <div class="col-md-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-success mb-4">
-                                        🌍 Country Preferences
-                                    </h4>
-
-                                    <div style="height:400px">
-                                        <canvas id="countryChartCustomer"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-info mb-4">
-                                        💰 Budget Distribution
-                                    </h4>
-
-                                    <div style="height:400px">
-                                        <canvas id="budgetChart"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Occasion Preferences + Taste Preferences -->
-                        <div class="row mt-3">
-
-                            <div class="col-md-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-warning mb-4">
-                                        🎉 Occasion Preferences
-                                    </h4>
-
-                                    <div style="height:400px">
-                                        <canvas id="occasionChart"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-secondary mb-4">
-                                        😋 Taste Preferences
-                                    </h4>
-
-                                    <div style="height:400px">
-                                        <canvas id="tasteChart"></canvas>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Top Requested Varieties + Occasion vs Budget -->
-                        <div class="row mt-3">
-
-                            <!-- Top Requested Varieties -->
-                            <div class="col-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-dark mb-4">
-
-                                        🍇 Top Requested Varieties
-
-                                        <i
-                                            class="fas fa-info-circle text-secondary ms-1"
+                                <div class="col-md-3">
+                                    <div class="analytics-card p-4 text-center">
+                                        <h6 class="text-muted">
+                                            Most Popular Template
+                                            <i class="bi bi-info-circle ms-1"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="top"
-                                            title="Most frequently requested wine grape varieties based on customer questionnaire responses">
-                                        </i>
+                                            title="Shows the questionnaire template selected by the highest number of customers during the selected period.">
+                                            </i>
+                                        </h6>
+                                        <h2 class="fw-bold text-success">
+                                        @if(($questionnaireStats['popular_template'] ?? null) == 1)
+                                            🍷 First Sip
+                                        @elseif(($questionnaireStats['popular_template'] ?? null) == 2)
+                                            🥂 Savy Sipper
+                                        @elseif(($questionnaireStats['popular_template'] ?? null) == 3)
+                                            🍾 Cork Master
+                                        @elseif(($questionnaireStats['popular_template'] ?? null) == 4)
+                                            🍷 Quick Pour
+                                        @else
+                                            None
+                                        @endif
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="analytics-card p-4 text-center">
+                                        <h6 class="text-muted">
+                                            Average Preferred Budget
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the average wine budget preferred by customers based on their questionnaire responses during the selected period.">
+                                            </i>
+                                        </h6>
 
-                                    </h4>
+                                        <h2 class="fw-bold text-info">
+                                            ₹{{ number_format($budgetStats['average_budget'] ?? 0) }}
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="analytics-card p-4 text-center">
+                                        <h6 class="text-muted">
+                                            Premium Customers
+                                            <i
+                                                class="fas fa-info-circle text-secondary ms-1"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Customers whose preferred budget is ₹25,000 or higher">
+                                            </i>
+                                        </h6>
+                                        <h2 class="fw-bold text-warning">
+                                            {{ $budgetStats['premium_percent'] ?? 0 }}%
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Questionnaire Usage + Wine Type Preferences -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-primary mb-4">
+                                            📋 Questionnaire Usage
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows how frequently each questionnaire template was completed by customers during the selected period.">
+                                            </i>
+                                        </h4>
+                                        <div style="height:400px">
+                                            <canvas id="questionnaireUsageChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-danger mb-4">
+                                            🍷 Wine Type Preferences
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the wine types most preferred by customers based on their questionnaire responses during the selected period.">
+                                            </i>
+                                        </h4>
+                                        <div style="height:400px">
+                                            <canvas id="wineTypePreferencesChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Country Preferences + Budget Distribution -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-success mb-4">
+                                            🌍 Country Preferences
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the wine-producing countries most preferred by customers based on their questionnaire responses during the selected period.">
+                                            </i>
+                                        </h4>
+                                        <div style="height:400px">
+                                            <canvas id="countryChartCustomer"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-info mb-4">
+                                            💰 Budget Distribution
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows how customer preferred budgets are distributed across the available budget ranges during the selected period.">
+                                            </i>
+                                        </h4>
+                                        <div style="height:400px">
+                                            <canvas id="budgetChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Occasion Preferences + Taste Preferences -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-warning mb-4">
+                                            🎉 Occasion Preferences
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the occasions for which customers most commonly seek wine recommendations based on their questionnaire responses.">
+                                            </i>
+                                        </h4>
+                                        <div style="height:400px">
+                                            <canvas id="occasionChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-secondary mb-4">
+                                            😋 Taste Preferences
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the taste characteristics most preferred by customers based on their questionnaire responses.">
+                                            </i>
+                                        </h4>
+                                        <div style="height:400px">
+                                            <canvas id="tasteChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Top Requested Varieties + Occasion vs Budget -->
+                            <div class="row mt-3">
+                                <!-- Top Requested Varieties -->
+                                <div class="col-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-dark mb-4">
+                                            🍇 Top Requested Varieties
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the wine grape varieties most frequently requested by customers based on their questionnaire responses.">
+                                            </i>
+                                        </h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Variety</th>
 
-
-                                    <div class="table-responsive">
-
-                                        <table class="table table-hover">
-
+                                                        <th class="text-end">Requests</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($topVarieties as $variety)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $variety->answer }}
+                                                            </td>
+                                                            <td class="text-end">
+                                                                {{ $variety->total }}
+                                                            </td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="2" class="text-center">
+                                                                No data found
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Occasion vs Budget Preferences -->
+                                <div class="col-6">
+                                    <div class="analytics-card p-4">
+                                        <h4 class="fw-bold text-dark mb-4">
+                                            🎁 Occasion vs Budget Preferences
+                                            <i class="bi bi-info-circle ms-1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows the preferred budget range associated with each customer occasion preference.">
+                                            </i>
+                                        </h4>
+                                        <table class="table table-sm">
                                             <thead>
-
                                                 <tr>
-
                                                     <th>
-                                                        Variety
+                                                        Occasion
                                                     </th>
-
-                                                    <th class="text-end">
-                                                        Requests
+                                                    <th>
+                                                        Preferred Budget
                                                     </th>
-
                                                 </tr>
-
                                             </thead>
-
-
                                             <tbody>
-
-                                                @forelse($topVarieties as $variety)
-
+                                                @foreach($occasionBudgetPreferences as $row)
                                                     <tr>
-
                                                         <td>
-                                                            {{ $variety->answer }}
+                                                            {{ $row->occasion }}
                                                         </td>
-
-                                                        <td class="text-end">
-                                                            {{ $variety->total }}
+                                                        <td>
+                                                            {{ $row->budget_band }}
                                                         </td>
-
                                                     </tr>
-
-                                                @empty
-
-                                                    <tr>
-
-                                                        <td
-                                                            colspan="2"
-                                                            class="text-center">
-
-                                                            No data found
-
-                                                        </td>
-
-                                                    </tr>
-
-                                                @endforelse
-
+                                                @endforeach
                                             </tbody>
-
                                         </table>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
-
-                            <!-- Occasion vs Budget Preferences -->
-                            <div class="col-6">
-
-                                <div class="analytics-card p-4">
-
-                                    <h4 class="fw-bold text-dark mb-4">
-                                        🎁 Occasion vs Budget Preferences
-                                    </h4>
-
-
-                                    <table class="table table-sm">
-
-                                        <thead>
-
-                                            <tr>
-
-                                                <th>
-                                                    Occasion
-                                                </th>
-
-                                                <th>
-                                                    Preferred Budget
-                                                </th>
-
-                                            </tr>
-
-                                        </thead>
-
-
-                                        <tbody>
-
-                                            @foreach($occasionBudgetPreferences as $row)
-
-                                                <tr>
-
-                                                    <td>
-                                                        {{ $row->occasion }}
-                                                    </td>
-
-                                                    <td>
-                                                        {{ $row->budget_band }}
-                                                    </td>
-
-                                                </tr>
-
-                                            @endforeach
-
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            </div>
-
                         </div>
-
-                    </div>
                     <!-- End Customer Preference collapse -->
-
                     </div>
                     <!-- End Customer Preference Analytics -->
                 </div>

@@ -41,13 +41,23 @@
                                 </div>
                             </div>
                         @else
-                            <div class="main-content">
-                                <div class="container-fluid">
-                                    <div class="alert alert-warning">
-                                        Analytics is disabled.
+                            @if($analyticsEnabled==1)
+                                <div class="main-content">
+                                    <div class="container-fluid">
+                                        <div class="alert alert-warning">
+                                            Analytics is enabled.
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="main-content">
+                                    <div class="container-fluid">
+                                        <div class="alert alert-warning">
+                                            Analytics is disabled.
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         @endif
 
 
