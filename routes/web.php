@@ -60,9 +60,8 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+Route::get('/about', function () {return view('about');})->name('about');
+Route::get('/kiosk', function () {return view('kioskdetails');})->name('kiosk');
 
 Route::get('/browse', [ProductController::class, 'browse'])->name('homeBrowseWines');
 Route::get('/allcheese', [ProductController::class, 'allcheese'])->name('allcheese');
