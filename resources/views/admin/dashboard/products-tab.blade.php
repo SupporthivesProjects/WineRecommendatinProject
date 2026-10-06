@@ -51,7 +51,7 @@
                                     <select id="statePriceSelect" class="form-select">
                                         <option value="retail_price">Default Price</option>
                                         <option value="retail_price_maharashtra">Maharashtra</option>
-                                        <option value="retail_price_kolkatta">Kolkata</option>
+                                        <option value="retail_price_kolkata">kolkata</option>
                                     </select>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                                                 <td class="align-middle product-price"
                                                     data-default-price="{{ $product->retail_price }}"
                                                     data-maharashtra-price="{{ $product->retail_price_maharashtra }}"
-                                                    data-kolkata-price="{{ $product->retail_price_kolkatta }}">
+                                                    data-kolkata-price="{{ $product->retail_price_kolkata }}">
                                                     
                                                     ₹&nbsp;{{ number_format($product->retail_price, 2) }}
                                                 </td>
@@ -260,7 +260,7 @@
                         price = priceCell.dataset.maharashtraPrice;
                     }
 
-                    if (selectedState === 'retail_price_kolkatta') {
+                    if (selectedState === 'retail_price_kolkata') {
                         price = priceCell.dataset.kolkataPrice;
                     }
 
