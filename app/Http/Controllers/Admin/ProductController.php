@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\popupEnquiry;
+use App\Models\PopupEnquiry;
 use App\Services\ProductImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
