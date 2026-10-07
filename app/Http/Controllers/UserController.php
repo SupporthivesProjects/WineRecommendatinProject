@@ -281,14 +281,120 @@ class UserController extends Controller
     }
 
 
+    // public function productDetails($id)
+    // {
+    //     if (!auth()->check()) {
+    //         return redirect()->route('home', [
+    //             'product' => $id
+    //         ]);
+    //     }
+        
+    //     // Fetch the current product with images and reviews
+    //     $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
+    //     $product->display_price = $product->getDisplayPrice();
+
+    //     // Get approved reviews with user data
+    //     $reviews = $product->reviews()
+    //         ->with('user')
+    //         ->where('status', 'approved')
+    //         ->latest()
+    //         ->paginate(5, ['*'], 'reviews_page');
+
+    //     // Calculate average rating
+    //     $averageRating = $product->reviews()
+    //         ->where('status', 'approved')
+    //         ->avg('rating');
+
+    //     // Get total number of approved reviews
+    //     $totalReviews = $product->reviews()
+    //         ->where('status', 'approved')
+    //         ->count();
+
+    //     // Get rating distribution for the chart
+    //     $ratingDistribution = [];
+    //     for ($i = 5; $i >= 1; $i--) {
+    //         $ratingDistribution[$i] = $product->reviews()
+    //             ->where('status', 'approved')
+    //             ->where('rating', $i)
+    //             ->count();
+    //     }
+
+    //     // Fetch 3 related products based on matching type or country, excluding the current product
+    //     // $relatedProducts = Product::with('images')
+    //     //     ->where('id', '!=', $product->id)
+    //     //     ->where(function ($query) use ($product) {
+    //     //         $query->where('type', $product->type)
+    //     //             ->orWhere('country', $product->country);
+    //     //     })
+    //     //     ->inRandomOrder()
+    //     //     ->limit(3)
+    //     //     ->get();
+        
+    //     // Get the logged-in user's store
+    //     $store = Auth::user()->store;
+
+    //     // Get products available in this store
+    //     $storeProducts = DB::table('store_products')
+    //         ->where('store_id', $store->id)
+    //         ->where('status', 'active')
+    //         ->pluck('product_id');
+
+    //     // Current product price
+    //     $price = $product->display_price;
+
+    //     $price = $product->display_price;
+    //     $relatedProducts = Product::with('images')
+    //         ->where('id', '!=', $product->id)
+    //         ->whereBetween('retail_price', [
+    //             max(0, $price - 1500),
+    //             $price + 1500
+    //         ])
+    //         ->where('grape_variety', $product->grape_variety)
+    //         ->where('type', $product->type)
+    //         ->inRandomOrder()
+    //         ->limit(3)
+    //         ->get();
+
+    //     // If less than 3 related products, fetch random other products excluding current and already fetched
+    //     if ($relatedProducts->count() < 3) {
+    //         $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
+
+    //         $additionalProducts = Product::with('images')
+    //             ->whereNotIn('id', $excludeIds)
+    //             ->inRandomOrder()
+    //             ->limit(3 - $relatedProducts->count())
+    //             ->get();
+
+    //         // Merge additional products with related products
+    //         $relatedProducts = $relatedProducts->merge($additionalProducts);
+    //     }
+
+    //     $relatedProducts->transform(function ($relatedProduct) {
+    //         $relatedProduct->display_price = $relatedProduct->getDisplayPrice();
+    //         return $relatedProduct;
+    //     });
+
+    //     $cart = session()->get('cart', []);
+
+    //     return view('user.product-detail', [
+    //         'product' => $product,
+    //         'relatedProducts' => $relatedProducts,
+    //         'reviews' => $reviews,
+    //         'averageRating' => $averageRating ?? 0,
+    //         'totalReviews' => $totalReviews,
+    //         'ratingDistribution' => $ratingDistribution,
+    //         'cart' => $cart,
+    //     ]);
+    // }
+
     public function productDetails($id)
-    {
+    {   
         if (!auth()->check()) {
             return redirect()->route('home', [
                 'product' => $id
             ]);
         }
-        
+
         // Fetch the current product with images and reviews
         $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
         $product->display_price = $product->getDisplayPrice();
@@ -312,6 +418,7 @@ class UserController extends Controller
 
         // Get rating distribution for the chart
         $ratingDistribution = [];
+
         for ($i = 5; $i >= 1; $i--) {
             $ratingDistribution[$i] = $product->reviews()
                 ->where('status', 'approved')
@@ -319,19 +426,27 @@ class UserController extends Controller
                 ->count();
         }
 
-        // Fetch 3 related products based on matching type or country, excluding the current product
-        // $relatedProducts = Product::with('images')
-        //     ->where('id', '!=', $product->id)
-        //     ->where(function ($query) use ($product) {
-        //         $query->where('type', $product->type)
-        //             ->orWhere('country', $product->country);
-        //     })
-        //     ->inRandomOrder()
-        //     ->limit(3)
-        //     ->get();
-        
+        /*
+        |--------------------------------------------------------------------------
+        | Related Products - User's Store Only
+        |--------------------------------------------------------------------------
+        */
+
+        // Get the logged-in user's store
+        $store = Auth::user()->store;
+
+        // Get active products available in this store
+        $storeProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->where('status', 'active')
+            ->pluck('product_id');
+
+        // Current product price
         $price = $product->display_price;
+
+        // Fetch 3 related products from the user's store only
         $relatedProducts = Product::with('images')
+            ->whereIn('id', $storeProducts)
             ->where('id', '!=', $product->id)
             ->whereBetween('retail_price', [
                 max(0, $price - 1500),
@@ -342,12 +457,19 @@ class UserController extends Controller
             ->inRandomOrder()
             ->limit(3)
             ->get();
+    
 
-        // If less than 3 related products, fetch random other products excluding current and already fetched
+        // If less than 3 related products are found,
+        // fetch additional products from the same store only
         if ($relatedProducts->count() < 3) {
-            $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
+
+            $excludeIds = $relatedProducts
+                ->pluck('id')
+                ->push($product->id)
+                ->toArray();
 
             $additionalProducts = Product::with('images')
+                ->whereIn('id', $storeProducts)
                 ->whereNotIn('id', $excludeIds)
                 ->inRandomOrder()
                 ->limit(3 - $relatedProducts->count())
@@ -357,11 +479,14 @@ class UserController extends Controller
             $relatedProducts = $relatedProducts->merge($additionalProducts);
         }
 
+        // Calculate display price for related products
         $relatedProducts->transform(function ($relatedProduct) {
             $relatedProduct->display_price = $relatedProduct->getDisplayPrice();
+
             return $relatedProduct;
         });
 
+        // Get cart from session
         $cart = session()->get('cart', []);
 
         return view('user.product-detail', [
