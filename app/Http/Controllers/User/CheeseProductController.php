@@ -7,6 +7,7 @@ use App\Models\CheeseProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CheeseProductController extends Controller
 {
@@ -68,12 +69,51 @@ class CheeseProductController extends Controller
         }])->findOrFail($id);
 
         // Debug: Find products with the cheese name in cheese_pairing using LIKE
+        // $cheeseName = $cheese->name;
+        // $matchingProducts = \App\Models\Product::where('cheese_pairing', 'LIKE', '%' . $cheeseName . '%')
+        //     ->with(['images' => function ($query) {
+        //         $query->orderBy('is_primary', 'desc'); // Primary image first
+        //     }])
+        //     ->get();
+        // Get wines paired with this cheese from the user's store only
         $cheeseName = $cheese->name;
-        $matchingProducts = \App\Models\Product::where('cheese_pairing', 'LIKE', '%' . $cheeseName . '%')
+
+        // Get active products available in the user's store
+        $storeProductIds = DB::table('store_products')
+            ->where('store_id', $user->store_id)
+            ->where('status', 'active')
+            ->pluck('product_id');
+
+        $matchingProducts = \App\Models\Product::whereIn('id', $storeProductIds)
+            ->where('cheese_pairing', 'LIKE', '%' . $cheeseName . '%')
             ->with(['images' => function ($query) {
                 $query->orderBy('is_primary', 'desc'); // Primary image first
             }])
             ->get();
+        
+            // If fewer than 5 matching wines are found,
+            // fetch random wines from the same store.
+            if ($matchingProducts->count() < 5) {
+
+                // IDs of wines already matched
+                $excludeIds = $matchingProducts
+                    ->pluck('id')
+                    ->toArray();
+
+                // Fetch random wines from the same store
+                $randomProducts = \App\Models\Product::whereIn('id', $storeProductIds)
+                    ->whereNotIn('id', $excludeIds)
+                    ->with(['images' => function ($query) {
+                        $query->orderBy('is_primary', 'desc');
+                    }])
+                    ->inRandomOrder()
+                    ->limit(7)
+                    ->get();
+
+                // Merge matched wines + random wines
+                $matchingProducts = $matchingProducts->merge($randomProducts);
+            }
+        
 
         // Get related cheeses from the same store
         $relatedCheeses = CheeseProduct::whereHas('stores', function ($query) use ($user, $id) {
