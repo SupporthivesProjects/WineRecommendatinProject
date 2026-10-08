@@ -245,7 +245,7 @@
                 padding: 50px 20px;
             }
         }
-
+        /*
         @media (max-width: 720px) 
         {
             .navbar-toggler {
@@ -277,6 +277,7 @@
                 padding: 8px 0;
             }
         }
+        */
         
     </style>
 
