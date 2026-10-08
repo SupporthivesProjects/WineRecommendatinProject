@@ -416,12 +416,12 @@
                             <!-- Start::header-element -->
                             <div class="header-element">
                                 <div class="horizontal-logo">
-                                    <a href="#" class="header-logo">
+                                    <a href="/" class="header-logo">
                                         <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                            class="toggle-logo">
+                                            class="toggle-logo header_desktop_logo">
                                         <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
                                         <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                            class="toggle-dark">
+                                            class="toggle-dark header_desktop_logo">
                                     </a>
                                 </div>
                             </div>
@@ -480,7 +480,7 @@
                                             background="transparent" speed="1" style="width: 40px; height: 40px;" loop
                                             autoplay>
                                         </lottie-player> -->
-                                        <a href="#" class="header-logo">
+                                        <a href="/" class="header-logo">
                                             <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                                 class="desktop-logo" id="header_logo_desktop">
                                             <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
@@ -1453,6 +1453,9 @@
             const section2 = document.querySelector("#products"); // change to your section 2 id
             const section2Top = section2.offsetTop;
             if (window.scrollY >= 100) {
+                console.log("I am in");
+                console.log(section2);
+                console.log(logo);
                 logo.style.height = "45px"; // shrink
             } else {
                 logo.style.height = "70px"; // expand back
