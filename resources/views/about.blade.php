@@ -419,7 +419,7 @@
             </section>
 
             <!-- Section 2: About Text -->
-            <section class="about-section py-5">
+            <section class="about-section py-5" id="aboutus">
                 <div class="container">
                     <div class="row justify-content-center">
                     <div class="col-lg-10">
@@ -550,7 +550,29 @@
             toastr.error("{{ session('error') }}");
         @endif
     </script>
+    <script>
+        document.addEventListener("scroll", () => {
+            const logo = document.getElementById("header_logo_desktop");
+            const section2 = document.querySelector("#aboutus"); // change to your section 2 id
 
+            const section2Top = section2.offsetTop;
+
+            // if (window.scrollY >= section2Top) {
+            //     logo.style.height = "55px"; // shrink
+            // } else {
+            //     logo.style.height = "90px"; // expand back
+            // }
+
+            if (window.scrollY >= 300) {
+                logo.style.height = "45px"; // shrink
+            } else {
+                logo.style.height = "70px"; // expand back
+            }
+
+
+        });
+
+    </script>
     
 
     

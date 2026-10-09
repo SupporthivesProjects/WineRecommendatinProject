@@ -202,7 +202,7 @@
     <style>
         #header_logo_desktop {
                 height: 70px; /* default */
-                transition: height 0.4s ease; /* smooth animation */
+                transition: height 0.6s ease; /* smooth animation */
             }
 
 
@@ -407,7 +407,7 @@
         <!-- End Switcher -->
 
         <div class="landing-page-wrapper">
-             <!-- app-header -->
+                <!-- app-header -->
                 <header class="app-header">
                     <!-- Start::main-header-container -->
                     <div class="main-header-container container-fluid">
@@ -418,7 +418,7 @@
                                 <div class="horizontal-logo">
                                     <a href="/" class="header-logo">
                                         <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                            class="toggle-logo header_desktop_logo">
+                                            class="toggle-logo header_desktop_logo" >
                                         <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
                                         <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                             class="toggle-dark header_desktop_logo">
@@ -484,7 +484,7 @@
                                             <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
                                                 class="desktop-logo" id="header_logo_desktop">
                                             <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                                class="desktop-white">
+                                                class="desktop-white" id="header_logo_white">
                                         </a>
                                     </div>
                                 </div>
@@ -495,42 +495,42 @@
                                 <ul class="main-menu justify-content-end" style="margin-left:auto!important;">
                                     <!-- Start::slide -->
                                     <li class="slide">
-                                        <a class="side-menu__item p-3 justify-content-end" href="#home">
+                                        <a class="side-menu__item p-3 justify-content-end" href="{{ route('home') }}">
                                             <span class="fonthover">Home</span>
                                         </a>
                                     </li>
                                     <!-- End::slide -->
                                     <!-- Start::slide -->
                                     <li class="slide">
-                                        <a href="#HIW" class="side-menu__item p-3 justify-content-end">
+                                        <a href="{{ route('home') }}#HIW" class="side-menu__item p-3 justify-content-end">
                                             <span class="fonthover">How It Works</span>
                                         </a>
                                     </li>
                                     <!-- End::slide -->
                                     <!-- Start::slide -->
                                     <li class="slide">
-                                        <a href="#featuredwines" class="side-menu__item p-3 justify-content-end">
+                                        <a href="{{ route('home') }}#featuredwines" class="side-menu__item p-3 justify-content-end">
                                             <span class="fonthover">Browse Wines</span>
                                         </a>
                                     </li>
                                     <!-- End::slide -->
                                     <!-- Start::slide -->
                                     <li class="slide">
-                                        <a href="#pairing" class="side-menu__item p-3 justify-content-end">
+                                        <a href="{{ route('home') }}#pairing" class="side-menu__item p-3 justify-content-end">
                                             <span class="fonthover">Pairing Wines</span>
                                         </a>
                                     </li>
                                     <!-- End::slide -->
                                     <!-- Start::slide -->
                                     <li class="slide">
-                                        <a href="#testimonials" class="side-menu__item p-3 justify-content-end">
+                                        <a href="{{ route('home') }}#testimonials" class="side-menu__item p-3 justify-content-end">
                                             <span class="fonthover">What our users say</span>
                                         </a>
                                     </li>
                                     <!-- End::slide -->
                                     <!-- Start::slide -->
                                     <li class="slide">
-                                        <a href="#Moments" class="side-menu__item p-3 justify-content-end">
+                                        <a href="{{ route('home') }}#Moments" class="side-menu__item p-3 justify-content-end">
                                             <span class="fonthover">Moments</span>
                                         </a>
                                     </li>
@@ -590,6 +590,8 @@
                         <a type="button" class="btn btn-dark" href="#products">Explore</a>
                     </div>
                 </section>
+
+
 
                 <!-- Filters & Cards Section -->
                 <section class="filters-and-cards" id="products">
@@ -1450,15 +1452,16 @@
         <script>
         document.addEventListener("scroll", () => {
             const logo = document.getElementById("header_logo_desktop");
+            const logotwo = document.getElementById("header_logo_white");
             const section2 = document.querySelector("#products"); // change to your section 2 id
             const section2Top = section2.offsetTop;
-            if (window.scrollY >= 100) {
-                console.log("I am in");
-                console.log(section2);
-                console.log(logo);
+            if (window.scrollY >= 100) 
+            {
                 logo.style.height = "45px"; // shrink
+                logotwo.style.height="45px";
             } else {
                 logo.style.height = "70px"; // expand back
+                logotwo.style.height="70px";
             }
 
 

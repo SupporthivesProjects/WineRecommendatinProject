@@ -1529,16 +1529,10 @@
         document.addEventListener("scroll", () => {
             const logo = document.getElementById("header_logo_desktop");
             const section2 = document.querySelector("#HIW"); // change to your section 2 id
-
             const section2Top = section2.offsetTop;
 
-            // if (window.scrollY >= section2Top) {
-            //     logo.style.height = "55px"; // shrink
-            // } else {
-            //     logo.style.height = "90px"; // expand back
-            // }
-
             if (window.scrollY >= 300) {
+                
                 logo.style.height = "45px"; // shrink
             } else {
                 logo.style.height = "70px"; // expand back

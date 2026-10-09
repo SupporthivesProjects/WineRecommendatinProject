@@ -12,12 +12,11 @@
                                     </div>
                                     <div class="col-lg-2 col-sm-6 col-md-4 reveal revealleft position-relative">
                                         <ul class="mb-5 mb-lg-0 ps-0">
-                                            <li><a href="#home">Dashboard</a></li>
-                                            <li><a href="#HIW">How it Works?</a></li>
-                                            <li><a href="#featuredwines">Browse Wines</a></li>
-                                            <li><a href="#pairing">Pairing Wines</a></li>
-                                            <li><a href="#testimonials">Whats users say</a></li>
-                                            <li><a href="#Moments">Moments</a></li>
+                                            <li><a href="{{ route('home') }}#HIW">How it Works?</a></li>
+                                            <li><a href="{{ route('home') }}#featuredwines">Browse Wines</a></li>
+                                            <li><a href="{{ route('home') }}#pairing">Pairing Wines</a></li>
+                                            <li><a href="{{ route('home') }}#testimonials">Whats users say</a></li>
+                                            <li><a href="{{ route('home') }}#Moments">Moments</a></li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-2 col-sm-6 col-md-4 reveal revealleft position-relative ">
