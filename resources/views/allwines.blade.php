@@ -49,9 +49,6 @@
     <style>
         html, body { overflow-x: hidden; }
         #mystyle { font-family: 'Cinzel Decorative', serif; }
-
-       
-
         .featured-badge {
             background-color: rgba(165, 9, 8, 0.7);
             color: white;
@@ -64,7 +61,6 @@
             right: 10px;
             z-index: 10;
         }
-
         .hero-section {
             height: 100vh;
             background-image: url('{{ asset('images/Browsewines3.jpg') }}');
@@ -129,15 +125,11 @@
             overflow: visible !important;
             max-height: none !important;
         }
-
         .scrollable-filter { max-height: 200px; overflow-y: auto; padding-right: 6px; }
-
         .scrollable-filter::-webkit-scrollbar { width: 6px; }
         .scrollable-filter::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-
         .app-header .nav-link { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: color 0.3s ease; color: black; font-size: 14px; font-weight: 500!important; }
         .app-header .nav-link:hover { color: #0b5ed7; }
-
         .app-header {
             position: fixed;
             top: 0;
@@ -150,32 +142,42 @@
         .app-sidebar {
             position:fixed;
         }
-
         .filters-and-cards {
             background: #fff;
             padding: 100px 20px;
             min-height: 100vh;
         }
-
-        .parallax-container { position: relative; height: 70vh; overflow: hidden; }
+        .parallax-container {
+            position: relative;
+            height: 80vh;
+            overflow: hidden;
+            isolation: isolate;
+        }
         .parallax-bg {
             background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
             background-size: cover;
             background-position: center;
             position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 150%; z-index: -1;
-            transform: translateY(0);
-            transition: transform 0.1s linear;
+            top: -25%;
+            left: 0;
+            width: 100%;
+            height: 150%;
+            z-index: -1;
+            will-change: transform;
         }
-
+        /* Transparent dark overlay */
+        .parallax-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+        }
         .wine-type-scroll { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-
         .wine-card {
-        position: relative;
-        overflow: hidden;
+            position: relative;
+            overflow: hidden;
         }
-
         .hover-overlay {
             position: absolute;
             inset: 0;
@@ -187,31 +189,18 @@
             transition: opacity 0.3s ease-in-out;
             z-index: 10;
         }
-
         .wine-card:hover .hover-overlay {
             opacity: 1;
         }
-
         .overlay-btn {
             padding: 12px 20px;
             font-size: 1rem;
         }
-      
-
-    </style>
-    <style>
         #header_logo_desktop {
                 height: 70px; /* default */
                 transition: height 0.6s ease; /* smooth animation */
             }
-
-
-            /* footer {
-                margin-left: 150px;
-                width: calc(100% - 250px);
-            } */
-
-            .wine-bg {
+        .wine-bg {
                 background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
                 background-size: cover;
                 background-position: center;
@@ -219,85 +208,77 @@
                 position: relative;
                 z-index: 1;
                 opacity: 1;
-            }
+        }
 
-            .wine-card {
+        .wine-card {
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
+        }
 
-            .wine-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            }
+        .wine-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
 
-            .fonthover {
-                white-space: nowrap;
-                color: black;
-                position: relative;
-                font-size: 0.875rem;
-                line-height: 1;
-                vertical-align: middle;
-            }
+        .fonthover {
+            white-space: nowrap;
+            color: black;
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
 
-            .fonthover:hover {
-                white-space: nowrap;
-                color: #7f2c2d;
-                position: relative;
-                font-size: 0.875rem;
-                line-height: 1;
-                vertical-align: middle;
-            }
-        </style>
-        <style>
-            /* Ensure text truncation works */
-            .line-clamp-1 {
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
+        .fonthover:hover {
+            white-space: nowrap;
+            color: #7f2c2d;
+            position: relative;
+            font-size: 0.875rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+       
+        /* Ensure text truncation works */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
-            .line-clamp-2 {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
-            .line-clamp-3 {
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-        </style>
-
-        <style>
-
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .mobile_none {
+            display: block;
+        }
+        .desktop_none {
+            display: none;
+        }
+        @media only screen and (max-width: 768px) {
             .mobile_none {
-                display: block;
-            }
-            .desktop_none {
                 display: none;
             }
-
-
-            @media only screen and (max-width: 768px) {
-                .mobile_none {
-                    display: none;
-                }
-                .desktop_none {
-                    display: block;
-                }
-
-                .mobo-content-end {
-                    justify-content: end;
-                }
-
+            .desktop_none {
+                display: block;
             }
 
-        </style>
+            .mobo-content-end {
+                justify-content: end;
+            }
+
+        }
+
+    </style>
 
     
 
@@ -407,184 +388,180 @@
         <!-- End Switcher -->
 
         <div class="landing-page-wrapper">
-                <!-- app-header -->
-                <header class="app-header">
-                    <!-- Start::main-header-container -->
-                    <div class="main-header-container container-fluid">
-                        <!-- Start::header-content-left -->
-                        <div class="header-content-left">
-                            <!-- Start::header-element -->
-                            <div class="header-element">
-                                <div class="horizontal-logo">
-                                    <a href="/" class="header-logo">
-                                        <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                            class="toggle-logo header_desktop_logo" >
-                                        <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
-                                        <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                            class="toggle-dark header_desktop_logo">
-                                    </a>
-                                </div>
+            <!-- app-header -->
+            <header class="app-header">
+                <!-- Start::main-header-container -->
+                <div class="main-header-container container-fluid">
+                    <!-- Start::header-content-left -->
+                    <div class="header-content-left">
+                        <!-- Start::header-element -->
+                        <div class="header-element">
+                            <div class="horizontal-logo">
+                                <a href="/" class="header-logo">
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                        class="toggle-logo header_desktop_logo" >
+                                    <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
+                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                        class="toggle-dark header_desktop_logo">
+                                </a>
                             </div>
-                            <!-- End::header-element -->
-
-
                         </div>
-                        <!-- End::header-content-left -->
+                        <!-- End::header-element -->
 
-                        <!-- Start::header-content-right -->
-                        <div class="header-content-right">
-                        
-                            <!-- Start::header-element -->
-                            <div class="header-element">
+
+                    </div>
+                    <!-- End::header-content-left -->
+
+                    <!-- Start::header-content-right -->
+                    <div class="header-content-right">
+                    
+                        <!-- Start::header-element -->
+                        <div class="header-element">
+                            <!-- Start::header-link -->
+                            <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
+                                <span class="open-toggle">
+                                    <i class="ri-menu-3-line fs-20"></i>
+                                </span>
+                            </a>
+                            <!-- End::header-link -->
+                        </div>
+                        <!-- End::header-element -->
+                    </div>
+                    <!-- End::header-content-right -->
+
+                </div>
+                <!-- End::main-header-container -->
+            </header>
+            <!-- /app-header -->
+
+            <!-- Start::app-sidebar -->
+            <aside class="app-sidebar" id="sidebar" style="background-color:white;">
+                <div class="container p-0">
+
+                    
+
+                    <!-- Start::main-sidebar -->
+                    <div class="main-sidebar pt-0">
+                        <div class="desktop_none">
+                            <div class="header-element p-3 d-flex justify-content-end">
                                 <!-- Start::header-link -->
-                                <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
+                                <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
                                     <span class="open-toggle">
                                         <i class="ri-menu-3-line fs-20"></i>
                                     </span>
                                 </a>
                                 <!-- End::header-link -->
                             </div>
-                            <!-- End::header-element -->
                         </div>
-                        <!-- End::header-content-right -->
-
-                    </div>
-                    <!-- End::main-header-container -->
-                </header>
-                <!-- /app-header -->
-
-                <!-- Start::app-sidebar -->
-                <aside class="app-sidebar" id="sidebar" style="background-color:white;">
-                    <div class="container p-0">
-
-                        
-
-                        <!-- Start::main-sidebar -->
-                        <div class="main-sidebar pt-0">
-                            <div class="desktop_none">
-                                <div class="header-element p-3 d-flex justify-content-end">
-                                    <!-- Start::header-link -->
-                                    <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
-                                        <span class="open-toggle">
-                                            <i class="ri-menu-3-line fs-20"></i>
-                                        </span>
+                        <!-- Start::nav -->
+                        <nav class="main-menu-container nav nav-pills sub-open mobo-content-end">
+                            <div class="landing-logo-container">
+                                <div class="horizontal-logo">
+                                    <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
+                                        background="transparent" speed="1" style="width: 40px; height: 40px;" loop
+                                        autoplay>
+                                    </lottie-player> -->
+                                    <a href="/" class="header-logo">
+                                        <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                            class="desktop-logo" id="header_logo_desktop">
+                                        <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                            class="desktop-white" id="header_logo_white">
                                     </a>
-                                    <!-- End::header-link -->
                                 </div>
                             </div>
-                            <!-- Start::nav -->
-                            <nav class="main-menu-container nav nav-pills sub-open mobo-content-end">
-                                <div class="landing-logo-container">
-                                    <div class="horizontal-logo">
-                                        <!-- <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
-                                            background="transparent" speed="1" style="width: 40px; height: 40px;" loop
-                                            autoplay>
-                                        </lottie-player> -->
-                                        <a href="/" class="header-logo">
-                                            <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                                class="desktop-logo" id="header_logo_desktop">
-                                            <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
-                                                class="desktop-white" id="header_logo_white">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
-                                        fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
-                                        <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
-                                    </svg></div>
-                                <ul class="main-menu justify-content-end" style="margin-left:auto!important;">
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a class="side-menu__item p-3 justify-content-end" href="{{ route('home') }}">
-                                            <span class="fonthover">Home</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a href="{{ route('home') }}#HIW" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">How It Works</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a href="{{ route('home') }}#featuredwines" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">Browse Wines</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a href="{{ route('home') }}#pairing" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">Pairing Wines</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a href="{{ route('home') }}#testimonials" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">What our users say</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a href="{{ route('home') }}#Moments" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">Moments</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
-                                    <!-- Start::slide -->
-                                    <li class="slide">
-                                        <a href="{{ route('contact') }}" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">Contact Us</span>
-                                        </a>
-                                    </li>
-                                    <li class="slide desktop_none">
-                                        <a href="{{ route('login') }}" class="side-menu__item p-3 justify-content-end">
-                                            <span class="fonthover">Login</span>
-                                        </a>
-                                    </li>
-                                    <!-- End::slide -->
+                            <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
+                                    fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                                </svg></div>
+                            <ul class="main-menu justify-content-end" style="margin-left:auto!important;">
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a class="side-menu__item p-3 justify-content-end" href="{{ route('home') }}">
+                                        <span class="fonthover">Home</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a href="{{ route('home') }}#HIW" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">How It Works</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a href="{{ route('home') }}#featuredwines" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">Browse Wines</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a href="{{ route('home') }}#pairing" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">Pairing Wines</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a href="{{ route('home') }}#testimonials" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">What our users say</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a href="{{ route('home') }}#Moments" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">Moments</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
+                                <!-- Start::slide -->
+                                <li class="slide">
+                                    <a href="{{ route('contact') }}" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">Contact Us</span>
+                                    </a>
+                                </li>
+                                <li class="slide desktop_none">
+                                    <a href="{{ route('login') }}" class="side-menu__item p-3 justify-content-end">
+                                        <span class="fonthover">Login</span>
+                                    </a>
+                                </li>
+                                <!-- End::slide -->
 
-                                </ul>
-                                <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg"
-                                        fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
-                                        <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z">
-                                        </path>
-                                    </svg></div>
-                                <div class="d-lg-flex d-none">
-                                    <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                        <!-- <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
-                                            New User
-                                        </a> -->
-                                        <a href="{{ route('login') }}" class="btn btn-wave btn-info">
-                                            Login
-                                        </a>
-                                    </div>
+                            </ul>
+                            <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg"
+                                    fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z">
+                                    </path>
+                                </svg></div>
+                            <div class="d-lg-flex d-none">
+                                <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
+                                    <!-- <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
+                                        New User
+                                    </a> -->
+                                    <a href="{{ route('login') }}" class="btn btn-wave btn-info">
+                                        Login
+                                    </a>
                                 </div>
-                            </nav>
-                            <!-- End::nav -->
-                        </div>
-                        <!-- End::main-sidebar -->
+                            </div>
+                        </nav>
+                        <!-- End::nav -->
                     </div>
-                </aside>
-                <!-- End::app-sidebar -->
+                    <!-- End::main-sidebar -->
+                </div>
+            </aside>
+            <!-- End::app-sidebar -->
+
+                
 
             <!-- Start::app-content -->
             <div class="main-content landing-main" id="home">
                 <!-- Hero Section -->
                 <section class="parallax-container">
                     <div class="parallax-bg"></div>
-                    <div class="hero-text my-3" style="
-                    text-align: right;
-                    max-width: 390px;
-                    color: white;
-                    position: absolute;
-                    right: 95px;
-                    top: 50%;
-                    transform: translateY(-50%);">
+                    <div class="hero-text my-3" style="text-align: right;max-width: 390px;color: white;position: absolute;
+                    right: 95px;top: 50%;transform: translateY(-50%);">
                         <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
                         <p>Curated selections for every occasion</p>
                         <a type="button" class="btn btn-dark" href="#products">Explore</a>
@@ -1450,24 +1427,56 @@
 
         </script>
         <script>
-        document.addEventListener("scroll", () => {
-            const logo = document.getElementById("header_logo_desktop");
-            const logotwo = document.getElementById("header_logo_white");
-            const section2 = document.querySelector("#products"); // change to your section 2 id
-            const section2Top = section2.offsetTop;
-            if (window.scrollY >= 100) 
-            {
-                logo.style.height = "45px"; // shrink
-                logotwo.style.height="45px";
-            } else {
-                logo.style.height = "70px"; // expand back
-                logotwo.style.height="70px";
-            }
+            document.addEventListener("scroll", () => {
+                const logo = document.getElementById("header_logo_desktop");
+                const logotwo = document.getElementById("header_logo_white");
+                const section2 = document.querySelector("#products"); // change to your section 2 id
+                const section2Top = section2.offsetTop;
+                if (window.scrollY >= 100) 
+                {
+                    logo.style.height = "45px"; // shrink
+                    logotwo.style.height="45px";
+                } else {
+                    logo.style.height = "70px"; // expand back
+                    logotwo.style.height="70px";
+                }
 
 
+            });
+        </script>
+    <!-- parallax script -->
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const containers = document.querySelectorAll('.parallax-container');
+
+            
+        function updateParallax() {
+            containers.forEach(container => {
+                const bg = container.querySelector('.parallax-bg');
+
+                if (!bg) return;
+
+                const rect = container.getBoundingClientRect();
+
+                if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+                const isMobile = window.innerWidth <= 767;
+                const speed = isMobile ? 0.1 : 0.3;
+
+                const offset = (window.innerHeight - rect.top) * speed;
+
+                bg.style.transform = `translateY(${offset}px)`;
+            });
+        }
+
+
+            window.addEventListener('scroll', updateParallax, { passive: true });
+            window.addEventListener('resize', updateParallax);
+
+            updateParallax();
         });
 
-    </script>
+     </script>
     
     </body>
 </html>
