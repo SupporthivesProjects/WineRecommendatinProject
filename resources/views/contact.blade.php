@@ -142,16 +142,82 @@
                 background-color: #6a0000;
                 border-color: #6a0000;
             }
+
+            .contact-hero {
+                position: relative;
+                height: 60vh;
+                min-height: 350px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 0;
+                overflow: hidden;
+                isolation: isolate;
+            }
+
+            /* Parallax background image */
+            .contact-hero-bg {
+                position: absolute;
+                top: -20%;
+                left: 0;
+                width: 100%;
+                height: 140%;
+
+                background-image: url('{{ asset('images/BrowseWines3.jpg') }}');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+
+                z-index: -1;
+                will-change: transform;
+            }
+
+            /* Dark transparent overlay */
+            .contact-hero-bg::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.45);
+                pointer-events: none;
+            }
+
+            /* Hero text */
+            .contact-hero-content {
+                position: relative;
+                z-index: 1;
+                color: white;
+                text-align: center;
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            @media (max-width: 768px) {
+                .contact-hero {
+                    height: 40vh;
+                    min-height: 280px;
+                }
+
+                .contact-hero-bg {
+                    top: -30%;
+                    height: 160%;
+                }
+            }
+
         </style>
     @endpush
 
     <!-- Hero Section -->
     <section class="contact-hero">
+        <div class="contact-hero-bg"></div>
         <div class="contact-hero-content">
-            <h1 class="text-white" style="font-family: 'Cinzel Decorative', serif;">Contact Us</h1>
+            <h1 class="text-white"
+                style="font-family: 'Cinzel Decorative', serif;">
+                Contact Us
+            </h1>
             <p class="lead">We'd love to hear from you</p>
         </div>
     </section>
+
 
     <!-- Contact Form Section -->
     <section class="contact-section">
@@ -331,5 +397,52 @@
                     }, false)
                 })
         })()
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hero = document.querySelector('.contact-hero');
+            if (!hero) return;
+
+            const bg = hero.querySelector('.contact-hero-bg');
+            if (!bg) return;
+
+            let ticking = false;
+
+            function updateParallax() {
+                const rect = hero.getBoundingClientRect();
+
+                // Stop updating when the hero is outside the viewport
+                if (rect.bottom < 0 || rect.top > window.innerHeight) {
+                    ticking = false;
+                    return;
+                }
+
+                const isMobile = window.innerWidth <= 768;
+                const speed = isMobile ? 0.20 : 0.30;
+
+                // Background moves more slowly than page scrolling
+                const offset = -rect.top * speed;
+
+                bg.style.transform = `translate3d(0, ${offset}px, 0)`;
+
+                ticking = false;
+            }
+
+            function requestParallaxUpdate() {
+                if (!ticking) {
+                    ticking = true;
+                    window.requestAnimationFrame(updateParallax);
+                }
+            }
+
+            window.addEventListener('scroll', requestParallaxUpdate, {
+                passive: true
+            });
+
+            window.addEventListener('resize', requestParallaxUpdate);
+
+            updateParallax();
+        });
+
     </script>
 @endsection
