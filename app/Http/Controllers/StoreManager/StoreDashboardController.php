@@ -24,6 +24,8 @@ class StoreDashboardController extends Controller
 {
     public function index()
     {
+
+
         // Step 1: Get current user and their store ID
         $user = auth()->user(); // Assuming Auth is set up
         $storeId = $user->store_id;
@@ -35,17 +37,43 @@ class StoreDashboardController extends Controller
             ->pluck('product_id')
             ->toArray();
 
-        $cheeseProductsCount = DB::table('store_inventory')
-            ->where('store_id', $storeId)
-            ->where('is_available', 1)
-            ->count();
+        
+        // Featured wine products for this store
+        $featuredProducts = Product::join(
+            'store_products',
+            'products.id',
+            '=',
+            'store_products.product_id'
+        )
+        ->where('store_products.store_id', $storeId)
+        ->where('store_products.is_featured', 1)
+        ->select('products.*')
+        ->get();
 
+        $featuredCount = $featuredProducts->count();
 
+        // Available cheese inventory records for this store
+        $cheeseProducts = DB::table('store_inventory')
+        ->join(
+            'cheese_products',
+            'store_inventory.cheese_product_id',
+            '=',
+            'cheese_products.id'
+        )
+        ->where('store_inventory.store_id', $storeId)
+        ->where('store_inventory.is_available', 1)
+        ->select(
+            'store_inventory.id as inventory_id',
+            'store_inventory.quantity',
+            'store_inventory.is_available',
+            'cheese_products.id as cheese_product_id',
+            'cheese_products.name',
+            'cheese_products.type',
+            'cheese_products.price'
+        )
+        ->get();
 
-        $featuredCount = DB::table('store_products')
-        ->where('store_id', $storeId)
-        ->where('is_featured', 1)
-        ->count();
+    $cheeseProductsCount = $cheeseProducts->count(); 
         
 
         // Step 3: Get all product details for this store
@@ -198,9 +226,11 @@ class StoreDashboardController extends Controller
             'priceLabels', 'priceData',
             'products',
             'featuredCount',
+            'featuredProducts',
             'graphData',
             'dates',
-            'cheeseProductsCount'
+            'cheeseProductsCount',
+            'cheeseProducts'
         ));
     }
 

@@ -65,6 +65,11 @@
                                 <div class="card-item-body">
                                     <div class="card-item-stat">
                                         <h4 class="fw-bold">{{ $products->count() }}</h4>
+                                        <a href="#storemanager_winelist" class="btn btn-sm btn-outline-primary mt-2">View
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                            </svg>
+                                        </a>
                                         <small></small>
                                     </div>
                                 </div>
@@ -106,6 +111,15 @@
                                 <div class="card-item-body">
                                     <div class="card-item-stat">
                                         <h4 class="fw-bold">{{ $featuredCount }}</h4>
+                                        <a href="#"
+                                            class="btn btn-sm btn-outline-primary mt-2"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#featuredProductsModal">
+                                                View
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                                </svg>
+                                            </a>
                                     </div>
                                 </div>
                             </div>
@@ -135,6 +149,15 @@
                                 <div class="card-item-body">
                                     <div class="card-item-stat">
                                         <h4 class="fw-bold">{{ $cheeseProductsCount }}</h4>
+                                        <a href="#"
+                                        class="btn btn-sm btn-outline-primary mt-2"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cheeseProductsModal">
+                                            View
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+                                            </svg>
+                                        </a>
                                         <small><b class="text-danger"></small>
                                     </div>
                                 </div>
@@ -205,11 +228,11 @@
                             </div>
                         </div><!-- col end -->
                         
-                        <div class="row">
+                        <div class="row" id="storemanager_winelist">
                             <div class="col-xl-12">
                                 <div class="card custom-card">
                                     <div class="card-header">
-                                        <div class="card-title">Recently Added Products</div>
+                                        <div class="card-title">Products in store</div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -290,6 +313,118 @@
             <!-- End::row-1 -->
         </div>
     </div>
+
+    <!-- featured products modal -->
+    <div class="modal fade" id="featuredProductsModal" tabindex="-1"
+        aria-labelledby="featuredProductsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="featuredProductsModalLabel">
+                        Featured Products
+                    </h5>
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="text" id="featuredProductSearch"
+                        class="form-control mb-3"
+                        placeholder="Search products...">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped"
+                            id="featuredProductsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Wine Name</th>
+                                    <th>Type</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($featuredProducts as $product)
+                                    <tr>
+                                        <td>{{ $product->id }}</td>
+                                        <td>{{ $product->wine_name }}</td>
+                                        <td>{{ $product->type }}</td>
+                                        <td>{{ $product->retail_price }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            No featured products found.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Cheese Products Modal -->
+    <div class="modal fade" id="cheeseProductsModal" tabindex="-1"
+        aria-labelledby="cheeseProductsModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cheeseProductsModalLabel">
+                        Cheese Products ({{ $cheeseProductsCount }})
+                    </h5>
+
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cheese Name</th>
+                                    <th>Type</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @forelse($cheeseProducts as $cheese)
+                                    <tr>
+                                        <td>{{ $cheese->cheese_product_id }}</td>
+                                        <td>{{ $cheese->name }}</td>
+                                        <td>{{ $cheese->type ?? 'N/A' }}</td>
+                                        <td>{{ number_format($cheese->price, 2) }}</td>
+                                        <td>{{ $cheese->quantity }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            No available cheese products found.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     
 <!-- End::app-content -->
 
@@ -471,6 +606,23 @@
             chart.render();
         </script>
 
+        <!-- modal search  -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchInput = document.getElementById('featuredProductSearch');
+                const table = document.getElementById('featuredProductsTable');
+
+                searchInput.addEventListener('input', function () {
+                    const search = this.value.toLowerCase();
+
+                    table.querySelectorAll('tbody tr').forEach(function (row) {
+                        row.style.display = row.textContent.toLowerCase().includes(search)
+                            ? ''
+                            : 'none';
+                    });
+                });
+            });
+            </script>
 
     
 @endpush

@@ -445,18 +445,71 @@ class UserController extends Controller
         $price = $product->display_price;
 
         // Fetch 3 related products from the user's store only
-        $relatedProducts = Product::with('images')
+        // $relatedProducts = Product::with('images')
+        //     ->whereIn('id', $storeProducts)
+        //     ->where('id', '!=', $product->id)
+        //     ->whereBetween('retail_price', [
+        //         max(0, $price - 1500),
+        //         $price + 1500
+        //     ])
+        //     ->where('grape_variety', $product->grape_variety)
+        //     ->where('type', $product->type)
+        //     ->inRandomOrder()
+        //     ->limit(3)
+        //     ->get();
+        $relatedProducts = collect();
+
+        $baseQuery = Product::with('images')
             ->whereIn('id', $storeProducts)
-            ->where('id', '!=', $product->id)
-            ->whereBetween('retail_price', [
-                max(0, $price - 1500),
-                $price + 1500
-            ])
+            ->where('id', '!=', $product->id);
+
+        // 1. First priority: Same grape variety
+        $grapeProducts = (clone $baseQuery)
             ->where('grape_variety', $product->grape_variety)
-            ->where('type', $product->type)
             ->inRandomOrder()
             ->limit(3)
             ->get();
+
+        $relatedProducts = $relatedProducts->merge($grapeProducts);
+
+        // 2. Second priority: Same type
+        if ($relatedProducts->count() < 3) {
+            $typeProducts = (clone $baseQuery)
+                ->where('type', $product->type)
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($typeProducts);
+        }
+
+        // 3. Third priority: Same varietal blend
+        if ($relatedProducts->count() < 3) {
+            $blendProducts = (clone $baseQuery)
+                ->where('varietal_blend', $product->varietal_blend)
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($blendProducts);
+        }
+
+        // 4. Final priority: Similar price
+        if ($relatedProducts->count() < 3) {
+            $priceProducts = (clone $baseQuery)
+                ->whereBetween('retail_price', [
+                    max(0, $price - 1500),
+                    $price + 1500
+                ])
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($priceProducts);
+        }
     
 
         // If less than 3 related products are found,

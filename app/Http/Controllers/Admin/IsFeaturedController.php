@@ -13,28 +13,29 @@ class IsFeaturedController extends Controller
 {
     public function index()
     {
-            $storesWithFeaturedCounts = DB::table('store_products')
-            ->select('store_id', DB::raw('count(*) as featured_count'))
-            ->where('is_featured', 1)
-            ->groupBy('store_id')
-            ->get();
-
-        // Get store details for each store_id
-        $stores = Store::whereIn('id', $storesWithFeaturedCounts->pluck('store_id'))->get()->keyBy('id');
-
-        // Merge store details into the collection
-        $data = $storesWithFeaturedCounts->map(function ($item) use ($stores) {
-            $store = $stores[$item->store_id];
-            return [
-                'id' => $item->store_id,
-                'store_name' => $store->store_name,
-                'contact_number' => $store->contact_number,
-                'email' => $store->email,
-                'featured_count' => $item->featured_count
-            ];
-        });
-
+        $data = Product::where('admin_featured_product', 1)->get();
         return view('admin.dashboard.is_featured_products', compact('data'));
+        //     $storesWithFeaturedCounts = DB::table('store_products')
+        //     ->select('store_id', DB::raw('count(*) as featured_count'))
+        //     ->where('is_featured', 1)
+        //     ->groupBy('store_id')
+        //     ->get();
+
+        // // Get store details for each store_id
+        // $stores = Store::whereIn('id', $storesWithFeaturedCounts->pluck('store_id'))->get()->keyBy('id');
+
+        // // Merge store details into the collection
+        // $data = $storesWithFeaturedCounts->map(function ($item) use ($stores) {
+        //     $store = $stores[$item->store_id];
+        //     return [
+        //         'id' => $item->store_id,
+        //         'store_name' => $store->store_name,
+        //         'contact_number' => $store->contact_number,
+        //         'email' => $store->email,
+        //         'featured_count' => $item->featured_count
+        //     ];
+        // });
+        
     }
 
     public function show($store_id)

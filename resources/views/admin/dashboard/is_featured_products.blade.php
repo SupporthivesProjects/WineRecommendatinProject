@@ -42,23 +42,23 @@
                                     <thead>
                                         <tr>
                                             <th class="text-start">SR No.</th>
-                                            <th class="text-start">Store Name</th>
-                                            <th class="text-start">Featured Products</th>
-                                            <th class="text-start">Action</th>
-                                            
+                                            <th class="text-start">Product Name</th>
+                                            <th class="text-start">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($data as $store)
-                                        <tr>
-                                            <td>{{ $store['id'] }}</td>
-                                            <td>{{ $store['store_name'] }}</td>
-                                            <td>{{ $store['featured_count'] }}</td>
-                                            <td>
-                                                <a href="{{ route('admin.isFeatured.show', $store['id']) }}">View</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                        @foreach($data as $product)
+                                            <tr>
+                                                <td>{{ $product->id }}</td>
+                                                <td>{{ $product->wine_name }}</td>
+                                                
+                                                    @if($product->status=="active")
+                                                        <td class="text-success fw-bold">Active</td>
+                                                    @else
+                                                        <td class="text-danger fw-bold">InActive</td>
+                                                    @endif
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

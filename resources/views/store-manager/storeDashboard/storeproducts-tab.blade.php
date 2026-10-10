@@ -195,20 +195,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Function to show toastr messages based on the response
-            function showToastr(response, action) {
-                response.json().then(data => {
-                    console.log(`Response for ${action}:`, data); // Debug output
+            // function showToastr(response, action) {
+            //     response.json().then(data => {
+            //         console.log(`Response for ${action}:`, data); // Debug output
 
-                    if (response.ok && data.success) {
-                        toastr.success(`Product ${action} updated successfully.`);
-                    } else {
-                        toastr.error(`Failed to update product ${action}.`);
-                    }
-                }).catch(err => {
-                    console.error(`JSON parsing failed for ${action}:`, err); // JSON error debug
-                    toastr.error(`Unexpected error for product ${action}.`);
-                });
-            }
+            //         if (response.ok && data.success) {
+            //             toastr.success(`Product ${action} updated successfully.`);
+            //         } else {
+            //             toastr.error(`Failed to update product ${action}.`);
+            //         }
+            //     }).catch(err => {
+            //         console.error(`JSON parsing failed for ${action}:`, err); // JSON error debug
+            //         toastr.error(`Unexpected error for product ${action}.`);
+            //     });
+            // }
 
             // Handle 'available' checkbox change
             document.querySelectorAll('input[name="available[]"]').forEach(function (checkbox) {
@@ -248,7 +248,7 @@
                         return response.json(); // Parse the JSON body
                     })
                     .then(data => {
-                        toastr.success(data.message || 'Product status updated successfully');
+                        // toastr.success(data.message || 'Product status updated successfully');
                         row.classList.add('row-success');
                         setTimeout(() => {
                             row.classList.remove('row-success');

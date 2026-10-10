@@ -375,9 +375,6 @@ class DashboardController extends Controller
             ];
         }
 
-
-
-
         //adminfeatured count
         $adminfeaturedcount = DB::table('products')
                         ->where('admin_featured_product',1)

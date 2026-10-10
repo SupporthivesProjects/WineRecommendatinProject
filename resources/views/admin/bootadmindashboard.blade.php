@@ -44,6 +44,23 @@
         .card-questionnaire {
             border-top: 4px solid #ec4899 !important;
         }
+
+        .card-users,
+        .card-featured,
+        .card-stores,
+        .card-products {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card-users .btn,
+        .card-featured .btn,
+        .card-stores .btn,
+        .card-products .btn {
+            position: relative;
+            z-index: 2;
+        }
+
 </style>
 
 @endpush
@@ -120,6 +137,13 @@
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
                                         </a>
+
+                                        <!-- Full-card clickable overlay -->
+                                        <a href="{{ route('admin.users.index') }}"
+                                        class="stretched-link"
+                                        aria-label="View all users">
+                                        </a>
+
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +167,7 @@
                                 </div>
                                 <div class="card-item-title mb-2">
                                     <label class="main-content-label fs-13 fw-bold mb-1">
-                                        Featured Products
+                                        Active Featured Products
                                     </label>
                                     <span class="d-block fs-12 mb-0 text-muted">Total Admin Featured Products</span>
                                 </div>
@@ -154,6 +178,11 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
+                                        </a>
+                                        <!-- Full-card clickable overlay -->
+                                        <a href="{{ route('admin.isFeatured.index') }}"
+                                        class="stretched-link"
+                                        aria-label="View all users">
                                         </a>
                                     </div>
                                 </div>
@@ -200,6 +229,11 @@
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
                                         </a>
+                                        <!-- Full-card clickable overlay -->
+                                        <a href="{{ route('admin.stores.index') }}"
+                                        class="stretched-link"
+                                        aria-label="View all users">
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -234,6 +268,11 @@
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
                                         </a>
+                                        <!-- Full-card clickable overlay -->
+                                        <a href="{{ route('admin.products.index') }}"
+                                        class="stretched-link"
+                                        aria-label="View all users">
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -266,6 +305,11 @@
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
                                         </a>
+                                         <!-- Full-card clickable overlay -->
+                                         <a href="{{ route('admin.cheese-products.index') }}" 
+                                        class="stretched-link"
+                                        aria-label="View all users">
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -293,6 +337,11 @@
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
                                         </a>
+                                        <!-- Full-card clickable overlay -->
+                                        <a href="{{ route('admin.templates.index') }}"
+                                        class="stretched-link"
+                                        aria-label="View all users">
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -319,6 +368,11 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
                                             </svg>
+                                        </a>
+                                        <!-- Full-card clickable overlay -->
+                                        <a href="{{ route('admin.reviews.index') }}"
+                                        class="stretched-link"
+                                        aria-label="View all users">
                                         </a>
                                     </div>
                                 </div>
