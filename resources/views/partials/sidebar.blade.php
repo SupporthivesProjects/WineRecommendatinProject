@@ -157,8 +157,14 @@
                         </li> -->
                         <li class="slide">
                             <a href="{{ route('admin.popup.enquiry') }}" class="side-menu__item">
-                                <i class="side-menu__icon fe fe-settings" style="color:var(--primary-color);"></i>
+                                <i class="side-menu__icon fe fe-help-circle" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Popup Enquiries</span>
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.support-tickets.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-life-buoy"></i>
+                                <span class="side-menu__label">Support Tickets</span>
                             </a>
                         </li>
                         
@@ -366,6 +372,12 @@
                             <a href="{{ route('store-manager.uploads') }}" class="side-menu__item">
                                 <i class="side-menu__icon fe fe-shopping-cart" style="color:var(--primary-color);"></i>
                                 <span class="side-menu__label">Uploads</span>
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('store-manager.tickets.index') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-life-buoy" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Support</span>
                             </a>
                         </li>
                     @elseif(Auth::user()->role === 'main_manager')

@@ -31,6 +31,10 @@ use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\StoreAnalyticsController;
 use App\Http\Controllers\Admin\QuestionnaireDebuggerController;
 use App\Http\Controllers\PopupEnquiryController;
+use App\Models\StoreSupportRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 use Illuminate\Support\Facades\Log;
 
@@ -317,6 +321,32 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('popup-enquiries/{enquiry}/status',[PopupEnquiryController::class, 'updateStatus'])->name('popup-enquiries.update-status');
     Route::post('/popup-enquiry',[PopupEnquiryController::class, 'store'])->name('popup-enquiry.store');
 
+    // Support Tickets - Admin Listing
+    Route::get('/support-tickets', function () {
+        $tickets = StoreSupportRequest::latest()->get();
+
+        return view('admin.support-tickets', compact('tickets'));
+    })->name('support-tickets.index');
+
+    // Update Support Ticket Status
+    Route::patch('/support-tickets/{id}/status', function (Request $request, $id) {
+        $request->validate([
+            'status' => [
+                'required',
+                Rule::in(['submitted', 'inprogress', 'closed']),
+            ],
+        ]);
+
+        $ticket = StoreSupportRequest::findOrFail($id);
+        $ticket->status = $request->status;
+        $ticket->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $ticket->status,
+        ]);
+    })->name('support-tickets.status');
+
 
 
 
@@ -380,6 +410,57 @@ Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'sto
 
     // View individual submission details
     Route::get('/questionnaire/responses/{submission_id}', [StoreDashboardController::class, 'showIndividualResponses'])->name('questionnaire.responses.show');
+
+    // Support form route    
+    Route::get('/support', function () {$user = auth()->user();$storeName = $user->store?->store_name;
+        return view('store-manager.support', compact('storeName'));
+    })->name('support');
+
+    //submit form    
+    Route::post('/support', function (\Illuminate\Http\Request $request) {
+        $request->validate([
+            'message' => ['required', 'string', 'max:5000'],
+        ]);
+
+        $user = auth()->user();
+        $store = $user->store;
+
+        if (!$store) {
+            return back()->with('error', 'Your account is not linked to a store.');
+        }
+
+        \App\Models\StoreSupportRequest::create([
+            'store_id' => $user->store_id,
+            'store_name' => $store->store_name,
+            'message' => $request->message,
+            'status' => 'submitted',
+        ]);
+
+        return redirect()
+            ->route('store-manager.tickets.index')
+            ->with('success', 'Your support ticket has been submitted successfully.');
+    })->name('support.submit');
+
+
+    //get all tickets
+    Route::get('/tickets', function () {
+        $user = auth()->user();
+    
+        $tickets = \App\Models\StoreSupportRequest::where(
+            'store_name',
+            $user->store?->store_name
+        )->latest()->get();
+    
+        return view('store-manager.tickets', compact('tickets'));
+    })->name('tickets.index');
+
+    //show individual ticket
+    Route::get('/tickets/{id}', function ($id) {
+        $ticket = \App\Models\StoreSupportRequest::findOrFail($id);
+    
+        return view('store-manager.ticket-details', compact('ticket'));
+    })->name('tickets.show');
+
 
 });
 

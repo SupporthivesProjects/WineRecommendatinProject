@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
             $pendingRequests = 0;
             $hasPendingEnquiries = false;
             $hasInProgressEnquiries = false;
+            $hasPendingSupportTickets = false;
 
             if (Auth::check() && Auth::user()->role !== 'user') {
 
@@ -53,6 +54,12 @@ class AppServiceProvider extends ServiceProvider
 
                     $hasInProgressEnquiries = PopupEnquiry::where('status', 'in_progress')
                         ->exists();
+
+                    // Support ticket notification - ADMIN ONLY
+                    $hasPendingSupportTickets = \App\Models\StoreSupportRequest::where(
+                        'status',
+                        'submitted'
+                    )->exists();
                 }
             }
 
@@ -60,6 +67,8 @@ class AppServiceProvider extends ServiceProvider
                 'pendingRequests' => $pendingRequests,
                 'hasPendingEnquiries' => $hasPendingEnquiries,
                 'hasInProgressEnquiries' => $hasInProgressEnquiries,
+                'hasPendingSupportTickets'=>$hasPendingSupportTickets,
+
             ]);
         });
     }

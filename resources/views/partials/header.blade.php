@@ -47,14 +47,11 @@
                         title="Popup Enquiries">
 
                             <i class="fe fe-bell header-link-icon"></i>
-                            @if ($hasPendingEnquiries ?? false)
-
+                            @if (($hasPendingEnquiries ?? false) || ($hasPendingSupportTickets ?? false))
                                 <span class="enquiry-notification-dot blinking"></span>
 
                             @elseif ($hasInProgressEnquiries ?? false)
-
                                 <span class="enquiry-notification-dot in-progress"></span>
-
                             @endif
 
                         </a>
