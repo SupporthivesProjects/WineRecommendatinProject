@@ -169,8 +169,10 @@
         // });
 
         $(document).ready(function () {
-        // Initialize DataTable first
-        $('#file-export').DataTable();
+            $('#file-export').DataTable({
+                stateSave: true
+            });
+        });
 
         // Then add delegated event listener
         $(document).on('change', '.featured-toggle', function () {

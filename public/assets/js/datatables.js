@@ -80,6 +80,7 @@ $(function (e) {
         ],
     
         lengthChange: true,
+        stateSave: true,
     
         language: {
             searchPlaceholder: 'Search...',
