@@ -147,9 +147,8 @@
 
 
         </style>
-        <!-- Slick Carousel CSS -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+        
+        
     @endpush
 
     <div class="container py-5">
@@ -230,7 +229,7 @@
             <div class="row mt-5">
                 <div class="col-12">
                     <h3 class="mb-4">Wines That Pair Well With {{ $cheese->name }}</h3>
-                    <div class="row wine-carousel">
+                    <div class="row g-4">
                         @foreach ($pairedWines as $wine)
                             <div class="col-md-3 mb-4">
                                 <div class="card h-100">
@@ -266,51 +265,12 @@
 @push('scripts')
     <!-- Slick Carousel JS -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    
     
     <script>
         $(document).ready(function() {
             // Initialize Slick Carousel if there are more than 4 wines
-            if ($('.wine-carousel').length > 0) {
-                $('.wine-carousel').slick({
-                    dots: false,
-                    arrows: true,
-                    infinite: true,
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 2500,
-                    speed: 1200,
-                    cssEase: 'ease',
-                    pauseOnHover: true,
-                    pauseOnFocus: true,
-                    responsive: [
-                        {
-                            breakpoint: 1024,
-                            settings: {
-                                slidesToShow: 3,
-                                slidesToScroll: 1,
-                                infinite: true,
-                                dots: false
-                            }
-                        },
-                        {
-                            breakpoint: 768,
-                            settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 1
-                            }
-                        },
-                        {
-                            breakpoint: 576,
-                            settings: {
-                                slidesToShow: 1,
-                                slidesToScroll: 1
-                            }
-                        }
-                    ]
-                });
-            }
+            
 
             // Add to cart functionality
             const addToCartButtons = document.querySelectorAll('.add-to-cart');
