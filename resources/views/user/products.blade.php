@@ -433,38 +433,64 @@
                         <div class="row g-2">
                             <!-- Filter sidebar -->
                             <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
-                                <!-- Vintage Year Filter -->
-                                <div class="filter-group">
-                                    <h4 class="fw-bold mb-4">Vintage Year</h4>
-                                    @php
-                                        $vintageYears = $products->pluck('vintage_year')->unique()->sort();
-                                    @endphp
-                                    @foreach ($vintageYears as $year)
-                                        <div class="form-check">
-                                            <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
-                                            <label class="form-check-label" for="vintage-year-{{ $year }}">
-                                                {{ $year }}
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
+                            {{-- Vintage Year Filter --}}
+                            <div class="filter-group">
+                                <h4 class="fw-bold mb-4">Vintage Year</h4>
 
-                                <!-- Winery Filter -->
-                                <div class="filter-group">
-                                    <h4 class="fw-bold mb-4">Winery</h4>
-                                    @php
-                                        $wineries = $products->pluck('winery')->unique()->sort();
-                                    @endphp
-                                    @foreach ($wineries as $winery)
-                                        <div class="form-check">
-                                            <input class="form-check-input wine-winery-filter" type="checkbox" value="{{ $winery }}" id="winery-{{ strtolower($winery) }}">
-                                            <label class="form-check-label" for="winery-{{ strtolower($winery) }}">
-                                                {{ ucfirst($winery) }} 🍷
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                @foreach ($allVintageYears as $year)
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input wine-vintage-year-filter"
+                                            type="checkbox"
+                                            value="{{ $year }}"
+                                            id="vintage-year-{{ $year }}"
+                                            {{ in_array($year, (array) request('vintage_years', [])) ? 'checked' : '' }}
+                                        >
+                                        <label
+                                            class="form-check-label"
+                                            for="vintage-year-{{ $year }}"
+                                        >
+                                            {{ $year }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
 
+                            {{-- Grape Variety Filter --}}
+                            <div class="filter-group">
+                                <h4 class="fw-bold mb-4">Grape Variety</h4>
+
+                                @foreach ($allGrapeVarieties as $variety)
+                                    <div class="form-check grape-variety-option {{ $loop->index >= 10 ? 'd-none' : '' }}">
+                                        <input
+                                            class="form-check-input wine-grape-variety-filter"
+                                            type="checkbox"
+                                            value="{{ $variety }}"
+                                            id="grape-variety-{{ $loop->index }}"
+                                            {{ in_array($variety, (array) request('grape_varieties', [])) ? 'checked' : '' }}
+                                        >
+
+                                        <label
+                                            class="form-check-label"
+                                            for="grape-variety-{{ $loop->index }}"
+                                        >
+                                            {{ $variety }}
+                                        </label>
+                                    </div>
+                                @endforeach
+
+                                @if ($allGrapeVarieties->count() > 10)
+                                    <button
+                                        type="button"
+                                        id="grape-variety-toggle"
+                                        class="btn btn-link p-0 mt-2 text-decoration-none"
+                                    >
+                                        Read More
+                                    </button>
+                                @endif
+                            </div>
+
+                        
                                 <!-- Retail Price Filter -->
                                 <!-- Retail Price Slider -->
                                 <div class="filter-group">
@@ -804,42 +830,52 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             const filters = document.querySelectorAll(
-                '.wine-type-filter, .wine-country-filter'
+                '.wine-type-filter, .wine-country-filter, ' +
+                '.wine-vintage-year-filter, .wine-grape-variety-filter'
             );
 
             filters.forEach(filter => {
-
                 filter.addEventListener('change', function () {
 
                     const params = new URLSearchParams(window.location.search);
 
-                    // Remove old values
-                    params.delete('types[]');
-                    params.delete('countries[]');
+                    // Clear old filter selections
+                    [
+                        'types[]',
+                        'countries[]',
+                        'vintage_years[]',
+                        'grape_varieties[]'
+                    ].forEach(key => params.delete(key));
 
-                    // Selected Types
-                    document.querySelectorAll('.wine-type-filter:checked').forEach(item => {
-                        params.append('types[]', item.value);
-                    });
+                    // Add selected types
+                    document.querySelectorAll('.wine-type-filter:checked')
+                        .forEach(item => params.append('types[]', item.value));
 
-                    // Selected Countries
-                    document.querySelectorAll('.wine-country-filter:checked').forEach(item => {
-                        params.append('countries[]', item.value);
-                    });
+                    // Add selected countries
+                    document.querySelectorAll('.wine-country-filter:checked')
+                        .forEach(item => params.append('countries[]', item.value));
+
+                    // Add selected vintage years
+                    document.querySelectorAll('.wine-vintage-year-filter:checked')
+                        .forEach(item => params.append('vintage_years[]', item.value));
+
+                    // Add selected grape varieties
+                    document.querySelectorAll('.wine-grape-variety-filter:checked')
+                        .forEach(item => params.append('grape_varieties[]', item.value));
 
                     // Preserve search text
                     const searchInput = document.querySelector('input[name="search"]');
+
                     if (searchInput && searchInput.value.trim() !== '') {
                         params.set('search', searchInput.value.trim());
                     }
 
-                    // Always return to first page after filtering
+                    // Start from page 1 after changing filters
                     params.delete('page');
 
-                    window.location.href = window.location.pathname + '?' + params.toString();
-
+                    window.location.href =
+                        window.location.pathname + '?' + params.toString();
                 });
-
             });
 
         });
@@ -967,6 +1003,35 @@
         }
 
 
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleButton = document.getElementById('grape-variety-toggle');
+
+            if (!toggleButton) return;
+
+            toggleButton.addEventListener('click', function () {
+                const hiddenOptions = document.querySelectorAll(
+                    '.grape-variety-option.d-none'
+                );
+
+                if (hiddenOptions.length > 0) {
+                    document.querySelectorAll('.grape-variety-option.d-none')
+                        .forEach(option => option.classList.remove('d-none'));
+
+                    this.textContent = 'Read Less';
+                } else {
+                    document.querySelectorAll('.grape-variety-option')
+                        .forEach((option, index) => {
+                            if (index >= 10) {
+                                option.classList.add('d-none');
+                            }
+                        });
+
+                    this.textContent = 'Read More';
+                }
+            });
+        });
     </script>
 
 @endpush

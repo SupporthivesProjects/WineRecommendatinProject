@@ -216,7 +216,7 @@ class UserController extends Controller
                 $q->where('wine_name', 'LIKE', "%{$search}%")
                 ->orWhere('type', 'LIKE', "%{$search}%")
                 ->orWhere('country', 'LIKE', "%{$search}%")
-                ->orWhere('winery', 'LIKE', "%{$search}%")
+                ->orWhere('grape_variety', 'LIKE', "%{$search}%")
                 ->orWhere('vintage_year', 'LIKE', "%{$search}%");
 
             });
@@ -247,6 +247,34 @@ class UserController extends Controller
         ->sort()
         ->values();
 
+        $allVintageYears = Product::whereIn('id', $storeProducts->pluck('product_id'))
+        ->whereNotNull('vintage_year')
+        ->where('vintage_year', '!=', '')
+        ->distinct()
+        ->orderBy('vintage_year')
+        ->pluck('vintage_year');
+
+        $allGrapeVarieties = Product::whereIn('id', $storeProducts->pluck('product_id'))
+            ->whereNotNull('grape_variety')
+            ->where('grape_variety', '!=', '')
+            ->distinct()
+            ->orderBy('grape_variety')
+            ->pluck('grape_variety');
+
+        if ($request->filled('vintage_years')) {
+            $productsQuery->whereIn(
+                'vintage_year',
+                (array) $request->input('vintage_years')
+            );
+        }
+        
+        if ($request->filled('grape_varieties')) {
+            $productsQuery->whereIn(
+                'grape_variety',
+                (array) $request->input('grape_varieties')
+            );
+        }
+
         $products = $productsQuery->paginate(9)
                         ->appends($request->all());
 
@@ -262,7 +290,7 @@ class UserController extends Controller
 
         $cart = session()->get('cart', []);
 
-        return view('user.products', compact('products', 'cart', 'allTypes', 'allCountries'));
+        return view('user.products', compact('products', 'cart', 'allTypes', 'allCountries','allVintageYears','allGrapeVarieties'));
     }
 
     public function matchedproducts($submissionId)
