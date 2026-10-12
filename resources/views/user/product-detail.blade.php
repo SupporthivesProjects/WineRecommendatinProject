@@ -142,6 +142,9 @@
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
+                    <a href="{{ route('user.products') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Browse Wines
+                    </a>
                 </div>
                 <!-- <div>
                     <a href="{{ url()->previous() }}" class="btn btn-secondary">
