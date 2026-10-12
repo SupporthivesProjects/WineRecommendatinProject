@@ -257,9 +257,12 @@ class UserController extends Controller
         $allGrapeVarieties = Product::whereIn('id', $storeProducts->pluck('product_id'))
             ->whereNotNull('grape_variety')
             ->where('grape_variety', '!=', '')
+            ->whereRaw('LOWER(varietal_blend) = ?', ['blend'])
             ->distinct()
             ->orderBy('grape_variety')
             ->pluck('grape_variety');
+
+        
 
         if ($request->filled('vintage_years')) {
             $productsQuery->whereIn(
