@@ -778,7 +778,10 @@
                                                     @endif
                                                 </p>
 
-                                                <p><strong>Vintage Year: <small>[ Please check for recent editions with our store manager ]</small></strong> {{ $product->vintage_year }}</p>
+                                                <p><strong>Country: </strong> {{ $product->country }}</p>
+                                                <p><strong>Price: </strong> {{ $product->display_price }}</p>
+
+                                                
                                                 <a href="{{ route('user.productdetails', $product->id) }}"
                                                     class="btn btn-dark mt-2 rounded-0">
                                                     Tell Me More !!
