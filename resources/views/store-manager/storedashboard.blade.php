@@ -395,7 +395,7 @@
                                     <th>ID</th>
                                     <th>Cheese Name</th>
                                     <th>Type</th>
-                                    <th>Price</th>
+                                    <!-- <th>Price</th> -->
                                     <th>Quantity</th>
                                 </tr>
                             </thead>
@@ -406,7 +406,7 @@
                                         <td>{{ $cheese->cheese_product_id }}</td>
                                         <td>{{ $cheese->name }}</td>
                                         <td>{{ $cheese->type ?? 'N/A' }}</td>
-                                        <td>{{ number_format($cheese->price, 2) }}</td>
+                                        <!-- <td>{{ number_format($cheese->price, 2) }}</td> -->
                                         <td>{{ $cheese->quantity }}</td>
                                     </tr>
                                 @empty
