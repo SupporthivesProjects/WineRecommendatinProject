@@ -152,6 +152,85 @@
         .image-wrapper {
             padding: 10px;
         }
+
+
+        /* Floating cart icon */
+        .floating-cart {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 80px;
+            height: 80px;
+            background: #8b0000;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .floating-cart:hover {
+            background: #a50908;
+            color: #fff;
+            transform: scale(1.08);
+        }
+
+        .floating-cart i {
+            font-size: 29px;
+        }
+
+        /* Cart item count */
+        .floating-cart-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 25px;
+            height: 25px;
+            padding: 0 6px;
+            background: #ffc107;
+            color: #222;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Gentle animation only when the cart has items */
+        .floating-cart.has-items {
+            animation: cartFloat 2.5s ease-in-out infinite;
+        }
+
+        @keyframes cartFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .floating-cart {
+                width: 58px;
+                height: 58px;
+                bottom: 18px;
+                left: 16px;
+            }
+
+            .floating-cart i {
+                font-size: 25px;
+            }
+        }
+
+
+
     </style>
 @endpush
 
@@ -178,7 +257,7 @@
                     <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
                     <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
                     <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View CartView Cart (<span id="cart-count">{{ count($cart ?? []) }}</span>)</a></li>
+                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View Cart(<span id="cart-count">{{ count($cart ?? []) }}</span>)</a></li>
                 </ul>
             </div>
         </div>
@@ -191,576 +270,612 @@
         </div>
     </section> -->
 
+    <!-- Cart  -->
+
+    @php
+        $cartItems = session('cart', []);
+        $cartCount = is_array($cartItems) ? count($cartItems) : 0;
+    @endphp
+
+    <a href="{{ route('user.cart') }}"
+    id="floating-cart"
+    class="floating-cart {{ $cartCount > 0 ? 'has-items' : '' }}"
+    aria-label="View shopping cart"
+    title="View Cart">
+
+        <i class="fas fa-shopping-cart"></i>
+
+        <span class="floating-cart-count" id="floating-cart-count">
+            {{ $cartCount }}
+        </span>
+    </a>
+
+
     
-<div class="pt-5" id="matchedproducts">
-    <div class="container my-5">
-         <!-- Start::row-6 -->
-            <div class="row">
-                <!-- Filter sidebar -->
-                <div class="col-3">
-                    <div class="filter-group">
-                    <!-- Types Filter -->
-                        <h4 class="fw-bold mb-4">Types</h4>
-                        @php
-                            $types = $products->pluck('type')->unique()->sort();
-                        @endphp
-                        @foreach ($types as $type)
-                            <div class="form-check">
-                                <input class="form-check-input wine-type-filter" type="checkbox" value="{{ strtolower($type) }}" id="type-{{ strtolower($type) }}">
-                                <label class="form-check-label fs-15" for="type-{{ strtolower($type) }}">
-                                    {{ ucfirst($type) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Vintage Year Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Vintage Year</h4>
-                        @php
-                            $vintageYears = $products->pluck('vintage_year')->unique()->sort();
-                        @endphp
-                        @foreach ($vintageYears as $year)
-                            <div class="form-check">
-                                <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
-                                <label class="form-check-label" for="vintage-year-{{ $year }}">
-                                    {{ $year }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Winery Filter -->
-                    <!-- <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Winery</h4>
-                        @php
-                            $wineries = $products->pluck('winery')->unique()->sort();
-                        @endphp
-                        @foreach ($wineries as $winery)
-                            <div class="form-check">
-                                <input class="form-check-input wine-winery-filter" type="checkbox" value="{{ $winery }}" id="winery-{{ strtolower($winery) }}">
-                                <label class="form-check-label" for="winery-{{ strtolower($winery) }}">
-                                    {{ ucfirst($winery) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div> -->
-
-                    <!-- Retail Price Filter -->
-                    @php
-                        $minPrice = $products->min('retail_price');
-                        $maxPrice = $products->max('retail_price');
-                    @endphp
-
-                    <div class="price-slider mt-2">
-                        <div class="input_range_wrapper">
-                            <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
-                            <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
+    <div class="pt-5" id="matchedproducts">
+        <div class="container my-5">
+            <!-- Start::row-6 -->
+                <div class="row">
+                    <!-- Filter sidebar -->
+                    <div class="col-3">
+                        <div class="filter-group">
+                        <!-- Types Filter -->
+                            <h4 class="fw-bold mb-4">Types</h4>
+                            @php
+                                $types = $products->pluck('type')->unique()->sort();
+                            @endphp
+                            @foreach ($types as $type)
+                                <div class="form-check">
+                                    <input class="form-check-input wine-type-filter" type="checkbox" value="{{ strtolower($type) }}" id="type-{{ strtolower($type) }}">
+                                    <label class="form-check-label fs-15" for="type-{{ strtolower($type) }}">
+                                        {{ ucfirst($type) }}
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span>₹<span id="min-val">{{ number_format($minPrice) }}</span></span>
-                            <span>₹<span id="max-val">{{ number_format($maxPrice) }}</span></span>
+
+                        <!-- Vintage Year Filter -->
+                        <div class="filter-group">
+                            <h4 class="fw-bold mb-4">Vintage Year</h4>
+                            @php
+                                $vintageYears = $products->pluck('vintage_year')->unique()->sort();
+                            @endphp
+                            @foreach ($vintageYears as $year)
+                                <div class="form-check">
+                                    <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
+                                    <label class="form-check-label" for="vintage-year-{{ $year }}">
+                                        {{ $year }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Winery Filter -->
+                        <!-- <div class="filter-group">
+                            <h4 class="fw-bold mb-4">Winery</h4>
+                            @php
+                                $wineries = $products->pluck('winery')->unique()->sort();
+                            @endphp
+                            @foreach ($wineries as $winery)
+                                <div class="form-check">
+                                    <input class="form-check-input wine-winery-filter" type="checkbox" value="{{ $winery }}" id="winery-{{ strtolower($winery) }}">
+                                    <label class="form-check-label" for="winery-{{ strtolower($winery) }}">
+                                        {{ ucfirst($winery) }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div> -->
+
+                        <!-- Retail Price Filter -->
+                        @php
+                            $minPrice = $products->min('retail_price');
+                            $maxPrice = $products->max('retail_price');
+                        @endphp
+
+                        <div class="price-slider mt-2">
+                            <div class="input_range_wrapper">
+                                <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
+                                <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>₹<span id="min-val">{{ number_format($minPrice) }}</span></span>
+                                <span>₹<span id="max-val">{{ number_format($maxPrice) }}</span></span>
+                            </div>
+                        </div>
+
+                        <!-- <div class="filter-group">
+                            <h4 class="fw-bold mb-4">Retail Price</h4>
+                            @php
+                                $prices = $products->pluck('retail_price')->unique()->sort();
+                            @endphp
+                            @foreach ($prices as $price)
+                                <div class="form-check">
+                                    <input class="form-check-input wine-retail-price-filter" type="checkbox" value="{{ $price }}" id="retail-price-{{ $price }}">
+                                    <label class="form-check-label" for="retail-price-{{ $price }}">
+                                    ₹{{ number_format($price, 2) }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div> -->
+
+
+                        <!-- Country Filter -->
+                        <div class="filter-group">
+                            <h4 class="fw-bold mb-4">Country</h4>
+                            @php
+                                $countries = $products->pluck('country')->unique()->sort();
+                            @endphp
+                            @foreach ($countries as $country)
+                                <div class="form-check">
+                                    <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $country }}" id="country-{{ strtolower($country) }}">
+                                    <label class="form-check-label" for="country-{{ strtolower($country) }}">
+                                        {{ ucfirst($country) }}
+                                    </label>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
-                    <!-- <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Retail Price</h4>
-                        @php
-                            $prices = $products->pluck('retail_price')->unique()->sort();
-                        @endphp
-                        @foreach ($prices as $price)
-                            <div class="form-check">
-                                <input class="form-check-input wine-retail-price-filter" type="checkbox" value="{{ $price }}" id="retail-price-{{ $price }}">
-                                <label class="form-check-label" for="retail-price-{{ $price }}">
-                                ₹{{ number_format($price, 2) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div> -->
 
+                    <!-- Products grid -->
+                    <div class="col-9">
+                        <div class="row row-sm">
+                            @foreach ($products as $product)
+                                <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                data-vintage-year="{{ $product->vintage_year }}"
+                                data-winery="{{ $product->winery }}"
+                                data-retail-price="{{ $product->retail_price }}"
+                                data-country="{{ $product->country }}">
+                                    <div class="card custom-card wine-card">
+                                        <!-- Image at the top -->
+                                        <div class="image-wrapper" style="position: relative;">
+                                            <img src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                            
 
-                    <!-- Country Filter -->
-                    <div class="filter-group">
-                        <h4 class="fw-bold mb-4">Country</h4>
-                        @php
-                            $countries = $products->pluck('country')->unique()->sort();
-                        @endphp
-                        @foreach ($countries as $country)
-                            <div class="form-check">
-                                <input class="form-check-input wine-country-filter" type="checkbox" value="{{ $country }}" id="country-{{ strtolower($country) }}">
-                                <label class="form-check-label" for="country-{{ strtolower($country) }}">
-                                    {{ ucfirst($country) }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-
-
-                <!-- Products grid -->
-                <div class="col-9">
-                    <div class="row row-sm">
-                        @foreach ($products as $product)
-                            <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
-                            data-vintage-year="{{ $product->vintage_year }}"
-                            data-winery="{{ $product->winery }}"
-                            data-retail-price="{{ $product->retail_price }}"
-                            data-country="{{ $product->country }}">
-                                <div class="card custom-card wine-card">
-                                    <!-- Image at the top -->
-                                    <div class="image-wrapper" style="position: relative;">
-                                        <img src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
-                                        
-
-                                        <!-- Featured badge on the image -->
-                                        @if ($product->admin_featured_product == 1)
-                                            <span class="featured-badge">
-                                                <i class="fas fa-crown"></i>
-                                            </span>
-                                        @endif
-                                    </div>
-
-                                    <!-- Card body with product information -->
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h5>
-                                        @php
-                                            $type = strtolower($product->type);
-                                            $emoji = match($type) {
-                                                'red' => '🍷',
-                                                'white' => '🥂',
-                                                'sparkling' => '✨',
-                                                'Rosé' => '✨',
-                                                default => ''
-                                            };
-                                        @endphp
-                                        <p>
-                                            <strong>Type:</strong> {{ ucfirst($type) }}
-                                            @if ($emoji)
-                                                <span style="font-size: 1.5em;">{{ $emoji }}</span>
+                                            <!-- Featured badge on the image -->
+                                            @if ($product->admin_featured_product == 1)
+                                                <span class="featured-badge">
+                                                    <i class="fas fa-crown"></i>
+                                                </span>
                                             @endif
-                                        </p>
+                                        </div>
 
-                                        <p><strong>MRP:</strong> {{ $product->retail_price }}</p>
-                                        <button
-                                            type="button"
-                                            class="btn btn-dark mt-2 rounded-0 open-product-modal"
-                                            data-product-id="{{ $product->id }}"
-                                        >
-                                            View !!
-                                        </button>
-                                        <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
+                                        <!-- Card body with product information -->
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-semibold"> {{ $product->wine_name }}</h5>
+                                            @php
+                                                $type = strtolower($product->type);
+                                                $emoji = match($type) {
+                                                    'red' => '🍷',
+                                                    'white' => '🥂',
+                                                    'sparkling' => '✨',
+                                                    'Rosé' => '✨',
+                                                    default => ''
+                                                };
+                                            @endphp
+                                            <p>
+                                                <strong>Type:</strong> {{ ucfirst($type) }}
+                                                @if ($emoji)
+                                                    <span style="font-size: 1.5em;">{{ $emoji }}</span>
+                                                @endif
+                                            </p>
+
+                                            <p><strong>MRP:</strong> {{ $product->retail_price }}</p>
+                                            <button
+                                                type="button"
+                                                class="btn btn-dark mt-2 rounded-0 open-product-modal"
                                                 data-product-id="{{ $product->id }}"
-                                                data-product-name="{{ $product->wine_name }}"
-                                                data-product-price="{{ $product->retail_price }}">
-                                            {{ in_array($product->id, $cart) ? 'Remove from Cart' : 'Buy Now' }}
-                                        </button>
+                                            >
+                                                View !!
+                                            </button>
+                                            <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
+                                                    data-product-id="{{ $product->id }}"
+                                                    data-product-name="{{ $product->wine_name }}"
+                                                    data-product-price="{{ $product->retail_price }}">
+                                                {{ in_array($product->id, $cart) ? 'Remove from Cart' : 'Buy Now' }}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            </div> 
-        <!-- End::row-6 -->
+                </div> 
+            <!-- End::row-6 -->
+        </div>
     </div>
-</div>
 
-<!-- product modal -->
- <!-- Product Modal -->
-<div class="modal fade" id="productModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-body p-0">
-                <div id="product-modal-content">
-                    <div class="text-center p-5">
-                        Loading...
+    <!-- product modal -->
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div id="product-modal-content">
+                        <div class="text-center p-5">
+                            Loading...
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
 @endsection
 @push('scripts')
-<script>
-    for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    const value = localStorage.getItem(key);
-    console.log(`${key}: ${value}`);
-}
-
-</script>
-<script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', () => {
-
-        function filterCards() {
-            const selectedTypes = Array.from(document.querySelectorAll('.wine-type-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-            const selectedVintageYears = Array.from(document.querySelectorAll('.wine-vintage-year-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-            const selectedWineries = Array.from(document.querySelectorAll('.wine-winery-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-            const selectedPrices = Array.from(document.querySelectorAll('.wine-retail-price-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-            const selectedCountries = Array.from(document.querySelectorAll('.wine-country-filter:checked')).map(cb => cb.value.trim().toLowerCase());
-
-            document.querySelectorAll('.wine-card-container').forEach(card => {
-                const cardType = (card.getAttribute('data-type') || '').trim().toLowerCase();
-                const cardVintageYear = (card.getAttribute('data-vintage-year') || '').trim().toLowerCase();
-                const cardWinery = (card.getAttribute('data-winery') || '').trim().toLowerCase();
-                const cardRetailPrice = (card.getAttribute('data-retail-price') || '').trim().toLowerCase();
-                const cardCountry = (card.getAttribute('data-country') || '').trim().toLowerCase();
-
-                const matchesType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
-                const matchesVintageYear = selectedVintageYears.length === 0 || selectedVintageYears.includes(cardVintageYear);
-                const matchesWinery = selectedWineries.length === 0 || selectedWineries.includes(cardWinery);
-                const matchesPrice = selectedPrices.length === 0 || selectedPrices.includes(cardRetailPrice);
-                const matchesCountry = selectedCountries.length === 0 || selectedCountries.includes(cardCountry);
-
-                if (matchesType && matchesVintageYear && matchesWinery && matchesPrice && matchesCountry) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Attach the event listener to all filter checkboxes
-        document.querySelectorAll(
-            '.wine-type-filter, .wine-vintage-year-filter, .wine-winery-filter, .wine-retail-price-filter, .wine-country-filter'
-        ).forEach(checkbox => {
-            checkbox.addEventListener('change', filterCards);
-        });
-
-        // Run filter once on load (optional)
-        filterCards();
-
-    });
-</script>
-<script>
-//   window.addEventListener("scroll", function () {
-//     const navbar = document.getElementById("mainNavbar");
-//     if (window.scrollY > 50) 
-//     {
-//         navbar.classList.add("scrolled"); 
-//     } else {
-//         navbar.classList.remove("scrolled");
-//     }
-//   });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Buy Now / Remove From Cart
-        document.addEventListener('click', function (e) {
-            const button = e.target.closest('.buy-now-btn');
-            if (!button) {
-                return;
-            }
-            const productId = button.getAttribute('data-product-id');
-            const productName = button.getAttribute('data-product-name');
-            const productPrice = button.getAttribute('data-product-price');
-            const isInCart = button.classList.contains('btn-dark');
-            let quantity = 1;
-
-            const qtyInput =
-                document.getElementById('modal-product-qty');
-
-            if (qtyInput) {
-                quantity = parseInt(qtyInput.value) || 1;
-            }
-            const url = isInCart
-                ? '{{ route("user.cart.remove") }}'
-                : '{{ route("user.cart.add") }}';
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({
-                    product_id: productId,
-                    product_name: productName,
-                    product_price: productPrice,
-                    quantity: quantity
-
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-
-                if (data.success) {
-
-                    if (isInCart) {
-
-                        button.classList.remove('btn-dark');
-                        button.classList.add('btn-light');
-                        button.textContent = 'Buy Now';
-
-                        toastr.warning(
-                            'Product removed from cart!',
-                            'Removed',
-                            {
-                                closeButton: true,
-                                progressBar: true,
-                                positionClass: 'toast-top-right',
-                                timeOut: 3000
-                            }
-                        );
-
-                    } else {
-
-                        button.classList.remove('btn-light');
-                        button.classList.add('btn-dark');
-                        button.textContent = 'Remove from Cart';
-
-                        toastr.success(
-                            'Product added to cart!',
-                            'Added',
-                            {
-                                closeButton: true,
-                                progressBar: true,
-                                positionClass: 'toast-top-right',
-                                timeOut: 3000
-                            }
-                        );
-                    }
-                }
-
-                const cartCountElement =
-                    document.getElementById('cart-count');
-
-                if (
-                    cartCountElement &&
-                    typeof data.cart_count !== 'undefined'
-                ) {
-                    cartCountElement.textContent =
-                        data.cart_count;
-                }
-
-            })
-            .catch(() => {
-
-                toastr.error(
-                    'Something went wrong!',
-                    'Error',
-                    {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: 'toast-top-right',
-                        timeOut: 3000
-                    }
-                );
-
-            });
-
-        });
-
-        // View Cart button
-        const viewCartBtn =
-            document.getElementById('view-cart-btn');
-
-        if (viewCartBtn) {
-
-            viewCartBtn.addEventListener(
-                'click',
-                function () {
-
-                    window.location.href =
-                        '{{ route("user.cart") }}';
-
-                }
-            );
-
-        }
-
-    });
-</script>
-
-
-
-<script>
-    const productsInfo = @json($products->keyBy('id')->map(function($p) {
-        return ['name' => $p->wine_name, 'price' => $p->retail_price];
-    }));
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const minSlider = document.getElementById("price-min");
-    const maxSlider = document.getElementById("price-max");
-    const minVal = document.getElementById("min-val");
-    const maxVal = document.getElementById("max-val");
-
-    // Call main filter function whenever slider moves
-    minSlider.addEventListener("input", applyFilters);
-    maxSlider.addEventListener("input", applyFilters);
-
-    // Also re-run when checkboxes are clicked (to stack filters)
-    document.querySelectorAll(".form-check-input").forEach(cb => {
-        cb.addEventListener("change", applyFilters);
-    });
-
-    function applyFilters() {
-
-        let minPrice = parseFloat(minSlider.value);
-        let maxPrice = parseFloat(maxSlider.value);
-
-        // Display values
-        minVal.textContent = minPrice.toLocaleString();
-        maxVal.textContent = maxPrice.toLocaleString();
-
-        // Loop all product cards
-        document.querySelectorAll(".wine-card-container").forEach(card => {
-
-            let price = parseFloat(card.dataset.retailPrice);
-            let type = card.dataset.type;
-            let country = card.dataset.country;
-            let vintage = card.dataset.vintageYear;
-
-            // --- TYPE FILTER ---
-            let selectedTypes = [...document.querySelectorAll('.wine-type-filter:checked')]
-                .map(el => el.value);
-            let typeMatch = selectedTypes.length ? selectedTypes.includes(type) : true;
-
-            // --- COUNTRY FILTER ---
-            let selectedCountries = [...document.querySelectorAll('.wine-country-filter:checked')]
-                .map(el => el.value);
-            let countryMatch = selectedCountries.length ? selectedCountries.includes(country) : true;
-
-            // --- VINTAGE YEAR FILTER ---
-            let selectedYears = [...document.querySelectorAll('.wine-vintage-year-filter:checked')]
-                .map(el => el.value);
-            let vintageMatch = selectedYears.length ? selectedYears.includes(vintage) : true;
-
-            // --- PRICE FILTER ---
-            let priceMatch = price >= minPrice && price <= maxPrice;
-
-            // FINAL CHECK
-            if (priceMatch && typeMatch && countryMatch && vintageMatch) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-        });
+    <script>
+        for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        console.log(`${key}: ${value}`);
     }
-    });
 
-</script>
+    </script>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+            function filterCards() {
+                const selectedTypes = Array.from(document.querySelectorAll('.wine-type-filter:checked')).map(cb => cb.value.trim().toLowerCase());
+                const selectedVintageYears = Array.from(document.querySelectorAll('.wine-vintage-year-filter:checked')).map(cb => cb.value.trim().toLowerCase());
+                const selectedWineries = Array.from(document.querySelectorAll('.wine-winery-filter:checked')).map(cb => cb.value.trim().toLowerCase());
+                const selectedPrices = Array.from(document.querySelectorAll('.wine-retail-price-filter:checked')).map(cb => cb.value.trim().toLowerCase());
+                const selectedCountries = Array.from(document.querySelectorAll('.wine-country-filter:checked')).map(cb => cb.value.trim().toLowerCase());
 
-        const modalElement = document.getElementById('productModal');
-        const productModal = new bootstrap.Modal(modalElement);
+                document.querySelectorAll('.wine-card-container').forEach(card => {
+                    const cardType = (card.getAttribute('data-type') || '').trim().toLowerCase();
+                    const cardVintageYear = (card.getAttribute('data-vintage-year') || '').trim().toLowerCase();
+                    const cardWinery = (card.getAttribute('data-winery') || '').trim().toLowerCase();
+                    const cardRetailPrice = (card.getAttribute('data-retail-price') || '').trim().toLowerCase();
+                    const cardCountry = (card.getAttribute('data-country') || '').trim().toLowerCase();
 
-        document.querySelectorAll('.open-product-modal').forEach(button => {
+                    const matchesType = selectedTypes.length === 0 || selectedTypes.includes(cardType);
+                    const matchesVintageYear = selectedVintageYears.length === 0 || selectedVintageYears.includes(cardVintageYear);
+                    const matchesWinery = selectedWineries.length === 0 || selectedWineries.includes(cardWinery);
+                    const matchesPrice = selectedPrices.length === 0 || selectedPrices.includes(cardRetailPrice);
+                    const matchesCountry = selectedCountries.length === 0 || selectedCountries.includes(cardCountry);
 
-            button.addEventListener('click', function () {
+                    if (matchesType && matchesVintageYear && matchesWinery && matchesPrice && matchesCountry) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
 
-                const productId = this.dataset.productId;
+            // Attach the event listener to all filter checkboxes
+            document.querySelectorAll(
+                '.wine-type-filter, .wine-vintage-year-filter, .wine-winery-filter, .wine-retail-price-filter, .wine-country-filter'
+            ).forEach(checkbox => {
+                checkbox.addEventListener('change', filterCards);
+            });
 
-                const modalContent =
-                    document.getElementById(
-                        'product-modal-content'
-                    );
+            // Run filter once on load (optional)
+            filterCards();
 
-                modalContent.style.opacity = '0.5';
+        });
+    </script>
+    <script>
+    //   window.addEventListener("scroll", function () {
+    //     const navbar = document.getElementById("mainNavbar");
+    //     if (window.scrollY > 50) 
+    //     {
+    //         navbar.classList.add("scrolled"); 
+    //     } else {
+    //         navbar.classList.remove("scrolled");
+    //     }
+    //   });
+    </script>
 
-                fetch('/product-modal/' + productId)
-                    .then(response => response.text())
-                    .then(html => {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Buy Now / Remove From Cart
+            document.addEventListener('click', function (e) {
+                const button = e.target.closest('.buy-now-btn');
+                if (!button) {
+                    return;
+                }
+                const productId = button.getAttribute('data-product-id');
+                const productName = button.getAttribute('data-product-name');
+                const productPrice = button.getAttribute('data-product-price');
+                const isInCart = button.classList.contains('btn-dark');
+                let quantity = 1;
 
-                        modalContent.innerHTML = html;
-                        modalContent.style.opacity = '1';
+                const qtyInput =
+                    document.getElementById('modal-product-qty');
 
-                        productModal.show();
+                if (qtyInput) {
+                    quantity = parseInt(qtyInput.value) || 1;
+                }
+                const url = isInCart
+                    ? '{{ route("user.cart.remove") }}'
+                    : '{{ route("user.cart.add") }}';
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        product_name: productName,
+                        product_price: productPrice,
+                        quantity: quantity
 
                     })
-                    .catch(error => {
+                })
+                .then(response => response.json())
+                .then(data => {
 
-                        console.error(error);
+                    if (data.success) {
 
-                        document.getElementById('product-modal-content').innerHTML =
-                            '<div class="text-center p-5 text-danger">Unable to load product.</div>';
+                        if (isInCart) {
 
-                        productModal.show();
-                    });
+                            button.classList.remove('btn-dark');
+                            button.classList.add('btn-light');
+                            button.textContent = 'Buy Now';
+
+                            toastr.warning(
+                                'Product removed from cart!',
+                                'Removed',
+                                {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: 'toast-top-right',
+                                    timeOut: 3000
+                                }
+                            );
+
+                        } else {
+
+                            button.classList.remove('btn-light');
+                            button.classList.add('btn-dark');
+                            button.textContent = 'Remove from Cart';
+
+                            toastr.success(
+                                'Product added to cart!',
+                                'Added',
+                                {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: 'toast-top-right',
+                                    timeOut: 3000
+                                }
+                            );
+                        }
+                    }
+
+                    const cartCountElement = document.getElementById('cart-count');
+                    const floatingCartCount = document.getElementById('floating-cart-count');
+                    const floatingCart = document.getElementById('floating-cart');
+
+                    // if (cartCountElement &&typeof data.cart_count !== 'undefined') 
+                    // {
+                    //     cartCountElement.textContent =
+                    //         data.cart_count;
+                    // }
+                    if (typeof data.cart_count !== 'undefined') {
+                        if (cartCountElement) {
+                            cartCountElement.textContent = data.cart_count;
+                        }
+
+                        if (floatingCartCount) {
+                            floatingCartCount.textContent = data.cart_count;
+                        }
+
+                        if (floatingCart) {
+                            floatingCart.classList.toggle(
+                                'has-items',
+                                Number(data.cart_count) > 0
+                            );
+                        }
+                    }
+
+                })
+                .catch(() => {
+
+                    toastr.error(
+                        'Something went wrong!',
+                        'Error',
+                        {
+                            closeButton: true,
+                            progressBar: true,
+                            positionClass: 'toast-top-right',
+                            timeOut: 3000
+                        }
+                    );
+
+                });
+
+            });
+
+            // View Cart button
+            const viewCartBtn =
+                document.getElementById('view-cart-btn');
+
+            if (viewCartBtn) {
+
+                viewCartBtn.addEventListener(
+                    'click',
+                    function () {
+
+                        window.location.href =
+                            '{{ route("user.cart") }}';
+
+                    }
+                );
+
+            }
+
+        });
+    </script>
+
+
+
+    <script>
+        const productsInfo = @json($products->keyBy('id')->map(function($p) {
+            return ['name' => $p->wine_name, 'price' => $p->retail_price];
+        }));
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const minSlider = document.getElementById("price-min");
+        const maxSlider = document.getElementById("price-max");
+        const minVal = document.getElementById("min-val");
+        const maxVal = document.getElementById("max-val");
+
+        // Call main filter function whenever slider moves
+        minSlider.addEventListener("input", applyFilters);
+        maxSlider.addEventListener("input", applyFilters);
+
+        // Also re-run when checkboxes are clicked (to stack filters)
+        document.querySelectorAll(".form-check-input").forEach(cb => {
+            cb.addEventListener("change", applyFilters);
+        });
+
+        function applyFilters() {
+
+            let minPrice = parseFloat(minSlider.value);
+            let maxPrice = parseFloat(maxSlider.value);
+
+            // Display values
+            minVal.textContent = minPrice.toLocaleString();
+            maxVal.textContent = maxPrice.toLocaleString();
+
+            // Loop all product cards
+            document.querySelectorAll(".wine-card-container").forEach(card => {
+
+                let price = parseFloat(card.dataset.retailPrice);
+                let type = card.dataset.type;
+                let country = card.dataset.country;
+                let vintage = card.dataset.vintageYear;
+
+                // --- TYPE FILTER ---
+                let selectedTypes = [...document.querySelectorAll('.wine-type-filter:checked')]
+                    .map(el => el.value);
+                let typeMatch = selectedTypes.length ? selectedTypes.includes(type) : true;
+
+                // --- COUNTRY FILTER ---
+                let selectedCountries = [...document.querySelectorAll('.wine-country-filter:checked')]
+                    .map(el => el.value);
+                let countryMatch = selectedCountries.length ? selectedCountries.includes(country) : true;
+
+                // --- VINTAGE YEAR FILTER ---
+                let selectedYears = [...document.querySelectorAll('.wine-vintage-year-filter:checked')]
+                    .map(el => el.value);
+                let vintageMatch = selectedYears.length ? selectedYears.includes(vintage) : true;
+
+                // --- PRICE FILTER ---
+                let priceMatch = price >= minPrice && price <= maxPrice;
+
+                // FINAL CHECK
+                if (priceMatch && typeMatch && countryMatch && vintageMatch) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const modalElement = document.getElementById('productModal');
+            const productModal = new bootstrap.Modal(modalElement);
+
+            document.querySelectorAll('.open-product-modal').forEach(button => {
+
+                button.addEventListener('click', function () {
+
+                    const productId = this.dataset.productId;
+
+                    const modalContent =
+                        document.getElementById(
+                            'product-modal-content'
+                        );
+
+                    modalContent.style.opacity = '0.5';
+
+                    fetch('/product-modal/' + productId)
+                        .then(response => response.text())
+                        .then(html => {
+
+                            modalContent.innerHTML = html;
+                            modalContent.style.opacity = '1';
+
+                            productModal.show();
+
+                        })
+                        .catch(error => {
+
+                            console.error(error);
+
+                            document.getElementById('product-modal-content').innerHTML =
+                                '<div class="text-center p-5 text-danger">Unable to load product.</div>';
+
+                            productModal.show();
+                        });
+
+                });
 
             });
 
         });
 
-    });
+        document.addEventListener('click', function (e) {
+        const relatedButton =
+            e.target.closest('.related-product-btn');
 
-    document.addEventListener('click', function (e) {
-    const relatedButton =
-        e.target.closest('.related-product-btn');
-
-    if (!relatedButton) {
-        return;
-    }
-
-    const productId =
-        relatedButton.dataset.productId;
-
-    document.getElementById(
-        'product-modal-content'
-    ).innerHTML =
-        '<div class="text-center p-5">Loading...</div>';
-
-    fetch('/product-modal/' + productId)
-        .then(response => response.text())
-        .then(html => {
-
-            document.getElementById(
-                'product-modal-content'
-            ).innerHTML = html;
-
-            const modalBody =
-                document.querySelector(
-                    '#productModal .modal-body'
-                );
-
-            if (modalBody) {
-                modalBody.scrollTop = 0;
-            }
-
-        })
-        .catch(error => {
-            console.error(error);
-        });
-
-    });
-
-
-</script>
-<script>
-    document.addEventListener('click', function (e) {
-        if (e.target.closest('.qty-plus-btn')) {
-            const qtyInput =
-                document.getElementById(
-                    'modal-product-qty'
-                );
-
-            qtyInput.value =
-                parseInt(qtyInput.value) + 1;
+        if (!relatedButton) {
+            return;
         }
 
-        if (e.target.closest('.qty-minus-btn')) {
+        const productId =
+            relatedButton.dataset.productId;
 
-            const qtyInput =
+        document.getElementById(
+            'product-modal-content'
+        ).innerHTML =
+            '<div class="text-center p-5">Loading...</div>';
+
+        fetch('/product-modal/' + productId)
+            .then(response => response.text())
+            .then(html => {
+
                 document.getElementById(
-                    'modal-product-qty'
-                );
+                    'product-modal-content'
+                ).innerHTML = html;
 
-            let qty =
-                parseInt(qtyInput.value);
+                const modalBody =
+                    document.querySelector(
+                        '#productModal .modal-body'
+                    );
 
-            if (qty > 1) {
-                qtyInput.value = qty - 1;
-            }
-        }
+                if (modalBody) {
+                    modalBody.scrollTop = 0;
+                }
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
         });
-</script>
+
+
+    </script>
+    <script>
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.qty-plus-btn')) {
+                const qtyInput =
+                    document.getElementById(
+                        'modal-product-qty'
+                    );
+
+                qtyInput.value =
+                    parseInt(qtyInput.value) + 1;
+            }
+
+            if (e.target.closest('.qty-minus-btn')) {
+
+                const qtyInput =
+                    document.getElementById(
+                        'modal-product-qty'
+                    );
+
+                let qty =
+                    parseInt(qtyInput.value);
+
+                if (qty > 1) {
+                    qtyInput.value = qty - 1;
+                }
+            }
+
+            });
+    </script>
 @endpush
