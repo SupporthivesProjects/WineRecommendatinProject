@@ -877,7 +877,8 @@
                 <section id="wineHeroCarousel"
                         class="carousel slide carousel-fade hero-carousel"
                         data-bs-ride="carousel"
-                        data-bs-interval="5000">
+                        data-bs-interval="5000"
+                        data-bs-pause="false">
 
                     <!-- Slide indicators -->
                     <div class="carousel-indicators">
