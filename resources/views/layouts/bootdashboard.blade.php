@@ -423,5 +423,28 @@
 
                 });
         </script>
+
+        <!-- keep session live -->
+        @auth
+        <script>
+            (function () {
+                const keepAliveUrl = @json(route('session.keepalive'));
+
+                setInterval(function () {
+                    fetch(keepAliveUrl, {
+                        method: 'GET',
+                        credentials: 'same-origin',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    }).catch(function (error) {
+                        console.warn('Session keepalive request failed:', error);
+                    });
+                }, 5 * 60 * 1000);
+            })();
+        </script>
+        @endauth
+
 </body>
 </html>

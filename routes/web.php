@@ -84,6 +84,11 @@ Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])
 Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 Route::get('/qr-product-modal/{id}', [UserDashboardController::class, 'qrProductModal'])->name('qr.product.modal');
 
+//keep session live
+Route::get('/session-keepalive', function () {
+    return response()->json(['status' => 'active']);
+})->name('session.keepalive');
+
 
 
 Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter')->withoutMiddleware(['auth', 'verified']);
@@ -380,6 +385,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'expertise'])->name('questionnaires.expertise');
     Route::post('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'submitExpertise'])->name('questionnaires.submit-expertise');
     Route::get('/get-questions/{id}', [App\Http\Controllers\QuestionnaireController::class, 'getQuestions']);
+
+
 });
 
 // Store Manager routes

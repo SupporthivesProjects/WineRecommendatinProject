@@ -2200,6 +2200,92 @@
         }
     </script>
     
+    <!-- auto scroll dashboard -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let inactivityTimer;
+            let scrollTimer;
+            let isAutoScrolling = false;
+
+            const INACTIVITY_LIMIT = 1 * 60 * 1000; // 1 minutes
+            const SCROLL_SPEED = 2;
+            const SCROLL_INTERVAL = 50;
+
+            function stopAutoScroll() {
+                isAutoScrolling = false;
+
+                if (scrollTimer) {
+                    clearInterval(scrollTimer);
+                    scrollTimer = null;
+                }
+            }
+
+            function startAutoScroll() {
+                if (isAutoScrolling) return;
+
+                const maxScroll =
+                    document.documentElement.scrollHeight - window.innerHeight;
+
+                if (maxScroll <= 0) return;
+
+                isAutoScrolling = true;
+                let direction = 1;
+
+                scrollTimer = setInterval(function () {
+                    const currentMax =
+                        document.documentElement.scrollHeight - window.innerHeight;
+
+                    if (currentMax <= 0) {
+                        stopAutoScroll();
+                        return;
+                    }
+
+                    if (direction === 1) {
+                        window.scrollBy(0, SCROLL_SPEED);
+
+                        if (window.scrollY >= currentMax - 2) {
+                            direction = -1;
+                        }
+                    } else {
+                        window.scrollBy(0, -SCROLL_SPEED);
+
+                        if (window.scrollY <= 2) {
+                            direction = 1;
+                        }
+                    }
+                }, SCROLL_INTERVAL);
+            }
+
+            function resetInactivityTimer() {
+                stopAutoScroll();
+
+                clearTimeout(inactivityTimer);
+
+                inactivityTimer = setTimeout(function () {
+                    startAutoScroll();
+                }, INACTIVITY_LIMIT);
+            }
+
+            const userEvents = [
+                'mousemove',
+                'mousedown',
+                'wheel',
+                'touchstart',
+                'keydown',
+                'click',
+                'pointerdown'
+            ];
+
+            userEvents.forEach(function (eventName) {
+                document.addEventListener(eventName, resetInactivityTimer, {
+                    passive: true
+                });
+            });
+
+            // Start the five-minute inactivity countdown on page load.
+            resetInactivityTimer();
+        });
+        </script>
 
 
    
