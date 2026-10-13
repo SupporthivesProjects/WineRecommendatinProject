@@ -890,6 +890,7 @@ class UserController extends Controller
         // Store product IDs
         $storeProductIds = DB::table('store_products')
             ->where('store_id', $store->id)
+            ->where('status', 'active')
             ->pluck('product_id');
 
         Log::info("Store Product IDs Count: " . $storeProductIds->count());
@@ -980,7 +981,8 @@ class UserController extends Controller
 
         $result = $takeFeatured
             ->merge($takeNormal)
-            ->shuffle()
+            // ->shuffle()
+            ->sortByDesc('retail_price')
             ->values();
 
         Log::info("=== FINAL RESULT COUNT: " . $result->count() . " ===");
