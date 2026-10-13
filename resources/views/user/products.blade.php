@@ -474,7 +474,7 @@
                                             class="form-check-label"
                                             for="grape-variety-{{ $loop->index }}"
                                         >
-                                            {{ $variety }}
+                                        {{ ucfirst(strtolower($variety)) }}
                                         </label>
                                     </div>
                                 @endforeach
