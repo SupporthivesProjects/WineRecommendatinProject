@@ -630,6 +630,208 @@
 
         }
 
+        /* hero section slider */
+
+        /* ============================
+        WINE HERO IMAGE CAROUSEL
+        ============================ */
+
+        #landing-section {
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .hero-carousel {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+            background: #160d0b;
+        }
+
+        .hero-carousel .carousel-inner,
+        .hero-carousel .carousel-item {
+            height: 100%;
+        }
+
+        .hero-slide-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Dark overlay makes the text readable */
+        .hero-slide-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(12, 7, 6, 0.82) 0%,
+                rgba(12, 7, 6, 0.55) 45%,
+                rgba(12, 7, 6, 0.12) 100%
+            );
+        }
+
+        .hero-slide-content {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            transform: translateY(-42%);
+            max-width: 760px;
+            color: #fff;
+            z-index: 2;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: #e0c58b;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 3px;
+        }
+
+        .hero-slide-content h1 {
+            margin-bottom: 22px;
+            color: #fff;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .hero-slide-content p {
+            max-width: 560px;
+            margin-bottom: 32px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            padding: 15px 26px;
+            border: 1px solid #dacea1;
+            border-radius: 0;
+            background: #dacea1;
+            color: #40251d;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta:hover {
+            border-color: #fff;
+            background: transparent;
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .hero-cta span {
+            font-size: 21px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-cta:hover span {
+            transform: translateX(5px);
+        }
+
+        /* Smooth image transition */
+        .hero-carousel .carousel-item {
+            transition: transform 0.8s ease-in-out,
+                        opacity 0.8s ease-in-out;
+        }
+
+        /* Indicators */
+        .hero-carousel .carousel-indicators {
+            z-index: 5;
+            margin-bottom: 30px;
+        }
+
+        .hero-carousel .carousel-indicators button {
+            width: 32px;
+            height: 4px;
+            margin: 0 5px;
+            border: 0;
+            background-color: #fff;
+            opacity: 0.5;
+        }
+
+        .hero-carousel .carousel-indicators button.active {
+            background-color: #dacea1;
+            opacity: 1;
+        }
+
+        /* Arrows */
+        .hero-carousel .carousel-control-prev,
+        .hero-carousel .carousel-control-next {
+            z-index: 4;
+            width: 7%;
+        }
+
+        /* Mobile layout */
+        @media (max-width: 767px) {
+            .hero-carousel {
+                height: 75vh;
+                min-height: 560px;
+                max-height: 720px;
+            }
+
+            .hero-slide-image {
+                object-position: center;
+            }
+
+            .hero-slide-overlay {
+                background: rgba(12, 7, 6, 0.55);
+            }
+
+            .hero-slide-content {
+                left: 8%;
+                right: 8%;
+                transform: translateY(-35%);
+                text-align: center;
+            }
+
+            .hero-eyebrow {
+                font-size: 10px;
+                letter-spacing: 2px;
+                line-height: 1.8;
+            }
+
+            .hero-slide-content h1 {
+                font-size: clamp(2rem, 8vw, 3rem);
+                line-height: 1.3;
+            }
+
+            .hero-slide-content p {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+
+            .hero-cta {
+                justify-content: center;
+                padding: 13px 18px;
+                font-size: 13px;
+            }
+
+            .hero-carousel .carousel-control-prev,
+            .hero-carousel .carousel-control-next {
+                width: 9%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-carousel .carousel-item {
+                transition: none;
+            }
+        }
+
+
     
 
     </style>
@@ -669,36 +871,130 @@
                         </div>
                     </div>
                 </nav>
-                <!-- Centered Text on Landing Image -->
-                <!-- <div class="d-flex justify-content-end align-items-center text-end text-white videotext" style="height: 100vh; padding-right: 50px;">
-                    <div>
-                        <h1 class="display-3 fw-bold" style="color: #dacea1;">
-                            Discover the Wine That <br>
-                            <span style="color: #754638;">Speaks to You</span>
-                            <br>
-                            <a href="#questionnairesdashboard" type="button" class="btn" id="explorebtn">Explore</a>
-                        </h1>
+               <!-- Slider -->
+                
+                <!-- Hero Image Carousel -->
+                <section id="wineHeroCarousel"
+                        class="carousel slide carousel-fade hero-carousel"
+                        data-bs-ride="carousel"
+                        data-bs-interval="5000">
+
+                    <!-- Slide indicators -->
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#wineHeroCarousel"
+                                data-bs-slide-to="0" class="active"
+                                aria-current="true" aria-label="Slide 1"></button>
+
+                        <button type="button" data-bs-target="#wineHeroCarousel"
+                                data-bs-slide-to="1" aria-label="Slide 2"></button>
+
+                        <button type="button" data-bs-target="#wineHeroCarousel"
+                                data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
-                </div>
-                <video class="bg-video" autoplay muted loop playsinline>
-                    <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video> -->
-                <section class="video-section">
-                        <div class="video-overlay">
-                            <div class="content text-center text-white">
-                                <h2 class="display-4">Discover the wine that</h2>
-                                <p class="lead" style="color: #e57351;">Speaks to you.</p>
-                                <a class="navbar-brand d-flex align-items-center justify-content-center w-100" href="#">
-                                    <img src="{{ asset('images/logofullwhite.png') }}" alt="Logo" class="mobile-logo">
+
+                    <div class="carousel-inner">
+
+                        <!-- Slide 1 -->
+                        <div class="carousel-item active">
+                            <img
+                                src="{{ asset('images/clinkglass.jpg') }}"
+                                class="hero-slide-image"
+                                alt="Wine glass and bottle">
+
+                            <div class="hero-slide-overlay"></div>
+
+                            <div class="hero-slide-content">
+                                <span class="hero-eyebrow">YOUR WINE JOURNEY STARTS HERE</span>
+
+                                <h1>Discover the Wine<br>That Speaks to You</h1>
+
+                                <p>
+                                    Every great wine has a story.
+                                    Find the one that speaks to you.
+                                </p>
+
+                                <a href="#questionnairesdashboard"
+                                class="btn hero-cta">
+                                    Discover Your Wine <span>&rarr;</span>
                                 </a>
                             </div>
                         </div>
-                        <video class="bg-video" autoplay muted loop playsinline>
-                            <source src="{{ asset('images/WineVideo.mov') }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+
+                        <!-- Slide 2 -->
+                        <div class="carousel-item">
+                            <img
+                                src="{{ asset('images/wineyarddashboard.jpg') }}"
+                                class="hero-slide-image"
+                                alt="Wine country and vineyards">
+
+                            <div class="hero-slide-overlay"></div>
+
+                            <div class="hero-slide-content">
+                                <span class="hero-eyebrow">EXPLORE. TASTE. ENJOY.</span>
+
+                                <h1>From the Vineyard<br>to Your Glass</h1>
+
+                                <p>
+                                    Explore exceptional wines and discover
+                                    new favourites from our curated collection.
+                                </p>
+
+                                <a href="{{ route('user.products') }}"
+                                class="btn hero-cta">
+                                    Explore Our Collection <span>&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="carousel-item">
+                            <img
+                                src="{{ asset('images/perfectpour.jpg') }}"
+                                class="hero-slide-image"
+                                alt="Elegant wine tasting">
+
+                            <div class="hero-slide-overlay"></div>
+
+                            <div class="hero-slide-content">
+                                <span class="hero-eyebrow">MADE FOR YOUR PALATE</span>
+
+                                <h1>Find Your<br>Perfect Pour</h1>
+
+                                <p>
+                                    Tell us what you love, and let us help
+                                    you find a wine for every occasion.
+                                </p>
+
+                                <a href="{{ route('user.showQuestionnaire') }}"
+                                class="btn hero-cta">
+                                    Find Your Perfect Pour <span>&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Previous and next arrows -->
+                    <button class="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#wineHeroCarousel"
+                            data-bs-slide="prev"
+                            aria-label="Previous slide">
+                        <span class="carousel-control-prev-icon"
+                            aria-hidden="true"></span>
+                    </button>
+
+                    <button class="carousel-control-next"
+                            type="button"
+                            data-bs-target="#wineHeroCarousel"
+                            data-bs-slide="next"
+                            aria-label="Next slide">
+                        <span class="carousel-control-next-icon"
+                            aria-hidden="true"></span>
+                    </button>
+
                 </section>
+
 
             </section>
 
