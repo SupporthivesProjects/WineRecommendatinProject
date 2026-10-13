@@ -955,33 +955,34 @@ class UserController extends Controller
 
             Log::info("Matches returned for $key: " . $matches->count());
 
-            // if ($matches->count() === 0) {
-            //     Log::warning("No matches for $key — skipping this filter and keeping previous pool.");
-            //     continue; // MOVE TO NEXT QUESTION
-            // }
             if ($matches->count() === 0) {
-
-                $priceQuestionKeys = [
-                    'question11',
-                    'question12',
-                    'question16',
-                    'question7',
-                ];
-            
-                if (in_array($key, $priceQuestionKeys, true)) {
-                    Log::warning(
-                        "No products match the selected price band for {$key}. Returning no recommendations."
-                    );
-            
-                    return collect();
-                }
-            
-                Log::warning(
-                    "No matches for {$key} — skipping this filter and keeping previous pool."
-                );
-            
-                continue;
+                Log::warning("No matches for $key — skipping this filter and keeping previous pool.");
+                continue; // MOVE TO NEXT QUESTION
             }
+            
+            // if ($matches->count() === 0) {
+
+            //     $priceQuestionKeys = [
+            //         'question11',
+            //         'question12',
+            //         'question16',
+            //         'question7',
+            //     ];
+            
+            //     if (in_array($key, $priceQuestionKeys, true)) {
+            //         Log::warning(
+            //             "No products match the selected price band for {$key}. Returning no recommendations."
+            //         );
+            
+            //         return collect();
+            //     }
+            
+            //     Log::warning(
+            //         "No matches for {$key} — skipping this filter and keeping previous pool."
+            //     );
+            
+            //     continue;
+            // }
 
             // Update the pool for next iteration (progressive filtering)
             $currentProductIds = $matches->pluck('id')->toArray();
