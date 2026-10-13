@@ -834,6 +834,33 @@ class UserController extends Controller
         return ['min' => 0, 'max' => 100000];
     }
 
+    private function applyStorePriceBand($query, array $band)
+    {
+        $store = auth()->user()?->store;
+        $state = strtolower(trim($store->state ?? ''));
+
+        if ($state === 'maharashtra') {
+            // Use Maharashtra pricing, falling back to the regular price.
+            $query->whereRaw(
+                'COALESCE(retail_price_maharashtra, retail_price) BETWEEN ? AND ?',
+                [$band['min'], $band['max']]
+            );
+        } elseif ($state === 'west bengal') {
+            // Use Kolkata pricing, falling back to the regular price.
+            $query->whereRaw(
+                'COALESCE(retail_price_kolkata, retail_price) BETWEEN ? AND ?',
+                [$band['min'], $band['max']]
+            );
+        } else {
+            $query->whereBetween('retail_price', [
+                $band['min'],
+                $band['max']
+            ]);
+        }
+
+        return $query;
+    }
+
 
     public function getMatchingProducts($responses)
     {
@@ -928,9 +955,32 @@ class UserController extends Controller
 
             Log::info("Matches returned for $key: " . $matches->count());
 
+            // if ($matches->count() === 0) {
+            //     Log::warning("No matches for $key — skipping this filter and keeping previous pool.");
+            //     continue; // MOVE TO NEXT QUESTION
+            // }
             if ($matches->count() === 0) {
-                Log::warning("No matches for $key — skipping this filter and keeping previous pool.");
-                continue; // MOVE TO NEXT QUESTION
+
+                $priceQuestionKeys = [
+                    'question11',
+                    'question12',
+                    'question16',
+                    'question7',
+                ];
+            
+                if (in_array($key, $priceQuestionKeys, true)) {
+                    Log::warning(
+                        "No products match the selected price band for {$key}. Returning no recommendations."
+                    );
+            
+                    return collect();
+                }
+            
+                Log::warning(
+                    "No matches for {$key} — skipping this filter and keeping previous pool."
+                );
+            
+                continue;
             }
 
             // Update the pool for next iteration (progressive filtering)
@@ -957,18 +1007,32 @@ class UserController extends Controller
         Log::info("Featured candidates (from final products): " . $featured->count());
         Log::info("Normal candidates: " . $normal->count());
 
-        if ($featured->isEmpty()) 
-        {
+        // if ($featured->isEmpty()) 
+        // {
 
-            Log::info("No featured products found in final products. Fetching fallback featured products.");
+        //     Log::info("No featured products found in final products. Fetching fallback featured products.");
+        //     $featured = Product::where('admin_featured_product', true)
+        //         ->when($wineType, function ($q) use ($wineType) {
+        //             $q->where(function ($x) use ($wineType) {
+        //                 $x->where('type', 'like', "%{$wineType}%")
+        //                   ->orWhere('method', 'like', "%{$wineType}%");
+        //             });
+        //         })
+        
+        //         ->inRandomOrder()
+        //         ->limit(5)
+        //         ->get();
+        // }
+        if ($featured->isEmpty()) {
             $featured = Product::where('admin_featured_product', true)
+                ->whereIn('id', $storeProductIds)
+                ->where('status', 'active')
                 ->when($wineType, function ($q) use ($wineType) {
                     $q->where(function ($x) use ($wineType) {
                         $x->where('type', 'like', "%{$wineType}%")
                           ->orWhere('method', 'like', "%{$wineType}%");
                     });
                 })
-        
                 ->inRandomOrder()
                 ->limit(5)
                 ->get();
@@ -1138,9 +1202,12 @@ class UserController extends Controller
                         break;
         
                     case 'question11':
+                       
+                        // $band = $this->detectPriceBand($value);
+                        // Log::info("Price Band Detected:", $band);
+                        // $q = $this->applyStorePriceBand($q, $band);
                         $band = $this->detectPriceBand($value);
                         Log::info("Price Band Detected:", $band);
-                    
                         $q->whereBetween('retail_price', [$band['min'], $band['max']]);
                         break;
                         
@@ -1219,6 +1286,9 @@ class UserController extends Controller
                         Log::info("Price Band Detected:", $band);
                     
                         $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        // $band = $this->detectPriceBand($value);
+                        // Log::info("Price Band Detected:", $band);
+                        // $q = $this->applyStorePriceBand($q, $band);
                         break;
                         
                 }
@@ -1316,6 +1386,10 @@ class UserController extends Controller
                         Log::info("Price Band Detected:", $band);
                     
                         $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        // $band = $this->detectPriceBand($value);
+                        // Log::info("Price Band Detected:", $band);
+
+                        // $q = $this->applyStorePriceBand($q, $band);
                         break;
                         
                 }
@@ -1359,6 +1433,10 @@ class UserController extends Controller
                         Log::info("Price Band Detected:", $band);
                     
                         $q->whereBetween('retail_price', [$band['min'], $band['max']]);
+                        // $band = $this->detectPriceBand($value);
+                        // Log::info("Price Band Detected:", $band);
+
+                        // $q = $this->applyStorePriceBand($q, $band);
                         break;
                         
                 }
