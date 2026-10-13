@@ -510,7 +510,10 @@ class StoreController extends Controller
             ->wherePivot('status', 'active')
             ->get();
 
-        $storeProducts = $store->products()->get();
+        // $storeProducts = $store->products()->get();
+        $storeProducts = $store->products()
+        ->withPivot(['status', 'is_featured'])
+        ->get();
 
         $cheeseProducts = $store->cheeseProducts()
             ->withPivot(['quantity', 'is_available'])

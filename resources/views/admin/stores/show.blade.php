@@ -450,6 +450,7 @@
                                     <th>Type</th>
                                     <th>Vintage</th>
                                     <th>Price</th>
+                                    <th>Featured</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -460,17 +461,20 @@
                                         <td>{{ ucfirst($product->type) }}</td>
                                         <td>{{ $product->vintage_year }}</td>
                                         <td>{{ $product->retail_price }}</td>
+                                        
+                                            @if ($product->pivot->is_featured)
+                                               <td> <span class="text-success fw-bold">Featured</span></td>
+                                            @else
+                                                <td><span class="text-danger fw-bold">Not Featured</span></td>
+                                            @endif
                                         <td>
                                             @if($product->pivot->status == 'active')
-
                                                 <form method="POST"
                                                     action="{{ route('admin.stores.product.toggle', [$store->id, $product->id]) }}">
                                                     @csrf
-
                                                     <input type="hidden"
                                                         name="status"
                                                         value="inactive">
-
                                                     <button
                                                         type="submit"
                                                         class="btn btn-sm btn-success">
