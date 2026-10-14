@@ -278,28 +278,33 @@
             }
         }
         */
-        /* Sidebar cart */
+        /* Fixed cart icon on the left side */
         .sidebar-cart {
-            margin-top: 30px;
-            padding: 25px 15px;
+            position: fixed;
+            bottom: 30px;
+            left: 25px;
+            top: auto;
+            transform: none;
+            margin: 0;
+            padding: 0;
             text-align: center;
-            background: #fff;
-            border: 1px solid #e5e5e5;
-            border-radius: 10px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            z-index: 9999;
         }
 
-        
         .sidebar-cart-link {
             position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 100px;
-            height: 100px;
+            width: 85px;
+            height: 85px;
             background: #8b0000;
             color: #fff;
             border-radius: 50%;
-            font-size: 44px;
+            font-size: 38px;
             text-decoration: none;
             transition: background 0.3s ease, transform 0.2s ease;
             box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
@@ -310,7 +315,6 @@
             color: #fff;
             transform: scale(1.08);
         }
-
 
         .sidebar-cart-count {
             position: absolute;
@@ -329,45 +333,29 @@
             justify-content: center;
         }
 
-        .sidebar-cart p {
-            margin: 12px 0 0;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Gentle cart animation */        
-        @keyframes cartBounce {
-            0%   { transform: scale(1) rotate(0deg); }
-            20%  { transform: scale(1.2) rotate(-10deg); }
-            40%  { transform: scale(1.2) rotate(10deg); }
-            60%  { transform: scale(1.15) rotate(-6deg); }
-            80%  { transform: scale(1.08) rotate(4deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        .sidebar-cart-link.animate-cart {
-            animation: cartBounce 0.8s ease-in-out;
-        }
-
-
-        /* Gentle continuous movement when cart has products */
+        /* Animation when cart has products */
         @keyframes cartSway {
-            0%, 100% {
-                transform: rotate(0deg);
-            }
-            25% {
-                transform: rotate(-5deg);
-            }
-            75% {
-                transform: rotate(5deg);
-            }
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
         }
 
         .sidebar-cart-link.cart-has-items {
             animation: cartSway 3s ease-in-out infinite;
-            transform-origin: top center;
+            transform-origin: center;
         }
 
+        @media (max-width: 768px) {
+            .sidebar-cart {
+                left: 10px;
+            }
+
+            .sidebar-cart-link {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+        }
 
 
     </style>
@@ -499,23 +487,6 @@
                                         <span id="price-range-label">₹&nbsp;<span id="price-min"></span> - ₹&nbsp;<span id="price-max"></span></span>
                                     </p>
                                     <div id="price-slider" style="margin-top: 10px;"></div>
-                                        <!-- Sidebar Cart -->
-                                        <div class="sidebar-cart">
-                                            <a href="{{ route('user.cart') }}"
-                                            class="sidebar-cart-link"
-                                            id="sidebar-cart-icon"
-                                            aria-label="View shopping cart">
-
-                                                <i class="fas fa-shopping-cart"></i>
-
-                                                <span class="sidebar-cart-count" id="sidebar-cart-count">
-                                                    {{ collect($cart ?? [])->sum('quantity') }}
-                                                </span>
-                                            </a>
-
-                                            <p>View Your Cart</p>
-                                        </div>
-                                
                                 </div>
                             </div>
                             <!-- Products grid -->
@@ -674,6 +645,20 @@
                             </div>
                         </div> 
                     <!-- End::row-6 -->
+                     <!-- Fixed Cart Icon -->
+                     <div class="sidebar-cart">
+                        <a href="{{ route('user.cart') }}"
+                        class="sidebar-cart-link"
+                        id="sidebar-cart-icon"
+                        aria-label="View shopping cart">
+
+                            <i class="fas fa-shopping-cart"></i>
+
+                            <span class="sidebar-cart-count" id="sidebar-cart-count">
+                                {{ collect($cart ?? [])->sum('quantity') }}
+                            </span>
+                        </a>
+                    </div>
 
                 
                     <!-- Pagination Code -->
