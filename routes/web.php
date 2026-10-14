@@ -86,8 +86,8 @@ Route::get('/qr-product-modal/{id}', [UserDashboardController::class, 'qrProduct
 
 //keep session live
 Route::get('/session-keepalive', function () {
-    return response()->json(['status' => 'active']);
-})->name('session.keepalive');
+    return response()->json(['token' => csrf_token()]);
+})->middleware('auth')->name('session.keepalive');
 
 
 

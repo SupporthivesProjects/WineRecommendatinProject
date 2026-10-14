@@ -812,7 +812,6 @@
 
 @endsection
 @push('scripts')
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -867,13 +866,8 @@
                 ? '{{ route("user.cart.remove") }}'
                 : '{{ route("user.cart.add") }}';
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                
+            postWithRetry(url, {
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     product_id: productId,
                     product_name: productName,

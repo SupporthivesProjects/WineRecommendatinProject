@@ -368,12 +368,8 @@
                 return;
             }
 
-            fetch('{{ route('user.cart.updateQuantity') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
+            postWithRetry('{{ route('user.cart.updateQuantity') }}', {
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         product_id: productId,
                         quantity: newQuantity
@@ -395,12 +391,8 @@
         }
 
         function removeFromCart(productId) {
-            fetch('{{ route('user.cart.remove') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
+            postWithRetry('{{ route('user.cart.remove') }}', {
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         product_id: productId
                     })
@@ -453,12 +445,8 @@
                     const submissionId = '{{ session('submission_id') }}';
                     console.log('Submission ID:', submissionId);
 
-                    fetch('{{ route('user.checkout') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            },
+                    postWithRetry('{{ route('user.checkout') }}', {
+                            headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 submission_id: submissionId
                             })

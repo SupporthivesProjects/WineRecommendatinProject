@@ -19,6 +19,10 @@
     <meta name="twitter:title" content="TechSomm">
     <meta name="twitter:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
     <meta name="twitter:image" content="https://app.wine.supporthives.com/assets/images/links/share_preview.jpg">
+    @auth
+        <script>window.KEEPALIVE_URL = @json(route('session.keepalive'));</script>
+        <script src="{{ asset('js/keepalive.js') }}"></script>
+    @endauth
 
 
 
@@ -157,6 +161,7 @@
             playTak();
         });
     </script>
+
 
 </body>
 
