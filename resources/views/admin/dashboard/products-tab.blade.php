@@ -74,7 +74,10 @@
                                         @forelse ($products as $index => $product)
                                             <tr>
                                                 <td class="align-middle">{{ $index + 1 }}</td>
-                                                <td class="align-middle">{{ $product->wine_name }}</td>
+                                                <td class="align-middle">
+                                                <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3"><br>
+                                                {{ $product->wine_name }}
+                                                </td>
                                                 <td class="align-middle">{{ ucfirst($product->type) }}</td>
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
