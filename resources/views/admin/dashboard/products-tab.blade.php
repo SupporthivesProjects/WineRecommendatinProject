@@ -7,6 +7,28 @@
             width: 300px !important; 
             margin-bottom: 20px;
         }
+        #wineimage {
+            overflow: visible !important;
+        }
+
+        .wine-hover-image {
+            width: 50px !important;
+            height: 50px !important;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+            transform: scale(1);
+            transform-origin: left center;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .wine-hover-image:hover {
+            transform: scale(4);
+            z-index: 9999;
+        }
+        
+
+
     </style>
     @endpush
 
@@ -61,6 +83,7 @@
                                         <tr>
                                             <th class="text-start">SR No.</th>
                                             <th class="text-start">Wine Name</th>
+                                            <th class="text-start">Image</th>
                                             <th class="text-start">Type</th>
                                             <th class="text-start">Winery</th>
                                             <th class="text-start">Country</th>
@@ -74,10 +97,8 @@
                                         @forelse ($products as $index => $product)
                                             <tr>
                                                 <td class="align-middle">{{ $index + 1 }}</td>
-                                                <td class="align-middle">
-                                                <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3"><br>
-                                                {{ $product->wine_name }}
-                                                </td>
+                                                <td class="align-middle">{{ $product->wine_name }}</td>
+                                                <td id="wineimage"><img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="wine-hover-image ht-50 wd-50 me-3"></td>
                                                 <td class="align-middle">{{ ucfirst($product->type) }}</td>
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
