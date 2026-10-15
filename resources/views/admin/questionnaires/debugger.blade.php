@@ -4,23 +4,79 @@
 @push('styles')
 
 <style>
-    #queryResult table{
-    width:100%;
-    font-size:13px;
+    /* Keep the debugger within the visible browser height */
+    .debugger-card {
+        height: calc(100vh - 120px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
-    #queryResult th{
-    white-space:nowrap;
-    position:sticky;
-    top:0;
-    z-index:10;
+    .debugger-card > .card-body {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
-    #queryResult td{
+    .debugger-row {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
 
-    white-space:nowrap;
-    vertical-align:middle;
+    /* Independent scrolling for both panels */
+    .debugger-panel {
+        height: 100%;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 10px;
+    }
 
+    #queryResult {
+        overflow: auto;
+    }
+
+    #queryResult table {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    #queryResult th {
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    #queryResult td {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    /* Allow SQL statements to wrap */
+    .debugger-card pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 991.98px) {
+        .debugger-card {
+            height: auto;
+            overflow: visible;
+        }
+
+        .debugger-card > .card-body,
+        .debugger-row {
+            overflow: visible;
+        }
+
+        .debugger-panel {
+            height: 60vh;
+            margin-bottom: 15px;
+        }
     }
 </style>
 
@@ -30,7 +86,7 @@
 
     <div class="main-content app-content">
         <div class="container-fluid">
-            <div class="card shadow">
+            <div class="card shadow debugger-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">
                         Questionnaire Debugger
@@ -41,8 +97,8 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-5">
+                    <div class="row debugger-row">
+                        <div class="col-lg-5 debugger-panel">
                             @foreach ($steps as $step)
                                 <div class="card shadow-sm mb-4 border-0">
                                     <div
@@ -136,12 +192,9 @@
                             @endforeach
 
                         </div>
-                        <div class="col-lg-7">
-
+                        <div class="col-lg-7 debugger-panel">
                             <div class="card shadow-sm">
-
                                 <div class="card-header d-flex justify-content-between align-items-center">
-
                                     <h5 class="mb-0">
                                         Matching Products
                                     </h5>
@@ -149,7 +202,7 @@
                                         0 Products
                                     </span>
                                 </div>
-                                <div class="card-body p-2" style="overflow:auto;max-height:850px;">
+                                <div class="card-body p-2">
                                     <div id="queryResult">
                                         <div class="text-center text-muted p-5">
                                             <h5>

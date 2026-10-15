@@ -107,7 +107,7 @@
                     </p>
                 @endif
                 <h4 class="fw-bold mb-4">
-                    ₹{{ number_format($product->retail_price, 2) }}
+                    ₹{{ number_format($product->display_price , 2) }}
                 </h4>
                 {{-- TASTING NOTES --}}
                 @if(!empty($product->tasting_notes))
@@ -255,7 +255,7 @@
                                             {{ ucfirst($related->type) }}
                                         </p>
                                         <p class="fw-bold">
-                                            ₹{{ number_format($related->retail_price, 2) }}
+                                            ₹{{ number_format($related->display_price , 2) }}
                                         </p>
                                         <button
                                             class="btn btn-outline-dark w-100 related-product-btn"

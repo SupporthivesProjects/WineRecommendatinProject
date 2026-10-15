@@ -589,6 +589,8 @@ class UserController extends Controller
     {
         $product = Product::with(['images', 'reviews.user'])
             ->findOrFail($id);
+        
+        $product->display_price = $product->getDisplayPrice();
 
         $reviews = $product->reviews()
             ->with('user')
@@ -614,33 +616,129 @@ class UserController extends Controller
                 ->count();
         }
 
-        $relatedProducts = Product::with('images')
-            ->where('id', '!=', $product->id)
-            ->where(function ($query) use ($product) {
+        // $relatedProducts = Product::with('images')
+        //     ->where('id', '!=', $product->id)
+        //     ->where(function ($query) use ($product) {
 
-                $query->where('type', $product->type)
-                    ->orWhere('country', $product->country);
-            })
+        //         $query->where('type', $product->type)
+        //             ->orWhere('country', $product->country);
+        //     })
+        //     ->inRandomOrder()
+        //     ->limit(3)
+        //     ->get();
+
+        // if ($relatedProducts->count() < 3) {
+
+        //     $excludeIds = $relatedProducts->pluck('id')
+        //         ->push($product->id)
+        //         ->toArray();
+
+        //     $additionalProducts = Product::with('images')
+        //         ->whereNotIn('id', $excludeIds)
+        //         ->inRandomOrder()
+        //         ->limit(3 - $relatedProducts->count())
+        //         ->get();
+
+        //     $relatedProducts = $relatedProducts->merge(
+        //         $additionalProducts
+        //     );
+        // }
+        /*
+        |--------------------------------------------------------------------------
+        | Related Products - Logged-in User's Store Only
+        |--------------------------------------------------------------------------
+        */
+
+        // Get the logged-in user's store
+        $store = Auth::user()->store;
+
+        // Get active products available in this store
+        $storeProducts = DB::table('store_products')
+            ->where('store_id', $store->id)
+            ->where('status', 'active')
+            ->pluck('product_id');
+
+        // Current product price
+        $price = $product->display_price ?? $product->getDisplayPrice();
+
+        $relatedProducts = collect();
+
+        $baseQuery = Product::with('images')
+            ->whereIn('id', $storeProducts)
+            ->where('id', '!=', $product->id);
+
+        // 1. First priority: Same grape variety
+        $grapeProducts = (clone $baseQuery)
+            ->where('grape_variety', $product->grape_variety)
             ->inRandomOrder()
             ->limit(3)
             ->get();
 
-        if ($relatedProducts->count() < 3) {
+        $relatedProducts = $relatedProducts->merge($grapeProducts);
 
-            $excludeIds = $relatedProducts->pluck('id')
+        // 2. Second priority: Same type
+        if ($relatedProducts->count() < 3) {
+            $typeProducts = (clone $baseQuery)
+                ->where('type', $product->type)
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($typeProducts);
+        }
+
+        // 3. Third priority: Same varietal blend
+        if ($relatedProducts->count() < 3) {
+            $blendProducts = (clone $baseQuery)
+                ->where('varietal_blend', $product->varietal_blend)
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($blendProducts);
+        }
+
+        // 4. Fourth priority: Similar price
+        if ($relatedProducts->count() < 3) {
+            $priceProducts = (clone $baseQuery)
+                ->whereBetween('retail_price', [
+                    max(0, $price - 1500),
+                    $price + 1500
+                ])
+                ->whereNotIn('id', $relatedProducts->pluck('id'))
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge($priceProducts);
+        }
+
+        // 5. Fill remaining slots from the same store only
+        if ($relatedProducts->count() < 3) {
+            $excludeIds = $relatedProducts
+                ->pluck('id')
                 ->push($product->id)
                 ->toArray();
 
             $additionalProducts = Product::with('images')
+                ->whereIn('id', $storeProducts)
                 ->whereNotIn('id', $excludeIds)
                 ->inRandomOrder()
                 ->limit(3 - $relatedProducts->count())
                 ->get();
 
-            $relatedProducts = $relatedProducts->merge(
-                $additionalProducts
-            );
+            $relatedProducts = $relatedProducts->merge($additionalProducts);
         }
+
+        // Calculate display price for related products
+        $relatedProducts->transform(function ($relatedProduct) {
+            $relatedProduct->display_price = $relatedProduct->getDisplayPrice();
+
+            return $relatedProduct;
+        });
+
 
         $cart = session()->get('cart', []);
         $cartItem = collect($cart)
@@ -665,71 +763,71 @@ class UserController extends Controller
     }
 
     public function qrProductModal($id)
-{
-    $product = Product::with(['images', 'reviews.user'])
-        ->findOrFail($id);
+    {
+        $product = Product::with(['images', 'reviews.user'])
+            ->findOrFail($id);
 
-    $reviews = $product->reviews()
-        ->with('user')
-        ->where('status', 'approved')
-        ->latest()
-        ->paginate(5, ['*'], 'reviews_page');
-
-    $averageRating = $product->reviews()
-        ->where('status', 'approved')
-        ->avg('rating');
-
-    $totalReviews = $product->reviews()
-        ->where('status', 'approved')
-        ->count();
-
-    $ratingDistribution = [];
-
-    for ($i = 5; $i >= 1; $i--) {
-        $ratingDistribution[$i] = $product->reviews()
+        $reviews = $product->reviews()
+            ->with('user')
             ->where('status', 'approved')
-            ->where('rating', $i)
+            ->latest()
+            ->paginate(5, ['*'], 'reviews_page');
+
+        $averageRating = $product->reviews()
+            ->where('status', 'approved')
+            ->avg('rating');
+
+        $totalReviews = $product->reviews()
+            ->where('status', 'approved')
             ->count();
-    }
 
-    $relatedProducts = Product::with('images')
-        ->where('id', '!=', $product->id)
-        ->where(function ($query) use ($product) {
-            $query->where('type', $product->type)
-                ->orWhere('country', $product->country);
-        })
-        ->inRandomOrder()
-        ->limit(3)
-        ->get();
+        $ratingDistribution = [];
 
-    if ($relatedProducts->count() < 3) {
-        $excludeIds = $relatedProducts->pluck('id')
-            ->push($product->id)
-            ->toArray();
+        for ($i = 5; $i >= 1; $i--) {
+            $ratingDistribution[$i] = $product->reviews()
+                ->where('status', 'approved')
+                ->where('rating', $i)
+                ->count();
+        }
 
-        $additionalProducts = Product::with('images')
-            ->whereNotIn('id', $excludeIds)
+        $relatedProducts = Product::with('images')
+            ->where('id', '!=', $product->id)
+            ->where(function ($query) use ($product) {
+                $query->where('type', $product->type)
+                    ->orWhere('country', $product->country);
+            })
             ->inRandomOrder()
-            ->limit(3 - $relatedProducts->count())
+            ->limit(3)
             ->get();
 
-        $relatedProducts = $relatedProducts->merge(
-            $additionalProducts
+        if ($relatedProducts->count() < 3) {
+            $excludeIds = $relatedProducts->pluck('id')
+                ->push($product->id)
+                ->toArray();
+
+            $additionalProducts = Product::with('images')
+                ->whereNotIn('id', $excludeIds)
+                ->inRandomOrder()
+                ->limit(3 - $relatedProducts->count())
+                ->get();
+
+            $relatedProducts = $relatedProducts->merge(
+                $additionalProducts
+            );
+        }
+
+        return view(
+            'user.partials.qr-product-modal',
+            compact(
+                'product',
+                'relatedProducts',
+                'reviews',
+                'averageRating',
+                'totalReviews',
+                'ratingDistribution'
+            )
         );
     }
-
-    return view(
-        'user.partials.qr-product-modal',
-        compact(
-            'product',
-            'relatedProducts',
-            'reviews',
-            'averageRating',
-            'totalReviews',
-            'ratingDistribution'
-        )
-    );
-}
     
 
 
