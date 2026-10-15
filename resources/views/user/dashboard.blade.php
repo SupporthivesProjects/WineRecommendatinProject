@@ -898,7 +898,7 @@
                         <!-- Slide 1 -->
                         <div class="carousel-item active">
                             <img
-                                src="{{ asset('images/clinkglass.jpg') }}"
+                                src="{{ asset('images/redonenew.jpg') }}"
                                 class="hero-slide-image"
                                 alt="Wine glass and bottle">
 
