@@ -12,11 +12,11 @@
         }
 
         .wine-hover-image {
-            width: 50px !important;
-            height: 50px !important;
+            width: 100px !important;
+            height: 100px !important;
             object-fit: cover;
             position: relative;
-            z-index: 1;
+            z-index: 100;
             transform: scale(1);
             transform-origin: left center;
             transition: transform 0.5s ease-in-out;
