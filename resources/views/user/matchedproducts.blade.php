@@ -348,8 +348,8 @@
 
                         <!-- Retail Price Filter -->
                         @php
-                            $minPrice = $products->min('retail_price');
-                            $maxPrice = $products->max('retail_price');
+                            $minPrice = $products->min('display_price');
+                            $maxPrice = $products->max('display_price');
                         @endphp
 
                         <div class="price-slider mt-2">
@@ -404,7 +404,7 @@
                                 <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                 data-vintage-year="{{ $product->vintage_year }}"
                                 data-winery="{{ $product->winery }}"
-                                data-retail-price="{{ $product->retail_price }}"
+                                data-retail-price="{{ $product->display_price }}"
                                 data-country="{{ $product->country }}">
                                     <div class="card custom-card wine-card">
                                         <!-- Image at the top -->
@@ -440,7 +440,7 @@
                                                 @endif
                                             </p>
 
-                                            <p><strong>MRP:</strong> {{ $product->retail_price }}</p>
+                                            <p><strong>MRP:</strong> {{ $product->display_price }}</p>
                                             <button
                                                 type="button"
                                                 class="btn btn-dark mt-2 rounded-0 open-product-modal"
@@ -451,7 +451,7 @@
                                             <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
                                                     data-product-id="{{ $product->id }}"
                                                     data-product-name="{{ $product->wine_name }}"
-                                                    data-product-price="{{ $product->retail_price }}">
+                                                    data-product-price="{{ $product->display_price }}">
                                                 {{ in_array($product->id, $cart) ? 'Remove from Cart' : 'Buy Now' }}
                                             </button>
                                         </div>
@@ -695,7 +695,7 @@
 
     <script>
         const productsInfo = @json($products->keyBy('id')->map(function($p) {
-            return ['name' => $p->wine_name, 'price' => $p->retail_price];
+            return ['name' => $p->wine_name, 'price' => $p->display_price];
         }));
     </script>
 

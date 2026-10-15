@@ -1147,6 +1147,14 @@ class UserController extends Controller
             // ->shuffle()
             ->sortByDesc('retail_price')
             ->values();
+        
+        // Apply the logged-in store's display price to every matched product
+        $result->transform(function ($product) {
+            $product->display_price = $product->getDisplayPrice();
+
+            return $product;
+        });
+        
 
         Log::info("=== FINAL RESULT COUNT: " . $result->count() . " ===");
         Log::info("=== END PRODUCT MATCHING ===");
