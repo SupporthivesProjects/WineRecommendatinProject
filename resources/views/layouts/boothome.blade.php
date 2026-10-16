@@ -2102,6 +2102,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const DEVICE_KEY = 'techsomm_kiosk_device_key';
             const KIOSK_ID_KEY = 'techsomm_kiosk_id';
             const HEARTBEAT_INTERVAL = 60 * 1000;
+            const REQUEST_TIMEOUT = 10 * 1000;
+
+            let heartbeatInProgress = false;
 
             function getDeviceKey() {
                 let key = localStorage.getItem(DEVICE_KEY);
@@ -2115,55 +2118,71 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             async function sendHeartbeat() {
+                if (heartbeatInProgress) {
+                    return;
+                }
+
+                heartbeatInProgress = true;
+
                 try {
                     const csrfToken = document.querySelector(
                         'meta[name="csrf-token"]'
                     )?.getAttribute('content');
 
                     if (!csrfToken) {
-                        console.warn('Kiosk monitoring: CSRF token not found.');
                         return;
                     }
 
-                    const response = await fetch('/kiosk/heartbeat', {
-                        method: 'POST',
-                        credentials: 'same-origin',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            device_key: getDeviceKey(),
-                            kiosk_id: localStorage.getItem(KIOSK_ID_KEY)
-                        })
-                    });
+                    const controller = new AbortController();
 
-                    if (!response.ok) {
-                        console.warn(
-                            'Kiosk heartbeat failed:',
-                            response.status
-                        );
-                        return;
-                    }
+                    const timeoutId = setTimeout(function () {
+                        controller.abort();
+                    }, REQUEST_TIMEOUT);
 
-                    const data = await response.json();
+                    try {
+                        const response = await fetch('/kiosk/heartbeat', {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            body: JSON.stringify({
+                                device_key: getDeviceKey(),
+                                kiosk_id: localStorage.getItem(KIOSK_ID_KEY)
+                            }),
+                            signal: controller.signal
+                        });
 
-                    if (data.kiosk_id) {
-                        localStorage.setItem(KIOSK_ID_KEY, data.kiosk_id);
+                        if (!response.ok) {
+                            return;
+                        }
+
+                        const data = await response.json();
+
+                        if (data.status === 'active' && data.kiosk_id) {
+                            localStorage.setItem(
+                                KIOSK_ID_KEY,
+                                data.kiosk_id
+                            );
+                        }
+                    } finally {
+                        clearTimeout(timeoutId);
                     }
                 } catch (error) {
-                    console.warn('Kiosk heartbeat request failed.');
+                    // Monitoring failures must not interrupt normal page usage.
+                } finally {
+                    heartbeatInProgress = false;
                 }
             }
 
-            // Report immediately, then every minute.
+            // Send immediately, then every minute.
             sendHeartbeat();
-
             setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
-        })();
 
-     </script>
+        })();
+    </script>
         
 
 
