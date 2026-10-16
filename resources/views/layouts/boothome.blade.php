@@ -11,6 +11,7 @@
     <title> Wine Recommender</title>
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta property="og:title" content="TechSomm">
     <meta property="og:description" content="Your digital sommelier for effortless wine discovery and perfect pairings.">
@@ -67,6 +68,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/css/glide.core.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/css/glide.theme.min.css">
+
 
 
     <!-- Tailwind CSS -->
@@ -1308,6 +1310,8 @@
     <!-- Sticky JS -->
     <script src="{{ asset('assets/js/custom-script.js') }}"></script>
 
+    
+
 
     <!-- Optional JavaScript for enhanced functionality -->
     <!-- <script>
@@ -2091,6 +2095,77 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
     </script>
+    <script>
+        (function () {
+            'use strict';
+
+            const DEVICE_KEY = 'techsomm_kiosk_device_key';
+            const KIOSK_ID_KEY = 'techsomm_kiosk_id';
+            const HEARTBEAT_INTERVAL = 60 * 1000;
+
+            function getDeviceKey() {
+                let key = localStorage.getItem(DEVICE_KEY);
+
+                if (!key) {
+                    key = crypto.randomUUID();
+                    localStorage.setItem(DEVICE_KEY, key);
+                }
+
+                return key;
+            }
+
+            async function sendHeartbeat() {
+                try {
+                    const csrfToken = document.querySelector(
+                        'meta[name="csrf-token"]'
+                    )?.getAttribute('content');
+
+                    if (!csrfToken) {
+                        console.warn('Kiosk monitoring: CSRF token not found.');
+                        return;
+                    }
+
+                    const response = await fetch('/kiosk/heartbeat', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            device_key: getDeviceKey(),
+                            kiosk_id: localStorage.getItem(KIOSK_ID_KEY)
+                        })
+                    });
+
+                    if (!response.ok) {
+                        console.warn(
+                            'Kiosk heartbeat failed:',
+                            response.status
+                        );
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    if (data.kiosk_id) {
+                        localStorage.setItem(KIOSK_ID_KEY, data.kiosk_id);
+                    }
+                } catch (error) {
+                    console.warn('Kiosk heartbeat request failed.');
+                }
+            }
+
+            // Report immediately, then every minute.
+            sendHeartbeat();
+
+            setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
+        })();
+
+     </script>
+        
+
 
 
 </body>

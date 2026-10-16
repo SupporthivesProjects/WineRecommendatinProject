@@ -34,6 +34,7 @@ use App\Http\Controllers\PopupEnquiryController;
 use App\Models\StoreSupportRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\KioskMonitoringController;
 
 
 use Illuminate\Support\Facades\Log;
@@ -352,9 +353,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         ]);
     })->name('support-tickets.status');
 
-
-
-
+    Route::get('/admin-kiosks', [KioskMonitoringController::class, 'admindashboarddetails'])->name('kiosks-details');
 
 });
 
@@ -388,6 +387,13 @@ Route::middleware(['auth'])->group(function () {
 
 
 });
+
+    // Kiosk Monitoring Route
+    Route::post('/kiosk/heartbeat', [
+        KioskMonitoringController::class,
+        'heartbeat',
+    ])->name('kiosk.heartbeat');
+
 
 // Store Manager routes
 Route::prefix('store-manager')->name('store-manager.')->middleware(['auth', 'store.manager'])->group(function () {
