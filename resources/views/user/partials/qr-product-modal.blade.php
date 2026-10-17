@@ -493,7 +493,7 @@
                     <hr class="mt-5">
 
                     <h4 class="fw-bold mb-4 mt-3">
-                        Related Products
+                        Similar Products
                     </h4>
 
 
