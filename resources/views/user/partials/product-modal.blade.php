@@ -232,7 +232,7 @@
                 <div id="related-products-section">
                 <hr class="mt-5">
                     <h4 class="fw-bold mb-4">
-                        Related Products
+                        Similar Products
                     </h4>
                     <div class="row">
                         @foreach($relatedProducts as $related)

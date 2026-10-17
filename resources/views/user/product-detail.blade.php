@@ -737,7 +737,7 @@
                 <div class="col-xl-12 mt-4">
                     <div class="card">
                         <div class="d-flex p-3 border-bottom">
-                            <h5 class="main-content-label mb-0 mt-2">Related Products</h5>
+                            <h5 class="main-content-label mb-0 mt-2">Similar Products</h5>
                         </div>
                         <div class="p-4">
                             <div class="row row-sm">
