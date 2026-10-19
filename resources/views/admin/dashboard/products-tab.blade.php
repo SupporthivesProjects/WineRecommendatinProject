@@ -159,72 +159,59 @@
 
 @push('scripts')
     <script>
-        // Toggle featured status
-        // $(document).ready(function() {
-        //     $('.featured-toggle').change(function() {
-        //         alert("I am here");
-        //         const productId = $(this).data('product-id');
-        //         const isFeatured = $(this).is(':checked') ? 1 : 0;
-        //         const url = '{{ route("admin.products.toggle-featured", [""]) }}/' + productId;
-    
-        //         $.ajax({
-        //             url: url,
-        //             type: 'POST',
-        //             data: {
-        //                 _token: '{{ csrf_token() }}',
-        //                 is_featured: isFeatured
-        //             },
-        //             success: function(response) {
-        //                 if (response.success) {
-        //                     toastr.success('Featured status updated successfully');
-        //                 } else {
-        //                     toastr.error('Failed to update featured status');
-        //                     // Revert the toggle if there was an error
-        //                     $('.featured-toggle[data-product-id="' + productId + '"]').prop('checked', !isFeatured);
-        //                 }
-        //             },
-        //             error: function(xhr) {
-        //                 toastr.error('An error occurred: ' + (xhr.responseJSON?.message || 'Unknown error'));
-        //                 // Revert the toggle on error
-        //                 $('.featured-toggle[data-product-id="' + productId + '"]').prop('checked', !isFeatured);
-        //             }
-        //         });
-        //     });
-        // });
-
-        $(document).ready(function () {
-            $('#file-export').DataTable({
-                stateSave: true
-            });
-        });
 
         // Then add delegated event listener
+        // $(document).on('change', '.featured-toggle', function () {
+        //     const productId = $(this).data('product-id');
+        //     const isFeatured = $(this).is(':checked') ? 1 : 0;
+        //     const url = '{{ route("admin.products.toggle-featured", [""]) }}/' + productId;
+
+        //     $.ajax({
+        //         url: url,
+        //         type: 'POST',
+        //         data: {
+        //             _token: '{{ csrf_token() }}',
+        //             is_featured: isFeatured
+        //         },
+        //         success: function(response) {
+        //             if (response.success) {
+        //                 toastr.success('Featured status updated successfully');
+        //             } else {
+        //                 toastr.error('Failed to update featured status');
+        //             }
+        //         },
+        //         error: function(xhr) {
+        //             toastr.error('An error occurred');
+        //         }
+        //     });
+
+        // });
+        
         $(document).on('change', '.featured-toggle', function () {
-            const productId = $(this).data('product-id');
-            const isFeatured = $(this).is(':checked') ? 1 : 0;
-            const url = '{{ route("admin.products.toggle-featured", [""]) }}/' + productId;
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    is_featured: isFeatured
-                },
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success('Featured status updated successfully');
-                    } else {
-                        toastr.error('Failed to update featured status');
-                    }
-                },
-                error: function(xhr) {
-                    toastr.error('An error occurred');
+        const productId = $(this).data('product-id');
+        const isFeatured = $(this).is(':checked') ? 1 : 0;
+        const url = '{{ route("admin.products.toggle-featured", [""]) }}/' + productId;
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                is_featured: isFeatured
+            },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success('Featured status updated successfully');
+                } else {
+                    toastr.error('Failed to update featured status');
                 }
-            });
-
+            },
+            error: function (xhr) {
+                console.error('Featured update failed:', xhr.status, xhr.responseText);
+                toastr.error('An error occurred while updating featured status');
+            }
         });
-
         });
 
 
