@@ -2183,6 +2183,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })();
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const qrProductModal = document.getElementById('qrProductModal');
+
+            if (!qrProductModal) {
+                return;
+            }
+
+            qrProductModal.addEventListener('hidden.bs.modal', function () {
+                window.location.href = "{{ route('homeBrowseWines') }}";
+            });
+        });
+    </script>
+
         
 
 
