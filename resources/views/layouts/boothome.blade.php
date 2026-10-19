@@ -194,10 +194,6 @@
             border-radius: 9999px;
             z-index: 10;
         }
-
-        
-
-
     </style>
 
     <style>
@@ -242,6 +238,58 @@
             pointer-events: auto !important;
         }
 
+        #qrRedirectLoader {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            background: rgba(255, 252, 247, 0.97);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+
+        #qrRedirectLoader .loader-content {
+            max-width: 340px;
+        }
+
+        #qrRedirectLoader .wine-loader {
+            font-size: 52px;
+            display: inline-block;
+            animation: winePulse 1.2s ease-in-out infinite;
+        }
+
+        #qrRedirectLoader .loader-spinner {
+            width: 34px;
+            height: 34px;
+            border: 3px solid #eadfd5;
+            border-top-color: #722f37;
+            border-radius: 50%;
+            margin: 22px auto 0;
+            animation: wineSpin 0.8s linear infinite;
+        }
+
+        #qrRedirectLoader h4 {
+            color: #722f37;
+            margin-top: 18px;
+            font-weight: 600;
+        }
+
+        #qrRedirectLoader p {
+            color: #6c625e;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        @keyframes wineSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes winePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
     </style>
 
     <!-- Scripts -->
@@ -994,6 +1042,20 @@
             <!-- End:: Section-7 -->
         </div>
         <!-- End::app-content -->
+
+
+        <div id="qrRedirectLoader" role="status" aria-live="polite">
+            <div class="loader-content">
+                <div class="wine-loader">🍷</div>
+                <h4>Taking you to our wine collection…</h4>
+                <p>
+                    Just a moment — we're getting everything ready
+                    for you.
+                </p>
+                <div class="loader-spinner"></div>
+            </div>
+        </div>
+
 
         <!-- Age Verification Modal -->
         <!-- Premium Wine-Themed Age Verification Modal (Enhanced) -->
@@ -2184,19 +2246,38 @@ document.addEventListener("DOMContentLoaded", function () {
         })();
     </script>
 
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const qrProductModal = document.getElementById('qrProductModal');
+            const loader = document.getElementById('qrRedirectLoader');
 
-            if (!qrProductModal) {
+            if (!qrProductModal || !loader) {
                 return;
             }
 
+            let openingEnquiry = false;
+
+            // Enquire Now also closes the product modal.
+            // That action should NOT trigger the redirect.
+            document.addEventListener('click', function (event) {
+                if (event.target.closest('#mainEnquireNowBtn')) {
+                    openingEnquiry = true;
+                }
+            });
+
             qrProductModal.addEventListener('hidden.bs.modal', function () {
+                if (openingEnquiry) {
+                    openingEnquiry = false;
+                    return;
+                }
+
+                loader.style.display = 'flex';
                 window.location.href = "{{ route('homeBrowseWines') }}";
             });
         });
     </script>
+
 
         
 
