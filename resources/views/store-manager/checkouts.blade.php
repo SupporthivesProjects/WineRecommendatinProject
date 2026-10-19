@@ -10,6 +10,36 @@
     .dataTables_filter {
         margin-left: 20px;
     }
+    .checkout-product-image {
+        width: 100px;
+        height: 120px;
+        object-fit: contain;
+        object-position: center;
+        display: block;
+        margin: 0 auto;
+        padding: 5px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    #orderModal .table th,
+    #orderModal .table td {
+        vertical-align: middle;
+    }
+
+    #orderModal .table tfoot th,
+    #orderModal .table tfoot td {
+        background: #f5f6fa;
+        font-weight: 700;
+        padding: 14px 10px;
+    }
+
+    #orderModal .table tfoot #orderTotal {
+        white-space: nowrap;
+        color: #198754;
+        font-size: 1rem;
+    }
 
 
 </style>
@@ -126,6 +156,7 @@
                                     <th>Sr.No</th>
                                     <th>Image</th>
                                     <th>Product</th>
+                                    <th>Country</th>            
                                     <th>Qty</th>
                                     <th>Price</th>
                                     <th>Total</th>
@@ -136,8 +167,8 @@
 
                             <tfoot>
                                 <tr>
-                                    <th colspan="4" class="text-end">Grand Total</th>
-                                    <th id="orderTotal"></th>
+                                    <th colspan="6" class="text-end">Grand Total</th>
+                                    <th id="orderTotal" class="text-nowrap"></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -179,11 +210,18 @@
 
                 html += `
                 <tr>
-                    <td>${index+1}</td>
-                     <td>
-                        <img src="${image}" width="200" height="200" class="me-2"/>
+                    <td>${index+1}</td>                     
+                    <td class="text-center align-middle">
+                        <img
+                            src="${image}"
+                            alt="${p.name || 'Product image'}"
+                            class="checkout-product-image"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='/default.png';"
+                        />
                     </td>
                     <td>${p.name}</td>
+                    <td>${p.country}</td>
                     <td>${p.quantity}</td>
                     <td>₹${p.retail_price}</td>
                     <td>₹&nbsp;${rowTotal}</td>
