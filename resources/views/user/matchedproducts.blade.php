@@ -302,7 +302,13 @@
                         <!-- Types Filter -->
                             <h4 class="fw-bold mb-4">Types</h4>
                             @php
-                                $types = $products->pluck('type')->unique()->sort();
+    
+                                $types = $products->pluck('type')
+                                ->filter()
+                                ->map(fn($type) => strtolower(trim($type)))
+                                ->unique()
+                                ->sort()
+                                ->values();
                             @endphp
                             @foreach ($types as $type)
                                 <div class="form-check">
