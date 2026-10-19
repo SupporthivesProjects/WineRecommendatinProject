@@ -219,8 +219,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     
     //print product info
     Route::get('/admin/products/print-info',[AdminProductController::class, 'showPrintInfoFields'])->name('products.print-info');
-    
     Route::post('/admin/products/print-info/generate',[AdminProductController::class, 'generateProductInfoPdf'])->name('products.print-info.generate');
+    Route::post('/products/print-info/csv',[AdminProductController::class, 'exportProductInfoCsv'])->name('products.print-info.csv');
 
     // Products management
     Route::resource('products', AdminProductController::class);

@@ -74,43 +74,54 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
-
-                <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-primary">
+                </div>                
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        formaction="{{ route('admin.products.print-info.generate') }}"
+                    >
                         <i class="fe fe-file-text me-2"></i>
                         Generate PDF
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                        formaction="{{ route('admin.products.print-info.csv') }}"
+                    >
+                        <i class="fe fe-download me-2"></i>
+                        Export as CSV
                     </button>
                 </div>
             </form>
         </div>
-
     </div>
 </div>
 
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const checkboxes = document.querySelectorAll('.field-checkbox');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.field-checkbox');
 
-    document.getElementById('selectAllFields').addEventListener('click', function () {
-        checkboxes.forEach(checkbox => checkbox.checked = true);
-    });
+            document.getElementById('selectAllFields').addEventListener('click', function () {
+                checkboxes.forEach(checkbox => checkbox.checked = true);
+            });
 
-    document.getElementById('clearAllFields').addEventListener('click', function () {
-        checkboxes.forEach(checkbox => checkbox.checked = false);
-    });
+            document.getElementById('clearAllFields').addEventListener('click', function () {
+                checkboxes.forEach(checkbox => checkbox.checked = false);
+            });
 
-    document.getElementById('printInfoForm').addEventListener('submit', function (event) {
-        const selected = document.querySelectorAll('.field-checkbox:checked');
+            document.getElementById('printInfoForm').addEventListener('submit', function (event) {
+                const selected = document.querySelectorAll('.field-checkbox:checked');
 
-        if (selected.length === 0) {
-            event.preventDefault();
-            alert('Please select at least one field.');
-        }
-    });
-});
-</script>
+                if (selected.length === 0) {
+                    event.preventDefault();
+                    alert('Please select at least one field.');
+                }
+            });
+        });
+    </script>
 @endpush

@@ -1190,4 +1190,70 @@ class ProductController extends Controller
         return view('admin.enquiries', compact('enquiries'));
     }
 
+
+    
+    public function exportProductInfoCsv(Request $request)
+    {
+        // Reuse the complete field mapping from the PDF export.
+        $fieldLabels = $this->productInfoFields();
+
+        $validated = $request->validate([
+            'fields' => ['required', 'array', 'min:1'],
+            'fields.*' => [
+                'required',
+                'string',
+                \Illuminate\Validation\Rule::in(array_keys($fieldLabels)),
+            ],
+        ]);
+
+        $fields = $validated['fields'];
+
+        $products = Product::select($fields)
+            ->orderBy('wine_name', 'asc')
+            ->get();
+
+        $filename = 'product-information-' . now()->format('Y-m-d-His') . '.csv';
+
+        return response()->streamDownload(
+            function () use ($products, $fields, $fieldLabels) {
+                $output = fopen('php://output', 'w');
+
+                // UTF-8 BOM for better compatibility with Excel.
+                fprintf($output, "\xEF\xBB\xBF");
+
+                // CSV column headings.
+                fputcsv($output, array_map(
+                    fn ($field) => $fieldLabels[$field],
+                    $fields
+                ));
+
+                foreach ($products as $product) {
+                    $row = [];
+
+                    foreach ($fields as $field) {
+                        $value = $product->{$field};
+
+                        // Reduce the risk of CSV formula injection.
+                        if (
+                            is_string($value) &&
+                            preg_match('/^[\t\r\n ]*[=+\-@]/', $value)
+                        ) {
+                            $value = "'" . $value;
+                        }
+
+                        $row[] = $value;
+                    }
+
+                    fputcsv($output, $row);
+                }
+
+                fclose($output);
+            },
+            $filename,
+            ['Content-Type' => 'text/csv; charset=UTF-8']
+        );
+    }
+
+
+
 }
