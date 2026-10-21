@@ -1,15 +1,12 @@
-
-@extends('layouts.bootdashboard')
+@extends('layouts.user')
+@section('title', 'Dashboard')
 @section('admindashboardcontent')
 @push('styles')
-
     <style>
         html, body {
             overscroll-behavior: auto;       
             overflow-x: hidden !important;             
         }
-
-
         .card-title 
         {
             font-family: 'Cinzel Decorative', serif;
@@ -17,7 +14,6 @@
         #mystyle
         {
             font-family: 'Cinzel Decorative', serif;
-
         }
         #loader {
             position: fixed;
@@ -26,7 +22,6 @@
             transform: translate(-50%, -50%);
             z-index: 9999;
         }
-
         .spinner {
             border: 8px solid #f3f3f3;
             border-top: 8px solid #3498db;
@@ -35,19 +30,16 @@
             height: 50px;
             animation: spin 2s linear infinite;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         #question-container h5 {
             font-size: 1.6rem;
             color: var(--primary-color);
             font-weight: 600;
             margin-bottom: 1.5rem;
         }
-
         #question-container .form-check-input {
             width: 20px;
             height: 20px;
@@ -56,26 +48,21 @@
             margin-right: 10px;
             cursor: pointer;
         }
-    
         #question-container .form-check {
             margin-bottom: 1rem; 
         }
-
         #question-container .form-check-label {
             font-size: 1.1rem;
         }
-
         .move-arrow {
             animation: arrowBounce 1s infinite ease-in-out;
             margin-left: 5px;
         }
-
         @keyframes arrowBounce {
             0% { transform: translateX(0); }
             50% { transform: translateX(5px); }
             100% { transform: translateX(0); }
         }
-
         input[type="range"]::-webkit-slider-thumb {
             background: #007bff;
             border: none;
@@ -84,42 +71,30 @@
             border-radius: 50%;
             cursor: pointer;
         }
-
         .slider-container {
             position: relative;
             padding: 10px 0;
         }
-
-
         .emoji-icon {
             font-size: 3.0rem;
             line-height: 1;
         }
-
-       
-
         .option-text {
             font-size: 1rem;
             line-height: 1.2;
         }
-
         .modal.fade .modal-dialog {
             transition: transform 0.5s ease-out, opacity 0.5s ease-out;
             transform: translateY(-20px);
             opacity: 0;
         }
-
         .modal.fade.show .modal-dialog {
             transform: translateY(0);
             opacity: 1;
         }
-
         .btn-close.white-close {
             filter: invert(1) brightness(2);
         }
-
-
-
         .modal-content {
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -134,7 +109,6 @@
             overflow: hidden;
             transition: all 0.3s ease-in-out;
         }
-
         .lottie-container {
             /* background-color: #f0f4f8; */
             background-color: #acfbff;
@@ -145,24 +119,20 @@
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
         }
-
         #question-container h5 {
             font-weight: 600;
             font-size: 1.25rem;
             margin-bottom: 1rem;
             color: #333;
         }
-
         .btn {
             transition: all 0.2s ease-in-out;
             font-weight: 500;
         }
-
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         .questionnaire-label {
             position: absolute;
             top: 10px;
@@ -176,18 +146,14 @@
             z-index: 2;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-
         .card.custom-card {
             position: relative; 
             background-color:white;
-
         }
-
         #userdashboard
         {
             background-color:white;
         }
-
         .custom-card {
             border: none;
             border-radius: 12px;
@@ -195,56 +161,24 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             background-color: #fff; 
         }
-
         .custom-card:hover {
             transform: translateY(-5px); 
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
-
         #questionnaire_btn
         {
             background-color: #de9313 !important;
             border: 0px;
         }
-
         #landing-section 
         {
                 position: relative;
                 height: 100vh; 
-                /* background: url('{{ asset('images/Redlabel.jpg') }}') no-repeat center center/cover;
-                background-attachment: fixed; 
-                z-index: 1; */
-                
         }
-
-        #mainNavbar {
-            z-index: 999!important;
-            background-color: transparent;
-            position:fixed; 
-            padding: 20px 0;
-            width: 100%;
-            right: 0px;
-            color:white;
-            font-size : 1.0rem;
-            transition: background-color 0.3s ease;
-            border-radius: 0px;
-        }
-        
-
-        .scrolled
-        {
-            background-color: rgba(0, 0, 0, 0.5) !important;
-            color: black!important;
-            font-size : 1.0rem !important;
-            z-index:2000!important;
-        }
-
-       
         .enlarged-icon {
             width: 60px;
             height: auto;
         }
-
         .grayscale-img 
         {
             filter: grayscale(100%);
@@ -255,7 +189,6 @@
             height: 100vh;
             overflow: hidden;
         }
-
         .bg-video {
             position: absolute;
             top: 50%;
@@ -269,7 +202,6 @@
             object-fit: cover;
             filter: brightness(0.5);
         }
-
         .video-overlay {
             position: absolute;
             top: 0;
@@ -283,22 +215,18 @@
             padding: 2rem;
             z-index: 2;
         }
-
         .video-overlay .content h2 {
             font-family: 'Playfair Display', serif;
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
         .video-overlay .content p {
             font-size: 1.25rem;
         }
-
         .btn-close 
         {
             z-index: 1056 !important; /* Higher than modal backdrop */
         }
-
         .background-section 
         {
             position: relative;
@@ -306,10 +234,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            
+            overflow: hidden;   
         }
-
         .background-section::before {
             content: '';
             position: absolute;
@@ -334,9 +260,6 @@
                 background-color: rgba(0, 0, 0, 0.4); 
                 z-index: 0; 
         }
-
-       
-
         .questionnaire-image{
             width:100%;
             height:280px;
@@ -346,20 +269,16 @@
             background:#fff;
             transition:0.3s ease;
         }
-
         #explorebtn
         {
             background-color : #dacea1;
             color: #754638;
         }
-
         #explorebtn:hover 
         {
             background-color: #754638;
             color:#dacea1;
         }
-
-
         .emoji-img {
             width: 60px;
             height:60px;
@@ -367,7 +286,6 @@
             filter: invert(1) brightness(2);
 
         }
-
         .option-box {
             border-radius: 12px;
             /* height: 120px; */
@@ -376,26 +294,20 @@
             /* height: 120px; */
             text-align: center;
         }
-
         .option-box.active {
             border-color: #0d6efd;
             background-color: #e6f0ff;
         }
-
         .option-box:hover .emoji-img {
             transform: scale(1.1);
             filter: brightness(1.1); /* Example effect */
             color:white;
         }
-
         .option-box:hover {
             background-color: transparent !important;
             border-color: rgb(98,89,202) !important; /* or any static color */
             color: white !important;
         }
-
-
-
         @media (max-width: 768px) 
         {
             .background-section 
@@ -413,14 +325,12 @@
             {
                 color:black;
             }
-    
             .custom-card {
                 width: 100% !important;
                 max-width: 100% !important;
                 margin-left: auto;
                 margin-right: auto;
             }
-
             .navbar .navbar-toggler .navbar-toggler-icon:before 
             {
                 content: "\f479";
@@ -431,26 +341,21 @@
                 color: #ffffff!important;
                 inset-inline-start: 0;
             }
-
             .row.g-4 {
                 margin: 0 !important;
             }
-
             .container, .container-fluid {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
             }
-
             .card-img-top {
                 width: 100%;
                 height: auto;
             }
-
             .open-questionnaire-modal {
                 font-size: 1rem;
                 padding: 0.5rem 1rem;
             }
-
             .scrolled
             {
                 background-color: rgba(0, 0, 0,0.7) !important;
@@ -458,16 +363,13 @@
                 font-size : 1.0rem !important;
                 z-index: 1000;;
             }
-        
             .video-section {
                 position: relative;
                 min-height: 300px; 
                 overflow: hidden;
                 padding: 2rem 1rem;
                 background-color: #000; 
-            }
-
-            
+            }            
             .bg-video {
                 position: absolute;
                 width: 100%;
@@ -475,7 +377,6 @@
                 object-fit: cover;
                 z-index: 1;
             }
-
             .video-overlay {
                 position: relative;
                 z-index: 2;
@@ -486,13 +387,11 @@
                 justify-content: center;
                 padding: 1rem;
             }
-
             .video-overlay .content 
             {
                     position: relative;
                 z-index: 3;
             }
-
             #mainNavbar .container{
                 display:flex !important;
                 justify-content:flex-end !important;
@@ -500,129 +399,33 @@
                 position:relative;
                 padding-right:15px !important;
             }
-
-            #mainNavbar{
-                padding:15px 0;
-            }
-
-            .navbar-toggler{
-                margin-left:auto !important;
-                margin-right:0 !important;
-                z-index:9999;
-                border:1px solid rgba(255,255,255,0.7);
-                border-radius:10px;
-                padding:8px 10px;
-                background:rgba(0,0,0,0.25);
-                backdrop-filter:blur(8px);
-            }
-
-            .navbar-toggler:focus{
-                box-shadow:none !important;
-            }
-
-            .navbar .navbar-toggler .navbar-toggler-icon:before{
-                content:"\f479";
-                font-family:bootstrap-icons !important;
-                position:absolute;
-                right:10px;
-                font-size:1rem;
-                color:#ffffff !important;
-                inset-inline-start:0;
-            }
-
-            .navbar-collapse{
-                position:absolute;
-                top:70px;
-                right:15px;
-                width:260px;
-                background:rgba(0,0,0,0.82);
-                backdrop-filter:blur(12px);
-                padding:18px 20px;
-                border-radius:18px;
-                text-align:right;
-                z-index:9998;
-                border:1px solid rgba(255,255,255,0.08);
-                box-shadow:0 10px 35px rgba(0,0,0,0.35);
-            }
-
-            .navbar-nav{
-                width:100%;
-                align-items:flex-end;
-                gap:2px;
-            }
-
-            .navbar-nav .nav-item{
-                width:100%;
-            }
-
-            .navbar-nav .nav-link{
-                display:flex;
-                justify-content:flex-end;
-                align-items:center;
-                gap:8px;
-                text-align:right;
-                padding:10px 0;
-                font-size:15px;
-                font-weight:500;
-                color:#fff !important;
-                transition:0.25s ease;
-            }
-
-            .navbar-nav .nav-link:hover{
-                color:#e57351 !important;
-                transform:translateX(-3px);
-            }
-
-            .navbar-nav .nav-link i{
-                margin-right:0 !important;
-                font-size:14px;
-            }
-
             .video-overlay .content h2{
                 /* font-size:2.6rem;
                 line-height:1.2; */
                 display: none;
             }
-
             .video-overlay .content p{
                 /* font-size:1.2rem; */
                 display: none;
             }
-
             .mobile-logo{
                 height:auto;
                 margin-top:10px;
             }
-
             .questionnaire-image{
                 height:220px;
                 padding:15px;
             }
-
         }
-
-        
-        @media screen and (min-width: 700px) and (max-width: 900px){
-            .navbar-brand .mobile-logo{
-                height:400px !important;
-                width:auto !important;
-            }
-        }
-    
-
         /* Desktop */
         @media (min-width: 992px){
-
             .questionnaire-image{
                 height:320px;
                 padding:25px;
             }
-
         }
-
         /* Tablet */
         @media (max-width: 991px){
-
             .questionnaire-image{
                 height:260px;
                 padding:20px;
@@ -631,16 +434,13 @@
         }
 
         /* hero section slider */
-
         /* ============================
         WINE HERO IMAGE CAROUSEL
         ============================ */
-
         #landing-section {
             position: relative;
             min-height: 100vh;
         }
-
         .hero-carousel {
             position: relative;
             height: 100vh;
@@ -648,12 +448,10 @@
             overflow: hidden;
             background: #160d0b;
         }
-
         .hero-carousel .carousel-inner,
         .hero-carousel .carousel-item {
             height: 100%;
         }
-
         .hero-slide-image {
             display: block;
             width: 100%;
@@ -661,7 +459,6 @@
             object-fit: cover;
             object-position: center;
         }
-
         /* Dark overlay makes the text readable */
         .hero-slide-overlay {
             position: absolute;
@@ -673,7 +470,6 @@
                 rgba(12, 7, 6, 0.12) 100%
             );
         }
-
         .hero-slide-content {
             position: absolute;
             top: 50%;
@@ -684,7 +480,6 @@
             color: #fff;
             z-index: 2;
         }
-
         .hero-eyebrow {
             display: inline-block;
             margin-bottom: 22px;
@@ -693,7 +488,6 @@
             font-weight: 600;
             letter-spacing: 3px;
         }
-
         .hero-slide-content h1 {
             margin-bottom: 22px;
             color: #fff;
@@ -702,7 +496,6 @@
             font-weight: 600;
             line-height: 1.2;
         }
-
         .hero-slide-content p {
             max-width: 560px;
             margin-bottom: 32px;
@@ -710,7 +503,6 @@
             font-size: 1.15rem;
             line-height: 1.8;
         }
-
         .hero-cta {
             display: inline-flex;
             align-items: center;
@@ -724,35 +516,29 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
         .hero-cta:hover {
             border-color: #fff;
             background: transparent;
             color: #fff;
             transform: translateY(-3px);
         }
-
         .hero-cta span {
             font-size: 21px;
             transition: transform 0.3s ease;
         }
-
         .hero-cta:hover span {
             transform: translateX(5px);
         }
-
         /* Smooth image transition */
         .hero-carousel .carousel-item {
             transition: transform 0.8s ease-in-out,
                         opacity 0.8s ease-in-out;
         }
-
         /* Indicators */
         .hero-carousel .carousel-indicators {
             z-index: 5;
             margin-bottom: 30px;
         }
-
         .hero-carousel .carousel-indicators button {
             width: 32px;
             height: 4px;
@@ -761,19 +547,16 @@
             background-color: #fff;
             opacity: 0.5;
         }
-
         .hero-carousel .carousel-indicators button.active {
             background-color: #dacea1;
             opacity: 1;
         }
-
         /* Arrows */
         .hero-carousel .carousel-control-prev,
         .hero-carousel .carousel-control-next {
             z-index: 4;
             width: 7%;
         }
-
         /* Mobile layout */
         @media (max-width: 767px) {
             .hero-carousel {
@@ -785,94 +568,50 @@
             .hero-slide-image {
                 object-position: center;
             }
-
             .hero-slide-overlay {
                 background: rgba(12, 7, 6, 0.55);
             }
-
             .hero-slide-content {
                 left: 8%;
                 right: 8%;
                 transform: translateY(-35%);
                 text-align: center;
             }
-
             .hero-eyebrow {
                 font-size: 10px;
                 letter-spacing: 2px;
                 line-height: 1.8;
             }
-
             .hero-slide-content h1 {
                 font-size: clamp(2rem, 8vw, 3rem);
                 line-height: 1.3;
             }
-
             .hero-slide-content p {
                 font-size: 1rem;
                 line-height: 1.7;
             }
-
             .hero-cta {
                 justify-content: center;
                 padding: 13px 18px;
                 font-size: 13px;
             }
-
             .hero-carousel .carousel-control-prev,
             .hero-carousel .carousel-control-next {
                 width: 9%;
             }
         }
-
         @media (prefers-reduced-motion: reduce) {
             .hero-carousel .carousel-item {
                 transition: none;
             }
         }
-
-
-    
-
     </style>
 
 @endpush
         <!-- Start::app-content -->
         <!-- Landing Section -->
             <section id="landing-section">
-                <!-- Navbar (stays on top of landing image) -->
-                <nav id="mainNavbar" class="navbar navbar-expand-lg ">
-                    <div class="container ">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                            <!-- Left-aligned nav items -->
-                            <ul class="navbar-nav">
-                                <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link text-white">Dashboard</a></li>
-                                <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link text-white">Questionnaires</a></li>
-                                <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link text-white">Browse Wines</a></li>
-                                <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link text-white">Browse Cheeses</a></li>
-                                <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link text-white">Featured Products</a></li>
-                            </ul>
-
-                            <!-- Right-aligned logout button -->
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                                        @csrf
-                                        <a class="nav-link text-white d-flex align-items-center"  href="{{ route('logout') }}" 
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
-                                        </a>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
                <!-- Slider -->
-                
                 <!-- Hero Image Carousel -->
                 <section id="wineHeroCarousel"
                         class="carousel slide carousel-fade hero-carousel"
