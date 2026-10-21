@@ -260,39 +260,182 @@
 </style>
 <style>
     #mainNavbar {
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        background-color: transparent;
+        position: fixed;
+        top: 10px;
+        left: 0;
+        right: 0;
+        border-radius:0px;
+        width: 100%;
+        z-index: 1050;
+        padding: 0px 24px;
+        background: transparent;
+        box-sizing: border-box;
+        transition: background-color 0.3s ease;
+    }
+
+    #mainNavbar.scrolled {
+        background-color: rgba(45, 6, 6, 0.9) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #mainNavbar .navbar-inner {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        width: 100%;
+        max-width: 100%;
+        align-items: center;
+    }
+
+    /* Logo on the left */
+    #mainNavbar .navbar-logo {
+        justify-self: start;
+        display: flex;
+        align-items: center;
+    }
+
+    #mainNavbar .navbar-logo img {
+        display: block;
+        max-height: 80px;
+        max-width: 190px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    /* Links centered */
+    #mainNavbar .navbar-collapse {
+        grid-column: 2;
+        justify-content: center;
+    }
+
+    #mainNavbar .main-nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
     }
 
     #mainNavbar .nav-link {
         color: #fff !important;
+        position: relative;
+        white-space: nowrap;
     }
 
-    /* Black strip after scrolling */
-    #mainNavbar.scrolled {
-        background-color: #000;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* Active page underline */
+    #mainNavbar .nav-link.active {
+        display: inline-block;
+        width: fit-content;
+        background: transparent !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+    #mainNavbar .nav-link.active::after {
+        content: "";
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 2px;
+        height: 2px;
+        background: #fff;
     }
 
-    /* Hamburger stays on the right */
-    #mainNavbar .navbar-toggler {
-        margin-left: auto;
-        border-color: rgba(255, 255, 255, 0.7);
+    /* Logout on the right */
+    #mainNavbar .desktop-logout {
+        grid-column: 3;
+        justify-self: end;
     }
 
-    /* Black dropdown menu on smaller screens */
+    #mainNavbar .logout-link {
+        background: none;
+        border: 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    #mainNavbar .logout-mobile {
+        display: none;
+    }
+
+    /* Mobile layout */
     @media (max-width: 991.98px) {
-        #mainNavbar .navbar-collapse {
-            background-color: #000;
-            padding: 12px 16px;
-            margin-top: 10px;
+        #mainNavbar .navbar-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
 
-        #mainNavbar .navbar-nav .nav-link {
-            color: #fff !important;
+        #mainNavbar .navbar-logo {
+            margin-right: auto;
+        }
+
+        #mainNavbar .navbar-toggler {
+            order: 2;
+            margin-left: auto;
+        }
+
+        #mainNavbar .navbar-collapse {
+            flex-basis: 100%;
+            order: 3;
+            background: transparent;
+            padding: 12px 16px;
+        }
+
+        #mainNavbar .main-nav {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+        }
+
+        #mainNavbar .nav-link {
             padding: 10px 0;
         }
+
+        #mainNavbar .desktop-logout {
+            display: none;
+        }
+
+        #mainNavbar .logout-mobile {
+            display: block;
+        }
     }
+
+    #mainNavbar .navbar-toggler {
+        border: 0;
+        box-shadow: none;
+        padding: 8px;
+    }
+
+    #mainNavbar .hamburger-icon {
+        width: 26px;
+        height: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    #mainNavbar .hamburger-icon span {
+        display: block;
+        width: 26px;
+        height: 2px;
+        background: #fff;
+        border-radius: 2px;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    /* Turn hamburger into a cross when menu is open */
+    #mainNavbar .navbar-toggler[aria-expanded="true"] .hamburger-icon span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+
+    #mainNavbar .navbar-toggler[aria-expanded="true"] .hamburger-icon span:nth-child(2) {
+        opacity: 0;
+    }
+
+    #mainNavbar .navbar-toggler[aria-expanded="true"] .hamburger-icon span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+
 </style>
 
 @stack('styles')

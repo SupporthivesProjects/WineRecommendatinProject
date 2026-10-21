@@ -48,27 +48,9 @@
             transform: translateY(-4px);
         }
 
-        .transparent-navbar {
-            background: transparent;
-            position: fixed;
-            top: 20px;
-            width: 101%;
-            z-index: 10;
-            padding: 20px 0;
-        }
-        
-        .navbar-dark .nav-link {
-            font-size: 15px !important;
-        }
-        
-        .scrolled {
-            background-color: rgba(0, 0, 0, 0.7) !important;
-            border-radius: 0;
-        }
-
         .parallax-container {
             position: relative;
-            height: 70vh;
+            height: 100vh;
             overflow: hidden;
         }
         .parallax-container::before {
@@ -108,11 +90,6 @@
             background: #fff;
             padding: 100px 20px;
             min-height: 100vh;
-        }
-        
-            
-        .navbar-dark .navbar-toggler {
-            border: 0px solid var(--white-1);
         }
 
     </style>
