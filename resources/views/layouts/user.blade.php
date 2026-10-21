@@ -1,0 +1,497 @@
+@include('partials.mainhead')
+<link rel="stylesheet" href="{{ asset('assets/libs/jsvectormap/css/jsvectormap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+ <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Sweet Alert  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    /* ================================
+        DataTables Global Styling
+        ================================ */
+
+        .dataTables_wrapper {
+            width: 100%;
+        }
+
+        /* ---------- TOP ROW ---------- */
+
+        .dt-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .dt-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .dt-search {
+            margin-left: auto;
+        }
+
+        .dt-search .dataTables_filter {
+            margin: 0;
+        }
+
+        .dt-search .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        .dt-search input {
+            width: 320px !important;
+            height: 38px;
+            margin-left: 0 !important;
+            padding: 8px 14px;
+            border: 1px solid #e1e5ef;
+            border-radius: 6px;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .dt-search input:focus {
+            border-color: #7367f0;
+            box-shadow: 0 0 0 2px rgba(115, 103, 240, 0.08);
+        }
+
+        /* ---------- SHOW ENTRIES ---------- */
+
+        .dt-left .dataTables_length {
+            margin: 0;
+        }
+
+        .dataTables_length label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .dataTables_length select {
+            min-width: 75px;
+            height: 38px;
+            padding: 5px 28px 5px 10px;
+            border: 1px solid #e1e5ef;
+            border-radius: 6px;
+            background-color: #fff;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* ---------- BUTTONS ---------- */
+
+        .dt-left .dt-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dt-left .dt-button {
+            margin: 0 !important;
+            padding: 8px 14px !important;
+            border: none !important;
+            border-radius: 6px !important;
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+        }
+
+        /* ---------- TOP PAGINATION ---------- */
+
+        .dt-top-pagination {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .dt-top-pagination .dataTables_paginate {
+            margin: 0;
+        }
+
+        /* ---------- BOTTOM ROW ---------- */
+
+        .dt-bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .dt-info {
+            font-size: 13px;
+        }
+
+        .dt-bottom-pagination {
+            margin-left: auto;
+        }
+
+        .dt-bottom-pagination .dataTables_paginate {
+            margin: 0;
+        }
+
+        /* ---------- PAGINATION ---------- */
+
+        .dataTables_paginate {
+            display: flex;
+            align-items: center;
+        }
+
+        .dataTables_paginate .paginate_button {
+            min-width: 38px;
+            height: 36px;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px !important;
+            margin: 0 2px !important;
+            border: 1px solid #e1e5ef !important;
+            border-radius: 5px !important;
+            background: #fff !important;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+
+        .dataTables_paginate .paginate_button:hover {
+            background: #f4f3ff !important;
+            border-color: #7367f0 !important;
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background: #7367f0 !important;
+            border-color: #7367f0 !important;
+            color: #fff !important;
+        }
+
+        .dataTables_paginate .paginate_button.disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* ---------- TABLE ---------- */
+
+        .dataTables_wrapper table {
+            width: 100% !important;
+        }
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 768px) {
+
+            .dt-top-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dt-left {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .dt-left .dt-buttons {
+                flex-wrap: wrap;
+            }
+
+            .dt-search {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .dt-search input {
+                width: 100% !important;
+            }
+
+            .dt-top-pagination {
+                justify-content: center;
+            }
+
+            .dt-bottom-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .dt-bottom-pagination {
+                margin-left: 0;
+            }
+        }
+
+        .enquiry-notification-dot {
+            position: absolute;
+            top: 32px;
+            right: 19px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #dc3545;
+        }
+
+        .enquiry-notification-dot.blinking {
+            animation: enquiryBlink 1s infinite;
+        }
+
+        .enquiry-notification-dot.in-progress {
+            background: #198754;
+        }
+
+        @keyframes enquiryBlink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+
+</style>
+<style>
+    #mainNavbar {
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        background-color: transparent;
+    }
+
+    #mainNavbar .nav-link {
+        color: #fff !important;
+    }
+
+    /* Black strip after scrolling */
+    #mainNavbar.scrolled {
+        background-color: #000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Hamburger stays on the right */
+    #mainNavbar .navbar-toggler {
+        margin-left: auto;
+        border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Black dropdown menu on smaller screens */
+    @media (max-width: 991.98px) {
+        #mainNavbar .navbar-collapse {
+            background-color: #000;
+            padding: 12px 16px;
+            margin-top: 10px;
+        }
+
+        #mainNavbar .navbar-nav .nav-link {
+            color: #fff !important;
+            padding: 10px 0;
+        }
+    }
+</style>
+
+@stack('styles')
+</head>
+
+<body>
+
+    @include("partials/switcher")
+    @include("partials/loader")
+
+    <div class="page">
+        @include('partials.user-header')
+         @yield('admindashboardcontent')
+
+        @include("partials/headersearch_modal")
+        @include("partials/footer")
+        @include("partials/right-sidebar")
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <!-- jQuery UI CSS and JS (provides the slider) -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+        @include("partials/commonjs")
+
+    <!-- JSVector Maps JS -->
+    <script src="{{ asset('assets/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>    
+
+    <!-- JSVector Maps MapsJS -->
+    <script src="{{ asset('assets/libs/jsvectormap/maps/world-merc.js') }}"></script>
+
+    <!-- Apex Charts JS -->
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+
+    <!-- Main-Dashboard -->
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+
+     <!-- Chartjs Chart JS -->
+     <script src="{{ asset('assets/libs/chart.js/chart.min.js') }}"></script>
+
+    <!-- Imternal Chartjs JS -->
+    <script src="{{ asset('assets/js/chartjs-charts.js') }}"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+    <!-- Datatables Cdn -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- Internal Datatables JS -->
+    <script src="{{ asset('assets/js/datatables.js') }}"></script>
+
+     <!-- Toastr JS -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+     <script>
+        function playTak() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const buf = ctx.createBuffer(1, ctx.sampleRate * 0.04, ctx.sampleRate);
+            const data = buf.getChannelData(0);
+            for (let i = 0; i < data.length; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 8);
+            }
+            const src = ctx.createBufferSource();
+            src.buffer = buf;
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.10, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+            src.connect(gain);
+            gain.connect(ctx.destination);
+            src.start();
+        }
+
+        $(document).on('click', 'button, a, .btn, input, select, textarea, label, td, th, .nav-link, .dropdown-item, .form-check-input, .form-select, .card, .list-group-item, .badge, .close, .alert, [data-bs-toggle], [role="button"], [tabindex]', function () {
+            playTak();
+        });
+    </script>
+
+
+
+     
+    @stack('scripts')
+
+
+    @include("partials/custom_switcherjs")
+
+    <!-- Custom JS -->
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+        <!-- Your existing content -->
+
+        @if(auth()->check() && auth()->user()->role === 'user')
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const sidebarToggle = document.querySelector('.sidemenu-toggle');
+                    if (sidebarToggle) {
+                        sidebarToggle.click(); // Auto-click to hide the sidebar
+                    }
+                });
+            </script>
+        @endif
+
+
+        <script>
+            $(document).ready(function () {
+
+                $.extend(true, $.fn.dataTable.defaults, {
+                    pageLength: 10,
+
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+
+                    dom:
+                        '<"row mb-3"' +
+                            '<"col-md-6"l>' +
+                            '<"col-md-6 d-flex justify-content-end"p>' +
+                        '>' +
+                        't' +
+                        '<"row mt-3"' +
+                            '<"col-md-6"i>' +
+                            '<"col-md-6 d-flex justify-content-end"p>' +
+                        '>',
+
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_",
+                    }
+                });
+
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('table').each(function () {
+
+                    if ($.fn.DataTable.isDataTable(this)) {
+                        return;
+                    }
+
+                    $(this).DataTable({
+                        searching: true,
+                        lengthChange: true,
+                        pageLength: 10,
+                        lengthMenu: [10, 25, 50, 100],
+                        stateSave: true,
+                        dom: 'lBfrtip'
+                    });
+
+                });
+
+                });
+        </script>
+
+        <!-- keep session live -->
+        @auth
+        <script>
+            (function () {
+                const keepAliveUrl = @json(route('session.keepalive'));
+
+                setInterval(function () {
+                    fetch(keepAliveUrl, {
+                        method: 'GET',
+                        credentials: 'same-origin',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    }).catch(function (error) {
+                        console.warn('Session keepalive request failed:', error);
+                    });
+                }, 5 * 60 * 1000);
+            })();
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const navbar = document.getElementById('mainNavbar');
+
+                if (!navbar) return;
+
+                function updateNavbar() {
+                    navbar.classList.toggle('scrolled', window.scrollY > 30);
+                }
+
+                window.addEventListener('scroll', updateNavbar, { passive: true });
+                updateNavbar();
+            });
+        </script>
+        @endauth
+
+</body>
+</html>
