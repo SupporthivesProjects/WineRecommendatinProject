@@ -1,4 +1,5 @@
-@extends('layouts.bootdashboard')
+@extends('layouts.user')
+@section('title', 'Questionnaires')
 @section('admindashboardcontent')
 @push('styles')
 
@@ -10,9 +11,7 @@
         #mystyle
         {
             font-family: 'Cinzel Decorative', serif;
-
         }
-
         .hero-section 
         {
             height: 100vh;
@@ -27,19 +26,16 @@
             position: relative;
             z-index: 1;
         }
-
         .hero-text 
         {
             text-align: right;          /* Right-align text */
             width: 100%;
             padding-right: 5%; 
         }
-
         .hero-text h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
         .transparent-navbar {
             background: transparent;
             position: fixed;
@@ -62,7 +58,6 @@
             overflow: hidden;
             height: 100%;
         }
-
         .image-card img {
             width: 100%;
             height: 100%;
@@ -70,7 +65,6 @@
             display: block;
             transition: transform 0.5s ease;
         }
-
         .overlay {
             position: absolute;
             top: 0;
@@ -83,65 +77,53 @@
             justify-content: center;
             transition: background-color 0.5s ease;
         }
-
         .overlay-text {
             color: white;
             text-align: center;
             transition: all 0.5s ease;
         }
-
         .overlay-text .hover-text {
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease;
         }
-
         .image-card.hover img {
             transform: scale(1.05);
         }
-
         .image-card.hover .overlay {
             background-color: rgba(0,0,0,0.9);
         }
-
         .image-card.hover .overlay-text .default-text {
             display: none;
         }
-
         .image-card.hover .overlay-text .hover-text {
             display: block;
             opacity: 1;
         }
-
         #question-container h5 {
             font-size: 1.6rem;
             color: var(--primary-color);
             font-weight: 600;
             margin-bottom: 1.5rem;
         }
-
         #question-container .form-check-input {
             width: 20px;
             height: 20px;
-            border: 2px solid #6c757d; /* Bootstrap's secondary color or use your own */
+            border: 2px solid #6c757d; 
             border-radius: 50%;
             margin-right: 10px;
             cursor: pointer;
         }
-    
         #question-container .form-check {
             margin-bottom: 1rem; 
         }
-
         #question-container .form-check-label {
             font-size: 1.1rem;
         }
-
         .move-arrow {
             animation: arrowBounce 1s infinite ease-in-out;
             margin-left: 5px;
         }
-
         @keyframes arrowBounce {
             0% { transform: translateX(0); }
             50% { transform: translateX(5px); }
@@ -336,39 +318,7 @@
 
 @endpush
 
-    <!-- Transparent Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
-        <div class="container d-flex align-items-center">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-between w-100" id="navbarNav">
-                <!-- Nav links (left aligned) -->
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
-                    <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
-                    <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
-                    <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-                </ul>
-                <!-- Logout (right aligned) -->
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                            @csrf
-                            <a class="nav-link d-flex align-items-center" href="{{ route('logout') }}" 
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fe fe-power fs-16 align-middle me-2"></i> {{ __('Log Out') }}
-                            </a>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
+   
 
     <!-- header section -->
     <section class="parallax-container">
@@ -1444,19 +1394,6 @@
                 }
             });
     </script>
-
-    <script>
-        window.addEventListener("scroll", function () {
-            const navbar = document.getElementById("mainNavbar");
-            if (window.scrollY > 50) 
-            {
-                navbar.classList.add("scrolled"); 
-            } else {
-                navbar.classList.remove("scrolled");
-            }
-        });
-    </script>
-
     <script>
         document.addEventListener("scroll", function () {
             const scrolled = window.scrollY;
