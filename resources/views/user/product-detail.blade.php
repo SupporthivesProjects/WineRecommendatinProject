@@ -1,4 +1,5 @@
 @extends('layouts.bootdashboard')
+@section('title', 'Products')
 @section('admindashboardcontent')
     <style>
         /* Star Rating Styles */

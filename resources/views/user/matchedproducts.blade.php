@@ -1,4 +1,5 @@
-@extends('layouts.bootdashboard')
+@extends('layouts.user')
+@section('title', 'Questionnaire Responses')
 @section('admindashboardcontent')
 @push('styles')
 
@@ -22,7 +23,6 @@
             z-index: 10; 
 
         }
-
         .hero-section 
         {
             height: 70vh;
@@ -37,34 +37,28 @@
             position: relative;
             z-index: 1;
         }
-
         .hero-text 
         {
             text-align: right;          /* Right-align text */
             width: 100%;
             padding-right: 5%; 
         }
-
         .hero-text h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
         .wine-card {
             border-radius: 0 !important; 
             transition: box-shadow 0.3s ease, transform 0.3s ease;
             box-shadow: none;
         }
-
         .wine-card:hover {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Floating effect */
             transform: translateY(-4px);
         }
-
         .filter-group {
             margin-bottom: 2rem;
         }
-
         .filter-title {
             font-size: 1.25rem;
             font-weight: 600;
@@ -72,16 +66,13 @@
             border-bottom: 1px solid #ddd;
             padding-bottom: 0.5rem;
         }
-
         .form-check {
             margin-bottom: 0.75rem;
         }
-
         .form-check-input:checked {
             background-color: #8b0000; /* Deep wine red */
             border-color: #8b0000;
         }
-
         .form-check-label {
             font-size: 0.95rem;
             color: #444;
@@ -90,25 +81,7 @@
         .form-check-input:focus {
             box-shadow: 0 0 0 0.1rem rgba(139, 0, 0, 0.25);
         }
-        
-
-        .transparent-navbar {
-            background: transparent;
-            position: fixed;
-            top:20px;
-            width: 100%;
-            z-index: 10;
-            padding: 20px 0;
-        }
-        .navbar-dark .nav-link {
-            /* color: #a50908!important; */
-            font-size:15px!important;
-        }
-        .scrolled
-        {
-            background-color: rgba(0, 0, 0,0.7) !important;
-            border-radius:0px;
-        }
+    
         .input_range_wrapper {
             position: relative;
             width: 100%;
@@ -126,7 +99,6 @@
             height: 3px;
             background: #E90C04;
         }
-
         .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             pointer-events: auto;
@@ -136,11 +108,6 @@
             border-radius: 50%;
             margin-top: -7.5px;
         }
-
-    </style>
-
-    <style>
-
         .card.custom-card.wine-card .image-wrapper img.card-img-top {
             object-fit: contain;
             width: 308px;
@@ -152,8 +119,6 @@
         .image-wrapper {
             padding: 10px;
         }
-
-
         /* Floating cart icon */
         .floating-cart {
             position: fixed;
@@ -178,11 +143,9 @@
             color: #fff;
             transform: scale(1.08);
         }
-
         .floating-cart i {
             font-size: 29px;
         }
-
         /* Cart item count */
         .floating-cart-count {
             position: absolute;
@@ -201,12 +164,10 @@
             font-size: 12px;
             font-weight: 700;
         }
-
         /* Gentle animation only when the cart has items */
         .floating-cart.has-items {
             animation: cartFloat 2.5s ease-in-out infinite;
         }
-
         @keyframes cartFloat {
             0%, 100% {
                 transform: translateY(0);
@@ -215,7 +176,6 @@
                 transform: translateY(-6px);
             }
         }
-
         @media (max-width: 576px) {
             .floating-cart {
                 width: 58px;
@@ -228,41 +188,8 @@
                 font-size: 25px;
             }
         }
-
-
-
     </style>
 @endpush
-
-    <!-- Transparent Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar scrolled">
-        <div class="container">
-            <a class="navbar-brand text-white" href="#">
-                <lottie-player 
-                    src="{{ asset('Lottie/Animation - 1745878648192.json') }}"
-                    background="transparent" 
-                    speed="1"  
-                    style="width: 40px; height: 40px;" 
-                    loop 
-                    autoplay>
-                </lottie-player>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
-                    <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a></li>
-                    <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li>
-                    <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured Products</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cart') }}" class="nav-link">View Cart(<span id="cart-count">{{ count($cart ?? []) }}</span>)</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- <section class="hero-section">
         <div class="hero-text">
         <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
@@ -278,10 +205,10 @@
     @endphp
 
     <a href="{{ route('user.cart') }}"
-    id="floating-cart"
-    class="floating-cart {{ $cartCount > 0 ? 'has-items' : '' }}"
-    aria-label="View shopping cart"
-    title="View Cart">
+        id="floating-cart"
+        class="floating-cart {{ $cartCount > 0 ? 'has-items' : '' }}"
+        aria-label="View shopping cart"
+        title="View Cart">
 
         <i class="fas fa-shopping-cart"></i>
 
@@ -292,7 +219,7 @@
 
 
     
-    <div class="pt-5" id="matchedproducts">
+    <div class="pt-5 mt-5" id="matchedproducts">
         <div class="container my-5">
             <!-- Start::row-6 -->
                 <div class="row">
