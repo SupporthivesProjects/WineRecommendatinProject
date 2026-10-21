@@ -1,9 +1,10 @@
-@extends('layouts.bootdashboard')
+@extends('layouts.user')
+@section('title', 'My Cheese')
 @section('admindashboardcontent')
     @push('styles')
         <style>
             .cheese-image {
-                height: 400px;
+                height: 470px;
                 object-fit: cover;
                 width: 100%;
                 border-radius: 8px;
@@ -143,20 +144,15 @@
             .wine-carousel .card-body .d-flex {
                 margin-top: auto;
             }
-
-
-
         </style>
-        
-        
     @endpush
 
-    <div class="container py-5">
-        <a href="{{ route('user.cheeses') }}" class="back-link">
+    <div class="container py-5 mt-5">
+        <!-- <a href="{{ route('user.cheeses') }}" class="back-link">
             <i class="fe fe-arrow-left me-2"></i> Back to Cheeses
-        </a>
+        </a> -->
 
-        <div class="row g-4">
+        <div class="row g-4 mt-4">
             <!-- Cheese Image -->
             <div class="col-lg-6">
                 <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
@@ -231,7 +227,7 @@
                     <h3 class="mb-4">Wines That Pair Well With {{ $cheese->name }}</h3>
                     <div class="row g-4">
                         @foreach ($pairedWines as $wine)
-                            <div class="col-md-3 mb-4">
+                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
                                 <div class="card h-100">
                                 <div class="wine-image-wrapper">
                                     <img src="{{ asset('storage/' . $wine->image1) }}"

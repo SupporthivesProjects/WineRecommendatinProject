@@ -1,4 +1,5 @@
 @extends('layouts.user')
+@section('title', 'My Cart')
 @section('admindashboardcontent')
     @push('styles')
         <style>
