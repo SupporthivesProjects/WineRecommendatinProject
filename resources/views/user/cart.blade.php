@@ -1,4 +1,4 @@
-@extends('layouts.bootdashboard')
+@extends('layouts.user')
 @section('admindashboardcontent')
     @push('styles')
         <style>
@@ -7,7 +7,7 @@
             }
 
             .hero-section {
-                height: 50vh;
+                height: 70vh;
                 background-image: url('{{ asset('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') }}');
                 background-size: cover;
                 background-position: center;
@@ -138,10 +138,7 @@
                 padding: 20px 0;
             }
 
-            .scrolled {
-                background-color: rgba(0, 0, 0, 0.7) !important;
-                border-radius: 0px;
-            }
+          
 
             @media (max-width: 768px) 
             {
@@ -183,31 +180,6 @@
         </style>
     @endpush
 
-    <!-- Transparent Navbar -->
-    <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark fixed-top transparent-navbar">
-        <div class="container">
-            <a class="navbar-brand text-white" href="#">
-                <lottie-player src="{{ asset('Lottie/Animation - 1745878648192.json') }}" background="transparent"
-                    speed="1" style="width: 40px; height: 40px;" loop autoplay>
-                </lottie-player>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a href="{{ route('user.dashboard') }}" class="nav-link">Dashboard</a></li>
-                    <li class="nav-item"><a href="{{ route('user.showQuestionnaire') }}" class="nav-link">Questionnaires</a>
-                    </li>
-                    <li class="nav-item"><a href="{{ route('user.products') }}" class="nav-link">Browse Wines</a></li>
-                    <li class="nav-item"><a href="{{ route('user.cheeses') }}" class="nav-link">Browse Cheeses</a></li> 
-                    <li class="nav-item"><a href="{{ route('user.featuredproducts') }}" class="nav-link">Featured
-                            Products</a></li>
-                    <!-- Removed the matched products link since the route doesn't exist -->
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <section class="hero-section">
         <div class="hero-text">

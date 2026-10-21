@@ -1,4 +1,5 @@
 @extends('layouts.user')
+@section('title', 'Browse Cheeses')
 @section('admindashboardcontent')
 @push('styles')
     <style>
