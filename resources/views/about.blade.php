@@ -354,7 +354,7 @@
 
     <div class="landing-page-wrapper">
        <!-- app-header -->
-       <header class="app-header">
+        <header class="app-header">
             <!-- Start::main-header-container -->
             <div class="main-header-container container-fluid">
                 <!-- Start::header-content-left -->
@@ -397,7 +397,7 @@
             </div>
             <!-- End::main-header-container -->
         </header>
-    <!-- /app-header -->
+        <!-- /app-header -->
 
         <!-- Start::app-sidebar -->
         <aside class="app-sidebar" id="sidebar" style="background-color:white;">
@@ -663,29 +663,7 @@
             toastr.error("{{ session('error') }}");
         @endif
     </script>
-    <script>
-        document.addEventListener("scroll", () => {
-            const logo = document.getElementById("header_logo_desktop");
-            const section2 = document.querySelector("#aboutus"); // change to your section 2 id
-
-            const section2Top = section2.offsetTop;
-
-            // if (window.scrollY >= section2Top) {
-            //     logo.style.height = "55px"; // shrink
-            // } else {
-            //     logo.style.height = "90px"; // expand back
-            // }
-
-            if (window.scrollY >= 300) {
-                logo.style.height = "45px"; // shrink
-            } else {
-                logo.style.height = "70px"; // expand back
-            }
-
-
-        });
-
-    </script>
+    
     <script>
         
         document.addEventListener('DOMContentLoaded', function () {
@@ -721,23 +699,30 @@
 
     </script>    
     <script>
-            document.addEventListener("scroll", () => {
-                const logo = document.getElementById("header_logo_desktop");
-                const logotwo = document.getElementById("header_logo_white");
-                const section2 = document.querySelector("#products"); // change to your section 2 id
-                const section2Top = section2.offsetTop;
-                if (window.scrollY >= 100) 
-                {
-                    logo.style.height = "45px"; // shrink
-                    logotwo.style.height="45px";
-                } else {
-                    logo.style.height = "70px"; // expand back
-                    logotwo.style.height="70px";
-                }
+    document.addEventListener("DOMContentLoaded", function () {
+        const logo = document.getElementById("header_logo_desktop");
+        const logoTwo = document.getElementById("header_logo_white");
 
+        if (!logo) {
+            console.error("Desktop logo element not found.");
+            return;
+        }
 
-            });
-    </script>
+        function updateLogoSize() {
+            const height = window.scrollY >= 100 ? "45px" : "70px";
+
+            logo.style.height = height;
+
+            if (logoTwo) {
+                logoTwo.style.height = height;
+            }
+        }
+
+        window.addEventListener("scroll", updateLogoSize, { passive: true });
+
+        updateLogoSize();
+    });
+</script>
 
     
 
