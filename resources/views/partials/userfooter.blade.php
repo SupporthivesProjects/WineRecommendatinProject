@@ -4,7 +4,7 @@
         <!-- Centered Logo -->
         <div class="mb-3">
             <img src="{{ asset('images/logoredwhite.jpg') }}" alt="Supporthives Logo"
-                 style="max-height: 80px; width: auto;">
+                 style="max-height: 150px; width: auto;">
         </div>
     </div>
 </footer>

@@ -398,6 +398,10 @@
         #mainNavbar .logout-mobile {
             display: block;
         }
+        .userfooter .container img {
+            height: 80px;
+            width: auto;
+        }
     }
 
     #mainNavbar .navbar-toggler {
