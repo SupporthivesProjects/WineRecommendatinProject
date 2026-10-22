@@ -10,7 +10,4 @@
         </div>
     </div>
 </footer>
-
-                
-            </footer>
 <!-- Footer End -->

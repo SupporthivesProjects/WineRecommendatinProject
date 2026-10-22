@@ -261,7 +261,7 @@
 <style>
     #mainNavbar {
         position: fixed;
-        top: 10px;
+        top: 0px;
         left: 0;
         right: 0;
         border-radius:0px;
@@ -435,6 +435,18 @@
     #mainNavbar .navbar-toggler[aria-expanded="true"] .hamburger-icon span:nth-child(3) {
         transform: translateY(-9px) rotate(-45deg);
     }
+    .userfooter .container {
+        padding-inline-start: 12px !important;
+        padding-inline-end: 12px !important;
+        text-align: center;
+    }
+
+    .userfooter .container img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
 
 </style>
 
@@ -451,7 +463,7 @@
          @yield('admindashboardcontent')
 
         @include("partials/headersearch_modal")
-        @include("partials/footer")
+        @include("partials/userfooter")
         @include("partials/right-sidebar")
     </div>
 

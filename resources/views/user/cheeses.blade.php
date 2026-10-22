@@ -51,7 +51,7 @@
 
         .parallax-container {
             position: relative;
-            height: 100vh;
+            height: 80vh;
             overflow: hidden;
         }
         .parallax-container::before {

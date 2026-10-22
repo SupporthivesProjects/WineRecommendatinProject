@@ -91,7 +91,7 @@
         .parallax-container 
         {
             position: relative;
-            height: 70vh;
+            height: 80vh;
             overflow: hidden;
         }
 
