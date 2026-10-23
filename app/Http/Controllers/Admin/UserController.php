@@ -169,7 +169,7 @@ class UserController extends Controller
             'store_id' => ['nullable', 'exists:stores,id'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable',  Password::defaults()],
-            'role' => ['required', 'in:admin,store_manager,user,main_manager'],
+            'role' => ['required', 'in:admin,store_manager,user,main_manager,sub_admin'],
             'status' => ['required', 'in:active,inactive'],
         ]);
 
