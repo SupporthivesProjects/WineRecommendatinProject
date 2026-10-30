@@ -397,7 +397,7 @@
 
 
     <!-- JavaScript for Charts and Modal Functionality -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1"></script>
     <script>
         // Tab persistence using localStorage
         document.addEventListener('DOMContentLoaded', function() {

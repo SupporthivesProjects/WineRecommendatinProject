@@ -1,9 +1,13 @@
 @include('partials.mainhead')
-<link rel="stylesheet" href="{{ asset('assets/libs/jsvectormap/css/jsvectormap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}">
+@php
+    // Only load the heavy libraries on pages that use them
+    $uses = \App\View\PageLibraries::detect($__env->yieldContent('admindashboardcontent').$__env->yieldPushContent('scripts'));
+@endphp
+@if ($uses['tables'])
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+@endif
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
 <!-- Sweet Alert  -->
@@ -473,33 +477,34 @@
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
+    @if ($uses['jqueryui'])
     <!-- jQuery UI CSS and JS (provides the slider) -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    @endif
 
         @include("partials/commonjs")
 
-    <!-- JSVector Maps JS -->
-    <script src="{{ asset('assets/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>    
-
-    <!-- JSVector Maps MapsJS -->
-    <script src="{{ asset('assets/libs/jsvectormap/maps/world-merc.js') }}"></script>
-
+    @if ($uses['apexcharts'])
     <!-- Apex Charts JS -->
     <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
     <!-- Main-Dashboard -->
     <script src="{{ asset('assets/js/index.js') }}"></script>
+    @endif
 
+    @if ($uses['chartjs'])
      <!-- Chartjs Chart JS -->
      <script src="{{ asset('assets/libs/chart.js/chart.min.js') }}"></script>
 
     <!-- Imternal Chartjs JS -->
     <script src="{{ asset('assets/js/chartjs-charts.js') }}"></script>
+    @endif
 
     <!-- Custom JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
 
+    @if ($uses['tables'])
     <!-- Datatables Cdn -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
@@ -513,9 +518,10 @@
 
     <!-- Internal Datatables JS -->
     <script src="{{ asset('assets/js/datatables.js') }}"></script>
+    @endif
 
-     <!-- Toastr JS -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+     <!-- Toastr JS (2.1.3 is what the old unversioned "latest" URL served) -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
      <script>
         function playTak() {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -564,6 +570,7 @@
         @endif
 
 
+        @if ($uses['tables'])
         <script>
             $(document).ready(function () {
 
@@ -615,6 +622,7 @@
 
                 });
         </script>
+        @endif
 
         <!-- keep session live -->
         @auth
