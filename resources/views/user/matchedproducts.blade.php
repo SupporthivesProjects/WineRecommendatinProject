@@ -676,7 +676,9 @@
                 let vintageMatch = selectedYears.length ? selectedYears.includes(vintage) : true;
 
                 // --- PRICE FILTER ---
-                let priceMatch = price >= minPrice && price <= maxPrice;
+                // Wines without a price (or a page whose slider has no range) are never hidden by price
+                let priceMatch = isNaN(price) || isNaN(minPrice) || isNaN(maxPrice)
+                    || (price >= minPrice && price <= maxPrice);
 
                 // FINAL CHECK
                 if (priceMatch && typeMatch && countryMatch && vintageMatch) {
