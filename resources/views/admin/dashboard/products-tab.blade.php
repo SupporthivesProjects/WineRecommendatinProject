@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table id="file-export" class="table table-bordered" style="width:100%">
+                                <table id="products-table" class="table table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-start">SR No.</th>
@@ -93,58 +93,8 @@
                                             <th class="text-start">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @forelse ($products as $index => $product)
-                                            <tr>
-                                                <td class="align-middle">{{ $index + 1 }}</td>
-                                                <td class="align-middle">{{ $product->wine_name }}</td>
-                                                <td id="wineimage"><img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="wine-hover-image ht-50 wd-50 me-3"></td>
-                                                <td class="align-middle">{{ ucfirst($product->type) }}</td>
-                                                <td class="align-middle">{{ $product->winery }}</td>
-                                                <td class="align-middle">{{ $product->country }}</td>
-
-                                                <td class="align-middle product-price"
-                                                    data-default-price="{{ $product->retail_price }}"
-                                                    data-maharashtra-price="{{ $product->retail_price_maharashtra }}"
-                                                    data-kolkata-price="{{ $product->retail_price_kolkata }}">
-                                                    
-                                                    ₹&nbsp;{{ number_format($product->retail_price, 2) }}
-                                                </td>
-
-                                                <td class="align-middle text-center">
-                                                    <div class="form-check form-switch d-inline-block">
-                                                        <input type="checkbox" class="form-check-input featured-toggle" 
-                                                               data-product-id="{{ $product->id }}"
-                                                               id="featured-{{ $product->id }}"
-                                                               {{ $product->admin_featured_product ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="featured-{{ $product->id }}"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <span class="badge rounded-pill border border-{{ $product->status === 'active' ? 'success' : 'danger' }} text-{{ $product->status === 'active' ? 'success' : 'danger' }} py-1 px-3">
-                                                        {{ ucfirst($product->status) }}
-                                                    </span>
-                                                </td>
-                                                <td class="align-middle">
-                                                    <div class="btn-group">
-                                                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-sm btn-primary">
-                                                            <i class="fe fe-eye"></i>
-                                                        </a>
-                                                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-sm btn-info">
-                                                            <i class="fe fe-edit"></i>
-                                                        </a>
-                                                        <a href="{{ route('admin.products.qr', $product) }}" class="btn btn-sm btn-danger">
-                                                            <i class="fe fe-grid"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="9" class="text-center">No products found</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
+                                    {{-- Rows are loaded page by page by AdminProductController@index --}}
+                                    <tbody></tbody>
                                 </table>
                             </div>
                         </div>
@@ -257,13 +207,105 @@
         }
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // Export buttons fetch every row from the server (length -1), export, then restore the current page
+        function exportAllRows(e, dt, button, config) {
+            const self = this;
+            const oldStart = dt.settings()[0]._iDisplayStart;
 
-            const statePriceSelect = document.getElementById('statePriceSelect');
-            statePriceSelect.addEventListener('change', function () 
-            {
-                
-                const selectedState = this.value;
+            dt.one('preXhr', function (e, s, data) {
+                data.start = 0;
+                data.length = -1;
+
+                dt.one('preDraw', function (e, settings) {
+                    const buttons = $.fn.dataTable.ext.buttons;
+                    const className = button[0].className;
+
+                    if (className.indexOf('buttons-copy') >= 0) {
+                        buttons.copyHtml5.action.call(self, e, dt, button, config);
+                    } else if (className.indexOf('buttons-csv') >= 0) {
+                        buttons.csvHtml5.action.call(self, e, dt, button, config);
+                    } else if (className.indexOf('buttons-excel') >= 0) {
+                        buttons.excelHtml5.action.call(self, e, dt, button, config);
+                    } else if (className.indexOf('buttons-pdf') >= 0) {
+                        buttons.pdfHtml5.action.call(self, e, dt, button, config);
+                    } else if (className.indexOf('buttons-print') >= 0) {
+                        buttons.print.action(e, dt, button, config);
+                    }
+
+                    dt.one('preXhr', function (e, s, data) {
+                        settings._iDisplayStart = oldStart;
+                        data.start = oldStart;
+                    });
+
+                    setTimeout(dt.ajax.reload, 0);
+
+                    return false;
+                });
+            });
+
+            dt.ajax.reload();
+        }
+
+        $(document).ready(function () {
+            $('#products-table').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: '{{ route('admin.products.index') }}',
+                order: [[0, 'asc']],
+                columns: [
+                    { className: 'align-middle' },
+                    { className: 'align-middle' },
+                    { orderable: false },
+                    { className: 'align-middle' },
+                    { className: 'align-middle' },
+                    { className: 'align-middle' },
+                    { className: 'align-middle' },
+                    { className: 'align-middle text-center' },
+                    { className: 'align-middle' },
+                    { className: 'align-middle', orderable: false }
+                ],
+                createdRow: function (row) {
+                    $('td', row).eq(2).attr('id', 'wineimage');
+                },
+
+                dom:
+                    '<"dt-top-row"<"dt-left"lB><"dt-search"f>>' +
+                    '<"dt-top-pagination"p>' +
+                    'rt' +
+                    '<"dt-bottom-row"<"dt-info"i><"dt-bottom-pagination"p>>',
+
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'].map(function (type) {
+                    return { extend: type, action: exportAllRows };
+                }),
+
+                pageLength: 10,
+
+                lengthMenu: [
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
+                ],
+
+                lengthChange: true,
+                stateSave: true,
+                searchDelay: 400,
+
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: 'Show _MENU_ entries'
+                }
+            }).on('draw', function () {
+                // Default price rows already arrive formatted; only re-apply a chosen state
+                if (document.getElementById('statePriceSelect').value !== 'retail_price') {
+                    applyStatePrice();
+                }
+            });
+        });
+
+        // Show each row's price for the selected state (re-applied whenever a new page is drawn)
+        function applyStatePrice() {
+
+                const selectedState = document.getElementById('statePriceSelect').value;
 
                 document.querySelectorAll('.product-price').forEach(function (priceCell) {
 
@@ -289,8 +331,10 @@
 
                 });
 
-            });
+        }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('statePriceSelect').addEventListener('change', applyStatePrice);
         });
     </script>
     

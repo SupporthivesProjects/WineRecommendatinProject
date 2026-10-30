@@ -100,62 +100,8 @@
                                                 <th>Featured</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach($allProducts as $product)
-                                            @php
-                                                $isAvailable = isset($storeProducts[$product->id]) 
-                                                && $storeProducts[$product->id]->status == 'active';
-                                                $isFeatured = $isAvailable && $storeProducts[$product->id]->is_featured;
-                                            @endphp
-                                                <tr>
-                                                    <td>{{ $product->id }}</td>
-                                                    <td class="d-flex align-items-center">
-                                                        <img src="{{ $product->image1 ? asset('storage/' . $product->image1) : asset('images/default.jpg') }}" alt="" class="ht-50 wd-50 me-3">
-                                                        <span class="my-auto text-truncate">{{ $product->wine_name }}</span>
-                                                        <span class="save-status ms-2" style="display:none;"></span>
-                                                        <a href="{{ route('store-manager.singleproduct', $product->id) }}" class="ms-2" title="View Product">
-                                                            <i class="bi bi-box-arrow-up-right"></i>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                    @php
-                                                        $icons = [
-                                                            'red' => '<i class="fas fa-wine-glass text-danger" title="Red Wine"></i>',
-                                                            'white' => '<i class="fas fa-wine-glass text-warning" title="White Wine"></i>',
-                                                            'sparkling' => '<i class="fas fa-champagne-glasses text-info" title="Sparkling Wine"></i>',
-                                                            'still' => '<i class="fas fa-tint text-primary" title="Still Wine"></i>',
-                                                            'rosé' => '<i class="fas fa-wine-glass" style="color:#ff69b4;" title="Rosé Wine"></i>',
-                                                        ];
-
-                                                        $type = \Illuminate\Support\Str::lower(trim($product->type));
-                                                    @endphp
-
-                                                    {!! $icons[$type] ?? '<i class="fas fa-question-circle"></i>' !!}
-                                                    {{ ucfirst($product->type) }}
-                                                    </td>
-                                                    <td>{{ $product->vintage_year }}</td>
-                                                    <td>
-                                                    <span class="badge rounded-pill {{ $product->status === 'active' ? 'bg-success' : 'bg-danger' }}">
-                                                        {{ $product->status === 'active' ? 'Available' : 'Not in Stock' }}
-                                                    </span>
-                                                    </td>
-                                                    <!-- Available Checkbox -->
-                                                    <td data-order="{{ $isAvailable ? 1 : 0 }}">
-                                                        <input type="checkbox"
-                                                            name="available[]"
-                                                            value="{{ $product->id }}"
-                                                            {{ $isAvailable ? 'checked' : '' }} {{ $canAddProducts ? '' : 'disabled' }}>
-                                                    </td>
-                                                    <!-- Featured Checkbox -->
-                                                    <td data-order="{{ $isFeatured ? 1 : 0 }}">
-                                                        <input type="checkbox"
-                                                            name="featured[]"
-                                                            value="{{ $product->id }}"
-                                                            {{ $isFeatured ? 'checked' : '' }} {{ $canFeatureProducts ? '' : 'disabled' }}>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
+                                        {{-- Rows are loaded page by page by StoreManager\ProductController@index --}}
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -179,6 +125,19 @@
     <script>
         $(document).ready(function() {
             $('#productTable').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: '{{ route('store-manager.products') }}',
+                searchDelay: 400,
+                columns: [
+                    null,
+                    { className: 'd-flex align-items-center' },
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
                 "pageLength": 10,
                 "lengthMenu": [10, 20, 50, 100],
                 dom: '<"d-flex align-items-center gap-3"l f>rtip',
@@ -210,9 +169,17 @@
                 });
             }
 
+            // Rows are redrawn on every page change, so listen on the document instead of on each checkbox
+            document.addEventListener('change', function (event) {
+                if (event.target.matches('input[name="available[]"]')) {
+                    onAvailableChange.call(event.target);
+                } else if (event.target.matches('input[name="featured[]"]')) {
+                    onFeaturedChange.call(event.target);
+                }
+            });
+
             // Handle 'available' checkbox change
-            document.querySelectorAll('input[name="available[]"]').forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
+            function onAvailableChange() {
                     const row = this.closest('tr');
                     const productId = this.value;
                     const status = this.checked ? 'active' : 'inactive';
@@ -276,12 +243,10 @@
                             }, 3000);
 
                     });
-                });
-            });
+            }
 
             // Handle 'featured' checkbox change
-            document.querySelectorAll('input[name="featured[]"]').forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
+            function onFeaturedChange() {
                     const productId = this.value;
                     const row = this.closest('tr');
                     const statusEl = row.querySelector('.save-status');
@@ -334,8 +299,7 @@
                         }, 3000);
 
                         });
-                });
-            });
+            }
         });
     </script>
 

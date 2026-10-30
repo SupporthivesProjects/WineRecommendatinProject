@@ -30,10 +30,86 @@ class ProductController extends Controller
     /**
      * Display a listing of the products.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('id', 'asc')->get();
-        return view('admin.dashboard.products-tab', compact('products'));
+        // The table loads its rows page by page from here (DataTables server-side mode)
+        if ($request->ajax() && $request->has('draw')) {
+            return $this->productsTableData($request);
+        }
+
+        return view('admin.dashboard.products-tab');
+    }
+
+    /**
+     * One page of rows for the products table, in the DataTables server-side format.
+     */
+    private function productsTableData(Request $request)
+    {
+        // Column index => sortable database column
+        $sortColumns = [0 => 'id', 1 => 'wine_name', 3 => 'type', 4 => 'winery', 5 => 'country', 6 => 'retail_price', 7 => 'admin_featured_product', 8 => 'status'];
+
+        $query = Product::query();
+        $total = (clone $query)->count();
+
+        // Every search word must match at least one visible column, like the old client-side search
+        foreach (preg_split('/\s+/', trim((string) $request->input('search.value')), -1, PREG_SPLIT_NO_EMPTY) as $word) {
+            $query->where(function ($q) use ($word) {
+                foreach (['wine_name', 'type', 'winery', 'country', 'status', 'retail_price'] as $column) {
+                    $q->orWhere($column, 'like', '%'.$word.'%');
+                }
+            });
+        }
+        $filtered = (clone $query)->count();
+
+        $sortIndex = (int) $request->input('order.0.column', 0);
+        $query->orderBy($sortColumns[$sortIndex] ?? 'id', $request->input('order.0.dir') === 'desc' ? 'desc' : 'asc')
+            ->orderBy('id');
+
+        // SR No. is the product's position in the full list ordered by id, as before
+        $query->select('products.*')->selectSub(
+            DB::table('products as p2')->selectRaw('count(*)')->whereNull('p2.deleted_at')->whereColumn('p2.id', '<=', 'products.id'),
+            'sr_no'
+        );
+
+        // length -1 is only sent by the export buttons, which need every row
+        $length = (int) $request->input('length', 10);
+        if ($length !== -1) {
+            $query->skip(max(0, (int) $request->input('start', 0)))->take(min(max($length, 1), 100));
+        }
+
+        $rows = $query->get()->map(function (Product $product) {
+            $active = $product->status === 'active';
+            $image = $product->image1 ? asset('storage/'.$product->image1) : asset('images/default.jpg');
+
+            return [
+                e($product->sr_no),
+                e($product->wine_name),
+                '<img src="'.e($image).'" alt="" class="wine-hover-image ht-50 wd-50 me-3">',
+                e(ucfirst($product->type)),
+                e($product->winery),
+                e($product->country),
+                '<span class="product-price" data-default-price="'.e($product->retail_price).'"'
+                    .' data-maharashtra-price="'.e($product->retail_price_maharashtra).'"'
+                    .' data-kolkata-price="'.e($product->retail_price_kolkata).'">'
+                    .'₹&nbsp;'.number_format((float) $product->retail_price, 2).'</span>',
+                '<div class="form-check form-switch d-inline-block">'
+                    .'<input type="checkbox" class="form-check-input featured-toggle" data-product-id="'.$product->id.'" id="featured-'.$product->id.'"'.($product->admin_featured_product ? ' checked' : '').'>'
+                    .'<label class="form-check-label" for="featured-'.$product->id.'"></label></div>',
+                '<span class="badge rounded-pill border border-'.($active ? 'success' : 'danger').' text-'.($active ? 'success' : 'danger').' py-1 px-3">'.e(ucfirst($product->status)).'</span>',
+                '<div class="btn-group">'
+                    .'<a href="'.e(route('admin.products.show', $product)).'" class="btn btn-sm btn-primary"><i class="fe fe-eye"></i></a>'
+                    .'<a href="'.e(route('admin.products.edit', $product)).'" class="btn btn-sm btn-info"><i class="fe fe-edit"></i></a>'
+                    .'<a href="'.e(route('admin.products.qr', $product)).'" class="btn btn-sm btn-danger"><i class="fe fe-grid"></i></a>'
+                    .'</div>',
+            ];
+        });
+
+        return response()->json([
+            'draw' => (int) $request->input('draw'),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtered,
+            'data' => $rows,
+        ]);
     }
 
     /**
