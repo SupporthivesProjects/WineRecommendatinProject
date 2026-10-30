@@ -314,78 +314,334 @@
         p.barValuesPrice {
             margin-bottom: 4px;
         }
+
+
+        /* =====================================
+        SPLIT HERO SECTION
+        ===================================== */
+
+        .split-hero-section {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            min-height: 720px;
+            background: #f8f7f4;
+            overflow: hidden;
+        }
+
+        /* LEFT: PARALLAX IMAGE */
+
+        .split-hero-image {
+            position: relative;
+            min-height: 720px;
+            overflow: hidden;
+        }
+
+        .split-hero-image .parallax-bg {
+            position: absolute;
+            inset: -10% 0;
+            height: 120%;
+            background-image: url('{{ asset('images/wineshelf.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        /* RIGHT: CONTENT */
+
+        .split-hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 55px 55px;
+        }
+
+        .split-hero-heading {
+            margin-bottom: 30px;
+        }
+
+        .split-hero-heading h1 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.4rem;
+            color: #292522;
+            margin-bottom: 12px;
+        }
+
+        .split-hero-heading p {
+            font-size: 1rem;
+            color: #777;
+            margin: 0;
+        }
+
+        /* QUESTIONNAIRE GRID */
+
+        .questionnaire-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .questionnaire-grid .image-card {
+            height: 210px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .questionnaire-grid .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .questionnaire-grid .overlay {
+            background-color: rgba(0, 0, 0, 0.42);
+        }
+
+        .questionnaire-grid .image-card:hover .overlay {
+            background-color: rgba(0, 0, 0, 0.78);
+        }
+
+        .questionnaire-grid .overlay-text h4 {
+            font-size: 1.15rem;
+            padding: 0 12px;
+        }
+
+        .questionnaire-grid .hover-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* TABLETS */
+
+        @media (max-width: 991px) {
+            .split-hero-section {
+                grid-template-columns: 38% 62%;
+            }
+
+            .split-hero-content {
+                padding: 35px 25px;
+            }
+
+            .split-hero-heading h1 {
+                font-size: 1.8rem;
+            }
+
+            .questionnaire-grid .image-card {
+                height: 180px;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 767px) {
+            .split-hero-section {
+                grid-template-columns: 1fr;
+            }
+
+            .split-hero-image {
+                min-height: 350px;
+            }
+
+            .split-hero-content {
+                padding: 40px 20px;
+            }
+
+            .split-hero-heading {
+                text-align: center;
+            }
+
+            .split-hero-heading h1 {
+                font-size: 1.8rem;
+            }
+
+            .questionnaire-grid {
+                gap: 12px;
+            }
+
+            .questionnaire-grid .image-card {
+                height: 160px;
+            }
+
+            .questionnaire-grid .overlay-text h4 {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .questionnaire-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .questionnaire-grid .image-card {
+                height: 190px;
+            }
+        }
+
+        /* =====================================
+        SPLIT HERO RIGHT BACKGROUND
+        ===================================== */
+
+        body:has(.split-hero-section) .split-hero-content {
+            background: linear-gradient(
+                135deg,
+                #F5EFE5 0%,
+                #EDE1D0 100%
+            ) !important;
+        }
+
+        /* Optional subtle warm border between image and content */
+        body:has(.split-hero-section) .split-hero-content {
+            border-left: 1px solid rgba(117, 75, 49, 0.12);
+        }
+
+        /* Heading */
+        body:has(.split-hero-section) .split-hero-heading h1 {
+            color: #542D2D;
+        }
+
+        body:has(.split-hero-section) .split-hero-heading p {
+            color: #78675A;
+        }
+
+
+        /* =====================================
+        QUESTIONNAIRE PAGE NAVBAR ONLY
+        ===================================== */
+
+        body:has(.split-hero-section) .transparent-navbar {
+            background: rgba(48, 28, 27, 0.88) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 0;
+        }
+
+        /* Navbar links */
+        body:has(.split-hero-section) .transparent-navbar .nav-link,
+        body:has(.split-hero-section) .transparent-navbar a {
+            color: #E8C982 !important;
+            transition: color 0.3s ease;
+        }
+
+        /* Hover */
+        body:has(.split-hero-section) .transparent-navbar .nav-link:hover,
+        body:has(.split-hero-section) .transparent-navbar a:hover {
+            color: #FFFFFF !important;
+        }
+
+        /* Scrolled navbar */
+        body:has(.split-hero-section) .transparent-navbar.scrolled {
+            background: rgba(48, 28, 27, 0.95) !important;
+        }
+
+        /* Navbar icons */
+        body:has(.split-hero-section) .transparent-navbar i {
+            color: #E8C982 !important;
+        }
+
+        #mainNavbar .nav-link {
+            color: #987b6b !important;
+            position: relative;
+            white-space: nowrap;
+        }
+
     </style>
 
 @endpush
 
-   
+    <!-- SPLIT HERO SECTION -->
+    <section class="split-hero-section" id="questionnaires">
 
-    <!-- header section -->
-    <section class="parallax-container">
-        <div class="parallax-bg"></div>
-        <div class="hero-text">
-            <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
-            <p>Curated selections for every occasion</p>
-            <a href="#questionnaires" type="button" class="btn btn-dark">
-                Explore
-            </a>
+        <!-- LEFT: PARALLAX WINE IMAGE -->
+        <div class="split-hero-image">
+            <div class="parallax-bg"></div>
         </div>
-    </section>
-    
-    <section class="filters-and-cards bg-white" id="questionnaires">
-        <div class="container my-5">
-            <div class="row gx-3 gy-3">
-                <div class="col-md-6">
-                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="1" >
-                        <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid" alt="Image 1">
-                        <div class="overlay">
-                            <div class="overlay-text">
-                                <h4 class="default-text">First Sip</h4>
-                                <h4 class="hover-text">New to wine? Start with your First Sip <br> we'll keep it simple and fun.</h4>
-                                
-                            </div>
+
+        <!-- RIGHT: HEADING + FOUR QUESTIONNAIRE CARDS -->
+        <div class="split-hero-content">
+
+            <div class="split-hero-heading">
+                <h1 id="mystyle">Explore Our Finest Wines</h1>
+                <p>Discover your taste. Find your perfect wine.</p>
+            </div>
+
+            <div class="questionnaire-grid">
+
+                <!-- FIRST SIP -->
+                <div class="image-card open-questionnaire-modal"
+                    data-questionnaire-id="1">
+
+                    <img src="{{ asset('images/FirstSipTwo.jpg') }}"
+                        class="img-fluid" alt="First Sip">
+
+                    <div class="overlay">
+                        <div class="overlay-text">
+                            <h4 class="default-text">First Sip</h4>
+                            <h4 class="hover-text">
+                                New to wine? Start with your First Sip.
+                                We'll keep it simple and fun.
+                            </h4>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="2">
-                        <img src="{{ asset('images/Wineglasses.jpg') }}" class="img-fluid" alt="Image 2">
-                        <div class="overlay">
-                            <div class="overlay-text">
-                                <h4 class="default-text">Savy Sip</h4>
-                                <h4 class="hover-text">Let’s fine-tune your sips with Savy Sipper.</h4>
-                            </div>
+                <!-- SAVVY SIP -->
+                <div class="image-card open-questionnaire-modal"
+                    data-questionnaire-id="2">
+
+                    <img src="{{ asset('images/Wineglasses.jpg') }}"
+                        class="img-fluid" alt="Savvy Sip">
+
+                    <div class="overlay">
+                        <div class="overlay-text">
+                            <h4 class="default-text">Savvy Sip</h4>
+                            <h4 class="hover-text">
+                                Let's fine-tune your sips with Savvy Sipper.
+                            </h4>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="3">
-                        <img src="{{ asset('images/questionnaire2.jpg') }}" class="img-fluid" alt="Image 3">
-                        <div class="overlay">
-                            <div class="overlay-text">
-                                <h4 class="default-text">Cork Master</h4>
-                                <h4 class="hover-text">Crafted for connoisseurs <br> Unlock your palate with Cork Master.</h4>
-                            </div>
+                <!-- CORK MASTER -->
+                <div class="image-card open-questionnaire-modal"
+                    data-questionnaire-id="3">
+
+                    <img src="{{ asset('images/questionnaire2.jpg') }}"
+                        class="img-fluid" alt="Cork Master">
+
+                    <div class="overlay">
+                        <div class="overlay-text">
+                            <h4 class="default-text">Cork Master</h4>
+                            <h4 class="hover-text">
+                                Crafted for connoisseurs.
+                                Unlock your palate with Cork Master.
+                            </h4>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="image-card open-questionnaire-modal" data-questionnaire-id="4">
-                        <img src="{{ asset('images/questionnaire3.jpg') }}" class="img-fluid" alt="Image 4">
-                        <div class="overlay">
-                            <div class="overlay-text">
-                                <h4 class="default-text">Quick Pour</h4>
-                                <h4 class="hover-text">For when you need a wine—quick and right.!!</h4>
-                            </div>
+                <!-- QUICK POUR -->
+                <div class="image-card open-questionnaire-modal"
+                    data-questionnaire-id="4">
+
+                    <img src="{{ asset('images/questionnaire3.jpg') }}"
+                        class="img-fluid" alt="Quick Pour">
+
+                    <div class="overlay">
+                        <div class="overlay-text">
+                            <h4 class="default-text">Quick Pour</h4>
+                            <h4 class="hover-text">
+                                For when you need a wine — quick and right!
+                            </h4>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
+
 
 
   <!-- modal code -->
