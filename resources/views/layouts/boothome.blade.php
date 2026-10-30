@@ -1660,6 +1660,8 @@
     </script> -->
     <!-- Click sound, image protection, navbar height: one shared script -->
     <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
+    <!-- Kiosk monitoring heartbeat (one shared script) -->
+    <script src="{{ asset('assets/js/kiosk-heartbeat.js') }}?v={{ filemtime(public_path('assets/js/kiosk-heartbeat.js')) }}"></script>
     <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
 
@@ -2136,94 +2138,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     });
-    </script>
-    <script>
-        (function () {
-            'use strict';
-
-            const DEVICE_KEY = 'techsomm_kiosk_device_key';
-            const KIOSK_ID_KEY = 'techsomm_kiosk_id';
-            const HEARTBEAT_INTERVAL = 60 * 1000;
-            const REQUEST_TIMEOUT = 10 * 1000;
-
-            let heartbeatInProgress = false;
-
-            function getDeviceKey() {
-                let key = localStorage.getItem(DEVICE_KEY);
-
-                if (!key) {
-                    key = crypto.randomUUID();
-                    localStorage.setItem(DEVICE_KEY, key);
-                }
-
-                return key;
-            }
-
-            async function sendHeartbeat() {
-                if (heartbeatInProgress) {
-                    return;
-                }
-
-                heartbeatInProgress = true;
-
-                try {
-                    const csrfToken = document.querySelector(
-                        'meta[name="csrf-token"]'
-                    )?.getAttribute('content');
-
-                    if (!csrfToken) {
-                        return;
-                    }
-
-                    const controller = new AbortController();
-
-                    const timeoutId = setTimeout(function () {
-                        controller.abort();
-                    }, REQUEST_TIMEOUT);
-
-                    try {
-                        const response = await fetch('/kiosk/heartbeat', {
-                            method: 'POST',
-                            credentials: 'same-origin',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken
-                            },
-                            body: JSON.stringify({
-                                device_key: getDeviceKey(),
-                                kiosk_id: localStorage.getItem(KIOSK_ID_KEY)
-                            }),
-                            signal: controller.signal
-                        });
-
-                        if (!response.ok) {
-                            return;
-                        }
-
-                        const data = await response.json();
-
-                        if (data.status === 'active' && data.kiosk_id) {
-                            localStorage.setItem(
-                                KIOSK_ID_KEY,
-                                data.kiosk_id
-                            );
-                        }
-                    } finally {
-                        clearTimeout(timeoutId);
-                    }
-                } catch (error) {
-                    // Monitoring failures must not interrupt normal page usage.
-                } finally {
-                    heartbeatInProgress = false;
-                }
-            }
-
-            // Send immediately, then every minute.
-            sendHeartbeat();
-            setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
-
-        })();
     </script>
 
     

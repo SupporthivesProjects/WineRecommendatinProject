@@ -11,6 +11,7 @@ class KioskStatus extends Model
 
     protected $fillable = [
         'kiosk_id',
+        'label',
         'store_id',
         'user_id',
         'ip_address',

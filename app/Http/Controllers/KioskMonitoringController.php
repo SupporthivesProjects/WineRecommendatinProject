@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\KioskStatus;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Store;
@@ -11,6 +12,58 @@ use App\Models\Store;
 
 class KioskMonitoringController extends Controller
 {
+    /**
+     * A kiosk is online when a heartbeat arrived within this many minutes.
+     */
+    public const ONLINE_MINUTES = 5;
+
+    /**
+     * An offline kiosk not seen for this many days counts as stale and may be removed.
+     */
+    public const STALE_DAYS = 7;
+
+    /**
+     * Create or update the kiosk row for a logged-in user's heartbeat.
+     * Returns null when the device key already belongs to another store.
+     */
+    private function recordAuthenticatedHeartbeat(string $kioskId, int $storeId, int $userId, ?string $ip): ?KioskStatus
+    {
+        $kiosk = KioskStatus::firstOrNew([
+            'kiosk_id' => $kioskId,
+        ]);
+
+        if ($kiosk->exists && (int) $kiosk->store_id !== $storeId) {
+            return null;
+        }
+
+        $previousUserId = $kiosk->user_id;
+
+        $kiosk->store_id = $storeId;
+        $kiosk->user_id = $userId;
+        $kiosk->ip_address = $ip;
+        $kiosk->last_seen_at = now();
+
+        if (
+            !$kiosk->exists ||
+            (int) $previousUserId !== $userId
+        ) {
+            $kiosk->logged_in_at = now();
+        }
+
+        $kiosk->logged_out_at = null;
+        $kiosk->save();
+
+        return $kiosk;
+    }
+
+    /**
+     * Current CSRF token, so the heartbeat can recover after its session expired.
+     */
+    public function token(): JsonResponse
+    {
+        return response()->json(['token' => csrf_token()]);
+    }
+
     /**
      * Record a heartbeat from an authenticated kiosk session.
      */
@@ -34,32 +87,18 @@ class KioskMonitoringController extends Controller
             $storeId = $user->store_id;
             $kioskId = $storeId . '-K-' . $deviceKey;
 
-            $kiosk = \App\Models\KioskStatus::firstOrNew([
-                'kiosk_id' => $kioskId,
-            ]);
+            try {
+                $kiosk = $this->recordAuthenticatedHeartbeat($kioskId, (int) $storeId, (int) $user->id, $request->ip());
+            } catch (UniqueConstraintViolationException $e) {
+                // Two tabs registered this device at the same moment; the row exists now, so update it
+                $kiosk = $this->recordAuthenticatedHeartbeat($kioskId, (int) $storeId, (int) $user->id, $request->ip());
+            }
 
-            if ($kiosk->exists && (int) $kiosk->store_id !== (int) $storeId) {
+            if ($kiosk === null) {
                 return response()->json([
                     'status' => 'invalid_device',
                 ], 403);
             }
-
-            $previousUserId = $kiosk->user_id;
-
-            $kiosk->store_id = $storeId;
-            $kiosk->user_id = $user->id;
-            $kiosk->ip_address = $request->ip();
-            $kiosk->last_seen_at = now();
-
-            if (
-                !$kiosk->exists ||
-                (int) $previousUserId !== (int) $user->id
-            ) {
-                $kiosk->logged_in_at = now();
-            }
-
-            $kiosk->logged_out_at = null;
-            $kiosk->save();
 
             return response()->json([
                 'status' => 'active',
@@ -200,7 +239,10 @@ class KioskMonitoringController extends Controller
     {
         // A kiosk is considered online if it sent a heartbeat
         // within the last 5 minutes.
-        $cutoff = now()->subMinutes(5);
+        $cutoff = now()->subMinutes(self::ONLINE_MINUTES);
+
+        // Offline kiosks not seen for a week can be removed from the list
+        $staleCutoff = now()->subDays(self::STALE_DAYS);
 
         // Summary cards
         $totalStores = Store::count();
@@ -230,10 +272,49 @@ class KioskMonitoringController extends Controller
             'onlineKiosks',
             'offlineKiosks',
             'kiosks',
-            'cutoff'
+            'cutoff',
+            'staleCutoff'
         ));
     }
 
+    /**
+     * Give a kiosk a readable name (e.g. "Entrance tablet"). Empty clears it.
+     */
+    public function updateLabel(Request $request, KioskStatus $kiosk): JsonResponse
+    {
+        $validated = $request->validate([
+            'label' => ['nullable', 'string', 'max:100'],
+        ]);
 
+        $kiosk->label = isset($validated['label']) && trim($validated['label']) !== ''
+            ? trim($validated['label'])
+            : null;
+        $kiosk->save();
 
+        return response()->json([
+            'success' => true,
+            'label' => $kiosk->label,
+        ]);
+    }
+
+    /**
+     * Remove a stale kiosk record. Kiosks seen within the last week are kept;
+     * a removed kiosk is registered again automatically when a user logs in on it.
+     */
+    public function destroy(KioskStatus $kiosk): JsonResponse
+    {
+        $isStale = $kiosk->last_seen_at === null
+            || $kiosk->last_seen_at->lt(now()->subDays(self::STALE_DAYS));
+
+        if (!$isStale) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only kiosks not seen for ' . self::STALE_DAYS . ' days can be removed.',
+            ], 422);
+        }
+
+        $kiosk->delete();
+
+        return response()->json(['success' => true]);
+    }
 }

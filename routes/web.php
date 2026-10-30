@@ -351,6 +351,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     })->name('support-tickets.status');
 
     Route::get('/admin-kiosks', [KioskMonitoringController::class, 'admindashboarddetails'])->name('kiosks-details');
+    Route::patch('/admin-kiosks/{kiosk}/label', [KioskMonitoringController::class, 'updateLabel'])->name('kiosks.label');
+    Route::delete('/admin-kiosks/{kiosk}', [KioskMonitoringController::class, 'destroy'])->name('kiosks.destroy');
 
 });
 
@@ -387,7 +389,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kiosk/heartbeat', [
         KioskMonitoringController::class,
         'heartbeat',
-    ])->name('kiosk.heartbeat');
+    ])->middleware('throttle:kiosk-heartbeat')->name('kiosk.heartbeat');
+
+    // Fresh CSRF token for the heartbeat after a session expired (e.g. a kiosk woke from sleep)
+    Route::get('/kiosk/token', [
+        KioskMonitoringController::class,
+        'token',
+    ])->middleware('throttle:kiosk-heartbeat')->name('kiosk.token');
 
 
 // Store Manager routes

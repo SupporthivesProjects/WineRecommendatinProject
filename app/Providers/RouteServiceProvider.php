@@ -44,5 +44,11 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+
+        // Kiosks send one heartbeat a minute (plus one per page load); keyed per device so
+        // several kiosks behind one store IP never limit each other
+        RateLimiter::for('kiosk-heartbeat', function (Request $request) {
+            return Limit::perMinute(30)->by('kiosk|'.$request->input('device_key', '').'|'.$request->ip());
+        });
     }
 }

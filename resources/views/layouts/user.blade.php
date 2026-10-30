@@ -524,6 +524,8 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
      <!-- Click sound, image protection, navbar height: one shared script -->
     <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
+    <!-- Kiosk monitoring heartbeat (one shared script) -->
+    <script src="{{ asset('assets/js/kiosk-heartbeat.js') }}?v={{ filemtime(public_path('assets/js/kiosk-heartbeat.js')) }}"></script>
 
 
 
