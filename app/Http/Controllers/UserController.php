@@ -150,7 +150,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('user.profile')->with('success', 'Profile updated successfully.');
+        return redirect()->route('user.userprofile.show')->with('success', 'Profile updated successfully.');
     }
 
     public function featuredproducts()

@@ -133,10 +133,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/showQuestionnaire', [UserDashboardController::class, 'userquestionnaire'])->name('user.showQuestionnaire');
     Route::post('/submit-response', [UserDashboardController::class, 'storeResponse']);
 
-    Route::get('/user/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
+    // GET /user/profile and GET /profile are defined further down (user.userprofile.show, user.storeprofile.show).
     Route::put('/user/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
@@ -507,12 +506,14 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/reviews/{review}', [\App\Http\Controllers\User\ReviewController::class, 'destroy'])->name('user.reviews.destroy');
 });
 
-// Show user profile
-Route::get('/user/profile', [UserProfileController::class, 'show'])->name('user.userprofile.show');
+Route::middleware('auth')->group(function () {
+    // Show user profile
+    Route::get('/user/profile', [UserProfileController::class, 'show'])->name('user.userprofile.show');
 
-// Show Store profile
-Route::get('/profile', [StoreProfileController::class, 'show'])->name('user.storeprofile.show');
-Route::get('/store-tab-profile', [StoreProfileController::class, 'storeTab'])->name('user.store-tab-profile.show');
+    // Show Store profile
+    Route::get('/profile', [StoreProfileController::class, 'show'])->name('user.storeprofile.show');
+    Route::get('/store-tab-profile', [StoreProfileController::class, 'storeTab'])->name('user.store-tab-profile.show');
+});
 
 // Update Contact Number (Form Submission)
 Route::post('/store/update-contact', [StoreProfileController::class, 'updateContactNumber'])
