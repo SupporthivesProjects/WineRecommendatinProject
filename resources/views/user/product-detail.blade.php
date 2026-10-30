@@ -752,7 +752,7 @@
                                         <div class="card custom-card wine-card">
                                             <!-- Image -->
                                             <div class="image-wrapper" style="position: relative;">
-                                                <img src="{{ asset('storage/' . $product->image1) }}"
+                                                <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                                                     class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                 @if ($product->is_featured == 1)

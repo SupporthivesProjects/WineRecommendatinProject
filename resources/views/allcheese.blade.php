@@ -169,7 +169,7 @@
                         <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                             <div class="card cheese-card h-100">
                                 <div class="position-relative">
-                                    <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
+                                    <img loading="lazy" src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
                                          class="card-img-top" 
                                          alt="{{ $cheese->name }}"
                                          style="height: 300px; object-fit: cover;">

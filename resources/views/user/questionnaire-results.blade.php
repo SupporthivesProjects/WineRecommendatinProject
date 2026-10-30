@@ -41,7 +41,7 @@
                                 <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                                     <div class="h-48 bg-gray-200 flex items-center justify-center">
                                         @if($product->image_url)
-                                            <img src="{{ $product->image_url }}" alt="{{ $product->wine_name }}" class="h-full w-full object-cover">
+                                            <img loading="lazy" src="{{ $product->image_url }}" alt="{{ $product->wine_name }}" class="h-full w-full object-cover">
                                         @else
                                             <div class="h-full w-full flex items-center justify-center bg-gradient-to-br 
                                                 @if($product->type == 'red') from-red-100 to-red-200

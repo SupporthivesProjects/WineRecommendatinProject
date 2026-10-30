@@ -230,7 +230,7 @@
                             <div class="col-12 col-sm-6 col-lg-3 mb-4">
                                 <div class="card h-100">
                                 <div class="wine-image-wrapper">
-                                    <img src="{{ asset('storage/' . $wine->image1) }}"
+                                    <img loading="lazy" src="{{ asset('storage/' . $wine->image1) }}"
                                         class="wine-card-image"
                                         alt="{{ $wine->wine_name }}">
                                 </div>

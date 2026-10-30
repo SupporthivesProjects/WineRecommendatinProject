@@ -156,7 +156,7 @@
                         data-description="{{ strtolower($cheese->description ?? '') }}">
                             <div class="card cheese-card h-100">
                                 <div class="position-relative">
-                                    <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
+                                    <img loading="lazy" src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
                                          class="card-img-top" 
                                          alt="{{ $cheese->name }}"
                                          style="object-fit: cover;">

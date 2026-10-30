@@ -47,7 +47,7 @@
                                         </div>
 
                                         <!-- Image -->
-                                        <img src="{{ asset('storage/' . $image->image) }}"
+                                        <img loading="lazy" src="{{ asset('storage/' . $image->image) }}"
                                              class="card-img-top"
                                              style="height:200px; object-fit:contain;">
 

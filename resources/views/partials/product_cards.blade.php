@@ -25,7 +25,7 @@
              data-featured="{{ $product->admin_featured_product ? 'true' : 'false' }}">
             <!-- <div class="card custom-card wine-card">
                 <div class="image-wrapper" style="position: relative;">
-                    <img src="{{ asset('storage/' . $product->image1)  }}"
+                    <img loading="lazy" src="{{ asset('storage/' . $product->image1)  }}"
                          class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                     @if($product->admin_featured_product)
@@ -62,7 +62,7 @@
             </div> -->
             <div class="card custom-card wine-card position-relative">
                 <div class="image-wrapper" style="position: relative;">
-                    <img src="{{ asset('storage/' . $product->image1) }}"
+                    <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                         class="card-img-top rounded-0" alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
                     @if($product->admin_featured_product)

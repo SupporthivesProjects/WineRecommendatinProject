@@ -65,7 +65,7 @@
                                         @foreach($cheeseProducts as $product)
                                             <tr>
                                                 <td class="d-flex align-items-center">
-                                                    <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-cheese.jpg') }}" 
+                                                    <img loading="lazy" src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-cheese.jpg') }}" 
                                                          alt="{{ $product->name }}" class="product-thumbnail me-3">
                                                     <span>{{ $product->name }}</span>
                                                 </td>

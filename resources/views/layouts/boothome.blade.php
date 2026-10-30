@@ -733,7 +733,7 @@
 
                                             <!-- IMAGE SECTION (Bigger + auto adjusts) -->
                                             <div class="flex-grow overflow-hidden relative">
-                                                <img src="{{ asset('storage/' . $product->image1) }}"
+                                                <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                                                     class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
                                                     alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
@@ -953,7 +953,7 @@
                                     
                                     'https://media.istockphoto.com/id/476976729/photo/wine-tasting-at-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=jpLOBX57Z9r91cb2yFOUkl27pa3kn4d6K9yvPctrLug='] as $image)
                             <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                                <img src="{{ $image }}" alt="Wine image" class="w-full h-64 object-cover">
+                                <img loading="lazy" src="{{ $image }}" alt="Wine image" class="w-full h-64 object-cover">
                             </div>
                         @endforeach
                     </div>

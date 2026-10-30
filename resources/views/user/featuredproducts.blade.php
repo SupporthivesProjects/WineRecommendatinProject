@@ -365,7 +365,7 @@
                                                     @php
                                                         $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
                                                     @endphp
-                                                    <img src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                                    <img loading="lazy" src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)

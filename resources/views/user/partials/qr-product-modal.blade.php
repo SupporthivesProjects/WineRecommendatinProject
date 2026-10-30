@@ -505,7 +505,7 @@
 
                                 <div class="card related-product-card">
 
-                                    <img
+                                    <img loading="lazy"
                                         src="{{ asset('storage/' . $related->image1) }}"
                                         class="card-img-top related-product-image"
                                         alt="{{ $related->wine_name }}"

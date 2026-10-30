@@ -81,7 +81,7 @@
                                                 <td class="align-middle">
                                                     <div class="d-flex align-items-center">
                                                         @if($testimonial->image_url)
-                                                            <img src="{{ asset('storage/' . $testimonial->image_url) }}" 
+                                                            <img loading="lazy" src="{{ asset('storage/' . $testimonial->image_url) }}" 
                                                                  class="testimonial-avatar me-2" 
                                                                  alt="{{ $testimonial->name }}">
                                                         @else

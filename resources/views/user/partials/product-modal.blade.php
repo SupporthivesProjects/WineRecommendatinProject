@@ -238,7 +238,7 @@
                         @foreach($relatedProducts as $related)
                             <div class="col-md-4 mb-4">
                                 <div class="card h-100">
-                                    <img
+                                    <img loading="lazy"
                                         src="{{ asset('storage/' . $related->image1) }}"
                                         class="card-img-top"
                                         style="

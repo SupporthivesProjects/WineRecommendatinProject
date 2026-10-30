@@ -69,7 +69,7 @@
                                                 <td class="align-middle">{{ $index + 1 }}</td>
                                                 <td class="align-middle">
                                                     @if($product->image)
-                                                        <img src="{{ asset('storage/' . $product->image) }}" 
+                                                        <img loading="lazy" src="{{ asset('storage/' . $product->image) }}" 
                                                              alt="{{ $product->name }}" 
                                                              class="product-thumbnail">
                                                     @else

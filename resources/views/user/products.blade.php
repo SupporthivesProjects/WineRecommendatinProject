@@ -507,7 +507,7 @@
                                             <div class="card custom-card wine-card">
                                                 <!-- Image at the top -->
                                                 <div class="image-wrapper" style="position: relative;">
-                                                    <img src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                                    <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)

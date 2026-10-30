@@ -57,7 +57,7 @@
                         <div class="testimonial-item bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
                             <div class="flex items-center mb-4">
                                 @if($testimonial->image_url)
-                                    <img src="{{ asset('storage/' . $testimonial->image_url) }}" 
+                                    <img loading="lazy" src="{{ asset('storage/' . $testimonial->image_url) }}" 
                                          alt="{{ $testimonial->name }}"
                                          class="h-12 w-12 rounded-full object-cover">
                                 @else
@@ -96,7 +96,7 @@
                         <div class="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
                             <div class="flex items-center mb-4">
                                 @if($testimonial->image_url)
-                                    <img src="{{ asset('storage/' . $testimonial->image_url) }}" 
+                                    <img loading="lazy" src="{{ asset('storage/' . $testimonial->image_url) }}" 
                                          alt="{{ $testimonial->name }}"
                                          class="h-12 w-12 rounded-full object-cover">
                                 @else
