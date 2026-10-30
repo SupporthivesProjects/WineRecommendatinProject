@@ -48,7 +48,7 @@ class ContactController extends Controller
 
         // 🔐 Verify hCaptcha
         $captcha = Http::asForm()->post('https://hcaptcha.com/siteverify', [
-            'secret' => env('HCAPTCHA_SECRET_KEY'),
+            'secret' => config('services.hcaptcha.secret'),
             'response' => $request->input('h-captcha-response'),
             'remoteip' => $ip,
         ]);

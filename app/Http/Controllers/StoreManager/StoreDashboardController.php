@@ -533,7 +533,28 @@ class StoreDashboardController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $record = StoreManagerUpload::findOrFail($id);
+        // A store manager may only edit their own uploads
+        $record = StoreManagerUpload::where('store_manager_id', Auth::id())->findOrFail($id);
+
+        // Types match the edit form; every field stays optional as before
+        $request->validate([
+            'invoice_no' => ['nullable', 'string', 'max:255'],
+            'customer_name' => ['nullable', 'string', 'max:255'],
+            'customer_mobile' => ['nullable', 'string', 'max:20'],
+            'product_name' => ['nullable', 'string', 'max:255'],
+            'product_id' => ['nullable', 'string', 'max:255'],
+            'product_category' => ['nullable', 'string', 'max:255'],
+            'product_sub_category' => ['nullable', 'string', 'max:255'],
+            'product_price' => ['nullable', 'numeric', 'min:0'],
+            'size' => ['nullable', 'string', 'max:255'],
+            'packsize' => ['nullable', 'string', 'max:255'],
+            'qty' => ['nullable', 'integer', 'min:0'],
+            'stock' => ['nullable', 'integer', 'min:0'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'product_created_time' => ['nullable', 'date'],
+            'product_modified_time' => ['nullable', 'date'],
+            'date' => ['nullable', 'date'],
+        ]);
 
         // 48 hour restriction (IMPORTANT - backend safety)
         if ($record->created_at < now()->subHours(48)) {

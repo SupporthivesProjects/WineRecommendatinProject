@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // Read through config() so the contact form keeps working after `php artisan config:cache`
+    'hcaptcha' => [
+        'site_key' => env('HCAPTCHA_SITE_KEY'),
+        'secret' => env('HCAPTCHA_SECRET_KEY'),
+    ],
+
 ];

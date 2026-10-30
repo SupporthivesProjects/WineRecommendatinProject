@@ -244,29 +244,6 @@ class ProductController extends Controller
         return view('store-manager.products.store-products', compact('storeProducts', 'featuredProducts'));
     }
     
-    /**
-     * Update the store's featured products.
-     */
-    public function updateFeaturedProducts(Request $request)
-    {
-        $validated = $request->validate([
-            'featured_product_ids' => 'required|array',
-            'featured_product_ids.*' => 'exists:products,id',
-        ]);
-        
-        $store = Auth::user()->store;
-        
-        // Ensure all featured products are from the store's products
-        $storeProductIds = $store->products->pluck('id')->toArray();
-        $validFeaturedIds = array_intersect($validated['featured_product_ids'], $storeProductIds);
-        
-        // Sync the featured products
-        $store->featuredProducts()->sync($validFeaturedIds);
-        
-        return redirect()->route('store-manager.products.store-products')
-            ->with('success', 'Featured products updated successfully.');
-    }
-
     
 
 

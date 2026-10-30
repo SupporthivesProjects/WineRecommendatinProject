@@ -312,7 +312,7 @@
                                         </div>
                                         <script src="https://hcaptcha.com/1/api.js" async defer></script>
                                         <div class="mb-4 text-center">
-                                            <div class="h-captcha" data-sitekey="{{ env('HCAPTCHA_SITE_KEY') }}"></div>
+                                            <div class="h-captcha" data-sitekey="{{ config('services.hcaptcha.site_key') }}"></div>
 
                                             @error('h-captcha-response')
                                                 <div class="text-danger mt-2">{{ $message }}</div>

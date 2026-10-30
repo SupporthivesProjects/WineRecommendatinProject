@@ -8,6 +8,7 @@ use App\Models\SubadminFeaturePermission;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SubAdminController extends Controller
 {
@@ -46,18 +47,22 @@ class SubAdminController extends Controller
     {
         try {
 
-            SubadminFeaturePermission::where('sub_admin_id', $id)->delete();
+            // All or nothing: a failure must not leave the sub-admin with no permissions
+            DB::transaction(function () use ($request, $id) {
 
-            if ($request->has('features')) {
+                SubadminFeaturePermission::where('sub_admin_id', $id)->delete();
 
-                foreach ($request->features as $featureId) {
+                if ($request->has('features')) {
 
-                    SubadminFeaturePermission::create([
-                        'sub_admin_id' => $id,
-                        'feature_id'   => $featureId,
-                    ]);
+                    foreach ($request->features as $featureId) {
+
+                        SubadminFeaturePermission::create([
+                            'sub_admin_id' => $id,
+                            'feature_id'   => $featureId,
+                        ]);
+                    }
                 }
-            }
+            });
 
             return redirect()
                 ->back()
@@ -72,19 +77,4 @@ class SubAdminController extends Controller
         }
     }
 
-    /**
-     * Enable all features.
-     */
-    public function enableAll()
-    {
-        //
-    }
-
-    /**
-     * Disable all features.
-     */
-    public function disableAll()
-    {
-        //
-    }
 }

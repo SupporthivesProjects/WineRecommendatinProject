@@ -492,6 +492,12 @@
 
         $(function () {
             const slider = $("#price-slider");
+            if (!slider.length || !slider.hasClass('ui-slider')) {
+                return;
+            }
+            // Range comes from the slider set up above (its min/max are not in scope here)
+            const min = slider.slider('option', 'min');
+            const max = slider.slider('option', 'max');
             const steps = 5;
             for (let i = 0; i <= steps; i++) {
                 const percent = (i / steps) * 100;

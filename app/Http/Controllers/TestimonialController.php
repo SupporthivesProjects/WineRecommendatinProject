@@ -25,7 +25,8 @@ class TestimonialController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'position' => 'nullable|string|max:255',
             'company' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // No SVG: it can carry scripts and this form is public
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {

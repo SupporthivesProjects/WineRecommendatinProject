@@ -87,7 +87,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
-        'store.manager' => \App\Http\Middleware\StoreManagerMiddleware::class,
+        // 'store.manager' is defined in $middlewareAliases above (StoreManager), which takes precedence
         'main.manager' => \App\Http\Middleware\EnsureUserIsMainManager::class,
 
     ];

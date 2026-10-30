@@ -52,9 +52,15 @@ class ProfileRoutesTest extends TestCase
 
     public function test_profile_pages_require_login(): void
     {
-        foreach (['/user/profile', '/profile', '/store-tab-profile'] as $uri) {
+        foreach (['/user/profile', '/profile'] as $uri) {
             $this->get($uri)->assertRedirect('/login');
         }
+    }
+
+    public function test_removed_store_tab_profile_route_is_gone(): void
+    {
+        // StoreProfileController@storeTab never existed; the route was removed in the October 2026 audit
+        $this->get('/store-tab-profile')->assertNotFound();
     }
 
     public function test_layouts_with_profile_link_render_for_logged_in_user(): void

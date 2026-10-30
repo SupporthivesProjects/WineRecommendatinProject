@@ -328,7 +328,7 @@ class ProductController extends Controller
             }
 
             // For non-AJAX requests, redirect to browse page with filters
-            return redirect()->route('browse', $request->query());
+            return redirect()->route('homeBrowseWines', $request->query());
         } catch (\Exception $e) {
             Log::error('Product filter error: ' . $e->getMessage());
 

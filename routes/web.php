@@ -81,7 +81,6 @@ Route::get('/services', function () {
 })->name('services');
 
 //open qr code route- open for all no login required
-Route::get('/qr/products/{id}', [ProductController::class, 'qrProductRedirect'])->name('qr.product.redirect');
 Route::get('/products/{id}', [UserDashboardController::class, 'productDetails'])->name('user.productdetails');
 Route::get('/qr-product-modal/{id}', [UserDashboardController::class, 'qrProductModal'])->name('qr.product.modal');
 
@@ -135,9 +134,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // GET /user/profile and GET /profile are defined further down (user.userprofile.show, user.storeprofile.show).
     Route::put('/user/profile', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
-
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Admin routes
@@ -162,7 +158,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/users/loginhistory', [UserController::class, 'loginhistory'])->name('users.loginhistory');
 
     // Users management
-    Route::resource('users', UserController::class);
+    // The admin.users.create view does not exist, so the create page is not routed
+    Route::resource('users', UserController::class)->except(['create']);
     Route::put('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
     
 
@@ -249,7 +246,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         ->middleware(['auth', 'admin'])
         ->name('admin.reviews.status');
     //Settings
-    Route::resource('settings', SettingsController::class);
+    // SettingsController only implements index
+    Route::resource('settings', SettingsController::class)->only(['index']);
 
     // Routes for assigning users to stores
     Route::get('/stores/{store}/available-managers', [StoreController::class, 'getAvailableManagers']);
@@ -366,7 +364,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('questionnaires/{questionnaire}', [App\Http\Controllers\Admin\QuestionnaireController::class, 'update'])->name('questionnaires.update');
     Route::delete('questionnaires/{questionnaire}', [App\Http\Controllers\Admin\QuestionnaireController::class, 'destroy'])->name('questionnaires.destroy');
     Route::put('questionnaires/{questionnaire}/toggle-status', [App\Http\Controllers\Admin\QuestionnaireController::class, 'toggleStatus'])->name('questionnaires.toggle-status');
-    Route::get('questionnaire-analytics', [App\Http\Controllers\Admin\QuestionnaireController::class, 'analytics'])->name('questionnaires.analytics');
     Route::get('questionnaire-Images', [App\Http\Controllers\Admin\DashboardController::class, 'questionnaireimages'])->name('questionnaires.images');
     Route::post('questionnaire-StoreImages', [App\Http\Controllers\Admin\DashboardController::class, 'storeImages'])->name('questionnaires.storeImages');
     Route::delete('questionnaire-DeleteImage/{id}', [App\Http\Controllers\Admin\DashboardController::class, 'deleteImage'])->name('questionnaires.deleteImage');
@@ -377,7 +374,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 // User Questionnaire Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('questionnaires', [App\Http\Controllers\QuestionnaireController::class, 'index'])->name('questionnaires.index');
     Route::get('questionnaires/{questionnaire}', [App\Http\Controllers\QuestionnaireController::class, 'show'])->name('questionnaires.show');
     Route::post('questionnaires/{questionnaire}/submit', [App\Http\Controllers\QuestionnaireController::class, 'submit'])->name('questionnaires.submit');
     Route::get('questionnaires/expertise', [App\Http\Controllers\QuestionnaireController::class, 'expertise'])->name('questionnaires.expertise');
@@ -481,7 +477,6 @@ Route::middleware(['auth'])->group(function () {
     // Product routes for regular users
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
     Route::get('/products/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
-    Route::get('/products/type/{type}', [App\Http\Controllers\ProductController::class, 'byType'])->name('products.type');
 
     // Store routes for regular users
     Route::get('/stores', [App\Http\Controllers\StoreController::class, 'index'])->name('stores.index');
@@ -512,7 +507,6 @@ Route::middleware('auth')->group(function () {
 
     // Show Store profile
     Route::get('/profile', [StoreProfileController::class, 'show'])->name('user.storeprofile.show');
-    Route::get('/store-tab-profile', [StoreProfileController::class, 'storeTab'])->name('user.store-tab-profile.show');
 });
 
 // Update Contact Number (Form Submission)
@@ -533,9 +527,11 @@ Route::middleware(['auth'])->group(function () {
 
 // Update Password
 Route::post('/profile/update-password', [UserProfileController::class, 'updatePassword'])
+    ->middleware('auth')
     ->name('profile.update.password');
 
 Route::put('admin/reviews/{review}/update-status', [\App\Http\Controllers\Admin\ReviewController::class, 'updateStatus'])
+    ->middleware(['auth', 'admin'])
     ->name('admin.reviews.update-status');
 
 require __DIR__ . '/auth.php';

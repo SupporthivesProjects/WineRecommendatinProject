@@ -190,12 +190,35 @@ class QuestionnaireDebuggerController extends Controller
     }
     public function executeQuery(Request $request)
     {
-        $sql = base64_decode($request->sql);
-        $bindings = json_decode($request->bindings,true);
+        // Re-running matching queries is limited to full admins
+        if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only administrators can run debugger queries.'
+            ], 403);
+        }
+
+        $sql = trim((string) base64_decode((string) $request->sql, true));
+        $bindings = json_decode((string) $request->bindings, true);
+
+        if (!$this->isAllowedProductQuery($sql) || !is_array($bindings) || !$this->hasOnlyScalarValues($bindings)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only the logged product matching queries can be run here.'
+            ], 422);
+        }
 
         try{
 
-            $products = DB::select($sql,$bindings);
+            // Read-only transaction as a second safety net: any write fails at the database
+            DB::statement('SET TRANSACTION READ ONLY');
+            DB::beginTransaction();
+
+            try {
+                $products = DB::select($sql, array_values($bindings));
+            } finally {
+                DB::rollBack();
+            }
 
             return response()->json([
                 'success'=>true,
@@ -209,6 +232,44 @@ class QuestionnaireDebuggerController extends Controller
                 'message'=>$e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * Allow only the shape the product matcher logs: one SELECT from `products`,
+     * with no sub-queries, unions, other tables or statement separators.
+     */
+    private function isAllowedProductQuery(string $sql): bool
+    {
+        if ($sql === '' || !preg_match('/^select\s+.+\s+from\s+`products`(\s+where\s+.+)?$/is', $sql)) {
+            return false;
+        }
+
+        $lower = strtolower($sql);
+
+        if (substr_count($lower, 'select') !== 1 || preg_match('/;|--|\/\*|#|\b(union|into|join|outfile|dumpfile|load_file|sleep|benchmark|information_schema|for\s+update|lock\s+in)\b/', $lower)) {
+            return false;
+        }
+
+        // Every backticked table reference must be `products`
+        preg_match_all('/`(\w+)`\s*\./', $sql, $tables);
+        foreach ($tables[1] as $table) {
+            if ($table !== 'products') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function hasOnlyScalarValues(array $values): bool
+    {
+        foreach ($values as $value) {
+            if (!is_scalar($value) && $value !== null) {
+                return false;
+            }
+        }
+
+        return true;
     }
     public function clearLog()
     {

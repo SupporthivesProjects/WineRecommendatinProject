@@ -14,64 +14,6 @@ class CartController extends Controller
         return view('user.cart');
     }
 
-    public function add(Request $request)
-    {
-        $productId = $request->input('product_id');
-        $productName = $request->input('product_name');
-        $productPrice = $request->input('product_price');
-
-        // ✅ Fetch product from DB
-        $product = Product::find($productId);
-
-    
-        $cart = Session::get('cart', []);
-        
-        // Check if product already exists in cart
-        $existingIndex = null;
-        foreach ($cart as $index => $item) {
-            if ($item['id'] == $productId) {
-                $existingIndex = $index;
-                break;
-            }
-        }
-        
-        if ($existingIndex !== null) {
-            // Product exists, increment quantity
-            $cart[$existingIndex]['quantity'] = ($cart[$existingIndex]['quantity'] ?? 1) + 1;
-        } else {
-            // Add new product to cart
-            $cart[] = [
-                'id' => $productId,
-                'name' => $productName,
-                'retail_price' => $productPrice,
-                'image' => $product->image1,
-                'quantity' => 1
-            ];
-        }
-        
-        Session::put('cart', $cart);
-        
-        return response()->json(['success' => true, 'message' => 'Product added to cart']);
-    }
-
-    public function remove(Request $request)
-    {
-        $productId = $request->input('product_id');
-        $cart = Session::get('cart', []);
-        
-        // Remove product from cart
-        $cart = array_filter($cart, function($item) use ($productId) {
-            return $item['id'] != $productId;
-        });
-        
-        // Reindex array
-        $cart = array_values($cart);
-        
-        Session::put('cart', $cart);
-        
-        return response()->json(['success' => true, 'message' => 'Product removed from cart']);
-    }
-
     public function get()
     {
         $cart = Session::get('cart', []);
