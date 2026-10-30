@@ -2,6 +2,7 @@
 @section('title', 'Dashboard')
 @section('admindashboardcontent')
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/wine-loader.css') }}?v={{ filemtime(public_path('assets/css/wine-loader.css')) }}">
     <style>
         html, body {
             overscroll-behavior: auto;       
@@ -954,6 +955,7 @@
 
 @endsection
 @push('scripts')
+<script src="{{ asset('assets/js/wine-loader.js') }}?v={{ filemtime(public_path('assets/js/wine-loader.js')) }}"></script>
 
 <script>
             let questions = [];
@@ -1748,8 +1750,15 @@
                 }
             }
 
+            // Only one matching request at a time
+            let isSubmitting = false;
+
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
+                if (isSubmitting) {
+                    return;
+                }
+
                 captureResponse();
 
                 if (!validateCurrentQuestion()) 
@@ -1821,6 +1830,27 @@
             });
 
             function submitResponses() {
+                if (isSubmitting) {
+                    return;
+                }
+                isSubmitting = true;
+                document.getElementById('nextBtn').disabled = true;
+
+                // Closing the modal resets the questionnaire state, so keep a copy for a retry
+                const retryState = {
+                    questionnaireId: selectedQuestionnaireId,
+                    questions: questions,
+                    responses: Object.assign({}, responses),
+                    ruleResponses: Object.assign({}, ruleResponses),
+                    rules: questionnaireRules,
+                    validation: questionnaireValidation
+                };
+
+                // Show the Cork Master scene straight away; it never delays the request
+                if (window.WineLoader) {
+                    WineLoader.show();
+                }
+
                 console.log("check api:- ",selectedQuestionnaireId, responses);
                 fetch('/submit-response', {
                     method: 'POST',
@@ -1835,32 +1865,76 @@
                 })
                 .then(response => {
                     if (!response.ok) {
-                        toastr.error('There was an issue with your submission. Please try again.');
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
                 .then(data => {
                     if (data.status === 'success') {
-                        toastr.success('Your responses have been successfully submitted.');
+                        // Go to the recommendations at once; the loader stays up until that page replaces this one
+                        window.location.href = data.redirect;
                     } else if (data.status === 'no_results') {
+                        if (window.WineLoader) {
+                            WineLoader.hide();
+                        }
                         toastr.warning('No matching products were found. But we have a few recommendations.');
-                    } else {
-                        console.error('Unexpected status:', data);
-                        toastr.error('An unexpected error occurred.');
-                    }
 
-                    // Wait for 2 seconds before redirecting
-                    setTimeout(function() {
-                        window.location.href = data.redirect;  // Perform redirect
-                    },2000);  // 2 seconds delay
+                        // Leave time to read the message before going back to the dashboard
+                        setTimeout(function() {
+                            window.location.href = data.redirect;
+                        }, 2000);
+                    } else {
+                        throw new Error('Unexpected status: ' + data.status);
+                    }
                 })
                 .catch(error => {
                     console.error('Error saving response:', error);
-                    toastr.error('There was an error processing your response.');
-    
+                    submissionFailed(retryState);
                 });
             }
+
+            // Let the user retry from the last question without answering everything again
+            function submissionFailed(retryState) {
+                isSubmitting = false;
+                if (window.WineLoader) {
+                    WineLoader.hide();
+                }
+                toastr.error("Our Cork Master couldn't reach the cellar just now. Please press Finish to try again.");
+
+                const modal = document.getElementById('questionnaireModal');
+
+                function reopen() {
+                    selectedQuestionnaireId = retryState.questionnaireId;
+                    questions = retryState.questions;
+                    responses = retryState.responses;
+                    ruleResponses = retryState.ruleResponses;
+                    questionnaireRules = retryState.rules;
+                    questionnaireValidation = retryState.validation;
+                    QuestionnaireEngine.rules = questionnaireRules;
+
+                    currentStep = questions.length - 1;
+                    renderQuestion();
+                    const nextButton = document.getElementById('nextBtn');
+                    nextButton.disabled = false;
+                    nextButton.textContent = 'Finish';
+                    bootstrap.Modal.getOrCreateInstance(modal).show();
+                }
+
+                // If the modal is still open or closing, wait for its reset to finish before restoring
+                if (window.getComputedStyle(modal).display !== 'none') {
+                    modal.addEventListener('hidden.bs.modal', reopen, { once: true });
+                } else {
+                    reopen();
+                }
+            }
+
+            // Returning with the browser's Back button may restore this page from cache mid-submission
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    isSubmitting = false;
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            });
 
             document.getElementById('backBtn').addEventListener('click', function () {
                 if (currentStep > 0) {

@@ -1,0 +1,149 @@
+/* "Cork Master" matching loader (see assets/js/wine-loader.js) */
+
+.wine-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1090; /* above Bootstrap modals (1055) */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: radial-gradient(ellipse at 50% 35%, #4a0a18 0%, #2a050d 60%, #16020a 100%);
+    color: #f4ead5;
+    opacity: 0;
+    overscroll-behavior: contain;
+    outline: none;
+}
+
+.wine-loader.is-visible {
+    display: flex;
+    animation: wine-loader-in 0.22s ease-out forwards;
+}
+
+.wine-loader.is-leaving {
+    animation: wine-loader-out 0.3s ease-in forwards;
+}
+
+@keyframes wine-loader-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes wine-loader-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.wine-loader-card {
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+}
+
+.wine-loader-scene {
+    display: block;
+    width: min(260px, 70vw);
+    height: auto;
+    margin: 0 auto 18px;
+    overflow: visible;
+}
+
+.wine-loader-title {
+    margin: 0 0 10px;
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-size: clamp(1.15rem, 2.6vw + 0.6rem, 1.6rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: #f4ead5;
+}
+
+.wine-loader-message {
+    min-height: 3em; /* reserves space so rotating lines never shift the layout */
+    margin: 0;
+    font-size: clamp(0.92rem, 1vw + 0.7rem, 1.05rem);
+    line-height: 1.5;
+    color: #d9b964;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+
+.wine-loader-message.is-visible {
+    opacity: 1;
+}
+
+/* Bottle rocks gently while pouring */
+.wine-loader-bottle {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    transform: translate(46px, -4px) rotate(105deg);
+    animation: wine-loader-rock 2.6s ease-in-out infinite;
+}
+
+@keyframes wine-loader-rock {
+    0%, 100% { transform: translate(46px, -4px) rotate(105deg); }
+    50% { transform: translate(46px, -6px) rotate(110deg); }
+}
+
+/* Flowing stream */
+.wine-loader-stream {
+    stroke-dasharray: 6 5;
+    animation: wine-loader-flow 0.55s linear infinite;
+}
+
+@keyframes wine-loader-flow {
+    to { stroke-dashoffset: -11; }
+}
+
+/* Wine level rises, then holds while the surface swirls */
+.wine-loader-fill {
+    animation: wine-loader-rise 3.2s ease-out infinite;
+}
+
+@keyframes wine-loader-rise {
+    0% { transform: translateY(26px); }
+    70%, 100% { transform: translateY(-4px); }
+}
+
+.wine-loader-wave {
+    animation: wine-loader-swirl 1.6s linear infinite;
+}
+
+@keyframes wine-loader-swirl {
+    from { transform: translateX(0); }
+    to { transform: translateX(-28px); }
+}
+
+/* Cellar shelf: each bottle glows in turn */
+.wine-loader-shelf-bottle {
+    opacity: 0.25;
+    animation: wine-loader-shelf 1.7s ease-in-out infinite;
+}
+
+@keyframes wine-loader-shelf {
+    0%, 100% { opacity: 0.25; }
+    35% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wine-loader.is-visible,
+    .wine-loader.is-leaving,
+    .wine-loader-bottle,
+    .wine-loader-stream,
+    .wine-loader-fill,
+    .wine-loader-wave,
+    .wine-loader-shelf-bottle {
+        animation: none;
+    }
+
+    .wine-loader.is-visible {
+        opacity: 1;
+    }
+
+    .wine-loader-shelf-bottle {
+        opacity: 0.8;
+    }
+
+    .wine-loader-message {
+        transition: none;
+    }
+}

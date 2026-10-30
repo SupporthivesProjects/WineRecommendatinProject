@@ -869,15 +869,23 @@ class UserController extends Controller
 
         Log::debug('Customer ID:', ['template_id' => $customerID]);
 
+        // Save all answers with one INSERT instead of one query per answer
+        $now = now();
+        $responseRows = [];
         foreach ($answers as $questionKey => $answerValue) {
-            QuestionResponse::create([
+            $responseRows[] = [
                 'template_id' => $templateId,
                 'question_key' => $questionKey,
                 'answer' => is_array($answerValue) ? json_encode($answerValue) : $answerValue,
                 'user_id' => auth()->id(),
-                'submission_id' => $submissionId,
+                'submission_id' => (string) $submissionId,
                 'customerID' => $customerID,
-            ]);
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+        if ($responseRows) {
+            QuestionResponse::insert($responseRows);
         }
 
         // Filter out the first 3 questions before sending to product matcher
@@ -1553,7 +1561,8 @@ class UserController extends Controller
         Log::info("Executing Query for $key");
         Log::info("SQL: " . $q->toSql(), $q->getBindings());
 
-        $results = $q->get();
+        // Only the IDs are used by the caller (progressive filtering), so don't load full product rows
+        $results = $q->get(['id']);
 
         Log::info("Results for $key: " . $results->count());
         Log::info("---- END MATCH BLOCK: $key ----");
