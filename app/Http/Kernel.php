@@ -35,6 +35,8 @@ class Kernel extends HttpKernel
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
+            // Must stay before SubstituteBindings so it runs before the "auth" route middleware.
+            \App\Http\Middleware\EnforceLoginExpiry::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 

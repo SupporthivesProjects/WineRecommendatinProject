@@ -39,6 +39,8 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            // Persistent login lifetime in minutes (15 days), counted from the original login.
+            'remember' => 60 * 24 * 15,
         ],
     ],
 

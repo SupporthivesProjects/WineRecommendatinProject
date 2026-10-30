@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\EnforceLoginExpiry;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -39,6 +40,8 @@ class AuthenticatedSessionController extends Controller
         }
 
         $request->session()->regenerate();
+
+        EnforceLoginExpiry::start($request);
 
         $user = auth()->user();
 
