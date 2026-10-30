@@ -3,6 +3,7 @@
 @section('admindashboardcontent')
 
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
 
     <style>
         html, body {
@@ -234,7 +235,7 @@
                     <!-- Start::row-6 -->
                         <div class="row g-2">
                             <!-- Filter sidebar -->
-                            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
+                            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start listing-filter-panel">
                                 <!-- Vintage Year Filter -->
                                 <div class="filter-group">
                                     <h4 class="fw-bold mb-4">Vintage Year</h4>
@@ -352,16 +353,16 @@
 
                                     </div>
                                 </div>
-                                <div class="row row-sm">
+                                <div class="row row-sm product-card-grid">
                                     @foreach ($products as $product)
-                                        <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                        <div class="col-md-6 col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
                                         data-winery="{{ $product->winery }}"
                                         data-retail-price="{{ $product->retail_price }}"
                                         data-country="{{ $product->country }}">
                                             <div class="card custom-card wine-card">
                                                 <!-- Image at the top -->
-                                                <div class="image-wrapper" style="position: relative;">
+                                                <div class="image-wrapper product-card-media">
                                                     @php
                                                         $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
                                                     @endphp

@@ -2,6 +2,7 @@
 @section('title', 'Browse Cheeses')
 @section('admindashboardcontent')
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <style>
         html, body {
             overscroll-behavior: auto;       
@@ -142,7 +143,7 @@
         <div class="row">
             <!-- Cheese Products Grid -->
             <div class="col-12">
-                <div class="row">
+                <div class="row product-card-grid">
                     @forelse($cheeses as $cheese)
                         @php
                             $inStock = $cheese->stores->sum('pivot.quantity') > 0;
@@ -155,11 +156,10 @@
                         <div class="col-xl-3 col-lg-4 col-md-6 mb-4" data-name="{{ strtolower($cheese->name) }}"
                         data-description="{{ strtolower($cheese->description ?? '') }}">
                             <div class="card cheese-card h-100">
-                                <div class="position-relative">
+                                <div class="position-relative product-card-media">
                                     <img loading="lazy" src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}" 
                                          class="card-img-top" 
-                                         alt="{{ $cheese->name }}"
-                                         style="object-fit: cover;">
+                                         alt="{{ $cheese->name }}">
                                     @if(!$isInStock)
                                         <div class="position-absolute top-0 start-0 w-100 bg-danger text-white text-center py-1">
                                             Out of Stock

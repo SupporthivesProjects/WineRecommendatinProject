@@ -2,6 +2,7 @@
 @section('title', 'Browse Wines')
 @section('admindashboardcontent')
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
 
     <style>
@@ -50,7 +51,6 @@
         .wine-card {
             border-radius: 0 !important; 
             transition: box-shadow 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
         }
 
         .wine-card:hover {
@@ -213,17 +213,6 @@
             white-space: nowrap;
         }
 
-        .card.custom-card.wine-card .image-wrapper img.card-img-top {
-            object-fit: contain;
-            width: 308px;
-            height: 287px;
-            display: flex;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .image-wrapper {
-            padding: 10px;
-        }
         @media (max-width: 768px) {
             .filters-and-cards {
                 padding: 50px 20px;
@@ -329,7 +318,7 @@
                     <!-- Start::row-6 -->
                         <div class="row g-2">
                             <!-- Filter sidebar -->
-                            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
+                            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start listing-filter-panel">
                             {{-- Vintage Year Filter --}}
                             <div class="filter-group">
                                 <h4 class="fw-bold mb-4">Vintage Year</h4>
@@ -495,16 +484,16 @@
                                     </a>
                                     </div>
                                 </div>
-                                <div class="row row-sm">
+                                <div class="row row-sm product-card-grid">
                                     @foreach ($products as $product)
-                                        <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                        <div class="col-md-6 col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
                                         data-winery="{{ $product->winery }}"
                                         data-retail-price="{{ $product->display_price }}"
                                         data-country="{{ $product->country }}">
                                             <div class="card custom-card wine-card">
                                                 <!-- Image at the top -->
-                                                <div class="image-wrapper" style="position: relative;">
+                                                <div class="image-wrapper product-card-media">
                                                     <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                     <!-- Featured badge on the image -->

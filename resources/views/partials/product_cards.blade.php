@@ -1,22 +1,7 @@
 @if($products->count() > 0)
     @foreach($products as $product)
 
-        <style>
-
-            .card.custom-card.wine-card .image-wrapper img.card-img-top {
-                object-fit: contain;
-                width: 308px;
-                height: 287px;
-                display: flex;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .image-wrapper {
-                padding: 10px;
-            }
-        </style>
-    
-        <div class="col-xl-4 wine-card-container" 
+        <div class="col-md-6 col-xl-4 wine-card-container" 
              data-type="{{ strtolower($product->type) }}"
              data-vintage-year="{{ $product->vintage_year }}" 
              data-winery="{{ $product->winery }}"
@@ -24,7 +9,7 @@
              data-country="{{ $product->country }}"
              data-featured="{{ $product->admin_featured_product ? 'true' : 'false' }}">
             <!-- <div class="card custom-card wine-card">
-                <div class="image-wrapper" style="position: relative;">
+                <div class="image-wrapper product-card-media">
                     <img loading="lazy" src="{{ asset('storage/' . $product->image1)  }}"
                          class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
@@ -61,7 +46,7 @@
                 </div>
             </div> -->
             <div class="card custom-card wine-card position-relative">
-                <div class="image-wrapper" style="position: relative;">
+                <div class="image-wrapper product-card-media">
                     <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                         class="card-img-top rounded-0" alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
@@ -72,7 +57,7 @@
                     @endif
                 </div>
 
-                <div class="card-body" style="box-shadow: 0 10px 30px rgba(0,0,0,0.15)">
+                <div class="card-body">
                     <h5 class="card-title fw-semibold">{{ $product->wine_name }}</h5>
                     <p>
                         <strong>Type:</strong> {{ ucfirst($type) }}

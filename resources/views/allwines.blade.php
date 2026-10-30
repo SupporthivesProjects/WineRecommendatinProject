@@ -17,6 +17,8 @@
     <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Style Css -->
     <link href="{{ asset('assets/css/allwinesstyles.css') }}" rel="stylesheet">
+    <!-- Shared listing styles (product cards, sticky filters) -->
+    <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <!-- Icons Css -->
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
     <!-- Node Waves Css -->
@@ -48,6 +50,8 @@
     <!-- Custom Styles -->
     <style>
         html, body { overflow-x: hidden; }
+        /* Height of the fixed top bar (#sidebar), used by the sticky filter panel */
+        :root { --listing-header-height: 86px; }
         #mystyle { font-family: 'Cinzel Decorative', serif; }
         .featured-badge {
             background-color: rgba(165, 9, 8, 0.7);
@@ -575,7 +579,7 @@
                     <div class="container my-5">
                         <div class="row g-2">
                             <!-- Filter Sidebar -->
-                            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start">
+                            <div class="col-12 col-md-3 d-none d-md-block bg-light rounded rounded-2 p-4 align-self-start listing-filter-panel">
                                 <!-- Vintage Year Filter -->
                                 <div class="filter-group">
                                     <h4 class="fw-bold mb-4">Vintage Year</h4>
@@ -754,7 +758,7 @@
                                 </div>
 
                                 <!-- Products Container -->
-                                <div class="row row-sm" id="products-container">
+                                <div class="row row-sm product-card-grid" id="products-container">
                                     @if (isset($products) && $products->count() > 0)
                                         @include('partials.product_cards', ['products' => $products])
                                     @else

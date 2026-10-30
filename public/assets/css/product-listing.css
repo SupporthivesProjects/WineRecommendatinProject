@@ -1,0 +1,97 @@
+/*
+ * Shared styles for the product listing pages (Browse Wines, Browse Cheeses,
+ * Featured Products, matched products and the public browse pages).
+ * Not loaded on the homepage. Cards opt in through .product-card-grid on their row,
+ * filter sidebars through .listing-filter-panel.
+ * Hover effects stay in each page's own styles: the card rules below use :where()
+ * so a page's ".wine-card:hover" (loaded after this file) still wins.
+ */
+
+/* The theme (styles.min.css) sets "body { overflow: auto !important }", which makes <body>
+   its own scroll box that never scrolls and so stops sticky elements. Let the page scroll
+   instead; <html> still hides sideways overflow. */
+html body {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    overflow-x: clip !important;
+}
+
+/* ---------- Product cards ---------- */
+
+:where(.product-card-grid) .card.wine-card,
+:where(.product-card-grid) .card.cheese-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #ececec;
+    border-radius: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Equal-height cards in a row; the gap below matches the cheese columns' mb-4 */
+:where(.product-card-grid) .card.wine-card {
+    height: calc(100% - 1.5rem);
+    margin-bottom: 1.5rem;
+}
+
+:where(.product-card-grid) .product-card-media {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+    padding: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+:where(.product-card-grid) .product-card-media > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+:where(.product-card-grid) .card-body {
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+/* Room for two lines so the details below line up across a row */
+:where(.product-card-grid) .card .card-title {
+    font-size: 1.09375rem; /* the theme's h5 size (forced there), so h4 and h5 titles match */
+    font-weight: 600;
+    line-height: 1.35;
+    min-height: 2.7em;
+    margin-bottom: 0.75rem;
+}
+
+:where(.product-card-grid) .card-body p {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    :where(.product-card-grid) .product-card-media {
+        height: 240px;
+    }
+}
+
+/* ---------- Filter sidebar ---------- */
+
+/* Stays below the navbar while the cards scroll; scrolls inside itself if taller than the screen.
+   Phones keep their existing layout. --site-navbar-height comes from site-interactions.js;
+   a page whose top bar is not #mainNavbar sets --listing-header-height itself. */
+@media (min-width: 768px) {
+    .listing-filter-panel {
+        --listing-top: var(--listing-header-height, var(--site-navbar-height, 80px));
+        position: sticky;
+        top: calc(var(--listing-top) + 1.25rem);
+        align-self: flex-start;
+        max-height: calc(100vh - var(--listing-top) - 2.5rem);
+        overflow-y: auto;
+    }
+}

@@ -2,6 +2,7 @@
 @section('title', 'Questionnaire Responses')
 @section('admindashboardcontent')
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
 
     <style>
@@ -109,17 +110,6 @@
             border-radius: 50%;
             margin-top: -7.5px;
         }
-        .card.custom-card.wine-card .image-wrapper img.card-img-top {
-            object-fit: contain;
-            width: 308px;
-            height: 287px;
-            display: flex;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .image-wrapper {
-            padding: 10px;
-        }
         /* Floating cart icon at the top right, 10px below the navbar (height set by site-interactions.js) */
         .floating-cart {
             position: fixed;
@@ -223,7 +213,7 @@
             <!-- Start::row-6 -->
                 <div class="row">
                     <!-- Filter sidebar -->
-                    <div class="col-3">
+                    <div class="col-3 listing-filter-panel">
                         <div class="filter-group">
                         <!-- Types Filter -->
                             <h4 class="fw-bold mb-4">Types</h4>
@@ -331,16 +321,16 @@
 
                     <!-- Products grid -->
                     <div class="col-9">
-                        <div class="row row-sm">
+                        <div class="row row-sm product-card-grid">
                             @foreach ($products as $product)
-                                <div class="col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
+                                <div class="col-md-6 col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                 data-vintage-year="{{ $product->vintage_year }}"
                                 data-winery="{{ $product->winery }}"
                                 data-retail-price="{{ $product->display_price }}"
                                 data-country="{{ $product->country }}">
                                     <div class="card custom-card wine-card">
                                         <!-- Image at the top -->
-                                        <div class="image-wrapper" style="position: relative;">
+                                        <div class="image-wrapper product-card-media">
                                             <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
                                             
 
