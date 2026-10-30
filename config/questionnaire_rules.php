@@ -176,8 +176,14 @@ return [
                 ],
         
                 'No Preference' => 'ALL',
-        
+
             ]
+        ],
+        [
+            'source' => 'region',
+            'target' => 'country',
+            'action' => 'skip_question',
+            'when' => 'No Preference'
         ],
         [
             'source' => 'grape_category',

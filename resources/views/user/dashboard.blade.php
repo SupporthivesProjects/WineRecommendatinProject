@@ -1737,7 +1737,17 @@
 
                 localStorage.setItem('userResponses', JSON.stringify(responses));
             }
-            
+
+            // A question skipped by a skip_question rule must not keep an answer given before it was skipped
+            function clearSkippedAnswer(index)
+            {
+                delete responses[`question${index + 1}`];
+
+                if (questions[index].key) {
+                    delete ruleResponses[questions[index].key];
+                }
+            }
+
             // Navigation buttons
             document.getElementById('nextBtn').addEventListener('click', function () {
                 captureResponse();
@@ -1786,6 +1796,7 @@
                                         questions[currentStep].key
                                     )
                                 ) {
+                                    clearSkippedAnswer(currentStep);
                                     currentStep++;
                                 }
                             }
@@ -1863,6 +1874,14 @@
                         currentStep = countryIndex - 1;
                     } else {
                         currentStep--;
+
+                        // Step back over questions skipped by skip_question rules, as Next does
+                        while (
+                            currentStep > 0 &&
+                            QuestionnaireEngine.shouldSkipQuestion(questions[currentStep].key)
+                        ) {
+                            currentStep--;
+                        }
                     }
 
                     renderQuestion();
