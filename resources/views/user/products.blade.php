@@ -229,12 +229,13 @@
                 padding: 50px 20px;
             }
         }
-        /* Fixed cart icon on the left side */
+        /* Fixed cart icon at the top right, 10px below the navbar (height set by site-interactions.js) */
         .sidebar-cart {
             position: fixed;
-            bottom: 30px;
-            left: 25px;
-            top: auto;
+            top: calc(var(--site-navbar-height, 80px) + 10px);
+            right: 20px;
+            bottom: auto;
+            left: auto;
             transform: none;
             margin: 0;
             padding: 0;
@@ -297,10 +298,6 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar-cart {
-                left: 10px;
-            }
-
             .sidebar-cart-link {
                 width: 50px;
                 height: 50px;

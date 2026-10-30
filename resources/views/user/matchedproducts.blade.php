@@ -120,11 +120,11 @@
         .image-wrapper {
             padding: 10px;
         }
-        /* Floating cart icon */
+        /* Floating cart icon at the top right, 10px below the navbar (height set by site-interactions.js) */
         .floating-cart {
             position: fixed;
-            bottom: 25px;
-            left: 25px;
+            top: calc(var(--site-navbar-height, 80px) + 10px);
+            right: 20px;
             width: 80px;
             height: 80px;
             background: #8b0000;
@@ -181,8 +181,6 @@
             .floating-cart {
                 width: 58px;
                 height: 58px;
-                bottom: 18px;
-                left: 16px;
             }
 
             .floating-cart i {

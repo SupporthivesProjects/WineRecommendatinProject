@@ -666,5 +666,7 @@
             updateLogoSize();
         });
     </script>
+    <!-- Click sound, image protection: one shared script -->
+    <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
 </body>
 </html>
