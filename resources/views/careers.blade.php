@@ -329,9 +329,6 @@
                             </svg></div>
                         <div class="d-lg-flex d-none">
                             <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                <a href="{{ route('register') }}" class="btn btn-wave btn-secondary">
-                                    New User
-                                </a>
                                 <a href="{{ route('login') }}" class="btn btn-wave btn-info">
                                     Login
                                 </a>

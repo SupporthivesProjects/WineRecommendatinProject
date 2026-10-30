@@ -230,6 +230,14 @@ class PersistentLoginTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_public_registration_is_disabled(): void
+    {
+        $this->assertFalse(Route::has('register'));
+        $this->get('/register')->assertNotFound();
+        $this->get('/login')->assertOk();
+        $this->get('/careers')->assertOk();
+    }
+
     public function test_inactive_user_still_cannot_log_in(): void
     {
         $user = $this->makeUser('user');
