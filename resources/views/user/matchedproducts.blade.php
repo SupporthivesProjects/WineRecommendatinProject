@@ -2,6 +2,7 @@
 @section('title', 'Questionnaire Responses')
 @section('admindashboardcontent')
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
 
     <style>
         #mystyle
@@ -417,6 +418,7 @@
 
 @endsection
 @push('scripts')
+    <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
     <script>
         for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -556,6 +558,11 @@
                                     timeOut: 3000
                                 }
                             );
+
+                            // Bottle-into-cart animation (visual only, see assets/js/cart-animation.js)
+                            if (window.WineCartFx) {
+                                WineCartFx.play(button, document.getElementById('floating-cart'), document.getElementById('floating-cart-count'));
+                            }
                         }
                     }
 

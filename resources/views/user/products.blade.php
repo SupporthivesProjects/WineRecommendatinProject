@@ -2,6 +2,7 @@
 @section('title', 'Browse Wines')
 @section('admindashboardcontent')
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
 
     <style>
         html, body {
@@ -671,6 +672,7 @@
 
 @endsection
 @push('scripts')
+    <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
     <script>
         $(function () {
             const prices = @json($products->pluck('display_price')->unique()->sort()->values());
@@ -846,6 +848,11 @@
                                     positionClass: 'toast-top-right',
                                     timeOut: 3000
                                 });
+
+                                // Bottle-into-cart animation (visual only, see assets/js/cart-animation.js)
+                                if (window.WineCartFx) {
+                                    WineCartFx.play(this, document.getElementById('sidebar-cart-icon'), document.getElementById('sidebar-cart-count'));
+                                }
                             }
                         }
 
