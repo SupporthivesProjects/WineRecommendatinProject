@@ -174,6 +174,8 @@ class ProductController extends Controller
         try {
             // Fetch only active cheese products with pagination
             $cheeses = CheeseProduct::where('is_active', 1)
+                // Same store order the view previously got from one-by-one loading
+                ->with(['stores' => fn ($q) => $q->orderBy('store_inventory.id')])
                 ->paginate(12);
 
             return view('allcheese', [

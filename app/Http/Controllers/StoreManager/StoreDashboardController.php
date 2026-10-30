@@ -287,14 +287,22 @@ class StoreDashboardController extends Controller
 
         $orders = CartCheckout::where('store_id', $storeId)
             ->latest()
-            ->get()
-            ->map(function ($order) {
+            ->get();
+
+        // Load every product referenced by these orders in one query
+        $productIds = $orders->flatMap(fn ($order) => array_column(json_decode($order->products, true) ?? [], 'id'))
+            ->filter()
+            ->unique();
+        $productsById = \App\Models\Product::whereIn('id', $productIds)->get()->keyBy('id');
+
+        $orders = $orders
+            ->map(function ($order) use ($productsById) {
 
                 $products = json_decode($order->products, true) ?? [];
 
                 foreach ($products as &$p) {
-                    // Fetch product from DB
-                    $product = \App\Models\Product::find($p['id'] ?? null);
+                    // Fetch product from the preloaded set
+                    $product = $productsById->get($p['id'] ?? null);
 
                     // Attach image
                     $p['image'] = $product && $product->image1

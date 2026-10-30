@@ -28,8 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // View composer for header notifications
-        View::composer('*', function ($view) {
+        // View composer for header notifications. Only the header uses these values,
+        // so it is not attached to '*' (which re-ran the queries for every partial).
+        View::composer('partials.header', function ($view) {
 
             $pendingRequests = 0;
             $hasPendingEnquiries = false;

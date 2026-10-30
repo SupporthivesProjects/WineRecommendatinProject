@@ -286,19 +286,20 @@ class DashboardController extends Controller
 
         // Check if questionnaire_logs table exists
         if (Schema::hasTable('questionnaire_logs')) {
+            // One grouped query for the whole range instead of three counts per day
+            $logCounts = $dateRange->isEmpty() ? collect() : QuestionnaireLog::whereIn('admin_id', [1, 2, 3])
+                ->whereDate('created_at', '>=', $dateRange->first())
+                ->whereDate('created_at', '<=', $dateRange->last())
+                ->selectRaw('admin_id, DATE(created_at) as log_date, COUNT(*) as total')
+                ->groupBy('admin_id', 'log_date')
+                ->get()
+                ->groupBy('admin_id')
+                ->map(fn ($rows) => $rows->pluck('total', 'log_date'));
+
             foreach ($dateRange as $date) {
-                // Using model instead of DB facade
-                $adminData[] = QuestionnaireLog::where('admin_id', 1)
-                    ->whereDate('created_at', $date)
-                    ->count();
-
-                $admin1Data[] = QuestionnaireLog::where('admin_id', 2)
-                    ->whereDate('created_at', $date)
-                    ->count();
-
-                $admin2Data[] = QuestionnaireLog::where('admin_id', 3)
-                    ->whereDate('created_at', $date)
-                    ->count();
+                $adminData[] = (int) ($logCounts->get(1)[$date] ?? 0);
+                $admin1Data[] = (int) ($logCounts->get(2)[$date] ?? 0);
+                $admin2Data[] = (int) ($logCounts->get(3)[$date] ?? 0);
             }
         } else {
             // Provide sample data if table doesn't exist
