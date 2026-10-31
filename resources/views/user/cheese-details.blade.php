@@ -2,6 +2,7 @@
 @section('title', 'Cheese Details')
 @section('admindashboardcontent')
     @push('styles')
+        <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
         <style>
             .cheese-image {
                 height: 470px;
@@ -144,6 +145,14 @@
             .wine-carousel .card-body .d-flex {
                 margin-top: auto;
             }
+            /* Paired wine cards: same hover as Browse Wines (card look comes from product-listing.css) */
+            .product-card-grid .wine-card {
+                transition: box-shadow 0.3s ease, transform 0.3s ease;
+            }
+            .product-card-grid .wine-card:hover {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+                transform: translateY(-4px);
+            }
         </style>
     @endpush
 
@@ -225,28 +234,37 @@
             <div class="row mt-5">
                 <div class="col-12">
                     <h3 class="mb-4">Wines That Pair Well With {{ $cheese->name }}</h3>
-                    <div class="row g-4">
+                    <div class="row row-sm product-card-grid">
                         @foreach ($pairedWines as $wine)
-                            <div class="col-12 col-sm-6 col-lg-3 mb-4">
-                                <div class="card h-100">
-                                <div class="wine-image-wrapper">
-                                    <img loading="lazy" src="{{ asset('storage/' . $wine->image1) }}"
-                                        class="wine-card-image"
-                                        alt="{{ $wine->wine_name }}">
-                                </div>
+                            @php
+                                $wineType = strtolower($wine->type ?? '');
+                                $wineEmoji = match ($wineType) {
+                                    'red' => '🍷',
+                                    'white' => '🥂',
+                                    'sparkling' => '✨',
+                                    default => '',
+                                };
+                            @endphp
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <div class="card custom-card wine-card">
+                                    <div class="image-wrapper product-card-media">
+                                        <img loading="lazy" src="{{ asset('storage/' . $wine->image1) }}"
+                                            class="card-img-top rounded-0"
+                                            alt="{{ $wine->wine_name }}">
+                                    </div>
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ $wine->wine_name }}</h5>
-                                        <p class="card-text text-muted small">
-                                            {{ $wine->winery }}<br>
-                                            {{ $wine->vintage_year }} • {{ $wine->wine_sub_region }} • {{ $wine->country }}
+                                        <h5 class="card-title fw-semibold">{{ $wine->wine_name }}</h5>
+                                        <p>
+                                            <strong>Type:</strong> {{ ucfirst($wineType) }}
+                                            @if ($wineEmoji)
+                                                <span style="font-size: 1.5em;">{{ $wineEmoji }}</span>
+                                            @endif
                                         </p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="h6 mb-0">₹ &nbsp; {{ number_format($wine->retail_price, 2) }}</span>
-                                            <a href="{{ route('products.show', $wine->id) }}"
-                                                class="btn btn-sm btn-outline-dark">
-                                                View
-                                            </a>
-                                        </div>
+                                        <p><strong>Vintage:</strong> {{ $wine->vintage_year ?: '—' }}</p>
+                                        <p><strong>MRP:</strong> {{ number_format($wine->retail_price, 2) }}</p>
+                                        <a href="{{ route('products.show', $wine->id) }}" class="btn btn-dark mt-2 rounded-0">
+                                            View details
+                                        </a>
                                     </div>
                                 </div>
                             </div>
