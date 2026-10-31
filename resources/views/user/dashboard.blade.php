@@ -719,7 +719,47 @@
         #questionnaireModal #backBtn.btn-danger:hover {
             background-color: #e0c58b !important;
             color: #2d0606 !important;
-        }    </style>
+        }
+
+        /* Price question: price labels in a row under the slider (same layout as the
+           Questionnaires page), in white on the dark popup */
+        #questionnaireModal #question-container {
+            color: #fff;
+        }
+        #questionnaireModal .sliderInputWrapper {
+            position: relative;
+        }
+        #questionnaireModal .sliderInputWrapper input[type="range"] {
+            position: relative;
+            z-index: 2;
+            margin-top: -8px;
+        }
+        #questionnaireModal .barsDiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-end;
+            min-height: 30px;
+            padding: 0 10px;
+        }
+        #questionnaireModal .barDiv {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1px;
+        }
+        #questionnaireModal .single-bar {
+            width: 1px;
+            height: 25px;
+            background: #e0c58b;
+        }
+        #questionnaireModal p.barValuesPrice {
+            margin-bottom: 4px;
+            color: #fff;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+    </style>
 
 @endpush
         <!-- Start::app-content -->
