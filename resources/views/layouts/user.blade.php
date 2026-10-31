@@ -467,6 +467,49 @@
     }
     
 
+    /* Light golden page background for the signed-in kiosk pages */
+    :root {
+        --kiosk-bg: #faf4e8;
+        --body-bg-rgb: 250, 244, 232;
+    }
+    body,
+    .page {
+        background-color: var(--kiosk-bg) !important;
+    }
+    /* Full-width sections that painted their own white / cream background */
+    .user-main .filters-and-cards,
+    .user-main .pd-page,
+    .user-main > .container-fluid.bg-white {
+        background-color: transparent !important;
+    }
+    /* Filter sidebars were the theme's lavender "light" colour */
+    .user-main .listing-filter-panel.bg-light {
+        background-color: #fff !important;
+        border: 1px solid #eadfd5;
+    }
+
+    /* The content area fills the screen, so the footer always follows it with no gap
+       (kiosk screens are tall) */
+    .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .user-main {
+        flex: 1 0 auto;
+    }
+    .page > .userfooter {
+        margin-top: 0 !important;
+    }
+    /* Questionnaires page: the split hero stretches down to the footer */
+    .user-main:has(> #questionnaires) {
+        display: flex;
+        flex-direction: column;
+    }
+    .user-main > #questionnaires {
+        flex: 1 0 auto;
+    }
+
 </style>
 
 @stack('styles')
@@ -479,7 +522,9 @@
 
     <div class="page">
         @include('partials.user-header')
-         @yield('admindashboardcontent')
+        <main class="user-main">
+            @yield('admindashboardcontent')
+        </main>
 
         @include("partials/headersearch_modal")
         @include("partials/userfooter")
