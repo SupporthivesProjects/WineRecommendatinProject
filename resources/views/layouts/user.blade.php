@@ -472,8 +472,9 @@
         --kiosk-bg: #faf4e8;
         --body-bg-rgb: 250, 244, 232;
     }
-    body,
-    .page {
+    /* On body only: the parallax hero images sit at z-index -1, so a background on
+       .page (or main) would paint over them */
+    body {
         background-color: var(--kiosk-bg) !important;
     }
     /* Full-width sections that painted their own white / cream background */
