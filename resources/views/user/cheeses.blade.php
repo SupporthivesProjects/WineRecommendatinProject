@@ -182,7 +182,7 @@
                                         </div>
                                         <div class="d-grid">
                                             <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark w-100 py-2 d-flex align-items-center justify-content-center">
-                                            View Details
+                                            View details
                                             </a>
                                         </div>
                                     </div>

@@ -199,7 +199,7 @@
                                         </div>
                                         <div class="d-grid">
                                             <a href="{{ route('user.cheese.show', $cheese->id) }}" class="btn btn-dark btn-sm w-100">
-                                                View Details
+                                                View details
                                             </a>
                                         </div>
                                     </div>

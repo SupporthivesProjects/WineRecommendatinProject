@@ -1487,5 +1487,7 @@
     
     <!-- Click sound, image protection: one shared script -->
     <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
+    <!-- Phone filter drawer -->
+    <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
     </body>
 </html>

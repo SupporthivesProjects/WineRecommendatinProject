@@ -499,7 +499,7 @@
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)
                                                         <span class="featured-badge">
-                                                            <i class="fas fa-crown"></i>
+                                                            <i class="fas fa-crown"></i> Featured
                                                         </span>
                                                     @endif
                                                 </div>
@@ -523,9 +523,11 @@
                                                         @endif
                                                     </p>
 
+                                                    <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
+
                                                     <p><strong>MRP:</strong> {{ $product->display_price }}</p>
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
-                                                        Read More !!
+                                                        View details
                                                     </a>
                                                     <button
                                                         class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
@@ -533,7 +535,7 @@
                                                         data-product-name="{{ $product->wine_name }}"
                                                         data-product-price="{{ $product->display_price }}">
 
-                                                        {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
+                                                        {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -658,6 +660,8 @@
 
 @endsection
 @push('scripts')
+    <!-- Phone filter drawer -->
+    <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
     <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
     <script>
         $(function () {
@@ -815,7 +819,7 @@
                             if (isInCart) {
                                 this.classList.remove('btn-dark');
                                 this.classList.add('btn-light');
-                                this.textContent = 'Add to Cart';
+                                this.textContent = 'Add to cart';
 
                                 toastr.warning('Product removed from cart!', 'Removed', {
                                     closeButton: true,
@@ -826,7 +830,7 @@
                             } else {
                                 this.classList.remove('btn-light');
                                 this.classList.add('btn-dark');
-                                this.textContent = 'Remove from Cart';
+                                this.textContent = 'Remove from cart';
 
                                 toastr.success('Product added to cart!', 'Added', {
                                     closeButton: true,

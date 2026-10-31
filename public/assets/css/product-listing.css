@@ -95,3 +95,113 @@ html body {
         overflow-y: auto;
     }
 }
+
+/* ---------- Phone filter drawer (see listing-filters.js) ---------- */
+
+.listing-filters-toggle,
+.listing-filters-head,
+.listing-filters-foot,
+.listing-filters-backdrop {
+    display: none;
+}
+
+@media (max-width: 767.98px) {
+    .listing-filters-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        margin-bottom: 16px;
+        padding: 0 18px;
+        background: #fff;
+        border: 1px solid #7b1e3a;
+        color: #7b1e3a;
+        font-weight: 500;
+    }
+
+    div.listing-filter-panel {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2100;
+        width: 85%;
+        max-width: 340px;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        margin: 0;
+        padding: 0 20px 20px !important;
+        background: #fff !important;
+        border-radius: 0 !important;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+        overflow-y: auto;
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+    }
+
+    div.listing-filter-panel.is-open {
+        transform: none;
+    }
+
+    .listing-filters-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        margin-bottom: 8px;
+        padding: 12px 0;
+        background: #fff;
+        border-bottom: 1px solid #eadfd5;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .listing-filters-close {
+        width: 44px;
+        height: 44px;
+        background: none;
+        border: 0;
+        color: #3b0f1a;
+        font-size: 1.75rem;
+        line-height: 1;
+    }
+
+    .listing-filters-foot {
+        display: block;
+        position: sticky;
+        bottom: 0;
+        padding-top: 12px;
+        background: #fff;
+    }
+
+    .listing-filters-apply {
+        width: 100%;
+        min-height: 48px;
+        background: #7b1e3a;
+        border: 0;
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .listing-filters-backdrop:not([hidden]) {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 2090;
+        background: rgba(20, 4, 8, 0.5);
+    }
+
+    html.listing-filters-locked {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 767.98px) and (prefers-reduced-motion: reduce) {
+    div.listing-filter-panel {
+        transition: none;
+    }
+}

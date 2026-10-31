@@ -1,8 +1,8 @@
-@extends('layouts.bootdashboard')
+@extends('layouts.user')
 @section('title', 'Wine Details')
 @section('admindashboardcontent')
-    <!-- TechSomm brand colours (this page uses the admin layout) -->
-    <link rel="stylesheet" href="{{ asset('assets/css/brand.css') }}?v={{ filemtime(public_path('assets/css/brand.css')) }}">
+    <!-- Shared product cards (Similar Products) -->
+    <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <style>
         /* Star Rating Styles */
         .rating-stars {
@@ -58,16 +58,145 @@
             }
         }
 
-        .card.custom-card.wine-card .image-wrapper img.card-img-top {
-            object-fit: contain;
-            width: 308px;
-            height: 287px;
-            display: flex;
-            margin-left: auto;
-            margin-right: auto;
+        /* Kiosk header band */
+        .pd-hero {
+            background: #2d0606;
+            color: #fff;
+            padding: 120px 0 36px;
         }
-        .image-wrapper {
-            padding: 10px;
+        .pd-crumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .pd-crumb a {
+            color: #e0c58b;
+            text-decoration: none;
+        }
+        .pd-hero-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 10px;
+        }
+        .pd-hero-title {
+            margin: 0;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.25rem;
+            color: #fff;
+        }
+        .pd-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .pd-hero-actions .btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0;
+            font-weight: 500;
+        }
+        .pd-btn-light {
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            color: #fff;
+        }
+        .pd-btn-light:hover {
+            background: #fff;
+            color: #2d0606;
+        }
+        .pd-btn-gold {
+            background: #de9313;
+            border: 1px solid #de9313;
+            color: #2d0606;
+        }
+        .pd-btn-gold:hover {
+            background: #e0c58b;
+            color: #2d0606;
+        }
+
+        /* Page body */
+        .pd-page {
+            background: #f8f5f2;
+            padding: 40px 0 64px;
+        }
+        .pd-page .card {
+            border: 1px solid #eadfd5;
+            border-radius: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        .productdesc .product-carousel {
+            background: #fff;
+            border: 1px solid #eadfd5;
+            padding: 16px;
+        }
+        .product-main-image {
+            height: 420px;
+        }
+        .productdesc h4 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #3b0f1a;
+        }
+
+        /* Add to cart is the main action; once in the cart it becomes an outline "Remove from cart" */
+        .productdesc .buy-now-btn {
+            min-height: 48px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+        .productdesc .buy-now-btn.btn-light {
+            background: #7b1e3a !important;
+            border-color: #7b1e3a !important;
+            color: #fff !important;
+        }
+        .productdesc .buy-now-btn.btn-dark {
+            background: transparent !important;
+            border-color: #7b1e3a !important;
+            color: #7b1e3a !important;
+        }
+
+        /* Phones: smaller image; specs as label/value rows instead of a wide table */
+        @media (max-width: 767.98px) {
+            .pd-hero {
+                padding: 100px 0 28px;
+            }
+            .pd-hero-title {
+                font-size: 1.75rem;
+            }
+            .product-main-image {
+                height: 300px;
+            }
+            .pd-specs table,
+            .pd-specs tbody,
+            .pd-specs tr,
+            .pd-specs th,
+            .pd-specs td {
+                display: block;
+                width: 100%;
+            }
+            .pd-specs table {
+                border: 0 !important;
+            }
+            .pd-specs tr {
+                padding: 10px 0;
+                border-bottom: 1px solid #eadfd5;
+            }
+            .pd-specs th,
+            .pd-specs td {
+                border: 0 !important;
+                padding: 0 4px !important;
+                white-space: normal !important;
+            }
+            .pd-specs th {
+                font-size: 0.8rem;
+                font-weight: 500;
+                color: #6c625e;
+            }
         }
     </style>
     
@@ -123,40 +252,35 @@
         });
     </script>
 
-    <div class="">
+    <!-- Kiosk header band (dark, so the transparent navbar stays readable) -->
+    <section class="pd-hero">
         <div class="container">
-            <!-- Start::page-header -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-header-breadcrumb">
-                <div>
-                    <h2 class="main-content-title fs-24 mb-1">Welcome To Products Boards</h2>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Products</li>
-                    </ol>
-                </div>
-
-                <div>
-                    <a href="{{ route('user.cart') }}" class="btn btn-dark me-2">
-                        View Cart (<span id="cart-count">
-                            {{ collect($cart ?? [])->sum('quantity') }}
-                        </span>)
-                    </a>
-
-                    <a href="{{ url()->previous() }}" class="btn btn-secondary">
+            <nav class="pd-crumb" aria-label="Breadcrumb">
+                <a href="{{ route('user.dashboard') }}">Home</a>
+                <span aria-hidden="true">/</span>
+                <a href="{{ route('user.products') }}">Browse Wines</a>
+                <span aria-hidden="true">/</span>
+                <span>Wine Details</span>
+            </nav>
+            <div class="pd-hero-row">
+                <h1 class="pd-hero-title">Wine Details</h1>
+                <div class="pd-hero-actions">
+                    <a href="{{ url()->previous() }}" class="btn pd-btn-light">
                         <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
-                    <a href="{{ route('user.products') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Browse Wines
+                    <a href="{{ route('user.products') }}" class="btn pd-btn-light">
+                        Browse Wines
+                    </a>
+                    <a href="{{ route('user.cart') }}" class="btn pd-btn-gold">
+                        View Cart (<span id="cart-count">{{ collect($cart ?? [])->sum('quantity') }}</span>)
                     </a>
                 </div>
-                <!-- <div>
-                    <a href="{{ url()->previous() }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Back
-                    </a>
-                </div> -->
             </div>
+        </div>
+    </section>
 
-            <!-- End::page-header -->
+    <div class="pd-page">
+        <div class="container">
 
 
             <!-- Start::row-1 -->
@@ -167,7 +291,7 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-12 col-md-12">
                                     <div class="row">
-                                        <div class="col-md-7 offset-md-1 col-sm-9 col-8">
+                                        <div class="col-12 col-md-10 offset-md-1">
                                             <div class="product-carousel">
                                                 <div id="carousel" class="carousel slide" data-bs-ride="false">
                                                     <div class="carousel-inner">
@@ -296,7 +420,7 @@
                                                 data-product-name="{{ $product->wine_name }}"
                                                 data-product-price="{{ $product->display_price }}">
 
-                                                {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
+                                                {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
 
                                             </button>
                                         </div>
@@ -322,8 +446,8 @@
 
                             {{-- Specifications --}}
                             <div class="mt-4">
-                                <h5 class="mb-3">Specifications :</h5>
-                                <div class="table-responsive">
+                                <h5 class="mb-3">Specifications</h5>
+                                <div class="table-responsive pd-specs">
                                     @php
                                         // Type icons + colors
                                         $typeIcons = [
@@ -381,8 +505,10 @@
                                                 <td>{!! $extraIcons['sp_mentions'] ?? $defaultIcon !!} {{ $product->sp_mentions ?? 'N/A' }}</td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">Vintage <small>[ Please check for recent editions with our store manager ]</small></th>
-                                                <td>{!! $extraIcons['vintage_year'] ?? $defaultIcon !!} {{ $product->vintage_year ?? 'N/A' }}</td>
+                                                <th scope="row">Vintage</th>
+                                                <td>{!! $extraIcons['vintage_year'] ?? $defaultIcon !!} {{ $product->vintage_year ?? 'N/A' }}
+                                                    <small class="d-block text-muted">Please check for recent editions with our store manager.</small>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Alcohol Volume</th>
@@ -743,9 +869,9 @@
                             <h5 class="main-content-label mb-0 mt-2">Similar Products</h5>
                         </div>
                         <div class="p-4">
-                            <div class="row row-sm">
+                            <div class="row row-sm product-card-grid">
                                 @foreach ($relatedProducts as $product)
-                                    <div class="col-xl-4 wine-card-container"
+                                    <div class="col-md-6 col-xl-4 wine-card-container"
                                         data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
                                         data-winery="{{ $product->winery }}"
@@ -753,12 +879,12 @@
                                         data-country="{{ $product->country }}">
                                         <div class="card custom-card wine-card">
                                             <!-- Image -->
-                                            <div class="image-wrapper" style="position: relative;">
+                                            <div class="image-wrapper product-card-media">
                                                 <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                                                     class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                 @if ($product->is_featured == 1)
-                                                    <span class="featured-badge">Featured</span>
+                                                    <span class="featured-badge"><i class="fas fa-crown"></i> Featured</span>
                                                 @endif
                                             </div>
 
@@ -781,13 +907,13 @@
                                                     @endif
                                                 </p>
 
-                                                <p><strong>Country: </strong> {{ $product->country }}</p>
-                                                <p><strong>Price: </strong> {{ $product->display_price }}</p>
+                                                <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
+                                                <p><strong>MRP:</strong> {{ $product->display_price }}</p>
 
                                                 
                                                 <a href="{{ route('user.productdetails', $product->id) }}"
                                                     class="btn btn-dark mt-2 rounded-0">
-                                                    Tell Me More !!
+                                                    View details
                                                 </a>
                                                 <button
                                                     class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
@@ -795,7 +921,7 @@
                                                     data-product-name="{{ $product->wine_name }}"
                                                     data-product-price="{{ $product->display_price }}">
 
-                                                    {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from Cart' : 'Add to Cart' }}
+                                                    {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
 
                                                 </button>
 
@@ -899,7 +1025,7 @@
                     if (isInCart) {
                         this.classList.remove('btn-dark');
                         this.classList.add('btn-light');
-                        this.textContent = 'Add to Cart';
+                        this.textContent = 'Add to cart';
                         toastr.warning('Product removed from cart!', 'Removed', {
                             closeButton: true,
                             progressBar: true,
@@ -911,7 +1037,7 @@
 
                         this.classList.remove('btn-light');
                         this.classList.add('btn-dark');
-                        this.textContent = 'Remove from Cart';
+                        this.textContent = 'Remove from cart';
 
                         toastr.success('Product added to cart!', 'Added', {
                             closeButton: true,

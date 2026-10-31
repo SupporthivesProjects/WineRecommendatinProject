@@ -213,7 +213,7 @@
             <!-- Start::row-6 -->
                 <div class="row">
                     <!-- Filter sidebar -->
-                    <div class="col-3 listing-filter-panel">
+                    <div class="col-12 col-md-3 bg-light rounded rounded-2 p-4 align-self-start listing-filter-panel">
                         <div class="filter-group">
                         <!-- Types Filter -->
                             <h4 class="fw-bold mb-4">Types</h4>
@@ -274,7 +274,8 @@
                             $maxPrice = $products->max('display_price');
                         @endphp
 
-                        <div class="price-slider mt-2">
+                        <h4 class="fw-bold mb-4">Retail Price</h4>
+                        <div class="price-slider mt-2 mb-4">
                             <div class="input_range_wrapper">
                                 <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
                                 <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
@@ -320,7 +321,7 @@
 
 
                     <!-- Products grid -->
-                    <div class="col-9">
+                    <div class="col-12 col-md-9">
                         <div class="row row-sm product-card-grid">
                             @foreach ($products as $product)
                                 <div class="col-md-6 col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
@@ -337,7 +338,7 @@
                                             <!-- Featured badge on the image -->
                                             @if ($product->admin_featured_product == 1)
                                                 <span class="featured-badge">
-                                                    <i class="fas fa-crown"></i>
+                                                    <i class="fas fa-crown"></i> Featured
                                                 </span>
                                             @endif
                                         </div>
@@ -362,19 +363,21 @@
                                                 @endif
                                             </p>
 
+                                            <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
+
                                             <p><strong>MRP:</strong> {{ $product->display_price }}</p>
                                             <button
                                                 type="button"
                                                 class="btn btn-dark mt-2 rounded-0 open-product-modal"
                                                 data-product-id="{{ $product->id }}"
                                             >
-                                                View !!
+                                                View details
                                             </button>
                                             <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
                                                     data-product-id="{{ $product->id }}"
                                                     data-product-name="{{ $product->wine_name }}"
                                                     data-product-price="{{ $product->display_price }}">
-                                                {{ in_array($product->id, $cart) ? 'Remove from Cart' : 'Buy Now' }}
+                                                {{ in_array($product->id, $cart) ? 'Remove from cart' : 'Add to cart' }}
                                             </button>
                                         </div>
                                     </div>
@@ -406,6 +409,8 @@
 
 @endsection
 @push('scripts')
+    <!-- Phone filter drawer -->
+    <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
     <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
     <script>
         for (let i = 0; i < localStorage.length; i++) {
@@ -517,7 +522,7 @@
 
                             button.classList.remove('btn-dark');
                             button.classList.add('btn-light');
-                            button.textContent = 'Buy Now';
+                            button.textContent = 'Add to cart';
 
                             toastr.warning(
                                 'Product removed from cart!',
@@ -534,7 +539,7 @@
 
                             button.classList.remove('btn-light');
                             button.classList.add('btn-dark');
-                            button.textContent = 'Remove from Cart';
+                            button.textContent = 'Remove from cart';
 
                             toastr.success(
                                 'Product added to cart!',

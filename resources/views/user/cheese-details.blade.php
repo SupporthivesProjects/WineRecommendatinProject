@@ -210,7 +210,7 @@
                                 data-product-price="{{ $cheese->price }}"
                                 {{ !$inStock ? 'disabled' : '' }}>
                             <i class="fe fe-shopping-cart me-2"></i>
-                            {{ in_array($cheese->id, $cart) ? 'Remove from Cart' : 'Add to Cart' }}
+                            {{ in_array($cheese->id, $cart) ? 'Remove from cart' : 'Add to cart' }}
                         </button>
                         <button class="btn btn-outline-secondary">
                             <i class="fe fe-heart me-2"></i>Add to Wishlist
@@ -300,7 +300,7 @@
                                     this.classList.remove('btn-dark');
                                     this.classList.add('btn-light');
                                     this.innerHTML =
-                                        '<i class="fe fe-shopping-cart me-2"></i>Add to Cart';
+                                        '<i class="fe fe-shopping-cart me-2"></i>Add to cart';
 
                                     toastr.warning('Cheese removed from cart!', 'Removed', {
                                         closeButton: true,
@@ -312,7 +312,7 @@
                                     this.classList.remove('btn-light');
                                     this.classList.add('btn-dark');
                                     this.innerHTML =
-                                        '<i class="fe fe-shopping-cart me-2"></i>Remove from Cart';
+                                        '<i class="fe fe-shopping-cart me-2"></i>Remove from cart';
 
                                     toastr.success('Cheese added to cart!', 'Added', {
                                         closeButton: true,

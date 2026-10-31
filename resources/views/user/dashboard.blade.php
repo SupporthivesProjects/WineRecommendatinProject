@@ -1031,7 +1031,7 @@
                         <!-- <div class="lottie-container w-100" id="lottieAnimation" style="height: 250px; width: auto;"></div> -->
 
                         <!-- Question Side -->
-                        <div class="w-100 p-4 d-flex flex-column justify-content-between">
+                        <div class="w-100 p-4 d-flex flex-column justify-content-start">
                             <div id="question-container">
                                 <!-- Question and options will load here -->
                             </div>
@@ -1051,6 +1051,8 @@
 
 @endsection
 @push('scripts')
+    <!-- "Preparing your questions…" overlay while a questionnaire loads -->
+    <script src="{{ asset('assets/js/questionnaire-loader.js') }}?v={{ filemtime(public_path('assets/js/questionnaire-loader.js')) }}"></script>
 <script src="{{ asset('assets/js/wine-loader.js') }}?v={{ filemtime(public_path('assets/js/wine-loader.js')) }}"></script>
 
 <script>
@@ -1333,6 +1335,7 @@
                     $(this).addClass("hover");
 
                     if ($(this).hasClass("hover")) {
+                        QuestionLoader.show();
                         fetch(`/get-questions/${questionnaireId}`)
                             .then(response => {
                                 console.log(`Fetching questions for questionnaire ID: ${questionnaireId}`);
@@ -1350,6 +1353,7 @@
 
                                 if (!data.questions || data.questions.length === 0) { 
                                     console.warn('No questions returned or data format is incorrect:', data);
+                                    QuestionLoader.hide();
                                     alert('No questions available for this questionnaire.');
                                     return;
                                 }
@@ -1367,12 +1371,14 @@
                                 console.log(`Loaded ${questions.length} questions.`);
 
                                 renderQuestion();
+                                QuestionLoader.hide();
                                 new bootstrap.Modal(document.getElementById('questionnaireModal')).show();
 
 
                             })
                             .catch(error => {
                                 console.error('An error occurred while loading questions:', error);
+                                QuestionLoader.hide();
                                 alert('Something went wrong while loading the questionnaire. Please try again.');
                             });
                     } 

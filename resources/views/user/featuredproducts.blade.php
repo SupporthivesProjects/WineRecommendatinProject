@@ -370,7 +370,7 @@
 
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)
-                                                        <span class="featured-badge">Featured</span>
+                                                        <span class="featured-badge"><i class="fas fa-crown"></i> Featured</span>
                                                     @endif
                                                 </div>
 
@@ -393,9 +393,9 @@
                                                         @endif
                                                     </p>
 
-                                                    <p><strong>Vintage Year:</strong> {{ $product->vintage_year }}</p>
+                                                    <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
-                                                        Tell Me More !!
+                                                        View details
                                                     </a>
                                                 </div>
                                             </div>
@@ -454,6 +454,8 @@
 
 @endsection
 @push('scripts')
+    <!-- Phone filter drawer -->
+    <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
     <script>
         $(function () {
             const prices = @json($products->pluck('retail_price')->unique()->sort()->values());

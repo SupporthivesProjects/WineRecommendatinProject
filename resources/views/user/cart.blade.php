@@ -114,6 +114,48 @@
                 transition: background 0.3s ease;
             }
 
+            /* Phones: bottom bar with the total and Checkout (kiosk and desktop unchanged) */
+            .cart-mobile-bar {
+                display: none;
+            }
+            @media (max-width: 767.98px) {
+                body {
+                    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+                }
+                .cart-mobile-bar {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 16px;
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 1040;
+                    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+                    background: #2d0606;
+                    color: #fff;
+                    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+                }
+                .cart-mobile-total small {
+                    display: block;
+                    color: rgba(255, 255, 255, 0.7);
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.08em;
+                }
+                .cart-mobile-total strong {
+                    font-size: 1.15rem;
+                }
+                .cart-mobile-checkout {
+                    min-height: 48px;
+                    padding: 0 28px;
+                    background: #de9313;
+                    border: 0;
+                    color: #2d0606;
+                    font-weight: 600;
+                }
+            }
             .checkout-btn:hover {
                 background: #6d0000;
             }
@@ -228,6 +270,15 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Phones: total and checkout always in reach -->
+    <div class="cart-mobile-bar">
+        <div class="cart-mobile-total">
+            <small>Total</small>
+            <strong id="mobile-total-amount">₹0.00</strong>
+        </div>
+        <button type="button" class="cart-mobile-checkout" onclick="document.getElementById('checkout-btn').click()">Checkout</button>
     </div>
 @endsection
 
@@ -407,6 +458,7 @@
             document.getElementById('total-items').textContent = totalItems;
             document.getElementById('subtotal').textContent = '₹' + subtotal.toFixed(2);
             document.getElementById('total-amount').textContent = '₹' + subtotal.toFixed(2);
+            document.getElementById('mobile-total-amount').textContent = '₹' + subtotal.toFixed(2);
         }
 
         // Checkout functionality - same as original

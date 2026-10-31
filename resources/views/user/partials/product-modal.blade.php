@@ -159,7 +159,7 @@
                         data-product-name="{{ $product->wine_name }}"
                         data-product-price="{{ $product->retail_price }}"
                     >
-                        {{ $isInCart ? 'Remove from Cart' : 'Buy Now' }}
+                        {{ $isInCart ? 'Remove from cart' : 'Add to cart' }}
                     </button>
                 </div>
                 <hr>
@@ -261,7 +261,7 @@
                                             class="btn btn-outline-dark w-100 related-product-btn"
                                             data-product-id="{{ $related->id }}"
                                         >
-                                            Tell Me More
+                                            View details
                                         </button>
                                     </div>
                                 </div>

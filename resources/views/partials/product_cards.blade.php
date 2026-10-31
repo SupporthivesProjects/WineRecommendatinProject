@@ -52,7 +52,7 @@
 
                     @if($product->admin_featured_product)
                         <span class="featured-badge">
-                            <i class="fas fa-crown"></i>
+                            <i class="fas fa-crown"></i> Featured
                         </span>
                     @endif
                 </div>
@@ -63,13 +63,14 @@
                         <strong>Type:</strong> {{ ucfirst($type) }}
                         <span style="font-size: 1.5em;">{!! $emoji !!}</span>
                     </p>
+                    <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
                 </div>
 
                 <!-- HOVER OVERLAY -->
                 <div class="hover-overlay">
                     <a href="{{ route('user.productdetails', $product->id) }}" 
                     class="btn btn-dark rounded-0 overlay-btn">
-                    Tell me more !!
+                    View details
                     </a>
                 </div>
             </div>
