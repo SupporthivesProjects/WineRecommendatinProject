@@ -275,14 +275,9 @@
         width: 100%;
         z-index: 1050;
         padding: 0px 24px;
-        background: rgba(45, 6, 6, 0.9);
+        background: transparent;
         box-sizing: border-box;
         transition: background-color 0.3s ease;
-    }
-
-    /* Transparent only over a dark hero photo (pages set the transparent_navbar section) */
-    #mainNavbar.navbar-over-hero {
-        background: transparent;
     }
 
     #mainNavbar.scrolled {
@@ -371,9 +366,12 @@
 
     /* Mobile layout */
     @media (max-width: 991.98px) {
-        #mainNavbar,
-        #mainNavbar.navbar-over-hero {
-            background: rgba(45, 6, 6, 0.96);
+        /* While the menu is open, give it a background so the links stay readable */
+        #mainNavbar:has(.navbar-collapse.show),
+        #mainNavbar:has(.navbar-collapse.collapsing),
+        #mainNavbar .navbar-collapse.show,
+        #mainNavbar .navbar-collapse.collapsing {
+            background-color: rgba(45, 6, 6, 0.96);
         }
 
         #mainNavbar .navbar-inner {

@@ -1,6 +1,5 @@
 @extends('layouts.user')
 @section('title', 'Featured Products')
-@section('transparent_navbar', '1')
 @section('admindashboardcontent')
 
 @push('styles')
