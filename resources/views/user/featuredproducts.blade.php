@@ -13,6 +13,7 @@
          #mystyle
         {
             font-family: 'Cinzel Decorative', serif;
+            color: #330003;
 
         }
        .featured-badge {
@@ -98,7 +99,7 @@
 
         .parallax-bg 
         {
-            background-image:  url('{{ asset('images/blacklanding.jpg') }}');
+            background-image:  url('{{ asset('images/FinalFeatured.jpg') }}');
             background-size: cover;
             background-position: center;
             position: absolute;
@@ -221,7 +222,7 @@
         <section class="parallax-container">
             <div class="parallax-bg"></div>
             <div class="hero-text my-3">
-                <h1 class="text-white" id="mystyle">Explore Our Finest Wines</h1>
+                <h1  id="mystyle">Explore Our Finest Wines</h1>
                 <p class="text-muted">Curated selections for every occasion</p>
                 <a type="button" class="btn btn-dark" href="#products">
                     Explore

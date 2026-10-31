@@ -304,7 +304,7 @@
         <section class="parallax-container">
             <div class="parallax-bg"></div>
             <div class="hero-text my-3">
-                <h1 class="text-black" id="mystyle">Explore Our Finest Wines</h1>
+                <h1 class="text-black " id="mystyle">Explore Our Finest Wines</h1>
                 <p>Curated selections for every occasion</p>
                 <a type="button" class="btn btn-dark" href="#products">
                     Explore
