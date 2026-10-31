@@ -694,7 +694,32 @@
         #questionnairesdashboard .qcard-cta:hover svg {
             transform: translateX(4px);
         }
-    </style>
+
+        /* Questionnaire popup (dark): white question, light-gold options, gold outline Back */
+        #questionnaireModal #question-container h5 {
+            color: #fff !important;
+        }
+        #questionnaireModal .option-box {
+            color: #e0c58b !important;
+            border-color: rgba(224, 197, 139, 0.45) !important;
+        }
+        #questionnaireModal .option-box:hover {
+            color: #fff !important;
+            border-color: #e0c58b !important;
+        }
+        #questionnaireModal .option-box.active {
+            color: #fff !important;
+            border-color: #e0c58b !important;
+            background-color: rgba(224, 197, 139, 0.18) !important;
+        }
+        #questionnaireModal #backBtn.btn-danger {
+            color: #e0c58b !important;
+            border-color: #e0c58b !important;
+        }
+        #questionnaireModal #backBtn.btn-danger:hover {
+            background-color: #e0c58b !important;
+            color: #2d0606 !important;
+        }    </style>
 
 @endpush
         <!-- Start::app-content -->
@@ -1065,6 +1090,7 @@
             let questionnaireValidation = {};
             const surpriseMeConfig = @json(config('questionnaire_surprise_me'));
             let surpriseMeActive = {};
+            let surpriseMeSelections = {};
             const questionLayouts = {
                 country: 2,
                 sub_region:2,
@@ -1542,6 +1568,12 @@
                     ${renderQuestionHTML(q, currentStep)}
                 `;
 
+                // A freshly drawn question starts with nothing selected, Surprise Me included
+                if (q.key === 'taste') {
+                    surpriseMeActive[q.key] = false;
+                    delete surpriseMeSelections[q.key];
+                }
+
                 setupEventsForBatch([currentStep]);
                 backBtn.style.display = 'inline-block';
             }
@@ -1715,48 +1747,50 @@
                             {
                                 const isTasteQuestion = q.key === 'taste';
 
-                                if (input.value === "SurpriseMe" && input.checked && isTasteQuestion) {
+                                if (input.value === "SurpriseMe" && isTasteQuestion) {
 
-                                    // Get predefined options for this template and question
-                                    const templateId = selectedQuestionnaireId;
-                                    // Answers and the Surprise Me config are keyed by position (question1, question2, ...)
-                                    const questionId = `question${index + 1}`;
+                                    const surpriseLabel = document.querySelector(`label[for="${input.id}"]`);
 
-                                    const surpriseOptions =
-                                        surpriseMeConfig?.[templateId]?.[questionId] || [];
+                                    if (input.checked) {
+                                        // Preset tastes for this questionnaire and question; the config and the
+                                        // answers are keyed by position (question1, question2, ...)
+                                        const templateId = selectedQuestionnaireId;
+                                        const questionId = `question${index + 1}`;
+                                        const surpriseOptions =
+                                            surpriseMeConfig?.[templateId]?.[questionId] || [];
 
-                                    // Clear all selections first
-                                    inputs.forEach(i => {
-                                        i.checked = false;
+                                        // Match presets to the real option values (case-insensitive);
+                                        // without presets for this question, use every option
+                                        const optionValues = Array.from(inputs)
+                                            .map(i => i.value)
+                                            .filter(v => v !== 'SurpriseMe');
+                                        const presets = optionValues.filter(v =>
+                                            surpriseOptions.some(o => String(o).toLowerCase() === String(v).toLowerCase())
+                                        );
 
-                                        const label = document.querySelector(`label[for="${i.id}"]`);
-                                        if (label) {
-                                            label.classList.remove('active');
-                                        }
-                                    });
+                                        // Picked in the background and sent as the answer (see captureResponse)
+                                        surpriseMeSelections[q.key] = presets.length ? presets : optionValues;
+                                        surpriseMeActive[q.key] = true;
 
-                                    // Select the predefined Surprise Me options
-                                    inputs.forEach(i => {
-                                        // Case-insensitive, so "Fruit-Driven" in the config matches the "Fruit-driven" option
-                                        if (surpriseOptions.some(o => String(o).toLowerCase() === String(i.value).toLowerCase())) {
-                                            i.checked = true;
+                                        // On screen only "Surprise Me" is selected, so the result stays a surprise
+                                        inputs.forEach(i => {
+                                            if (i !== input) {
+                                                i.checked = false;
 
-                                            const label = document.querySelector(`label[for="${i.id}"]`);
-                                            if (label) {
-                                                label.classList.add('active');
+                                                const label = document.querySelector(`label[for="${i.id}"]`);
+                                                if (label) {
+                                                    label.classList.remove('active');
+                                                }
                                             }
+                                        });
+
+                                        if (surpriseLabel) {
+                                            surpriseLabel.classList.add('active');
                                         }
-                                    });
-
-                                    // Remember that Surprise Me was used
-                                    surpriseMeActive[q.key] = true;
-                                    // Highlight the SurpriseMe option
-                                    const surpriseLabel = document.querySelector(
-                                        `label[for="${input.id}"]`
-                                    );
-
-                                    if (surpriseLabel) {
-                                        surpriseLabel.classList.add('active');
+                                    } else {
+                                        // "Surprise Me" switched off again
+                                        surpriseMeActive[q.key] = false;
+                                        delete surpriseMeSelections[q.key];
                                     }
 
                                 } else if (input.value !== "SurpriseMe" && input.checked) {
@@ -1775,6 +1809,7 @@
 
                                     if (isTasteQuestion) {
                                         surpriseMeActive[q.key] = false;
+                                        delete surpriseMeSelections[q.key];
                                     }
                                 }
 
@@ -1868,6 +1903,11 @@
                         answer = selected.length
                             ? Array.from(selected).map(el => el.value)
                             : 'no response';
+
+                        // Surprise Me on the taste question: send the tastes picked in the background
+                        if (q.key === 'taste' && surpriseMeActive[q.key] && (surpriseMeSelections[q.key] || []).length) {
+                            answer = surpriseMeSelections[q.key].slice();
+                        }
 
                     }
                     else if (q.type === 'input') {
