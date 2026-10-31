@@ -1,0 +1,76 @@
+/*
+ * TechSomm brand colours for the kiosk, login and public pages.
+ * Not loaded on the homepage or the admin / store-manager panels.
+ * The theme (styles.min.css) builds its colours from variables such as --primary-rgb;
+ * overriding those here recolours buttons, pagination and checkboxes without
+ * touching page markup.
+ */
+:root {
+    --brand-wine-900: #3b0f1a;
+    --brand-wine-700: #7b1e3a;
+    --brand-wine-500: #a8324a;
+    --brand-gold-500: #de9313;
+    --brand-gold-200: #e0c58b;
+    --brand-cream-50: #f8f5f2;
+
+    /* Theme accents: template purple and pink become wine */
+    --primary-rgb: 123, 30, 58;
+    --secondary-rgb: 168, 50, 74;
+}
+
+/* Main actions (Read more, View details, Search, cart buttons): slate becomes wine */
+.btn-dark {
+    --dark-rgb: 123, 30, 58;
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+    --dark-rgb: 59, 15, 26;
+}
+
+/* Login button in the public header: cyan becomes wine */
+.btn-info {
+    --info-rgb: 123, 30, 58;
+}
+
+/* Secondary actions (Back, Browse Wines): solid pink becomes a wine outline */
+.btn-secondary {
+    background-color: transparent !important;
+    border-color: var(--brand-wine-700) !important;
+    color: var(--brand-wine-700) !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: var(--brand-wine-700) !important;
+    color: #fff !important;
+}
+
+/* Questionnaire steps: Next is the main action (was green), Back secondary (was red) */
+#nextBtn.btn-success {
+    --success-rgb: 123, 30, 58;
+}
+
+#nextBtn.btn-success:hover {
+    --success-rgb: 59, 15, 26;
+}
+
+#backBtn.btn-danger {
+    background-color: transparent !important;
+    border-color: var(--brand-wine-700) !important;
+    color: var(--brand-wine-700) !important;
+}
+
+#backBtn.btn-danger:hover {
+    background-color: var(--brand-wine-700) !important;
+    color: #fff !important;
+}
+
+/* Hero headings (Cinzel Decorative is wide): keep them on the screen on phones */
+@media (max-width: 575.98px) {
+    #mystyle {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+}

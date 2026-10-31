@@ -1,5 +1,5 @@
 @extends('layouts.user')
-@section('title', 'Questionnaire Responses')
+@section('title', 'Your Wine Matches')
 @section('admindashboardcontent')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">

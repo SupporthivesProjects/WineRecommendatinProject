@@ -1,6 +1,10 @@
 @extends('layouts.bootdashboard')
+@section('title', 'Browse Cheeses')
 @section('admindashboardcontent')
 @push('styles')
+    <!-- Headline font and TechSomm brand colours -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/brand.css') }}?v={{ filemtime(public_path('assets/css/brand.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <style>
         html, body {

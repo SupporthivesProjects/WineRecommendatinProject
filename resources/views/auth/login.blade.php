@@ -21,7 +21,7 @@
             height:100%;
             margin:0;
             overflow:hidden;
-            background:#ecebfa !important;
+            background:var(--brand-cream-50, #f8f5f2) !important;
         }
 
         /* Remove white bottom band */
@@ -33,7 +33,34 @@
         /* Main wrapper */
         .min-h-screen{
             min-height:100vh !important;
-            background:#ecebfa !important;
+            background:var(--brand-cream-50, #f8f5f2) !important;
+        }
+
+        /* Brand panel and form (was the admin template's purple) */
+        .signpages .details{
+            background:var(--brand-wine-900, #3b0f1a) !important;
+        }
+        .signpages .details h5{
+            color:var(--brand-gold-200, #e0c58b);
+        }
+        .signpages .login_form .form-control{
+            min-height:44px;
+        }
+        .signpages .login_form .form-control:focus{
+            border-color:var(--brand-wine-500, #a8324a);
+            box-shadow:0 0 0 0.2rem rgba(168, 50, 74, 0.25);
+        }
+        .signpages .login_form .btn-primary{
+            min-height:44px;
+            border-radius:4px !important;
+            font-weight:500;
+        }
+        .signpages .login_form .btn-primary:hover{
+            background-color:var(--brand-wine-900, #3b0f1a) !important;
+            border-color:var(--brand-wine-900, #3b0f1a) !important;
+        }
+        .signpages #remember_me{
+            accent-color:var(--brand-wine-700, #7b1e3a);
         }
 
         /* Kiosk/tablet positioning */
@@ -57,8 +84,8 @@
                             <!-- Center the image with mx-auto -->
                             <!-- <img src="{{ asset('assets/images/svgs/user.svg') }}" class="ht-100 mb-0 mx-auto" alt="user"> -->
                             <img src="{{ asset('images/logofullwhite.png') }}" class="img-fluid mb-0 mx-auto" style="max-width:150px;" alt="user">
-                            <h5 class="my-4 font-bold">Welcome Back !</h5>
-                            <span class="text-white-6 fs-13 mb-5 mt-xl-0">Signup to create, discover and connect with the global community</span>
+                            <h5 class="my-4 font-bold">Welcome back</h5>
+                            <span class="text-white-6 fs-13 mb-5 mt-xl-0">Sign in to open the TechSomm wine kiosk.</span>
                         </div>
 
                         </div>
@@ -70,8 +97,8 @@
                                         <!-- Start of integrated Laravel Form -->
                                         <form method="POST" action="{{ route('login') }}">
                                             @csrf
-                                            <h5 class="text-start mb-2">Signin to Your Account</h5>
-                                            <p class="mb-4 text-muted fs-13 ms-0 text-start">Signin to access Admin Dashboard</p>
+                                            <h5 class="text-start mb-2">Sign in</h5>
+                                            <p class="mb-4 text-muted fs-13 ms-0 text-start">Use your store account email and password.</p>
                                             <!-- Email Address -->
                                             <div class="form-group text-start">
                                                 <label class="form-label" for="email">Email</label>
@@ -116,7 +143,7 @@
                                             <div class="flex items-center justify-end mt-4">
                                                 
 
-                                                <x-primary-button class="ms-3 btn btn-primary w-100">
+                                                <x-primary-button class="btn btn-primary w-100">
                                                     {{ __('Log in') }}
                                                 </x-primary-button>
                                             </div>

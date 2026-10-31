@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
 @endif
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<!-- Headline font and TechSomm brand colours -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('assets/css/brand.css') }}?v={{ filemtime(public_path('assets/css/brand.css')) }}">
 
 <!-- Sweet Alert  -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -272,9 +275,14 @@
         width: 100%;
         z-index: 1050;
         padding: 0px 24px;
-        background: transparent;
+        background: rgba(45, 6, 6, 0.9);
         box-sizing: border-box;
         transition: background-color 0.3s ease;
+    }
+
+    /* Transparent only over a dark hero photo (pages set the transparent_navbar section) */
+    #mainNavbar.navbar-over-hero {
+        background: transparent;
     }
 
     #mainNavbar.scrolled {
@@ -363,6 +371,11 @@
 
     /* Mobile layout */
     @media (max-width: 991.98px) {
+        #mainNavbar,
+        #mainNavbar.navbar-over-hero {
+            background: rgba(45, 6, 6, 0.96);
+        }
+
         #mainNavbar .navbar-inner {
             display: flex;
             flex-wrap: wrap;

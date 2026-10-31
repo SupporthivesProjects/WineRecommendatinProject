@@ -1,5 +1,6 @@
 @extends('layouts.user')
 @section('title', 'My Cart')
+@section('transparent_navbar', '1')
 @section('admindashboardcontent')
     @push('styles')
         <style>

@@ -1,4 +1,4 @@
-<nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark">
+<nav id="mainNavbar" class="navbar navbar-expand-lg navbar-dark @hasSection('transparent_navbar') navbar-over-hero @endif">
     <div class="container-fluid navbar-inner">
 
         {{-- Logo: LEFT --}}

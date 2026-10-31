@@ -1,7 +1,11 @@
 @extends('layouts.bootdashboard')
+@section('title', 'Contact Us')
 
 @section('admindashboardcontent')
     @push('styles')
+    <!-- Headline font and TechSomm brand colours -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/brand.css') }}?v={{ filemtime(public_path('assets/css/brand.css')) }}">
         <style>
             .contact-hero {
                 background-image: url('{{ asset('images/BrowseWines3.jpg') }}');

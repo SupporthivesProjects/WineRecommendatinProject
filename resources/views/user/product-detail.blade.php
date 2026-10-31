@@ -1,6 +1,8 @@
 @extends('layouts.bootdashboard')
-@section('title', 'Products')
+@section('title', 'Wine Details')
 @section('admindashboardcontent')
+    <!-- TechSomm brand colours (this page uses the admin layout) -->
+    <link rel="stylesheet" href="{{ asset('assets/css/brand.css') }}?v={{ filemtime(public_path('assets/css/brand.css')) }}">
     <style>
         /* Star Rating Styles */
         .rating-stars {

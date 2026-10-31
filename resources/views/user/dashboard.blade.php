@@ -1,5 +1,6 @@
 @extends('layouts.user')
 @section('title', 'Dashboard')
+@section('transparent_navbar', '1')
 @section('admindashboardcontent')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/wine-loader.css') }}?v={{ filemtime(public_path('assets/css/wine-loader.css')) }}">
@@ -10,7 +11,7 @@
         }
         .card-title 
         {
-            font-family: 'Cinzel Decorative', serif;
+            font-family: inherit;
         }
         #mystyle
         {
