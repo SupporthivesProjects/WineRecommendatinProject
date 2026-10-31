@@ -606,6 +606,94 @@
                 transition: none;
             }
         }
+
+        /* Questionnaire cards: ivory and gold, equal heights, button on the same line in every card */
+        #questionnairesdashboard .qcard {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fbf8f3;
+            border: 1px solid #e0c58b;
+            border-radius: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+        #questionnairesdashboard .qcard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+        }
+        #questionnairesdashboard .qcard-media {
+            position: relative;
+            background: #fff;
+            border-bottom: 1px solid #eadfd5;
+        }
+        #questionnairesdashboard .qcard-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            padding: 5px 9px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #7b1e3a;
+            color: #7b1e3a;
+            font-size: 0.7rem;
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        #questionnairesdashboard .qcard-body {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px 20px 16px;
+        }
+        #questionnairesdashboard .qcard-title {
+            margin: 0;
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #3b0f1a;
+        }
+        #questionnairesdashboard .qcard-rule {
+            width: 40px;
+            height: 2px;
+            background: #de9313;
+        }
+        #questionnairesdashboard .qcard-text {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: #5b4a4e;
+        }
+        #questionnairesdashboard .qcard-cta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 20px 20px;
+            padding: 12px 16px;
+            background: transparent;
+            border: 1px solid #7b1e3a;
+            border-radius: 0;
+            color: #7b1e3a;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        #questionnairesdashboard .qcard-cta:hover,
+        #questionnairesdashboard .qcard-cta:focus-visible {
+            background: #7b1e3a;
+            color: #fff;
+        }
+        #questionnairesdashboard .qcard-cta svg {
+            transition: transform 0.2s ease;
+        }
+        #questionnairesdashboard .qcard-cta:hover svg {
+            transform: translateX(4px);
+        }
     </style>
 
 @endpush
@@ -758,74 +846,82 @@
                                         <div class="row g-4">
                                             <!-- Card 1 -->
                                             <div class="col-12 col-md-6 col-lg-3">
-                                                <div class="card custom-card    ">
-                                                    <div class="questionnaire-label">First Sip</div>
-                                                    <img src="{{ asset(($cardImages[0] ?? 'images/FirstPour.jpeg')) }}"  class="card-img-top questionnaire-image" alt="First Sip" >
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-0">New to wine? Start with your First Sip — we'll keep it simple and fun.</h5>                                                 
+                                                <div class="card custom-card qcard">
+                                                    <div class="qcard-media">
+                                                        <span class="qcard-tag">Beginner</span>
+                                                        <img src="{{ asset(($cardImages[0] ?? 'images/FirstPour.jpeg')) }}" class="card-img-top questionnaire-image" alt="First Sip">
                                                     </div>
-                                                    <div class="text-center">
-                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="1" id="questionnaire_btn">
-                                                            I want to try now !!
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                                                            </svg>
-                                                        </button>
+                                                    <div class="qcard-body">
+                                                        <h4 class="qcard-title">First Sip</h4>
+                                                        <span class="qcard-rule" aria-hidden="true"></span>
+                                                        <p class="qcard-text">New to wine? Start with your First Sip — we'll keep it simple and fun.</p>
                                                     </div>
+                                                    <button class="btn qcard-cta open-questionnaire-modal" data-questionnaire-id="1">
+                                                        Start First Sip
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                             <!-- Card 2 -->
                                             <div class="col-12 col-md-6 col-lg-3">
-                                                <div class="card custom-card">
-                                                    <div class="questionnaire-label">Savy Sip</div>
-                                                    <img  src="{{ asset(($cardImages[1] ?? 'images/SavySipper.png')) }}" class="card-img-top questionnaire-image" alt="Savy Sip" >
-                                                    <div class="card-body">
-                                                        <h5 class="card-title  mb-0">Let’s fine-tune your sips with Savy Sipper.</h5>
+                                                <div class="card custom-card qcard">
+                                                    <div class="qcard-media">
+                                                        <span class="qcard-tag">Intermediate</span>
+                                                        <img src="{{ asset(($cardImages[1] ?? 'images/SavySipper.png')) }}" class="card-img-top questionnaire-image" alt="Savy Sip">
                                                     </div>
-                                                    <div class="text-center">
-                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="2" id="questionnaire_btn">
-                                                            I want to try now !!
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                            </svg>
-                                                        </button>
+                                                    <div class="qcard-body">
+                                                        <h4 class="qcard-title">Savy Sip</h4>
+                                                        <span class="qcard-rule" aria-hidden="true"></span>
+                                                        <p class="qcard-text">Let’s fine-tune your sips with Savy Sipper.</p>
                                                     </div>
+                                                    <button class="btn qcard-cta open-questionnaire-modal" data-questionnaire-id="2">
+                                                        Start Savy Sip
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                             <!-- Card 3 -->
                                             <div class="col-12 col-md-6 col-lg-3">
-                                                <div class="card custom-card">
-                                                    <div class="questionnaire-label">Cork Master</div>
-                                                    <img  src="{{ asset(($cardImages[2] ?? 'images/CorkMaster.jpeg')) }}"  class="card-img-top questionnaire-image" alt="Cork Master">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-0">Crafted for connoisseurs — unlock your palate with Cork Master.</h5>
+                                                <div class="card custom-card qcard">
+                                                    <div class="qcard-media">
+                                                        <span class="qcard-tag">Connoisseur</span>
+                                                        <img src="{{ asset(($cardImages[2] ?? 'images/CorkMaster.jpeg')) }}" class="card-img-top questionnaire-image" alt="Cork Master">
                                                     </div>
-                                                    <div class="text-center">
-                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="3" id="questionnaire_btn">
-                                                            I want to try now !!
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                            </svg>
-                                                        </button>
+                                                    <div class="qcard-body">
+                                                        <h4 class="qcard-title">Cork Master</h4>
+                                                        <span class="qcard-rule" aria-hidden="true"></span>
+                                                        <p class="qcard-text">Crafted for connoisseurs — unlock your palate with Cork Master.</p>
                                                     </div>
+                                                    <button class="btn qcard-cta open-questionnaire-modal" data-questionnaire-id="3">
+                                                        Start Cork Master
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                             <!-- Card 4 -->
                                             <div class="col-12 col-md-6 col-lg-3">
-                                                <div class="card custom-card">
-                                                    <div class="questionnaire-label">Quick Pour</div>
-                                                    <img src="{{ asset(($cardImages[3] ?? 'images/QuickPour1.png')) }}"   class="card-img-top questionnaire-image" alt="Quick Pur">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title  mb-0">For when you need a wine—quick and right.!!</h5>
+                                                <div class="card custom-card qcard">
+                                                    <div class="qcard-media">
+                                                        <span class="qcard-tag">Quick</span>
+                                                        <img src="{{ asset(($cardImages[3] ?? 'images/QuickPour1.png')) }}" class="card-img-top questionnaire-image" alt="Quick Pour">
                                                     </div>
-                                                    <div class="text-center">
-                                                        <button class="btn btn-danger open-questionnaire-modal w-100" data-questionnaire-id="4" id="questionnaire_btn">
-                                                            I want to try now !!
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon move-arrow" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
-                                                            </svg>
-                                                        </button>
+                                                    <div class="qcard-body">
+                                                        <h4 class="qcard-title">Quick Pour</h4>
+                                                        <span class="qcard-rule" aria-hidden="true"></span>
+                                                        <p class="qcard-text">For when you need a wine — quick and right.</p>
                                                     </div>
+                                                    <button class="btn qcard-cta open-questionnaire-modal" data-questionnaire-id="4">
+                                                        Start Quick Pour
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="arrow-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                                                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
