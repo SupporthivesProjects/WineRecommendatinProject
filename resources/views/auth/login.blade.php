@@ -72,6 +72,57 @@
             }
 
         }
+
+        /* Laptop and desktop: full-height split, brand panel left, form right */
+        @media (min-width: 992px){
+            .min-h-screen{
+                padding:0 !important;
+                justify-content:stretch !important;
+            }
+            .login-logo-wrapper{
+                display:none;
+            }
+            .signpages,
+            .signpages > div,
+            .signpages .col-md-12,
+            .signpages .card,
+            .signpages .card > .row{
+                width:100%;
+                min-height:100vh;
+                margin:0;
+            }
+            .signpages{
+                flex:1 1 auto;
+            }
+            .signpages > div,
+            .signpages .col-md-12{
+                padding:0;
+            }
+            .signpages .card{
+                border:0;
+                border-radius:0;
+                box-shadow:none;
+            }
+            .signpages .details,
+            .signpages .login_form{
+                flex:0 0 50%;
+                max-width:50%;
+                display:flex !important;
+                align-items:center;
+                justify-content:center;
+            }
+            /* Keep the logo and text above the theme's colour overlay (.details::before) */
+            .signpages .details > .position-absolute{
+                position:relative !important;
+                z-index:1;
+                margin:0 !important;
+                padding:0 24px !important;
+            }
+            .signpages .login_form .main-container{
+                width:100%;
+                max-width:480px;
+            }
+        }
     </style>
     <div >
         <!-- Start::row-1 -->
