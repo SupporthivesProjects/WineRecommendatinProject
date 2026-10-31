@@ -703,7 +703,7 @@
             let questionnaireRules = {};
             let selectedQuestionnaireId = null;
             let questionnaireValidation = {};
-            const surpriseMeConfig = @json(config('surprise_me'));
+            const surpriseMeConfig = @json(config('questionnaire_surprise_me'));
             let surpriseMeActive = {};
             const questionLayouts = {
                 country: 2,
@@ -1357,7 +1357,8 @@
 
                                     // Get predefined options for this template and question
                                     const templateId = selectedQuestionnaireId;
-                                    const questionId = q.id;
+                                    // Answers and the Surprise Me config are keyed by position (question1, question2, ...)
+                                    const questionId = `question${index + 1}`;
 
                                     const surpriseOptions =
                                         surpriseMeConfig?.[templateId]?.[questionId] || [];
@@ -1374,7 +1375,8 @@
 
                                     // Select the predefined Surprise Me options
                                     inputs.forEach(i => {
-                                        if (surpriseOptions.includes(i.value)) {
+                                        // Case-insensitive, so "Fruit-Driven" in the config matches the "Fruit-driven" option
+                                        if (surpriseOptions.some(o => String(o).toLowerCase() === String(i.value).toLowerCase())) {
                                             i.checked = true;
 
                                             const label = document.querySelector(`label[for="${i.id}"]`);
