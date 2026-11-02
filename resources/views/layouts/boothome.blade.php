@@ -131,6 +131,41 @@
             --info-rgb: 123, 30, 58;
         }
 
+        /* Header once it has shrunk on scroll (body.home-header-scrolled, set by the
+           logo-shrink scroll handler): wine bar, white links, yellow logo. White at the top. */
+        .app-header,
+        #sidebar {
+            transition: background-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        #sidebar .side-menu__item .fonthover {
+            transition: color 0.35s ease;
+        }
+        body.home-header-scrolled .app-header,
+        body.home-header-scrolled #sidebar {
+            background-color: #3b0f1a !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+        body.home-header-scrolled #sidebar .side-menu__item .fonthover,
+        body.home-header-scrolled #sidebar .side-menu__item.active .fonthover {
+            color: #fff;
+        }
+        body.home-header-scrolled #sidebar .side-menu__item:hover .fonthover {
+            color: #e0c58b;
+        }
+        body.home-header-scrolled .app-header .open-toggle i,
+        body.home-header-scrolled #sidebar .open-toggle i {
+            color: #fff;
+        }
+        /* The wine Login button would disappear on the wine bar: gold instead */
+        body.home-header-scrolled #sidebar .btn-info {
+            --info-rgb: 224, 197, 139;
+            color: #3b0f1a !important;
+        }
+        body.home-header-scrolled #sidebar .btn-info:hover {
+            --info-rgb: 222, 147, 19;
+            color: #fff !important;
+        }
+
         /* Phones: the centred hero text uses the full width instead of half of it,
            and the Featured Wines arrows sit below the cards instead of over the photos */
         @media (max-width: 767.98px) {
@@ -1710,6 +1745,14 @@
     </script>
 
     <script>
+        // Header logos, and the yellow logo used on the wine bar once the header has shrunk
+        const headerLogos = document.querySelectorAll('.app-header .header-logo img, #sidebar .header-logo img');
+        const scrolledLogoSrc = "{{ asset('images/logoblackyellow.png') }}";
+        headerLogos.forEach(img => { img.dataset.defaultSrc = img.getAttribute('src'); });
+        // Load the yellow logo up front so the swap does not flash
+        new Image().src = scrolledLogoSrc;
+        let headerScrolled = false;
+
         document.addEventListener("scroll", () => {
             const logo = document.getElementById("header_logo_desktop");
             const section2 = document.querySelector("#HIW"); // change to your section 2 id
@@ -1722,7 +1765,15 @@
                 logo.style.height = "70px"; // expand back
             }
 
-
+            // Shrunk header: wine bar and yellow logo; back to white at the top
+            const scrolled = window.scrollY >= 300;
+            if (scrolled !== headerScrolled) {
+                headerScrolled = scrolled;
+                document.body.classList.toggle('home-header-scrolled', scrolled);
+                headerLogos.forEach(img => {
+                    img.setAttribute('src', scrolled ? scrolledLogoSrc : img.dataset.defaultSrc);
+                });
+            }
         });
 
     </script>

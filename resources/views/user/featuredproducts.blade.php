@@ -5,6 +5,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/price-filter.css') }}?v={{ filemtime(public_path('assets/css/price-filter.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
 
     <style>
@@ -134,47 +135,7 @@
             min-height: 100vh;
         }
 
-        #price-slider .ui-slider-tick-mark {
-            position: absolute;
-            height: 10px;
-            width: 1px;
-            background: #000;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        #price-slider {
-            position: relative;
-        }
-
-        #price-slider .tick-label {
-            position: absolute;
-            top: 20px;
-            font-size: 12px;
-            transform: translateX(-50%);
-        }
-
-        
-        .ui-slider-range {
-            background-color: red!important; 
-        }
-
-        /* Slider handles */
-        .ui-slider-horizontal .ui-slider-handle {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: none;
-            background-color: #dc3545!important; 
-            top: -0.4em; 
-            cursor: pointer;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.2s ease;
-        }
-
-        .ui-slider-horizontal .ui-slider-handle:hover {
-            background-color: #0b5ed7!important; 
-        }
+        /* Retail Price slider: assets/css/price-filter.css */
 
 
         /* Style the label like a button/tag */
@@ -242,9 +203,6 @@
                                 <!-- Vintage Year Filter -->
                                 <div class="filter-group">
                                     <h4 class="fw-bold mb-4">Vintage Year</h4>
-                                    @php
-                                        $vintageYears = $products->pluck('vintage_year')->unique()->sort();
-                                    @endphp
                                     @foreach ($vintageYears as $year)
                                         <div class="form-check">
                                             <input class="form-check-input wine-vintage-year-filter" type="checkbox" value="{{ $year }}" id="vintage-year-{{ $year }}">
@@ -258,9 +216,6 @@
                                 <!-- Winery Filter -->
                                 <div class="filter-group">
                                     <h4 class="fw-bold mb-4">Winery</h4>
-                                    @php
-                                        $wineries = $products->pluck('winery')->unique()->sort();
-                                    @endphp
                                     @foreach ($wineries as $winery)
                                         <div class="form-check">
                                             <input class="form-check-input wine-winery-filter" type="checkbox" value="{{ $winery }}" id="winery-{{ strtolower($winery) }}">
@@ -273,12 +228,20 @@
 
                                 <!-- Retail Price Filter -->
                                 <!-- Retail Price Slider -->
-                                <div class="filter-group">
+                                <div class="filter-group ts-price-filter">
                                     <h4 class="fw-bold mb-4">Retail Price</h4>
-                                    <p>
-                                        <span id="price-range-label">₹&nbsp;<span id="price-min"></span> - ₹&nbsp;<span id="price-max"></span></span>
-                                    </p>
-                                    <div id="price-slider" style="margin-top: 10px;"></div>
+                                    <div class="ts-price-values" id="price-range-label">
+                                        <div class="ts-price-box">
+                                            <span class="ts-price-caption">Min</span>
+                                            <span class="ts-price-amount">₹<span id="price-min"></span></span>
+                                        </div>
+                                        <span class="ts-price-dash" aria-hidden="true">–</span>
+                                        <div class="ts-price-box">
+                                            <span class="ts-price-caption">Max</span>
+                                            <span class="ts-price-amount">₹<span id="price-max"></span></span>
+                                        </div>
+                                    </div>
+                                    <div id="price-slider"></div>
                                 </div>
                             </div>
                             <!-- Products grid -->
@@ -287,9 +250,6 @@
                                 <div class="row mb-4">
                                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                         <h4 class="fw-bold mb-3">Types</h4>
-                                        @php
-                                            $types = $products->pluck('type')->unique()->sort();
-                                        @endphp
 
                                         @foreach ($types as $type)
                                             @php
@@ -319,9 +279,6 @@
                                     </div>
                                     <div class="col-12 col-lg-6 mb-3 filter-group wine-type-scroll">
                                         <h4 class="fw-bold mb-3">Country</h4>
-                                        @php
-                                            $countries = $products->pluck('country')->unique()->sort();
-                                        @endphp
 
                                         @foreach ($countries as $country)
                                             @php
@@ -470,7 +427,7 @@
     <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
     <script>
         $(function () {
-            const prices = @json($products->pluck('retail_price')->unique()->sort()->values());
+            const prices = @json($allPrices); // every featured wine, not only this page
             const min = Math.floor(Math.min(...prices));
             const max = Math.ceil(Math.max(...prices));
 
@@ -481,8 +438,8 @@
                 step: 1,
                 values: [min, max],
                 slide: function (event, ui) {
-                    $("#price-min").text(ui.values[0]);
-                    $("#price-max").text(ui.values[1]);
+                    $("#price-min").text(Number(ui.values[0]).toLocaleString('en-IN'));
+                    $("#price-max").text(Number(ui.values[1]).toLocaleString('en-IN'));
 
                     // Optional: trigger filter function here
                     filterProductsByPrice(ui.values[0], ui.values[1]);
@@ -490,8 +447,8 @@
             });
 
             // Initialize labels
-            $("#price-min").text(min);
-            $("#price-max").text(max);
+            $("#price-min").text(Number(min).toLocaleString('en-IN'));
+            $("#price-max").text(Number(max).toLocaleString('en-IN'));
         });
 
         function filterProductsByPrice(min, max) {

@@ -1,0 +1,214 @@
+/*
+ * One look for the Retail Price filter on every wine listing page:
+ * Browse Wines (guest and logged in), Featured Products and matched products.
+ * Styling only: each page keeps its own slider script, ids and filtering.
+ *
+ * Markup: .ts-price-filter > .ts-price-values (Min / Max boxes) + the page's slider,
+ * either a jQuery UI slider (#price-slider) or two native range inputs (.input_range_wrapper).
+ */
+
+.ts-price-filter {
+    --tsp-wine: #7b1e3a;
+    --tsp-wine-dark: #3b0f1a;
+    --tsp-wine-light: #a8324a;
+    --tsp-gold: #a8730f;
+    --tsp-gold-soft: rgba(224, 197, 139, 0.5);
+    --tsp-track: #eadfd2;
+    --tsp-line: #e6d9c8;
+    --tsp-handle: 22px;
+}
+
+/* ---------- Min / Max read-out ---------- */
+
+.ts-price-filter .ts-price-values {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.ts-price-filter .ts-price-box {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--tsp-line);
+    border-radius: 10px;
+    background: #fff;
+    text-align: center;
+}
+
+.ts-price-filter .ts-price-caption {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--tsp-gold);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.ts-price-filter .ts-price-amount {
+    display: block;
+    overflow: hidden;
+    color: var(--tsp-wine-dark);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ts-price-filter .ts-price-dash {
+    flex: 0 0 auto;
+    color: #b9a68c;
+}
+
+/* ---------- jQuery UI slider ---------- */
+
+.ts-price-filter .ui-slider.ui-slider-horizontal {
+    position: relative;
+    height: 6px;
+    margin: 8px calc(var(--tsp-handle) / 2) 6px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--tsp-track);
+}
+
+.ts-price-filter .ui-slider .ui-slider-range {
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--tsp-wine-light), var(--tsp-wine));
+}
+
+.ts-price-filter .ui-slider .ui-slider-handle {
+    top: 50%;
+    width: var(--tsp-handle);
+    height: var(--tsp-handle);
+    margin-top: calc(var(--tsp-handle) / -2);
+    margin-left: calc(var(--tsp-handle) / -2);
+    border: 3px solid var(--tsp-wine);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(59, 15, 26, 0.25);
+    cursor: grab;
+    outline: none;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.ts-price-filter .ui-slider .ui-slider-handle:hover,
+.ts-price-filter .ui-slider .ui-slider-handle:focus,
+.ts-price-filter .ui-slider .ui-slider-handle.ui-state-active {
+    border-color: var(--tsp-wine);
+    background: #fff;
+    box-shadow: 0 0 0 6px var(--tsp-gold-soft), 0 2px 6px rgba(59, 15, 26, 0.25);
+}
+
+.ts-price-filter .ui-slider .ui-slider-handle.ui-state-active {
+    cursor: grabbing;
+    transform: scale(1.08);
+}
+
+/* The Min / Max boxes replace the old tick labels */
+.ts-price-filter .ui-slider-tick-mark,
+.ts-price-filter .tick-label {
+    display: none;
+}
+
+/* ---------- Two native range inputs (matched products) ---------- */
+
+.ts-price-filter .input_range_wrapper {
+    position: relative;
+    width: 100%;
+    height: var(--tsp-handle);
+}
+
+/* Track, with the selected part filled between --tsp-from and --tsp-to (set by the page) */
+.ts-price-filter .input_range_wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: calc(var(--tsp-handle) / 2);
+    left: calc(var(--tsp-handle) / 2);
+    height: 6px;
+    margin-top: -3px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        var(--tsp-track) var(--tsp-from, 0%),
+        var(--tsp-wine-light) var(--tsp-from, 0%),
+        var(--tsp-wine) var(--tsp-to, 100%),
+        var(--tsp-track) var(--tsp-to, 100%)
+    );
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--tsp-handle);
+    margin: 0;
+    background: transparent;
+    pointer-events: none; /* only the handles take clicks, so the two inputs can overlap */
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]::-webkit-slider-runnable-track {
+    height: var(--tsp-handle);
+    background: transparent;
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]::-moz-range-track {
+    height: var(--tsp-handle);
+    background: transparent;
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
+    width: var(--tsp-handle);
+    height: var(--tsp-handle);
+    margin-top: 0;
+    border: 3px solid var(--tsp-wine);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(59, 15, 26, 0.25);
+    cursor: grab;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: box-shadow 0.15s ease;
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]::-moz-range-thumb {
+    box-sizing: border-box;
+    width: var(--tsp-handle);
+    height: var(--tsp-handle);
+    border: 3px solid var(--tsp-wine);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(59, 15, 26, 0.25);
+    cursor: grab;
+    pointer-events: auto;
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]:hover::-webkit-slider-thumb,
+.ts-price-filter .input_range_wrapper input[type="range"]:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 6px var(--tsp-gold-soft), 0 2px 6px rgba(59, 15, 26, 0.25);
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]:hover::-moz-range-thumb,
+.ts-price-filter .input_range_wrapper input[type="range"]:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 6px var(--tsp-gold-soft), 0 2px 6px rgba(59, 15, 26, 0.25);
+}
+
+.ts-price-filter .input_range_wrapper input[type="range"]:focus {
+    outline: none;
+}
+
+/* Touch screens (kiosk tablets, phones): bigger handles */
+@media (pointer: coarse) {
+    .ts-price-filter {
+        --tsp-handle: 28px;
+    }
+}

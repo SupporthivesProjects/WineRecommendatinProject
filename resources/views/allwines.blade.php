@@ -42,6 +42,8 @@
 
     <!-- jquery -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <!-- Retail Price filter: same look on every wine listing -->
+    <link rel="stylesheet" href="{{ asset('assets/css/price-filter.css') }}?v={{ filemtime(public_path('assets/css/price-filter.css')) }}">
 
     <!-- OLD LINKS START -->
     <!-- Fonts -->
@@ -663,12 +665,20 @@
                                 </div>
 
                                 <!-- Retail Price Slider -->
-                                <div class="filter-group">
+                                <div class="filter-group ts-price-filter">
                                     <h4 class="fw-bold mb-4">Retail Price</h4>
-                                    <p>
-                                        <span id="price-range-label">₹ &nbsp;<span id="price-min"></span> - ₹ &nbsp;<span id="max-price"></span></span>
-                                    </p>
-                                    <div id="price-slider" style="margin-top: 10px;"></div>
+                                    <div class="ts-price-values" id="price-range-label">
+                                        <div class="ts-price-box">
+                                            <span class="ts-price-caption">Min</span>
+                                            <span class="ts-price-amount">₹<span id="price-min"></span></span>
+                                        </div>
+                                        <span class="ts-price-dash" aria-hidden="true">–</span>
+                                        <div class="ts-price-box">
+                                            <span class="ts-price-caption">Max</span>
+                                            <span class="ts-price-amount">₹<span id="max-price"></span></span>
+                                        </div>
+                                    </div>
+                                    <div id="price-slider"></div>
                                 </div>
                             </div>
 
@@ -948,8 +958,8 @@
                         step: 1,
                         values: [min, max],
                         slide: function(event, ui) {
-                            $("#price-min").text(ui.values[0]);
-                            $("#max-price").text(ui.values[1]);
+                            $("#price-min").text(Number(ui.values[0]).toLocaleString('en-IN'));
+                            $("#max-price").text(Number(ui.values[1]).toLocaleString('en-IN'));
                             // Only load products when user stops sliding for 300ms
                             clearTimeout(window.sliderTimeout);
                             window.sliderTimeout = setTimeout(loadProducts, 300);
@@ -957,8 +967,8 @@
                     });
 
                     // Initialize labels
-                    $("#price-min").text(min);
-                    $("#max-price").text(max);
+                    $("#price-min").text(Number(min).toLocaleString('en-IN'));
+                    $("#max-price").text(Number(max).toLocaleString('en-IN'));
                 }
 
                 // Debounce function to prevent rapid AJAX calls
@@ -1360,10 +1370,10 @@
                             const currentValues = $("#price-slider").slider("values");
                             if (key === 'min_price') {
                                 currentValues[0] = parseInt(value) || 0;
-                                $("#price-min").text(currentValues[0]);
+                                $("#price-min").text(Number(currentValues[0]).toLocaleString('en-IN'));
                             } else {
                                 currentValues[1] = parseInt(value) || 1000;
-                                $("#max-price").text(currentValues[1]);
+                                $("#max-price").text(Number(currentValues[1]).toLocaleString('en-IN'));
                             }
                             $("#price-slider").slider("values", currentValues);
                         }

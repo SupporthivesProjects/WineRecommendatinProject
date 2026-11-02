@@ -4,6 +4,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/price-filter.css') }}?v={{ filemtime(public_path('assets/css/price-filter.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
 
     <style>
@@ -85,32 +86,7 @@
             box-shadow: 0 0 0 0.1rem rgba(139, 0, 0, 0.25);
         }
     
-        .input_range_wrapper {
-            position: relative;
-            width: 100%;
-            height: 10px;
-        }
-        .input_range_wrapper input[type="range"] {
-            position: absolute;
-            width: 100%;
-            height: 3px;
-            background: transparent;
-            pointer-events: none; /* allows overlap */
-            -webkit-appearance: none;
-        }
-        .input_range_wrapper input[type="range"]::-webkit-slider-runnable-track {
-            height: 3px;
-            background: #E90C04;
-        }
-        .input_range_wrapper input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            pointer-events: auto;
-            width: 20px;
-            height: 20px;
-            background: #E90C04;
-            border-radius: 50%;
-            margin-top: -7.5px;
-        }
+        /* Retail Price slider: assets/css/price-filter.css */
         /* Floating cart icon at the top right, 10px below the navbar (height set by site-interactions.js) */
         .floating-cart {
             position: fixed;
@@ -275,15 +251,22 @@
                             $maxPrice = $products->max('display_price');
                         @endphp
 
-                        <h4 class="fw-bold mb-4">Retail Price</h4>
-                        <div class="price-slider mt-2 mb-4">
-                            <div class="input_range_wrapper">
-                                <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}">
-                                <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}">
+                        <div class="price-slider ts-price-filter mt-2 mb-4">
+                            <h4 class="fw-bold mb-4">Retail Price</h4>
+                            <div class="ts-price-values">
+                                <div class="ts-price-box">
+                                    <span class="ts-price-caption">Min</span>
+                                    <span class="ts-price-amount">₹<span id="min-val">{{ number_format($minPrice) }}</span></span>
+                                </div>
+                                <span class="ts-price-dash" aria-hidden="true">–</span>
+                                <div class="ts-price-box">
+                                    <span class="ts-price-caption">Max</span>
+                                    <span class="ts-price-amount">₹<span id="max-val">{{ number_format($maxPrice) }}</span></span>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <span>₹<span id="min-val">{{ number_format($minPrice) }}</span></span>
-                                <span>₹<span id="max-val">{{ number_format($maxPrice) }}</span></span>
+                            <div class="input_range_wrapper">
+                                <input type="range" id="price-min" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $minPrice }}" aria-label="Minimum price">
+                                <input type="range" id="price-max" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" aria-label="Maximum price">
                             </div>
                         </div>
 
@@ -645,8 +628,15 @@
             let maxPrice = parseFloat(maxSlider.value);
 
             // Display values
-            minVal.textContent = minPrice.toLocaleString();
-            maxVal.textContent = maxPrice.toLocaleString();
+            minVal.textContent = minPrice.toLocaleString('en-IN');
+            maxVal.textContent = maxPrice.toLocaleString('en-IN');
+
+            // Highlight the selected part of the track (display only, see price-filter.css)
+            const sliderMin = parseFloat(minSlider.min);
+            const sliderSpan = (parseFloat(minSlider.max) - sliderMin) || 1;
+            const rangeWrapper = minSlider.parentElement;
+            rangeWrapper.style.setProperty('--tsp-from', ((Math.min(minPrice, maxPrice) - sliderMin) / sliderSpan * 100) + '%');
+            rangeWrapper.style.setProperty('--tsp-to', ((Math.max(minPrice, maxPrice) - sliderMin) / sliderSpan * 100) + '%');
 
             // Loop all product cards
             document.querySelectorAll(".wine-card-container").forEach(card => {

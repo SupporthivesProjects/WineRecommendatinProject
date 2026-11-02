@@ -161,10 +161,20 @@ class UserController extends Controller
             return $product;
         });
 
+        // Filter values and price range: every featured wine of this store, not only the current page
+        $allFeatured = Product::whereIn('id', $featuredStoreProducts->pluck('product_id'))
+            ->get(['id', 'vintage_year', 'winery', 'type', 'country', 'retail_price']);
+
+        $vintageYears = $allFeatured->pluck('vintage_year')->unique()->sort();
+        $wineries = $allFeatured->pluck('winery')->unique()->sort();
+        $types = $allFeatured->pluck('type')->unique()->sort();
+        $countries = $allFeatured->pluck('country')->unique()->sort();
+        $allPrices = $allFeatured->pluck('retail_price')->filter(fn ($price) => $price !== null)->unique()->sort()->values();
+
         // Cart contents, so each card shows Add to cart or Remove from cart
         $cart = session()->get('cart', []);
 
-        return view('user.featuredproducts', compact('products', 'cart'));
+        return view('user.featuredproducts', compact('products', 'cart', 'vintageYears', 'wineries', 'types', 'countries', 'allPrices'));
     }
 
 
@@ -278,9 +288,18 @@ class UserController extends Controller
             return $product;
         });
 
+        // Price range for the slider: every wine of this store, not only the current page
+        $allPrices = Product::whereIn('id', $storeProducts->pluck('product_id'))
+            ->get(['id', 'retail_price', 'retail_price_maharashtra', 'retail_price_kolkata'])
+            ->map(fn ($product) => $product->getDisplayPrice())
+            ->filter(fn ($price) => $price !== null)
+            ->unique()
+            ->sort()
+            ->values();
+
         $cart = session()->get('cart', []);
 
-        return view('user.products', compact('products', 'cart', 'allTypes', 'allCountries','allVintageYears','allGrapeVarieties'));
+        return view('user.products', compact('products', 'cart', 'allTypes', 'allCountries','allVintageYears','allGrapeVarieties', 'allPrices'));
     }
 
     public function matchedproducts($submissionId)

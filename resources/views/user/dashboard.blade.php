@@ -688,6 +688,40 @@
             background: #7b1e3a;
             color: #fff;
         }
+        /* Explore buttons of the Products, Featured Products and Questionnaires rows: one style */
+        .section-explore-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            min-width: 180px;
+            padding: 13px 28px;
+            border: 1px solid #7b1e3a;
+            border-radius: 0;
+            background: #7b1e3a;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .section-explore-btn:hover,
+        .section-explore-btn:focus-visible {
+            border-color: #3b0f1a;
+            background: #3b0f1a;
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(59, 15, 26, 0.25);
+            transform: translateY(-2px);
+        }
+        .section-explore-btn svg {
+            transition: transform 0.25s ease;
+        }
+        .section-explore-btn:hover svg,
+        .section-explore-btn:focus-visible svg {
+            transform: translateX(4px);
+        }
+
         #questionnairesdashboard .qcard-cta svg {
             transition: transform 0.2s ease;
         }
@@ -1012,8 +1046,8 @@
                                 <p class="fs-20">Discover our curated collection of fine spirits and exceptional beverages, handpicked from 
                                     around the world. Whether you're a connoisseur or a casual enthusiast, our cellar offers 
                                     something special for every palate. Explore and indulge in quality like never before.</p>
-                                    <a class="btn btn-dark" type="button" href="{{ route('user.products') }}">
-                                        Explore 
+                                    <a class="btn section-explore-btn" href="{{ route('user.products') }}">
+                                        Explore <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                                     </a>
                             </div>
                             
@@ -1031,8 +1065,8 @@
                                     exceptional quality, taste, and craftsmanship. From bold reds to smooth whiskeys, these 
                                     standout products represent the very best of what we offer. Perfect for gifting or savoring 
                                     yourself.</p>
-                                    <a class="btn btn-light" type="button" href="{{ route('user.featuredproducts') }}">
-                                        Explore 
+                                    <a class="btn section-explore-btn" href="{{ route('user.featuredproducts') }}">
+                                        Explore <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                                     </a>
                             </div>
                         </div>
@@ -1048,8 +1082,8 @@
                                 <p class="fs-20">Explore our curated questionnaire to uncover your ideal wine match. 
                                     Whether you're a seasoned connoisseur or just beginning your journey, our tailored questions 
                                     will guide you to the perfect bottle for your taste and occasion.</p>
-                                    <a class="btn btn-light" type="button" href="{{ route('user.showQuestionnaire') }}">
-                                        Explore 
+                                    <a class="btn section-explore-btn" href="{{ route('user.showQuestionnaire') }}">
+                                        Explore <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
                                     </a>
                                 
                             </div>

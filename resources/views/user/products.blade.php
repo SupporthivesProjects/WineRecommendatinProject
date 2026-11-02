@@ -4,6 +4,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/price-filter.css') }}?v={{ filemtime(public_path('assets/css/price-filter.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
 
     <style>
@@ -132,47 +133,7 @@
             min-height: 100vh;
         }
 
-        #price-slider .ui-slider-tick-mark {
-            position: absolute;
-            height: 10px;
-            width: 1px;
-            background: #000;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        #price-slider {
-            position: relative;
-        }
-
-        #price-slider .tick-label {
-            position: absolute;
-            top: 20px;
-            font-size: 12px;
-            transform: translateX(-50%);
-        }
-
-        
-        .ui-slider-range {
-            background-color: red!important; 
-        }
-
-        /* Slider handles */
-        .ui-slider-horizontal .ui-slider-handle {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: none;
-            background-color: #dc3545!important; 
-            top: -0.4em; 
-            cursor: pointer;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.2s ease;
-        }
-
-        .ui-slider-horizontal .ui-slider-handle:hover {
-            background-color: #0b5ed7!important; 
-        }
+        /* Retail Price slider: assets/css/price-filter.css */
 
 
         /* Style the label like a button/tag */
@@ -305,12 +266,20 @@
                         
                                 <!-- Retail Price Filter -->
                                 <!-- Retail Price Slider -->
-                                <div class="filter-group">
+                                <div class="filter-group ts-price-filter">
                                     <h4 class="fw-bold mb-4">Retail Price</h4>
-                                    <p>
-                                        <span id="price-range-label">₹&nbsp;<span id="price-min"></span> - ₹&nbsp;<span id="price-max"></span></span>
-                                    </p>
-                                    <div id="price-slider" style="margin-top: 10px;"></div>
+                                    <div class="ts-price-values" id="price-range-label">
+                                        <div class="ts-price-box">
+                                            <span class="ts-price-caption">Min</span>
+                                            <span class="ts-price-amount">₹<span id="price-min"></span></span>
+                                        </div>
+                                        <span class="ts-price-dash" aria-hidden="true">–</span>
+                                        <div class="ts-price-box">
+                                            <span class="ts-price-caption">Max</span>
+                                            <span class="ts-price-amount">₹<span id="price-max"></span></span>
+                                        </div>
+                                    </div>
+                                    <div id="price-slider"></div>
                                 </div>
                             </div>
                             <!-- Products grid -->
@@ -573,7 +542,7 @@
     <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
     <script>
         $(function () {
-            const prices = @json($products->pluck('display_price')->unique()->sort()->values());
+            const prices = @json($allPrices); // every wine of the store, not only this page
             const min = Math.floor(Math.min(...prices));
             const max = Math.ceil(Math.max(...prices));
 
@@ -584,8 +553,8 @@
                 step: 1,
                 values: [min, max],
                 slide: function (event, ui) {
-                    $("#price-min").text(ui.values[0]);
-                    $("#price-max").text(ui.values[1]);
+                    $("#price-min").text(Number(ui.values[0]).toLocaleString('en-IN'));
+                    $("#price-max").text(Number(ui.values[1]).toLocaleString('en-IN'));
 
                     // Optional: trigger filter function here
                     filterProductsByPrice(ui.values[0], ui.values[1]);
@@ -593,8 +562,8 @@
             });
 
             // Initialize labels
-            $("#price-min").text(min);
-            $("#price-max").text(max);
+            $("#price-min").text(Number(min).toLocaleString('en-IN'));
+            $("#price-max").text(Number(max).toLocaleString('en-IN'));
 
             // Tick marks and price labels under the slider
             const slider = $("#price-slider");
