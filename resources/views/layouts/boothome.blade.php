@@ -156,6 +156,14 @@
         #sidebar .header-logo img.logo-fading {
             opacity: 0;
         }
+        /* The yellow logo file has wide empty margins (artwork is ~53% of the image, the red
+           logo ~98%), so scale it up to look the same size as the shrunk logo on About/Services.
+           Applied only while the yellow file is shown, so the white header is unchanged. */
+        .app-header .header-logo img[src$="logoblackyellow.png"],
+        #sidebar .header-logo img[src$="logoblackyellow.png"] {
+            transform: scale(1.85);
+            transform-origin: center;
+        }
         body.home-header-scrolled .app-header,
         body.home-header-scrolled #sidebar {
             background-color: #3b0f1a !important;
