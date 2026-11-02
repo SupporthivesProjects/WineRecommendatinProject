@@ -367,9 +367,13 @@
                                                 <!-- Image at the top -->
                                                 <div class="image-wrapper product-card-media">
                                                     @php
+                                                        // Same image as Browse Wines (image1); the product_images table is a fallback
                                                         $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
+                                                        $cardImage = $product->image1
+                                                            ? asset('storage/' . $product->image1)
+                                                            : ($primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg'));
                                                     @endphp
-                                                    <img decoding="async" loading="lazy" src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                                    <img decoding="async" loading="lazy" src="{{ $cardImage }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)
