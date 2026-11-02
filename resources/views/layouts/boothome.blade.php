@@ -126,6 +126,38 @@
         }
     </style>
     <style>
+        /* Login button in the header: wine instead of cyan */
+        .btn-info {
+            --info-rgb: 123, 30, 58;
+        }
+
+        /* Phones: the centred hero text uses the full width instead of half of it,
+           and the Featured Wines arrows sit below the cards instead of over the photos */
+        @media (max-width: 767.98px) {
+            .hero-content-div {
+                width: calc(100% - 32px);
+            }
+            /* The full-width hero text would sit under the slide arrows; the dots and
+               swiping still change slides */
+            #carouselExampleIndicators .carousel-control-prev,
+            #carouselExampleIndicators .carousel-control-next {
+                display: none;
+            }
+            .featured-wines-carousel .glide__arrows {
+                position: static;
+                display: flex;
+                justify-content: center;
+                gap: 16px;
+                margin-top: 16px;
+            }
+            .featured-wines-carousel .glide__arrow {
+                position: static;
+                transform: none;
+                margin: 0;
+            }
+        }
+    </style>
+    <style>
         /* Add these styles to your existing style tag */
         .wine-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;

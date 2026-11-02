@@ -1,3 +1,38 @@
+<style>
+    /* TechSomm footer: deep wine with light text, gold Submit (was navy and template purple) */
+    .landing-footer {
+        background-color: #3b0f1a !important;
+    }
+    .landing-footer,
+    .landing-footer p,
+    .landing-footer h4,
+    .landing-footer .main-footer {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    .landing-footer a {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    .landing-footer a:hover {
+        color: #e0c58b !important;
+    }
+    .landing-footer hr {
+        border-top-color: rgba(224, 197, 139, 0.25) !important;
+    }
+    .landing-footer #button-addon2 {
+        background-color: #de9313 !important;
+        border-color: #de9313 !important;
+        color: #2d0606 !important;
+        font-weight: 500;
+    }
+    .landing-footer #button-addon2:hover {
+        background-color: #e0c58b !important;
+        border-color: #e0c58b !important;
+    }
+    .landing-footer .btn-icon {
+        background-color: rgba(224, 197, 139, 0.15) !important;
+        color: #e0c58b !important;
+    }
+</style>
 <section class="section landing-footer pb-0 text-fixed-white demo-footer px-4">
             <div class="container">
                 <div class="row">
@@ -6,8 +41,8 @@
                             <div class="top-footer">
                                 <div class="row">
                                     <div class="col-lg-4 col-sm-12 col-md-12 reveal revealleft position-relative">
-                                        <a href="index.html"><img loading="lazy" alt="" class="logo mb-3"
-                                                src="{{ asset('images/logoblackred_new.png') }}" style="width:180px;"></a>
+                                        <a href="{{ route('home') }}"><img loading="lazy" alt="TechSomm" class="logo mb-3"
+                                                src="{{ asset('images/logofullwhite.png') }}" style="width:180px;"></a>
                                         
                                     </div>
                                     <div class="col-lg-2 col-sm-6 col-md-4 reveal revealleft position-relative">
