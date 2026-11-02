@@ -1,7 +1,19 @@
 <style>
+    /* Guest product details (loaded into #qrProductModal on the homepage).
+       Wine, gold and cream like the rest of the site; brand.css is not loaded here,
+       so the colours are set below. */
     .qr-product-modal-wrapper {
+        --qr-wine-900: #3b0f1a;
+        --qr-wine-700: #7b1e3a;
+        --qr-gold-500: #de9313;
+        --qr-gold-600: #a8730f;
+        --qr-gold-200: #e0c58b;
+        --qr-cream: #f8f5f2;
+        --qr-line: #eee4d6;
         width: 100%;
         overflow-x: hidden;
+        background: #fffdf9;
+        color: #2f2a2b;
     }
 
     .qr-product-modal-wrapper .product-image-wrapper {
@@ -13,53 +25,176 @@
         justify-content: center;
         position: sticky;
         top: 20px;
+        padding: 24px;
+        border: 1px solid rgba(224, 197, 139, 0.55);
+        border-radius: 14px;
+        background: radial-gradient(circle at 50% 40%, #ffffff 0%, var(--qr-cream) 70%);
     }
 
     .qr-product-modal-wrapper .product-main-image {
         max-width: 100%;
-        max-height: 70vh;
+        max-height: 66vh;
         width: auto;
         height: auto;
         object-fit: contain;
+        filter: drop-shadow(0 18px 22px rgba(59, 15, 26, 0.18));
     }
 
     .qr-product-modal-wrapper .product-title {
+        font-family: Georgia, 'Times New Roman', serif;
         font-size: 2rem;
+        font-weight: 700;
         line-height: 1.2;
+        color: var(--qr-wine-900);
         word-break: break-word;
+    }
+
+    .qr-product-modal-wrapper .qr-type-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border: 1px solid rgba(123, 30, 58, 0.25);
+        border-radius: 999px;
+        background: rgba(123, 30, 58, 0.07);
+        color: var(--qr-wine-700);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+    }
+
+    /* Key facts as label/value tiles */
+    .qr-product-modal-wrapper .qr-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin: 18px 0 8px;
+    }
+
+    .qr-product-modal-wrapper .qr-fact {
+        padding: 10px 14px;
+        border: 1px solid var(--qr-line);
+        border-radius: 10px;
+        background: #fff;
+    }
+
+    .qr-product-modal-wrapper .qr-fact-label {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--qr-gold-600);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
     .qr-product-modal-wrapper .product-meta {
         font-size: 15px;
-        line-height: 1.6;
+        line-height: 1.5;
+        color: #2f2a2b;
+        word-break: break-word;
+    }
+
+    .qr-product-modal-wrapper .qr-rating {
+        color: var(--qr-gold-600);
+        font-size: 14px;
+    }
+
+    /* Section headings with a short gold rule */
+    .qr-product-modal-wrapper .qr-section-title {
+        position: relative;
+        margin: 24px 0 14px;
+        padding-bottom: 8px;
+        color: var(--qr-wine-900);
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .qr-product-modal-wrapper .qr-section-title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 44px;
+        height: 2px;
+        background: var(--qr-gold-500);
     }
 
     .qr-product-modal-wrapper .tasting-notes {
+        margin: 0;
+        padding: 14px 18px;
+        border-left: 3px solid var(--qr-gold-500);
+        border-radius: 0 10px 10px 0;
+        background: var(--qr-cream);
+        color: #4a3b3f;
         line-height: 1.7;
     }
 
+    /* Specifications */
     .qr-product-modal-wrapper .specifications-table {
         width: 100%;
+        margin-bottom: 0;
+        border: 1px solid var(--qr-line);
+        border-radius: 10px;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
     }
 
-    .qr-product-modal-wrapper .specifications-table th {
-        width: 35%;
-        white-space: normal;
-    }
-
+    .qr-product-modal-wrapper .specifications-table th,
     .qr-product-modal-wrapper .specifications-table td {
+        padding: 10px 14px;
+        border: 0;
+        border-bottom: 1px solid var(--qr-line);
         white-space: normal;
         word-break: break-word;
     }
 
+    .qr-product-modal-wrapper .specifications-table tr:last-child th,
+    .qr-product-modal-wrapper .specifications-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .qr-product-modal-wrapper .specifications-table th {
+        width: 35%;
+        background: #fbf6ef;
+        color: var(--qr-wine-700);
+        font-weight: 600;
+    }
+
+    .qr-product-modal-wrapper .specifications-table td {
+        background: #fff;
+        color: #2f2a2b;
+    }
+
+    /* One calm colour for every icon instead of the mixed theme colours */
+    .qr-product-modal-wrapper .specifications-table td i,
+    .qr-product-modal-wrapper .qr-type-pill i {
+        width: 18px;
+        margin-right: 4px;
+        color: var(--qr-gold-500) !important;
+        text-align: center;
+    }
+
+    .qr-product-modal-wrapper .qr-type-pill i {
+        color: var(--qr-wine-700) !important;
+    }
+
+    /* Similar products */
     .qr-product-modal-wrapper .related-product-card {
         height: 100%;
-        border: 1px solid #d3d3d3;
-        border-radius: 0;
-        transition: border-color 0.2s ease;
+        border: 1px solid var(--qr-line);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
     }
+
     .qr-product-modal-wrapper .related-product-card:hover {
-    border-color: #333;
+        border-color: var(--qr-gold-200);
+        box-shadow: 0 10px 24px rgba(59, 15, 26, 0.12);
+        transform: translateY(-3px);
     }
 
     .qr-product-modal-wrapper .related-product-card .card-body {
@@ -68,15 +203,31 @@
         flex-grow: 1;
     }
 
+    .qr-product-modal-wrapper .related-product-card h6 {
+        color: var(--qr-wine-900);
+    }
+
     .qr-product-modal-wrapper .related-product-card .related-product-btn {
         margin-top: auto;
+        border: 1px solid var(--qr-wine-700);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--qr-wine-700);
+        font-weight: 500;
+    }
+
+    .qr-product-modal-wrapper .related-product-card .related-product-btn:hover,
+    .qr-product-modal-wrapper .related-product-card .related-product-btn:focus-visible {
+        background: var(--qr-wine-700);
+        color: #fff;
     }
 
     .qr-product-modal-wrapper .related-product-image {
         width: 100%;
         height: 220px;
         object-fit: contain;
-        padding: 10px;
+        padding: 14px;
+        background: var(--qr-cream);
     }
 
     @media (max-width: 991.98px) {
@@ -90,7 +241,7 @@
         }
 
         .qr-product-modal-wrapper .product-main-image {
-            max-height: 40vh;
+            max-height: 38vh;
         }
 
         .qr-product-modal-wrapper .product-title {
@@ -108,26 +259,23 @@
             height: 35vh;
             min-height: 230px;
             margin-bottom: 15px;
+            padding: 16px;
         }
 
         .qr-product-modal-wrapper .product-main-image {
-            max-height: 32vh;
+            max-height: 30vh;
         }
 
         .qr-product-modal-wrapper .product-title {
             font-size: 1.4rem;
         }
 
+        .qr-product-modal-wrapper .qr-facts {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
         .qr-product-modal-wrapper .product-meta {
             font-size: 14px;
-        }
-
-        .qr-product-modal-wrapper h4 {
-            font-size: 1.2rem;
-        }
-
-        .qr-product-modal-wrapper h5 {
-            font-size: 1.05rem;
         }
 
         .qr-product-modal-wrapper .specifications-table {
@@ -231,66 +379,49 @@
 
                 {{-- TYPE --}}
 
-                <p class="text-warning fw-semibold mb-2 product-meta">
+                <span class="qr-type-pill">
 
                     {!! $typeIcons[$type] ?? $defaultIcon !!}
 
-                    {{ ucfirst($product->type) ?? 'N/A' }}
+                    {{ ucfirst($product->type) ?: 'N/A' }}
 
-                </p>
-
-
-                {{-- METHOD --}}
-
-                <p class="mb-1 product-meta">
-
-                    <strong>Method:</strong>
-
-                    {!! $methodIcons[$method] ?? $defaultIcon !!}
-
-                    {{ ucfirst($product->method) ?? 'N/A' }}
-
-                </p>
+                </span>
 
 
-                {{-- GRAPE VARIETY --}}
+                {{-- KEY FACTS --}}
 
-                <p class="mb-1 product-meta">
+                <div class="qr-facts">
 
-                    <strong>Grape Variety:</strong>
+                    <div class="qr-fact">
+                        <span class="qr-fact-label">Method</span>
+                        <span class="product-meta">{{ ucfirst($product->method) ?: 'N/A' }}</span>
+                    </div>
 
-                    {{ $product->grape_variety ?? 'N/A' }}
+                    <div class="qr-fact">
+                        <span class="qr-fact-label">Grape Variety</span>
+                        <span class="product-meta">{{ $product->grape_variety ?? 'N/A' }}</span>
+                    </div>
 
-                </p>
+                    <div class="qr-fact">
+                        <span class="qr-fact-label">Region</span>
+                        <span class="product-meta">{{ $product->wine_sub_region ?? 'N/A' }}</span>
+                    </div>
 
+                    <div class="qr-fact">
+                        <span class="qr-fact-label">Country</span>
+                        <span class="product-meta">{{ $product->country ?? 'N/A' }}</span>
+                    </div>
 
-                {{-- REGION --}}
-
-                <p class="mb-2 product-meta">
-
-                    <strong>Region:</strong>
-
-                    {{ $product->wine_sub_region ?? 'N/A' }}
-
-                </p>
-
-                {{-- country --}}
-
-                <p class="mb-2 product-meta">
-
-                    <strong>Country:</strong>
-
-                    {{ $product->country?? 'N/A' }}
-
-                </p>
+                </div>
 
 
                 {{-- REVIEWS --}}
 
                 @if($totalReviews > 0)
 
-                    <p class="text-muted mb-3">
+                    <p class="qr-rating mb-3">
 
+                        <i class="fas fa-star"></i>
                         {{ number_format($averageRating, 1) }}/5
 
                         ({{ $totalReviews }} Reviews)
@@ -315,13 +446,13 @@
 
                 @if(!empty($product->tasting_notes))
 
-                    <div class="mb-4">
+                    <div class="mb-2">
 
-                        <h5 class="fw-bold mb-2">
+                        <h5 class="qr-section-title">
                             Tasting Notes
                         </h5>
 
-                        <p class="text-muted tasting-notes">
+                        <p class="tasting-notes">
                             {{ $product->tasting_notes }}
                         </p>
 
@@ -330,21 +461,18 @@
                 @endif
 
 
-                <hr>
-
-
                 {{-- ========================================= --}}
                 {{-- SPECIFICATIONS --}}
                 {{-- ========================================= --}}
 
-                <h4 class="fw-bold mb-3 mt-2">
+                <h4 class="qr-section-title">
                     Specifications
                 </h4>
 
 
                 <div class="table-responsive">
 
-                    <table class="table table-bordered align-middle specifications-table">
+                    <table class="table align-middle specifications-table">
 
                         <tbody>
 
@@ -353,7 +481,7 @@
 
                                 <td>
                                     {!! $typeIcons[$type] ?? $defaultIcon !!}
-                                    {{ ucfirst($product->type) ?? 'N/A' }}
+                                    {{ ucfirst($product->type) ?: 'N/A' }}
                                 </td>
                             </tr>
 
@@ -363,7 +491,7 @@
 
                                 <td>
                                     {!! $methodIcons[$method] ?? $defaultIcon !!}
-                                    {{ ucfirst($product->method) ?? 'N/A' }}
+                                    {{ ucfirst($product->method) ?: 'N/A' }}
                                 </td>
                             </tr>
 
@@ -490,9 +618,7 @@
 
                 <div id="qr-related-products-section">
 
-                    <hr class="mt-5">
-
-                    <h4 class="fw-bold mb-4 mt-3">
+                    <h4 class="qr-section-title mt-5">
                         Similar Products
                     </h4>
 
@@ -519,7 +645,7 @@
                                         </h6>
 
 
-                                        <p class="text-muted mb-2">
+                                        <p class="qr-fact-label mb-3">
                                             {{ ucfirst($related->type) }}
                                         </p>
 
@@ -531,7 +657,7 @@
 
                                         <button
                                             type="button"
-                                            class="btn btn-outline-dark w-100 related-product-btn"
+                                            class="btn w-100 related-product-btn"
                                             data-product-id="{{ $related->id }}"
                                         >
                                             Tell Me More

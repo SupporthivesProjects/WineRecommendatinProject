@@ -1166,6 +1166,92 @@
         </div>
 
 
+        <!-- Product details and enquiry modals: wine, gold and cream like the rest of the site -->
+        <style>
+            #qrProductModal .modal-content,
+            #productEnquiryModal .modal-content {
+                border: 0;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 24px 60px rgba(59, 15, 26, 0.35);
+            }
+            #qrProductModal .modal-header,
+            #productEnquiryModal .modal-header {
+                padding: 16px 24px;
+                border-bottom: 2px solid #e0c58b;
+                background: linear-gradient(135deg, #3b0f1a 0%, #5c1a2c 100%);
+                color: #fff;
+            }
+            #qrProductModal .modal-title,
+            #productEnquiryModal .modal-title {
+                color: #fff;
+                font-family: Georgia, 'Times New Roman', serif;
+                font-weight: 700;
+                letter-spacing: 0.02em;
+            }
+            #qrProductModal .modal-body {
+                background: #fffdf9;
+            }
+            /* !important: the theme's .btn-danger colours are !important too */
+            #qrProductModal .btn.enquire-now-btn {
+                padding: 6px 16px;
+                border: 1px solid #e0c58b !important;
+                border-radius: 999px;
+                background: #e0c58b !important;
+                color: #3b0f1a !important;
+                font-weight: 600;
+            }
+            #qrProductModal .btn.enquire-now-btn:hover,
+            #qrProductModal .btn.enquire-now-btn:focus-visible {
+                border-color: #de9313 !important;
+                background: #de9313 !important;
+                color: #fff !important;
+            }
+            #qrProductModal .spinner-border {
+                color: #7b1e3a;
+            }
+            #qrProductModal .btn.enquire-now-btn {
+                white-space: nowrap;
+            }
+            @media (max-width: 575.98px) {
+                #qrProductModal .modal-header {
+                    padding: 12px 16px;
+                }
+                #qrProductModal .modal-title {
+                    font-size: 1rem;
+                    white-space: nowrap;
+                }
+                #qrProductModal .btn.enquire-now-btn {
+                    padding: 4px 12px;
+                    font-size: 0.8rem;
+                }
+            }
+            #productEnquiryModal .modal-body {
+                background: #fffdf9;
+            }
+            #productEnquiryModal .form-label {
+                color: #7b1e3a;
+                font-weight: 600;
+            }
+            #productEnquiryModal .form-control:focus,
+            #productEnquiryModal .form-select:focus {
+                border-color: #a8324a;
+                box-shadow: 0 0 0 0.2rem rgba(168, 50, 74, 0.2);
+            }
+            #productEnquiryModal #submitEnquiryBtn {
+                min-height: 44px;
+                border: 0 !important;
+                border-radius: 999px;
+                background: #7b1e3a !important;
+                color: #fff !important;
+                font-weight: 600;
+            }
+            #productEnquiryModal #submitEnquiryBtn:hover,
+            #productEnquiryModal #submitEnquiryBtn:focus-visible {
+                background: #3b0f1a !important;
+            }
+        </style>
+
         <!-- QR Product Modal -->
         <div class="modal fade" id="qrProductModal" tabindex="-1"
             aria-labelledby="qrProductModalLabel" aria-hidden="true">
@@ -1190,7 +1276,7 @@
 
                         <button
                             type="button"
-                            class="btn-close"
+                            class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
                             aria-label="Close">
                         </button>
@@ -1226,7 +1312,7 @@
                         </h5>
 
                         <button type="button"
-                                class="btn-close"
+                                class="btn-close btn-close-white"
                                 data-bs-dismiss="modal"
                                 aria-label="Close">
                         </button>
