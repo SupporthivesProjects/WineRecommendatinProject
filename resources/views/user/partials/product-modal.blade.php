@@ -22,7 +22,7 @@
                         justify-content:center;
                     "
                 >
-                    <img
+                    <img decoding="async"
                         src="{{ asset('storage/' . $product->image1) }}"
                         alt="{{ $product->wine_name }}"
                         class="img-fluid"

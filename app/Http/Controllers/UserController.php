@@ -157,10 +157,14 @@ class UserController extends Controller
         // Attach is_featured value to each product from store_products
         $products->getCollection()->transform(function ($product) use ($featuredStoreProducts) {
             $product->is_featured = $featuredStoreProducts[$product->id]->is_featured ?? 0;
+            $product->display_price = $product->getDisplayPrice();
             return $product;
         });
 
-        return view('user.featuredproducts', compact('products'));
+        // Cart contents, so each card shows Add to cart or Remove from cart
+        $cart = session()->get('cart', []);
+
+        return view('user.featuredproducts', compact('products', 'cart'));
     }
 
 
@@ -1382,6 +1386,14 @@ class UserController extends Controller
 
         // ✅ Fetch product from DB
         $product = Product::find($productId);
+
+        // The cart holds wines only; refuse unknown ids instead of failing on a missing product
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This product is not available.',
+            ], 404);
+        }
 
         // Check if product already in cart by id
         $foundIndex = null;

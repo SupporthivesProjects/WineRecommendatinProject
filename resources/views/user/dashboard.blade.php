@@ -790,7 +790,7 @@
 
                         <!-- Slide 1 -->
                         <div class="carousel-item active">
-                            <img
+                            <img fetchpriority="high" decoding="async"
                                 src="{{ asset('images/redonenew.jpg') }}"
                                 class="hero-slide-image"
                                 alt="Wine glass and bottle">
@@ -816,7 +816,7 @@
 
                         <!-- Slide 2 -->
                         <div class="carousel-item">
-                            <img
+                            <img fetchpriority="low" decoding="async"
                                 src="{{ asset('images/wineyarddashboard.jpg') }}"
                                 class="hero-slide-image"
                                 alt="Wine country and vineyards">
@@ -842,7 +842,7 @@
 
                         <!-- Slide 3 -->
                         <div class="carousel-item">
-                            <img
+                            <img fetchpriority="low" decoding="async"
                                 src="{{ asset('images/perfectpour.jpg') }}"
                                 class="hero-slide-image"
                                 alt="Elegant wine tasting">
@@ -914,7 +914,7 @@
                                                 <div class="card custom-card qcard">
                                                     <div class="qcard-media">
                                                         <span class="qcard-tag">Beginner</span>
-                                                        <img src="{{ asset(($cardImages[0] ?? 'images/FirstPour.jpeg')) }}" class="card-img-top questionnaire-image" alt="First Sip">
+                                                        <img loading="lazy" decoding="async" src="{{ asset(($cardImages[0] ?? 'images/FirstPour.jpeg')) }}" class="card-img-top questionnaire-image" alt="First Sip">
                                                     </div>
                                                     <div class="qcard-body">
                                                         <h4 class="qcard-title">First Sip</h4>
@@ -934,7 +934,7 @@
                                                 <div class="card custom-card qcard">
                                                     <div class="qcard-media">
                                                         <span class="qcard-tag">Intermediate</span>
-                                                        <img src="{{ asset(($cardImages[1] ?? 'images/SavySipper.png')) }}" class="card-img-top questionnaire-image" alt="Savy Sip">
+                                                        <img loading="lazy" decoding="async" src="{{ asset(($cardImages[1] ?? 'images/SavySipper.png')) }}" class="card-img-top questionnaire-image" alt="Savy Sip">
                                                     </div>
                                                     <div class="qcard-body">
                                                         <h4 class="qcard-title">Savy Sip</h4>
@@ -954,7 +954,7 @@
                                                 <div class="card custom-card qcard">
                                                     <div class="qcard-media">
                                                         <span class="qcard-tag">Connoisseur</span>
-                                                        <img src="{{ asset(($cardImages[2] ?? 'images/CorkMaster.jpeg')) }}" class="card-img-top questionnaire-image" alt="Cork Master">
+                                                        <img loading="lazy" decoding="async" src="{{ asset(($cardImages[2] ?? 'images/CorkMaster.jpeg')) }}" class="card-img-top questionnaire-image" alt="Cork Master">
                                                     </div>
                                                     <div class="qcard-body">
                                                         <h4 class="qcard-title">Cork Master</h4>
@@ -974,7 +974,7 @@
                                                 <div class="card custom-card qcard">
                                                     <div class="qcard-media">
                                                         <span class="qcard-tag">Quick</span>
-                                                        <img src="{{ asset(($cardImages[3] ?? 'images/QuickPour1.png')) }}" class="card-img-top questionnaire-image" alt="Quick Pour">
+                                                        <img loading="lazy" decoding="async" src="{{ asset(($cardImages[3] ?? 'images/QuickPour1.png')) }}" class="card-img-top questionnaire-image" alt="Quick Pour">
                                                     </div>
                                                     <div class="qcard-body">
                                                         <h4 class="qcard-title">Quick Pour</h4>
@@ -1004,7 +1004,7 @@
                         <!-- Row 1: Image Left, Text Right -->
                         <div class="row g-0 align-items-center">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/Blacklabel.jpg') }}" class="img-fluid w-100" alt="Image Left">
+                                <img loading="lazy" decoding="async" width="1920" height="1280" src="{{ asset('images/Blacklabel.jpg') }}" class="img-fluid w-100" alt="Image Left">
                             </div>
                             <div class="col-md-6 text-center p-3">
                                 <h1 id="mystyle">Products</h1>
@@ -1022,7 +1022,7 @@
                         <!-- Row 2: Text Left, Image Right -->
                         <div class="row g-0 align-items-center flex-md-row-reverse">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/Redlabel.jpg') }}" class="img-fluid w-100" alt="Image Right">
+                                <img loading="lazy" decoding="async" width="1920" height="1280" src="{{ asset('images/Redlabel.jpg') }}" class="img-fluid w-100" alt="Image Right">
                             </div>
                             <div class="col-md-6 text-center p-5">
                                 <h1 id="mystyle">Featured Products</h1>
@@ -1040,7 +1040,7 @@
                         <!-- Row 3: Image Left, Text Right -->
                         <div class="row g-0 align-items-center">
                             <div class="col-md-6">
-                                <img src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid w-100" alt="Image Left">
+                                <img loading="lazy" decoding="async" width="2016" height="1512" src="{{ asset('images/QuestionnaireImage.jpg') }}" class="img-fluid w-100" alt="Image Left">
                             </div>
                             <div class="col-md-6 text-center p-5">
                                 <h1 id="mystyle">Questionnaires</h1>

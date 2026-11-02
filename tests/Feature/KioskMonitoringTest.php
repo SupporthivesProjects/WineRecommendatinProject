@@ -76,6 +76,9 @@ class KioskMonitoringTest extends TestCase
             $table->timestamps();
         });
 
+        // Remote-login requests, checked by every logged-out heartbeat
+        (require database_path('migrations/2026_11_02_100000_create_kiosk_remote_logins_table.php'))->up();
+
         DB::table('stores')->insert(['id' => 1, 'store_name' => 'Wine Haven']);
     }
 

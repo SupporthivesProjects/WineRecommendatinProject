@@ -4,6 +4,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
 
     <style>
         html, body {
@@ -218,83 +219,6 @@
                 padding: 50px 20px;
             }
         }
-        /* Fixed cart icon at the top right, 10px below the navbar (height set by site-interactions.js) */
-        .sidebar-cart {
-            position: fixed;
-            top: calc(var(--site-navbar-height, 80px) + 10px);
-            right: 20px;
-            bottom: auto;
-            left: auto;
-            transform: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            z-index: 9999;
-        }
-
-        .sidebar-cart-link {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 85px;
-            height: 85px;
-            background: #8b0000;
-            color: #fff;
-            border-radius: 50%;
-            font-size: 38px;
-            text-decoration: none;
-            transition: background 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
-        }
-
-        .sidebar-cart-link:hover {
-            background: #600000;
-            color: #fff;
-            transform: scale(1.08);
-        }
-
-        .sidebar-cart-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            min-width: 25px;
-            height: 25px;
-            padding: 2px 6px;
-            background: #ffc107;
-            color: #212529;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Animation when cart has products */
-        @keyframes cartSway {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-
-        .sidebar-cart-link.cart-has-items {
-            animation: cartSway 3s ease-in-out infinite;
-            transform-origin: center;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar-cart-link {
-                width: 50px;
-                height: 50px;
-                font-size: 22px;
-            }
-        }
-
-
     </style>
 
     
@@ -494,7 +418,7 @@
                                             <div class="card custom-card wine-card">
                                                 <!-- Image at the top -->
                                                 <div class="image-wrapper product-card-media">
-                                                    <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                                    <img decoding="async" loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)
@@ -529,14 +453,7 @@
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
                                                         View details
                                                     </a>
-                                                    <button
-                                                        class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
-                                                        data-product-id="{{ $product->id }}"
-                                                        data-product-name="{{ $product->wine_name }}"
-                                                        data-product-price="{{ $product->display_price }}">
-
-                                                        {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
-                                                    </button>
+                                                    @include('partials.cart-button')
                                                 </div>
                                             </div>
                                         </div>
@@ -546,19 +463,7 @@
                         </div> 
                     <!-- End::row-6 -->
                      <!-- Fixed Cart Icon -->
-                     <div class="sidebar-cart">
-                        <a href="{{ route('user.cart') }}"
-                        class="sidebar-cart-link"
-                        id="sidebar-cart-icon"
-                        aria-label="View shopping cart">
-
-                            <i class="fas fa-shopping-cart"></i>
-
-                            <span class="sidebar-cart-count" id="sidebar-cart-count">
-                                {{ collect($cart ?? [])->sum('quantity') }}
-                            </span>
-                        </a>
-                    </div>
+                     @include('partials.floating-cart')
 
                 
                     <!-- Pagination Code -->
@@ -663,6 +568,7 @@
     <!-- Phone filter drawer -->
     <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
     <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
+    <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
     <script>
         $(function () {
             const prices = @json($products->pluck('display_price')->unique()->sort()->values());
@@ -788,114 +694,6 @@
                 parallax.style.transform = `translateY(${scrolled * 0.4}px)`; // adjust 0.4 for speed
             }
         });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const buttons = document.querySelectorAll('.buy-now-btn');
-
-            buttons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const productId = this.getAttribute('data-product-id');
-                    const productName = this.getAttribute('data-product-name');
-                    const productPrice = this.getAttribute('data-product-price');
-                    const isInCart = this.classList.contains('btn-dark');
-                    const url = isInCart ? '{{ route("user.cart.remove") }}' : '{{ route("user.cart.add") }}';
-
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        },
-                        body: JSON.stringify({ 
-                            product_id: productId, 
-                            product_name: productName,
-                            product_price: productPrice
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            if (isInCart) {
-                                this.classList.remove('btn-dark');
-                                this.classList.add('btn-light');
-                                this.textContent = 'Add to cart';
-
-                                toastr.warning('Product removed from cart!', 'Removed', {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    positionClass: 'toast-top-right',
-                                    timeOut: 3000
-                                });
-                            } else {
-                                this.classList.remove('btn-light');
-                                this.classList.add('btn-dark');
-                                this.textContent = 'Remove from cart';
-
-                                toastr.success('Product added to cart!', 'Added', {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    positionClass: 'toast-top-right',
-                                    timeOut: 3000
-                                });
-
-                                // Bottle-into-cart animation (visual only, see assets/js/cart-animation.js)
-                                if (window.WineCartFx) {
-                                    WineCartFx.play(this, document.getElementById('sidebar-cart-icon'), document.getElementById('sidebar-cart-count'));
-                                }
-                            }
-                        }
-
-                        // ✅ Update the cart count dynamically
-                        const cartCountElement = document.getElementById('cart-count');
-
-                        
-                        if (cartCountElement) 
-                        {
-                            cartCountElement.textContent =
-                                data.cart_count ?? 0;
-
-                        }
-                        // NEW CODE: Update the sidebar cart count separately
-                        const sidebarCartCount = document.getElementById('sidebar-cart-count');
-
-                        if (sidebarCartCount) {
-                            sidebarCartCount.textContent = data.cart_count ?? 0;
-                        }
-                        updateSidebarCartAnimation(data.cart_count ?? 0);
-
-                    })
-                    .catch(() => {
-                        toastr.error('Something went wrong!', 'Error', {
-                            closeButton: true,
-                            progressBar: true,
-                            positionClass: 'toast-top-right',
-                            timeOut: 3000
-                        });
-                    });
-                });
-            });
-
-            // Updated View Cart button - now redirects to cart page
-            document.getElementById('view-cart-btn')?.addEventListener('click', function () {
-                window.location.href = '{{ route("user.cart") }}';
-            });
-        });
-
-
-        function updateSidebarCartAnimation(cartCount) {
-            const cartIcon = document.getElementById('sidebar-cart-icon');
-
-            if (!cartIcon) return;
-
-            if (Number(cartCount) > 0) {
-                cartIcon.classList.add('cart-has-items');
-            } else {
-                cartIcon.classList.remove('cart-has-items');
-            }
-        }
-
-
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

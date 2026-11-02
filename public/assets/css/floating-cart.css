@@ -1,0 +1,163 @@
+/*
+ * Floating cart button shared by Browse Wines, Featured Products and Cheese Details
+ * (resources/views/partials/floating-cart.blade.php).
+ *
+ * While the cart has items it sways left and right and a thin wine-and-gold ring
+ * rotates around it. The ring is drawn by ::before/::after with pointer-events off,
+ * so it never covers the icon, the count badge or the click target.
+ */
+
+/* Fixed cart icon at the top right, 10px below the navbar (height set by site-interactions.js) */
+.sidebar-cart {
+    position: fixed;
+    top: calc(var(--site-navbar-height, 80px) + 10px);
+    right: 20px;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    z-index: 9999;
+}
+
+.sidebar-cart-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 85px;
+    height: 85px;
+    background: #8b0000;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 38px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+}
+
+.sidebar-cart-link:hover {
+    background: #600000;
+    color: #fff;
+    transform: scale(1.08);
+}
+
+.sidebar-cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    z-index: 2;
+    min-width: 25px;
+    height: 25px;
+    padding: 2px 6px;
+    background: #ffc107;
+    color: #212529;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animation when cart has products */
+@keyframes cartSway {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+.sidebar-cart-link.cart-has-items {
+    animation: cartSway 3s ease-in-out infinite;
+    transform-origin: center;
+}
+
+/* ---- Rotating ring around a cart with items ---- */
+
+.sidebar-cart-link::before,
+.sidebar-cart-link::after,
+.floating-cart::before,
+.floating-cart::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* The ring: a faint gold track with a bright gold-to-wine arc, cut down to a 4px band */
+.sidebar-cart-link::before,
+.floating-cart::before {
+    inset: -8px;
+    background: conic-gradient(
+        from 0deg,
+        rgba(212, 175, 55, 0.28) 0deg,
+        #f0d27a 50deg,
+        #d4af37 100deg,
+        #a8324a 160deg,
+        #7b1e3a 200deg,
+        rgba(212, 175, 55, 0.28) 250deg,
+        rgba(212, 175, 55, 0.28) 360deg
+    );
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+}
+
+/* Soft gold glow that breathes behind the ring */
+.sidebar-cart-link::after,
+.floating-cart::after {
+    inset: -8px;
+    z-index: -1;
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.45);
+}
+
+.sidebar-cart-link.cart-has-items::before,
+.floating-cart.has-items::before {
+    opacity: 1;
+    animation: cartRingSpin 2.8s linear infinite;
+}
+
+.sidebar-cart-link.cart-has-items::after,
+.floating-cart.has-items::after {
+    opacity: 1;
+    animation: cartRingGlow 2.8s ease-in-out infinite;
+}
+
+@keyframes cartRingSpin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes cartRingGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.35); }
+    50% { box-shadow: 0 0 14px 3px rgba(212, 175, 55, 0.35); }
+}
+
+@media (max-width: 768px) {
+    .sidebar-cart-link {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+
+    .sidebar-cart-link::before,
+    .sidebar-cart-link::after,
+    .floating-cart::before,
+    .floating-cart::after {
+        inset: -5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar-cart-link.cart-has-items,
+    .sidebar-cart-link.cart-has-items::before,
+    .sidebar-cart-link.cart-has-items::after,
+    .floating-cart.has-items::before,
+    .floating-cart.has-items::after {
+        animation: none;
+    }
+}

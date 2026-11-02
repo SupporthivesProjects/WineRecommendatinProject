@@ -4,6 +4,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
     <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
 
     <style>
         #mystyle
@@ -332,7 +333,7 @@
                                     <div class="card custom-card wine-card">
                                         <!-- Image at the top -->
                                         <div class="image-wrapper product-card-media">
-                                            <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                            <img decoding="async" loading="lazy" src="{{ asset('storage/' . $product->image1) }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
                                             
 
                                             <!-- Featured badge on the image -->
@@ -541,17 +542,7 @@
                             button.classList.add('btn-dark');
                             button.textContent = 'Remove from cart';
 
-                            toastr.success(
-                                'Product added to cart!',
-                                'Added',
-                                {
-                                    closeButton: true,
-                                    progressBar: true,
-                                    positionClass: 'toast-top-right',
-                                    timeOut: 3000
-                                }
-                            );
-
+                            // No success pop-up: the bottle animation and cart count confirm it
                             // Bottle-into-cart animation (visual only, see assets/js/cart-animation.js)
                             if (window.WineCartFx) {
                                 WineCartFx.play(button, document.getElementById('floating-cart'), document.getElementById('floating-cart-count'));

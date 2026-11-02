@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KioskRemoteLogin;
 use App\Models\KioskStatus;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
@@ -141,13 +142,22 @@ class KioskMonitoringController extends Controller
         $kiosk->last_seen_at = now();
         $kiosk->save();
 
-        return response()->json([
+        $response = [
             'status' => 'active',
             'kiosk_id' => $kiosk->kiosk_id,
             'store_id' => $kiosk->store_id,
             'logged_in' => false,
             'last_seen_at' => $kiosk->last_seen_at->toIso8601String(),
-        ]);
+        ];
+
+        // An administrator approved a remote login for this kiosk: hand over its one-time token.
+        // Only reached when the device key matched this kiosk (checked above).
+        $remoteLogin = KioskRemoteLogin::deliverTo($kiosk, $request->ip());
+        if ($remoteLogin) {
+            $response['remote_login'] = $remoteLogin;
+        }
+
+        return response()->json($response);
     }
 
 

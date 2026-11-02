@@ -326,7 +326,7 @@
                 <div class="cart-item" data-product-id="${item.id}">
                     <div class="row align-items-center">
                         <div class="col-md-2">                    
-                            <img src="${item.image 
+                            <img loading="lazy" decoding="async" src="${item.image 
                                 ? '/storage/' + item.image 
                                 : '/images/default.jpg'}"
                                 alt="${item.name}"
@@ -407,7 +407,6 @@
                 .then(data => {
                     if (data.success) {
                         loadCartItems(); // Reload cart items
-                        toastr.success('Quantity updated successfully');
                     } else {
                         toastr.error('Failed to update quantity');
                     }
@@ -433,7 +432,6 @@
                 .then(data => {
                     if (data.success) {
                         loadCartItems(); // Reload cart items
-                        toastr.success('Item removed from cart');
                     } else {
                         toastr.error('Failed to remove item');
                     }

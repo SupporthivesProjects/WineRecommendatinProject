@@ -1,7 +1,6 @@
 
 "use strict";
 (() => {
-  window.addEventListener('scroll', stickyFn);
   var navbar = document.getElementById("sidebar");
 
   // If the element is not found, we exit the script

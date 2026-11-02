@@ -3,6 +3,8 @@
 @section('admindashboardcontent')
     @push('styles')
         <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
         <style>
             .cheese-image {
                 height: 470px;
@@ -164,7 +166,7 @@
         <div class="row g-4 mt-4">
             <!-- Cheese Image -->
             <div class="col-lg-6">
-                <img src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
+                <img fetchpriority="high" decoding="async" src="{{ $cheese->image ? asset('storage/' . $cheese->image) : asset('images/default-cheese.jpg') }}"
                     alt="{{ $cheese->name }}" class="cheese-image">
             </div>
 
@@ -248,7 +250,7 @@
                             <div class="col-12 col-sm-6 col-lg-3">
                                 <div class="card custom-card wine-card">
                                     <div class="image-wrapper product-card-media">
-                                        <img loading="lazy" src="{{ asset('storage/' . $wine->image1) }}"
+                                        <img decoding="async" loading="lazy" src="{{ asset('storage/' . $wine->image1) }}"
                                             class="card-img-top rounded-0"
                                             alt="{{ $wine->wine_name }}">
                                     </div>
@@ -265,6 +267,7 @@
                                         <a href="{{ route('products.show', $wine->id) }}" class="btn btn-dark mt-2 rounded-0">
                                             View details
                                         </a>
+                                        @include('partials.cart-button', ['product' => $wine, 'cart' => session('cart', [])])
                                     </div>
                                 </div>
                             </div>
@@ -274,91 +277,13 @@
             </div>
         @endif
     </div>
+
+    <!-- Fixed Cart Icon -->
+    @include('partials.floating-cart', ['cart' => session('cart', [])])
 @endsection
 
 @push('scripts')
-    <!-- Slick Carousel JS -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    
-    <script>
-        $(document).ready(function() {
-            // Initialize Slick Carousel if there are more than 4 wines
-            
-
-            // Add to cart functionality
-            const addToCartButtons = document.querySelectorAll('.add-to-cart');
-
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-product-id');
-                    const productName = this.getAttribute('data-product-name');
-                    const productPrice = this.getAttribute('data-product-price');
-                    const isInCart = this.classList.contains('btn-dark');
-                    const url = isInCart ? '{{ route('user.cart.remove') }}' :
-                        '{{ route('user.cart.add') }}';
-
-                    fetch(url, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            },
-                            body: JSON.stringify({
-                                product_id: productId,
-                                product_name: productName,
-                                product_price: productPrice,
-                                product_type: 'cheese' // Add product type to distinguish between wine and cheese
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                if (isInCart) {
-                                    this.classList.remove('btn-dark');
-                                    this.classList.add('btn-light');
-                                    this.innerHTML =
-                                        '<i class="fe fe-shopping-cart me-2"></i>Add to cart';
-
-                                    toastr.warning('Cheese removed from cart!', 'Removed', {
-                                        closeButton: true,
-                                        progressBar: true,
-                                        positionClass: 'toast-top-right',
-                                        timeOut: 3000
-                                    });
-                                } else {
-                                    this.classList.remove('btn-light');
-                                    this.classList.add('btn-dark');
-                                    this.innerHTML =
-                                        '<i class="fe fe-shopping-cart me-2"></i>Remove from cart';
-
-                                    toastr.success('Cheese added to cart!', 'Added', {
-                                        closeButton: true,
-                                        progressBar: true,
-                                        positionClass: 'toast-top-right',
-                                        timeOut: 3000
-                                    });
-                                }
-
-                                // Update cart count if the element exists
-                                const cartCount = document.getElementById('cart-count');
-                                if (cartCount) {
-                                    const currentCount = parseInt(cartCount.textContent) || 0;
-                                    cartCount.textContent = isInCart ? currentCount - 1 :
-                                        currentCount + 1;
-                                }
-                            }
-                        })
-                        .catch(() => {
-                            toastr.error('Something went wrong!', 'Error', {
-                                closeButton: true,
-                                progressBar: true,
-                                positionClass: 'toast-top-right',
-                                timeOut: 3000
-                            });
-                        });
-                });
-            });
-        });
-    </script>
+    {{-- Add to cart on the paired wine cards (the cart holds wines only; the cheese itself is not sold here) --}}
+    <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
+    <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
 @endpush

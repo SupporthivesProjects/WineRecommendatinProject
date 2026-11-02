@@ -296,7 +296,7 @@
                                                 <div id="carousel" class="carousel slide" data-bs-ride="false">
                                                     <div class="carousel-inner">
                                                         <div class="thumb my-2">
-                                                            <img src="{{ asset('storage/' . $product->image1) }}"
+                                                            <img fetchpriority="high" decoding="async" src="{{ asset('storage/' . $product->image1) }}"
                                                                 alt="Product Image" class="product-main-image">
                                                         </div>
                                                     </div>
@@ -568,7 +568,7 @@
                         </div>
                         <div class="media mt-0 p-4 border-bottom border-top">
                             <div class="d-flex me-3">
-                                <a href="javascript:void(0);"><img class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/8.jpg"> </a>
+                                <a href="javascript:void(0);"><img loading="lazy" decoding="async" class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/8.jpg"> </a>
                             </div>
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1 fw-medium fs-16">Bruce Tran
@@ -592,7 +592,7 @@
                         </div>
                         <div class="media mt-0  p-4 border-bottom">
                             <div class="d-flex me-3">
-                                <a href="javascript:void(0);"><img class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/3.jpg"> </a>
+                                <a href="javascript:void(0);"><img loading="lazy" decoding="async" class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/3.jpg"> </a>
                             </div>
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1 fw-medium fs-16">Mina Harpe
@@ -616,7 +616,7 @@
                         </div>
                         <div class="media mt-0 p-4 border-bottom">
                             <div class="d-flex me-3">
-                                <a href="javascript:void(0);"><img class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/5.jpg"> </a>
+                                <a href="javascript:void(0);"><img loading="lazy" decoding="async" class="media-image avatar avatar-md rounded-circle" alt="64x64" src="../assets/images/faces/5.jpg"> </a>
                             </div>
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1 fw-medium fs-16">Maria Quinn
@@ -880,7 +880,7 @@
                                         <div class="card custom-card wine-card">
                                             <!-- Image -->
                                             <div class="image-wrapper product-card-media">
-                                                <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
+                                                <img decoding="async" loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                                                     class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                 @if ($product->is_featured == 1)
@@ -1038,13 +1038,7 @@
                         this.classList.remove('btn-light');
                         this.classList.add('btn-dark');
                         this.textContent = 'Remove from cart';
-
-                        toastr.success('Product added to cart!', 'Added', {
-                            closeButton: true,
-                            progressBar: true,
-                            positionClass: 'toast-top-right',
-                            timeOut: 3000
-                        });
+                        // No success pop-up for adding; the button text confirms it
                     }
             });
             });

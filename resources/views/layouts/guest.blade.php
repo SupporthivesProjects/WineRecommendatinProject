@@ -90,14 +90,17 @@
 <body class="font-sans text-gray-900 antialiased">
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">       
         <div class="login-logo-wrapper">
-            <div class="default-login-logo">
-                <x-application-logo class="w-30 h-30 fill-current text-gray-500" />
-            </div>
-            <img 
-                src="{{ asset('images/logoblackred_new.png') }}"
-                class="kiosk-login-logo"
-                alt="Kiosk Logo"
-            >
+            {{-- The logo also leads back to the public website --}}
+            <a href="{{ route('home') }}" class="d-block" aria-label="Go to the TechSomm website">
+                <div class="default-login-logo">
+                    <x-application-logo class="w-30 h-30 fill-current text-gray-500" />
+                </div>
+                <img 
+                    src="{{ asset('images/logoblackred_new.png') }}"
+                    class="kiosk-login-logo"
+                    alt="Kiosk Logo"
+                >
+            </a>
         </div>
 
 

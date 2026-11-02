@@ -765,7 +765,7 @@
 
                                             <!-- IMAGE SECTION (Bigger + auto adjusts) -->
                                             <div class="flex-grow overflow-hidden relative">
-                                                <img loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
+                                                <img decoding="async" loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
                                                     class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
                                                     alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
@@ -857,7 +857,7 @@
                                 <div class="md:w-1/2">
                                     <!-- <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
                                         alt="Steak" class="w-full h-full object-cover"> -->
-                                    <img src="{{ asset('images/WineandFood.jpg') }}" alt="Steak"
+                                    <img loading="lazy" decoding="async" width="2240" height="3360" src="{{ asset('images/WineandFood.jpg') }}" alt="Steak"
                                         class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -883,7 +883,7 @@
                             <!-- Pairing 2 -->
                             <div class="bg-white rounded-lg overflow-hidden shadow-md flex flex-col md:flex-row">
                                 <div class="md:w-1/2">
-                                    <img src="{{ asset('images/WineandCheese.jpg') }}" alt="Seafood"
+                                    <img loading="lazy" decoding="async" width="2736" height="1824" src="{{ asset('images/WineandCheese.jpg') }}" alt="Seafood"
                                         class="w-full h-full object-cover">
                                 </div>
                                 <div class="md:w-1/2 p-6">
@@ -985,7 +985,7 @@
                                     
                                     'https://media.istockphoto.com/id/476976729/photo/wine-tasting-at-restaurant.webp?a=1&b=1&s=612x612&w=0&k=20&c=jpLOBX57Z9r91cb2yFOUkl27pa3kn4d6K9yvPctrLug='] as $image)
                             <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                                <img loading="lazy" src="{{ $image }}" alt="Wine image" class="w-full h-64 object-cover">
+                                <img decoding="async" loading="lazy" src="{{ $image }}" alt="Wine image" class="w-full h-64 object-cover">
                             </div>
                         @endforeach
                     </div>

@@ -11,6 +11,10 @@
  * - If the session expired (HTTP 419, e.g. after the computer slept for hours),
  *   it fetches a fresh CSRF token and retries instead of failing silently.
  * - Never interrupts the page: every failure is ignored.
+ * - Remote login: when a main administrator approved a login for this kiosk, the
+ *   logged-out heartbeat response carries a one-time token. The kiosk sends it back
+ *   to /kiosk/remote-login with its device key; the server checks everything again
+ *   and signs this browser in, then the kiosk opens the dashboard.
  */
 (function (window, document) {
     'use strict';
@@ -27,6 +31,7 @@
     var REQUEST_TIMEOUT = 10 * 1000;
 
     var heartbeatInProgress = false;
+    var remoteLoginInProgress = false;
     var csrfToken = null;
 
     function storageGet(key) {
@@ -163,12 +168,58 @@
                 if (data && data.status === 'active' && data.kiosk_id) {
                     storageSet(KIOSK_ID_KEY, data.kiosk_id);
                 }
+                if (data && data.logged_in === false && data.remote_login) {
+                    completeRemoteLogin(data.remote_login, data.kiosk_id);
+                }
             })
             .catch(function () {
                 // Monitoring failures must not interrupt normal page usage
             })
             .finally(function () {
                 heartbeatInProgress = false;
+            });
+    }
+
+    // Exchange the one-time token for a login, then open the dashboard
+    function completeRemoteLogin(remoteLogin, kioskId) {
+        if (remoteLoginInProgress || !remoteLogin.id || !remoteLogin.token || !csrfToken) {
+            return;
+        }
+        remoteLoginInProgress = true;
+
+        withTimeout(function (signal) {
+            return fetch('/kiosk/remote-login', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    request_id: remoteLogin.id,
+                    token: remoteLogin.token,
+                    device_key: getDeviceKey(),
+                    kiosk_id: kioskId
+                }),
+                signal: signal
+            });
+        })
+            .then(function (response) {
+                return response.json().catch(function () {
+                    return {};
+                });
+            })
+            .then(function (data) {
+                if (data && data.success && data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(function () {
+                // The administrator sees the request expire and can try again
+            })
+            .finally(function () {
+                remoteLoginInProgress = false;
             });
     }
 

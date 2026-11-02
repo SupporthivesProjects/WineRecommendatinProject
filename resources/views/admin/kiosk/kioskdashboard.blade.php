@@ -272,6 +272,16 @@
                                                 </td>
 
                                                 <td class="text-nowrap">
+                                                    {{-- Main administrator only (the server checks this too) --}}
+                                                    @if (auth()->user()->role === 'admin')
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-primary kiosk-remote-login"
+                                                                data-url="{{ route('admin.kiosks.remote-login.show', $kiosk) }}"
+                                                                data-store-url="{{ route('admin.kiosks.remote-login.store', $kiosk) }}"
+                                                                title="Remote login">
+                                                            <i class="fe fe-log-in"></i> Remote Login
+                                                        </button>
+                                                    @endif
                                                     <button type="button"
                                                             class="btn btn-sm btn-outline-secondary kiosk-rename"
                                                             data-url="{{ route('admin.kiosks.label', $kiosk) }}"
@@ -374,6 +384,143 @@
                     error: () => Swal.fire('Error', 'The name could not be saved.', 'error')
                 });
             });
+        });
+
+        // ---- Remote login (main administrator only; every rule is enforced on the server) ----
+        const statusUrlTemplate = @json(route('admin.kiosks.remote-login.status', ['remoteLogin' => '__ID__']));
+        const escapeHtml = value => $('<div>').text(value == null ? '' : String(value)).html();
+        const remoteStatusText = {
+            pending: 'Request pending: waiting for the kiosk to check in (about a minute).',
+            delivered: 'The kiosk received the request and is signing in…',
+            completed: 'Login successful: the kiosk confirmed the sign-in.',
+            expired: 'Request expired: the kiosk did not complete the login in time.',
+            failed: 'Login failed.',
+            cancelled: 'Request cancelled: replaced by a newer request.',
+            rejected: 'Request rejected.'
+        };
+
+        function showRemoteLoginStatus(request) {
+            let timer = null;
+            const render = req => {
+                const done = ['completed', 'expired', 'failed', 'cancelled', 'rejected'].includes(req.status);
+                const icon = req.status === 'completed' ? 'success' : (done ? 'error' : 'info');
+                const reason = req.failure_reason && req.status !== 'completed' ? '<br><small>' + escapeHtml(req.failure_reason) + '</small>' : '';
+                Swal.update({
+                    icon: icon,
+                    title: req.status === 'completed' ? 'Login Successful' : (done ? 'Remote login not completed' : 'Remote login in progress'),
+                    html: '<p>' + escapeHtml(remoteStatusText[req.status] || req.status) + reason + '</p>'
+                        + '<p class="text-muted mb-0"><small>Username: ' + escapeHtml(req.approved_username) + '</small></p>',
+                    showConfirmButton: done,
+                    confirmButtonText: 'Close'
+                });
+                if (done) {
+                    clearInterval(timer);
+                    refreshDashboard(true);
+                }
+            };
+            Swal.fire({
+                icon: 'info',
+                title: 'Remote login in progress',
+                html: '<p>' + escapeHtml(remoteStatusText[request.status]) + '</p>',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Close',
+                didOpen: () => {
+                    timer = setInterval(() => {
+                        fetch(statusUrlTemplate.replace('__ID__', request.id), { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+                            .then(response => response.ok ? response.json() : Promise.reject())
+                            .then(data => render(data.request))
+                            .catch(() => {});
+                    }, 3000);
+                },
+                willClose: () => clearInterval(timer)
+            });
+        }
+
+        $(document).on('click', '.kiosk-remote-login', function () {
+            const storeUrl = this.dataset.storeUrl;
+
+            fetch(this.dataset.url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+                .then(response => response.ok ? response.json() : response.json().then(data => Promise.reject(data)))
+                .then(data => {
+                    const kiosk = data.kiosk;
+                    const users = data.eligible_users;
+                    const storeName = kiosk.store_name || 'Unknown store';
+
+                    if (!kiosk.online) {
+                        Swal.fire('Kiosk Offline', 'This kiosk has not reported in the last 5 minutes, so it cannot receive a remote login.', 'error');
+                        return;
+                    }
+                    if (kiosk.logged_in_username) {
+                        Swal.fire('Already signed in', escapeHtml(kiosk.logged_in_username) + ' is signed in on this kiosk. Sign them out on the kiosk first.', 'info');
+                        return;
+                    }
+                    if (!users.length) {
+                        Swal.fire('No eligible account', 'This store has no active account with the role "user". Remote login is only allowed for that role.', 'error');
+                        return;
+                    }
+
+                    const options = users.map(user =>
+                        '<option value="' + user.id + '">' + escapeHtml(user.username) + (user.name ? ' (' + escapeHtml(user.name) + ')' : '') + '</option>'
+                    ).join('');
+
+                    Swal.fire({
+                        title: 'Remote Login',
+                        icon: 'warning',
+                        html:
+                            '<div class="text-start">'
+                            + '<p class="mb-1"><strong>Kiosk ID:</strong> ' + escapeHtml(kiosk.label ? kiosk.label + ' (' + kiosk.kiosk_id + ')' : kiosk.kiosk_id) + '</p>'
+                            + '<p class="mb-1"><strong>Store:</strong> ' + escapeHtml(storeName) + '</p>'
+                            + (users.length > 1
+                                ? '<label class="form-label mt-2 mb-1" for="remote-login-user"><strong>Account</strong></label><select id="remote-login-user" class="form-select">' + options + '</select>'
+                                : '<input type="hidden" id="remote-login-user" value="' + users[0].id + '">')
+                            + '<p class="mb-1 mt-2"><strong>Username:</strong> <span id="remote-login-username"></span></p>'
+                            + '<p class="mb-3"><strong>Role:</strong> <span id="remote-login-role"></span></p>'
+                            + '<p id="remote-login-message" class="mb-2"></p>'
+                            + '<label class="form-label mb-1" for="remote-login-confirm">Type the username to confirm</label>'
+                            + '<input id="remote-login-confirm" class="form-control" autocomplete="off" spellcheck="false">'
+                            + '</div>',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, log in remotely',
+                        focusConfirm: false,
+                        didOpen: () => {
+                            const select = document.getElementById('remote-login-user');
+                            const show = () => {
+                                const user = users.find(u => String(u.id) === String(select.value));
+                                document.getElementById('remote-login-username').textContent = user.username;
+                                document.getElementById('remote-login-role').textContent = user.role;
+                                document.getElementById('remote-login-message').innerHTML =
+                                    'You are about to remotely log in as <strong>' + escapeHtml(user.username) + '</strong> on the kiosk assigned to <strong>'
+                                    + escapeHtml(storeName) + '</strong>. Do you want to proceed?';
+                            };
+                            select.addEventListener('change', show);
+                            show();
+                            document.getElementById('remote-login-confirm').focus();
+                        },
+                        preConfirm: () => {
+                            const user = users.find(u => String(u.id) === String(document.getElementById('remote-login-user').value));
+                            const typed = document.getElementById('remote-login-confirm').value.trim();
+                            if (typed !== user.username) {
+                                Swal.showValidationMessage('The typed username does not match ' + user.username + '.');
+                                return false;
+                            }
+                            return { user_id: user.id, approved_username: user.username, confirm_username: typed, approved_role: user.role };
+                        }
+                    }).then(result => {
+                        if (!result.isConfirmed) {
+                            return;
+                        }
+                        $.ajax({
+                            url: storeUrl,
+                            type: 'POST',
+                            data: Object.assign({ _token: csrf }, result.value),
+                            success: response => showRemoteLoginStatus(response.request),
+                            error: xhr => Swal.fire('Remote login refused', escapeHtml((xhr.responseJSON && xhr.responseJSON.message) || 'The request could not be created.'), 'error')
+                        });
+                    });
+                })
+                .catch(data => Swal.fire('Remote login unavailable', escapeHtml((data && data.message) || 'Could not load this kiosk.'), 'error'));
         });
 
         // Remove a stale kiosk (the server also refuses kiosks seen within the last week)

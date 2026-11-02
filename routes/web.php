@@ -34,6 +34,7 @@ use App\Models\StoreSupportRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\KioskMonitoringController;
+use App\Http\Controllers\KioskRemoteLoginController;
 
 
 use Illuminate\Support\Facades\Log;
@@ -350,6 +351,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/admin-kiosks', [KioskMonitoringController::class, 'admindashboarddetails'])->name('kiosks-details');
     Route::patch('/admin-kiosks/{kiosk}/label', [KioskMonitoringController::class, 'updateLabel'])->name('kiosks.label');
     Route::delete('/admin-kiosks/{kiosk}', [KioskMonitoringController::class, 'destroy'])->name('kiosks.destroy');
+    // Remote login: the controller also requires the main administrator (role "admin")
+    Route::get('/admin-kiosks/{kiosk}/remote-login', [KioskRemoteLoginController::class, 'show'])->name('kiosks.remote-login.show');
+    Route::post('/admin-kiosks/{kiosk}/remote-login', [KioskRemoteLoginController::class, 'store'])->name('kiosks.remote-login.store');
+    Route::get('/admin-kiosk-remote-logins/{remoteLogin}', [KioskRemoteLoginController::class, 'status'])->name('kiosks.remote-login.status');
 
 });
 
@@ -393,6 +398,12 @@ Route::middleware(['auth'])->group(function () {
         KioskMonitoringController::class,
         'token',
     ])->middleware('throttle:kiosk-heartbeat')->name('kiosk.token');
+
+    // A logged-out kiosk exchanges a one-time remote-login token (from its heartbeat) for a login
+    Route::post('/kiosk/remote-login', [
+        KioskRemoteLoginController::class,
+        'complete',
+    ])->middleware('throttle:kiosk-heartbeat')->name('kiosk.remote-login');
 
 
 // Store Manager routes

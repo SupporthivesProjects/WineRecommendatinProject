@@ -4,6 +4,8 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/product-listing.css') }}?v={{ filemtime(public_path('assets/css/product-listing.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/cart-animation.css') }}?v={{ filemtime(public_path('assets/css/cart-animation.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/floating-cart.css') }}?v={{ filemtime(public_path('assets/css/floating-cart.css')) }}">
 
     <style>
         html, body {
@@ -367,7 +369,7 @@
                                                     @php
                                                         $primaryImage = $product->images->where('is_primary', true)->first() ?? $product->images->first();
                                                     @endphp
-                                                    <img loading="lazy" src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
+                                                    <img decoding="async" loading="lazy" src="{{ $primaryImage ? asset('storage/products/' . $primaryImage->image_path) : asset('images/default.jpg') }}" class="card-img-top rounded-0" alt="{{ $product->wine_name }}">
 
                                                     <!-- Featured badge on the image -->
                                                     @if ($product->is_featured == 1)
@@ -398,6 +400,7 @@
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
                                                         View details
                                                     </a>
+                                                    @include('partials.cart-button')
                                                 </div>
                                             </div>
                                         </div>
@@ -406,6 +409,8 @@
                             </div>
                         </div> 
                     <!-- End::row-6 -->
+                     <!-- Fixed Cart Icon -->
+                     @include('partials.floating-cart')
 
                 
                     <!-- Pagination Code -->
@@ -457,6 +462,8 @@
 @push('scripts')
     <!-- Phone filter drawer -->
     <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
+    <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
+    <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
     <script>
         $(function () {
             const prices = @json($products->pluck('retail_price')->unique()->sort()->values());

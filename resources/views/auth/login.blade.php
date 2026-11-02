@@ -123,7 +123,84 @@
                 max-width:480px;
             }
         }
+
+        /* Back to Website: gold outline pill on the wine panel, wine outline on the cream background */
+        /* Phones and tablets: top right, clear of the small logo at the top left */
+        .login-back-home{
+            position:fixed;
+            top:16px;
+            right:16px;
+            z-index:20;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            min-height:40px;
+            padding:8px 16px;
+            border:1px solid var(--brand-wine-700, #7b1e3a);
+            border-radius:999px;
+            background:rgba(255, 255, 255, 0.85);
+            color:var(--brand-wine-700, #7b1e3a);
+            font-size:14px;
+            font-weight:500;
+            letter-spacing:0.02em;
+            text-decoration:none;
+            transition:background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        /* It sits inside the .row, so undo Bootstrap's full-width ".row > *" sizing */
+        .signpages > a.login-back-home{
+            left:auto;
+            width:auto;
+            max-width:calc(100% - 32px);
+            margin:0;
+            padding:8px 16px;
+        }
+        .login-back-home svg{
+            width:16px;
+            height:16px;
+            flex:0 0 auto;
+        }
+        .login-back-home:hover,
+        .login-back-home:focus-visible{
+            background:var(--brand-wine-700, #7b1e3a);
+            color:#fff;
+        }
+        .login-back-home:focus-visible{
+            outline:2px solid var(--brand-gold-500, #de9313);
+            outline-offset:2px;
+        }
+        @media (min-width: 992px){
+            .signpages > a.login-back-home{
+                top:24px;
+                left:24px;
+                right:auto;
+            }
+            .login-back-home{
+                border-color:rgba(224, 197, 139, 0.7);
+                background:transparent;
+                color:#fff;
+            }
+            .login-back-home svg{
+                color:var(--brand-gold-200, #e0c58b);
+            }
+            .login-back-home:hover,
+            .login-back-home:focus-visible{
+                background:var(--brand-gold-200, #e0c58b);
+                border-color:var(--brand-gold-200, #e0c58b);
+                color:var(--brand-wine-900, #3b0f1a);
+            }
+            .login-back-home:hover svg,
+            .login-back-home:focus-visible svg{
+                color:var(--brand-wine-900, #3b0f1a);
+            }
+        }
     </style>
+    <a href="{{ route('home') }}" class="login-back-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5 12 3l9 7.5"/>
+            <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>
+        </svg>
+        Back to Website
+    </a>
     <div >
         <!-- Start::row-1 -->
             <div class="col-md-12">
@@ -134,7 +211,9 @@
                             <div class="clearfix"></div>
                             <!-- Center the image with mx-auto -->
                             <!-- <img src="{{ asset('assets/images/svgs/user.svg') }}" class="ht-100 mb-0 mx-auto" alt="user"> -->
-                            <img src="{{ asset('images/logofullwhite.png') }}" class="img-fluid mb-0 mx-auto" style="max-width:150px;" alt="user">
+                            <a href="{{ route('home') }}" class="d-inline-block" aria-label="Go to the TechSomm website">
+                                <img src="{{ asset('images/logofullwhite.png') }}" class="img-fluid mb-0 mx-auto" style="max-width:150px;" alt="TechSomm">
+                            </a>
                             <h5 class="my-4 font-bold">Welcome back</h5>
                             <span class="text-white-6 fs-13 mb-5 mt-xl-0">Sign in to open the TechSomm wine kiosk.</span>
                         </div>

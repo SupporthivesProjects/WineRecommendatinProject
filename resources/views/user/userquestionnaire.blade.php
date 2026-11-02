@@ -573,7 +573,7 @@
                 <div class="image-card open-questionnaire-modal"
                     data-questionnaire-id="1">
 
-                    <img src="{{ asset('images/FirstSipTwo.jpg') }}"
+                    <img decoding="async" src="{{ asset('images/FirstSipTwo.jpg') }}"
                         class="img-fluid" alt="First Sip">
 
                     <div class="overlay">
@@ -591,7 +591,7 @@
                 <div class="image-card open-questionnaire-modal"
                     data-questionnaire-id="2">
 
-                    <img src="{{ asset('images/Wineglasses.jpg') }}"
+                    <img decoding="async" src="{{ asset('images/Wineglasses.jpg') }}"
                         class="img-fluid" alt="Savvy Sip">
 
                     <div class="overlay">
@@ -608,7 +608,7 @@
                 <div class="image-card open-questionnaire-modal"
                     data-questionnaire-id="3">
 
-                    <img src="{{ asset('images/questionnaire2.jpg') }}"
+                    <img decoding="async" src="{{ asset('images/questionnaire2.jpg') }}"
                         class="img-fluid" alt="Cork Master">
 
                     <div class="overlay">
@@ -626,7 +626,7 @@
                 <div class="image-card open-questionnaire-modal"
                     data-questionnaire-id="4">
 
-                    <img src="{{ asset('images/questionnaire3.jpg') }}"
+                    <img decoding="async" src="{{ asset('images/questionnaire3.jpg') }}"
                         class="img-fluid" alt="Quick Pour">
 
                     <div class="overlay">
