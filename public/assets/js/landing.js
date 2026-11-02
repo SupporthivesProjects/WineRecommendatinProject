@@ -351,7 +351,8 @@ function onScroll(event) {
     sections.forEach((elem) => {
         const val = elem.getAttribute("href");
         let refElement;
-        if (val != 'javascript:void(0);' && val !== "#") {
+        // only same-page section links (#id); full page URLs are not sections
+        if (val && /^#[\w-]+$/.test(val)) {
             refElement = document.querySelector(val);
         }
         const scrollTopMinus = scrollPos + 73;
@@ -389,6 +390,7 @@ const scrollToTop = document.querySelector(".scrollToTop");
 const $rootElement = document.documentElement;
 const $body = document.body;
 window.onscroll = () => {
+    if (!scrollToTop) return;
     const scrollTop = window.scrollY || window.pageYOffset;
     const clientHt = $rootElement.scrollHeight - $rootElement.clientHeight;
     if (window.scrollY > 100) {
@@ -397,9 +399,11 @@ window.onscroll = () => {
         scrollToTop.style.display = "none";
     }
 };
-scrollToTop.onclick = () => {
-    window.scrollTo(0, 0);
-};
+if (scrollToTop) {
+    scrollToTop.onclick = () => {
+        window.scrollTo(0, 0);
+    };
+}
 /* back to top */
 
 

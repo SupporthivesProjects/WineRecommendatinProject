@@ -687,6 +687,16 @@
             // Initialize labels
             $("#price-min").text(min);
             $("#price-max").text(max);
+
+            // Tick marks and price labels under the slider
+            const slider = $("#price-slider");
+            const steps = 5;
+            for (let i = 0; i <= steps; i++) {
+                const percent = (i / steps) * 100;
+                const tick = $("<span class='ui-slider-tick-mark'></span>").css("left", percent + "%");
+                const label = $("<span class='tick-label'></span>").text(Math.round(min + i * ((max - min) / steps))).css("left", percent + "%");
+                slider.append(tick).append(label);
+            }
         });
 
         function filterProductsByPrice(min, max) {
@@ -700,16 +710,6 @@
             });
         }
 
-        $(function () {
-            const slider = $("#price-slider");
-            const steps = 5;
-            for (let i = 0; i <= steps; i++) {
-                const percent = (i / steps) * 100;
-                const tick = $("<span class='ui-slider-tick-mark'></span>").css("left", percent + "%");
-                const label = $("<span class='tick-label'></span>").text(min + i * ((max - min) / steps)).css("left", percent + "%");
-                slider.append(tick).append(label);
-            }
-        });
 
 
     </script>
@@ -877,7 +877,7 @@
             });
 
             // Updated View Cart button - now redirects to cart page
-            document.getElementById('view-cart-btn').addEventListener('click', function () {
+            document.getElementById('view-cart-btn')?.addEventListener('click', function () {
                 window.location.href = '{{ route("user.cart") }}';
             });
         });

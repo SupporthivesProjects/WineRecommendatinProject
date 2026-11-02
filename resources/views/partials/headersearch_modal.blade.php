@@ -16,20 +16,6 @@
                 </div>
             </div>
             <div class="mt-3">
-                <p class="fw-semibold text-muted mb-2 fs-13">Apps and pages</p>
-                <ul class="ps-2">
-                    <li class="p-1 d-flex align-items-center text-muted mb-2 search-app">
-                        <a href="full-calendar.html"><span><i class='bx bx-calendar me-2 fs-14 bg-primary-transparent p-2 rounded-circle '></i>Calendar</span></a>
-                    </li>
-                    <li class="p-1 d-flex align-items-center text-muted mb-2 search-app">
-                        <a href="mail.html"><span><i class='bx bx-envelope me-2 fs-14 bg-primary-transparent p-2 rounded-circle'></i>Mail</span></a>
-                    </li>
-                    <li class="p-1 d-flex align-items-center text-muted mb-2 search-app">
-                        <a href="buttons.html"><span><i class='bx bx-dice-1 me-2 fs-14 bg-primary-transparent p-2 rounded-circle '></i>Buttons</span></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="mt-3">
               <p class="fw-semibold text-muted mb-2 fs-13">Links</p>
               <ul class="ps-2">
                   <li class="p-1 align-items-center  mb-1 search-app">

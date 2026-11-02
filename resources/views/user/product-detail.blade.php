@@ -490,7 +490,7 @@
                                         $method = strtolower($product->Method ?? 'n/a');
                                     @endphp
 
-                                    <table class="table mb-0 border table-bordered text-nowrap align-middle">
+                                    <table class="table mb-0 border table-bordered text-nowrap align-middle no-datatable">
                                         <tbody>
                                             <tr>
                                                 <th scope="row">Type</th>

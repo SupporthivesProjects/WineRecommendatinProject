@@ -642,7 +642,7 @@
         </script>
         <script>
             $(document).ready(function () {
-                $('table').each(function () {
+                $('table').not('.no-datatable').each(function () {
 
                     if ($.fn.DataTable.isDataTable(this)) {
                         return;

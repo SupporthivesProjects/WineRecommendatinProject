@@ -345,9 +345,11 @@ class UserController extends Controller
         $store = Auth::user()->store;
 
         // Get active products available in this store
+        // (users without a store, such as admins, see products active in any store)
         $storeProducts = DB::table('store_products')
-            ->where('store_id', $store->id)
+            ->when($store, fn ($query) => $query->where('store_id', $store->id))
             ->where('status', 'active')
+            ->distinct()
             ->pluck('product_id');
 
         // Current product price
@@ -492,9 +494,11 @@ class UserController extends Controller
         $store = Auth::user()->store;
 
         // Get active products available in this store
+        // (users without a store, such as admins, see products active in any store)
         $storeProducts = DB::table('store_products')
-            ->where('store_id', $store->id)
+            ->when($store, fn ($query) => $query->where('store_id', $store->id))
             ->where('status', 'active')
+            ->distinct()
             ->pluck('product_id');
 
         // Current product price

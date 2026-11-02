@@ -58,10 +58,10 @@
                             <h4>Store Information</h4>
                         </div>
                         <div class="card-body">
-                            <p><strong>Name:</strong> {{ $store->store_name }}</p>
-                            <p><strong>Address:</strong> {{ $store->address1 }}</p>
-                            <p><strong>Location:</strong> {{ $store->location }}</p>
-                            <p><strong>State:</strong> {{ $store->state }}</p>
+                            <p><strong>Name:</strong> {{ $store?->store_name ?? '—' }}</p>
+                            <p><strong>Address:</strong> {{ $store?->address1 ?? '—' }}</p>
+                            <p><strong>Location:</strong> {{ $store?->location ?? '—' }}</p>
+                            <p><strong>State:</strong> {{ $store?->state ?? '—' }}</p>
                             
                         </div>
                     </div>

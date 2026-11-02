@@ -205,7 +205,7 @@
 
                 let image = p.image 
                 ? p.image 
-                : '/default.png';
+                : '{{ asset('images/default.jpg') }}';
 
 
                 html += `
@@ -217,7 +217,7 @@
                             alt="${p.name || 'Product image'}"
                             class="checkout-product-image"
                             loading="lazy"
-                            onerror="this.onerror=null;this.src='/default.png';"
+                            onerror="this.onerror=null;this.src='{{ asset('images/default.jpg') }}';"
                         />
                     </td>
                     <td>${p.name}</td>

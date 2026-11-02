@@ -266,7 +266,7 @@ class StoreDashboardController extends Controller
                     // Attach image
                     $p['image'] = $product && $product->image1
                         ? asset('storage/' . $product->image1)
-                        : asset('default.png');
+                        : asset('images/default.jpg');
 
                     // Attach country
                     $p['country'] = $product->country ?? null;
@@ -622,6 +622,8 @@ class StoreDashboardController extends Controller
         $customer = DB::table('questionnaire_usage')
             ->where('submission_id', $submission_id)
             ->first();
+
+        abort_if(! $customer, 404);
 
         // Fetch all responses for this submission
         $responses = DB::table('question_responses')

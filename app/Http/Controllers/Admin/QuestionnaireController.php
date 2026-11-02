@@ -367,6 +367,8 @@ class QuestionnaireController extends Controller
             ->where('submission_id', $submission_id)
             ->first();
 
+        abort_if(! $customer, 404);
+
         // Fetch all responses for this submission
         $responses = DB::table('question_responses')
             ->where('submission_id', $submission_id)
