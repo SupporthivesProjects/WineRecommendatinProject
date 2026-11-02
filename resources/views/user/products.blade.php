@@ -93,13 +93,13 @@
         .parallax-container 
         {
             position: relative;
-            height: 70vh;
+            height: 80vh;
             overflow: hidden;
         }
 
         .parallax-bg 
         {
-            background-image:  url('{{ asset('images/productsredwine.jpg') }}');
+            background-image:  url('{{ asset('images/trytwo.jpg') }}');
             background-size: cover;
             background-position: center;
             position: absolute;
@@ -213,6 +213,8 @@
             margin-right: 1rem; /* spacing between options */
             white-space: nowrap;
         }
+
+        
 
         @media (max-width: 768px) {
             .filters-and-cards {
