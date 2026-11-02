@@ -79,7 +79,8 @@
 
     #header_logo_desktop {
             height: 70px; /* default */
-            transition: height 0.4s ease; /* smooth animation */
+            /* smooth shrink, plus the logo cross-fade when the header changes colour */
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out;
         }
 
 
@@ -133,12 +134,27 @@
 
         /* Header once it has shrunk on scroll (body.home-header-scrolled, set by the
            logo-shrink scroll handler): wine bar, white links, yellow logo. White at the top. */
+        /* Slow, eased fades so white -> wine (and back) glides instead of snapping */
         .app-header,
         #sidebar {
-            transition: background-color 0.35s ease, box-shadow 0.35s ease;
+            transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #sidebar .side-menu__item .fonthover {
-            transition: color 0.35s ease;
+        #sidebar .side-menu__item .fonthover,
+        .app-header .open-toggle i,
+        #sidebar .open-toggle i {
+            transition: color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #sidebar .btn-info {
+            transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1), color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Logos fade out, swap, and fade back in (see the scroll handler) */
+        .app-header .header-logo img,
+        #sidebar .header-logo img {
+            transition: opacity 0.5s ease-in-out, height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .app-header .header-logo img.logo-fading,
+        #sidebar .header-logo img.logo-fading {
+            opacity: 0;
         }
         body.home-header-scrolled .app-header,
         body.home-header-scrolled #sidebar {
@@ -1752,6 +1768,7 @@
         // Load the yellow logo up front so the swap does not flash
         new Image().src = scrolledLogoSrc;
         let headerScrolled = false;
+        let logoSwapTimer = null;
 
         document.addEventListener("scroll", () => {
             const logo = document.getElementById("header_logo_desktop");
@@ -1770,9 +1787,17 @@
             if (scrolled !== headerScrolled) {
                 headerScrolled = scrolled;
                 document.body.classList.toggle('home-header-scrolled', scrolled);
-                headerLogos.forEach(img => {
-                    img.setAttribute('src', scrolled ? scrolledLogoSrc : img.dataset.defaultSrc);
-                });
+
+                // Cross-fade the logo: fade out, swap once it is invisible, fade back in.
+                // A newer change cancels an unfinished one, so fast scrolling cannot mix them up.
+                clearTimeout(logoSwapTimer);
+                headerLogos.forEach(img => img.classList.add('logo-fading'));
+                logoSwapTimer = setTimeout(() => {
+                    headerLogos.forEach(img => {
+                        img.setAttribute('src', headerScrolled ? scrolledLogoSrc : img.dataset.defaultSrc);
+                        img.classList.remove('logo-fading');
+                    });
+                }, 500);
             }
         });
 
