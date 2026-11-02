@@ -161,7 +161,7 @@
            Applied only while the yellow file is shown, so the white header is unchanged. */
         .app-header .header-logo img[src$="logoblackyellow.png"],
         #sidebar .header-logo img[src$="logoblackyellow.png"] {
-            transform: scale(1.85);
+            transform: scale(2.035); /* 1.85 to match About, plus 10% */
             transform-origin: center;
         }
         body.home-header-scrolled .app-header,
