@@ -24,14 +24,6 @@ class UserController extends Controller
         
     }
 
-    /**
-     * Show the form for creating a new user.
-     */
-    public function create()
-    {
-        $stores = Store::where('status', 'active')->get();
-        return view('admin.users.create', compact('stores'));
-    }
 
     /**
      * Store a newly created user in storage.

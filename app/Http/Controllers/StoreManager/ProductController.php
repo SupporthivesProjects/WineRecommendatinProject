@@ -211,16 +211,6 @@ class ProductController extends Controller
     }
 
     
-    /**
-     * Display products available in the store.
-     */
-    public function storeProducts()
-    {
-        $store = Auth::user()->store;
-        $products = $store->products()->where('status', 'active')->get();
-        
-        return view('store-manager.products.store-products', compact('products'));
-    }
 
      /**
      * redirect store manager to single product page.
@@ -232,17 +222,6 @@ class ProductController extends Controller
         return view('store-manager.storeDashboard.storeSingleProduct', compact('product'));
     }
 
-    /**
-     * Display and manage featured products.
-     */
-    public function featuredProducts()
-    {
-        $store = Auth::user()->store;
-        $storeProducts = $store->products()->where('status', 'active')->get();
-        $featuredProducts = $store->featuredProducts->pluck('id')->toArray();
-        
-        return view('store-manager.products.store-products', compact('storeProducts', 'featuredProducts'));
-    }
     
     
 

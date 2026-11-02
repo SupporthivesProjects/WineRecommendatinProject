@@ -14,11 +14,6 @@ class CartController extends Controller
         return view('user.cart');
     }
 
-    public function get()
-    {
-        $cart = Session::get('cart', []);
-        return response()->json(['cart' => $cart]);
-    }
 
     public function updateQuantity(Request $request)
     {
@@ -40,21 +35,4 @@ class CartController extends Controller
         return response()->json(['success' => true, 'message' => 'Quantity updated']);
     }
 
-    public function checkout(Request $request)
-    {
-        $submissionId = $request->input('submission_id');
-        $cart = Session::get('cart', []);
-        
-        if (empty($cart)) {
-            return response()->json(['success' => false, 'message' => 'Cart is empty']);
-        }
-        
-        // Here you can add your checkout logic
-        // For example, save order to database, process payment, etc.
-        
-        // Clear cart after successful checkout
-        Session::forget('cart');
-        
-        return response()->json(['success' => true, 'message' => 'Order placed successfully']);
-    }
 }

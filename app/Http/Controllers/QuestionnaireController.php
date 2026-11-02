@@ -31,15 +31,6 @@ class QuestionnaireController extends Controller
         $this->ruleService = $ruleService;
     }
 
-    public function index()
-    {
-        
-        $questionnaires = QuestionnaireTemplate::where('is_active', true)
-            ->orderBy('id', 'asc')
-            ->get();
-            
-        return view('user.questionnaires', compact('questionnaires'));
-    }
     
     /**
      * Display the expertise assessment questionnaire.
@@ -215,33 +206,6 @@ class QuestionnaireController extends Controller
 
         return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
     }
-    // public function submit(Request $request, QuestionnaireTemplate $questionnaire)
-    // {
-    //     $request->validate([
-    //         'answers' => 'required|array',
-    //     ]);
-        
-    //     $user = Auth::user();
-    //     $answers = $request->answers;
-        
-    //     // Process answers to extract preferences
-    //     $preferences = $this->processAnswers($questionnaire, $answers);
-        
-    //     // Store the questionnaire response
-    //     UserQuestionnaireResponse::create([
-    //         'user_id' => $user->id,
-    //         'questionnaire_id' => $questionnaire->id,
-    //         'responses' => json_encode([
-    //             'answers' => $answers,
-    //             'preferences' => $preferences
-    //         ]),
-    //     ]);
-        
-    //     // Get recommended products based on preferences
-    //     $recommendedProducts = $this->getRecommendedProducts($preferences);
-        
-    //     return view('user.questionnaire-results', compact('preferences', 'recommendedProducts'));
-    // }
     
     /**
      * Process questionnaire answers to extract wine preferences.
@@ -323,58 +287,6 @@ class QuestionnaireController extends Controller
      * @param  array  $preferences
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    // private function getRecommendedProducts(array $preferences)
-    // {
-    //     $query = Product::where('status', 'active');
-        
-    //     // Apply filters based on preferences
-    //     if (!empty($preferences['wine_type'])) {
-    //         $query->where('type', $preferences['wine_type']);
-    //     }
-        
-    //     if (!empty($preferences['price_range'])) {
-    //         // Parse price range and apply filter
-    //         $priceRange = explode('-', $preferences['price_range']);
-    //         if (count($priceRange) == 2) {
-    //             $query->whereBetween('retail_price', [$priceRange[0], $priceRange[1]]);
-    //         }
-    //     }
-        
-    //     if (!empty($preferences['grape_variety'])) {
-    //         if (is_array($preferences['grape_variety'])) {
-    //             $query->where(function($q) use ($preferences) {
-    //                 foreach ($preferences['grape_variety'] as $grape) {
-    //                     $q->orWhere('grape_variety', 'like', '%' . $grape . '%');
-    //                 }
-    //             });
-    //         } else {
-    //             $query->where('grape_variety', 'like', '%' . $preferences['grape_variety'] . '%');
-    //         }
-    //     }
-        
-    //     if (!empty($preferences['country'])) {
-    //         if (is_array($preferences['country'])) {
-    //             $query->whereIn('country', $preferences['country']);
-    //         } else {
-    //             $query->where('country', $preferences['country']);
-    //         }
-    //     }
-        
-    //     if (!empty($preferences['sweetness'])) {
-    //         // Assuming we have a sweetness field or we're using a tag-based approach
-    //         $query->where('sweetness', $preferences['sweetness'])
-    //               ->orWhere('description', 'like', '%' . $preferences['sweetness'] . '%');
-    //     }
-        
-    //     if (!empty($preferences['body'])) {
-    //         // Assuming we have a body field or we're using a tag-based approach
-    //         $query->where('body', $preferences['body'])
-    //               ->orWhere('description', 'like', '%' . $preferences['body'] . '%');
-    //     }
-        
-    //     // Limit to a reasonable number of recommendations
-    //     return $query->inRandomOrder()->limit(6)->get();
-    // }
     private function getRecommendedProducts(array $preferences)
     {
 
@@ -502,32 +414,6 @@ class QuestionnaireController extends Controller
     }
 
 
-    public function storeResponse(Request $request)
-    {
-    
-
-        // Validate the incoming data
-        $validated = $request->validate([
-            'template_id' => 'required|integer',  
-            'answers' => 'required|array',        
-        ]);
-
-        // Log or save the data to the database
-        // Example: Storing in a 'responses' table (you can modify this as per your database schema)
-        
-        $templateId = $validated['template_id'];
-        $answers = $validated['answers'];
-
-        // Store the response (this example assumes a "responses" table with template_id and answers columns)
-        \DB::table('responses')->insert([
-            'template_id' => $templateId,
-            'answers' => json_encode($answers), 
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        return response()->json(['message' => 'Response saved successfully!'], 200);
-    }
 
 
 

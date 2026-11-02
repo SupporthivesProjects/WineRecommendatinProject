@@ -68,14 +68,6 @@ class CheeseProductController extends Controller
                 ->withPivot(['quantity', 'is_available']);
         }])->findOrFail($id);
 
-        // Debug: Find products with the cheese name in cheese_pairing using LIKE
-        // $cheeseName = $cheese->name;
-        // $matchingProducts = \App\Models\Product::where('cheese_pairing', 'LIKE', '%' . $cheeseName . '%')
-        //     ->with(['images' => function ($query) {
-        //         $query->orderBy('is_primary', 'desc'); // Primary image first
-        //     }])
-        //     ->get();
-        // Get wines paired with this cheese from the user's store only
         $cheeseName = $cheese->name;
 
         // Get active products available in the user's store

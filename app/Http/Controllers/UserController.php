@@ -107,23 +107,6 @@ class UserController extends Controller
         return view('user.dashboard', compact('questionnaires', 'recentRecommendations','cardImages'));
     }
 
-    /**
-     * Display the user's profile.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function profile()
-    {
-        $user = Auth::user();
-
-        // Get the user's questionnaire history
-        $questionnaireHistory = UserQuestionnaireResponse::where('user_id', $user->id)
-            ->with('questionnaire')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('user.profile', compact('user', 'questionnaireHistory'));
-    }
 
     /**
      * Update the user's profile.
@@ -312,111 +295,6 @@ class UserController extends Controller
     }
 
 
-    // public function productDetails($id)
-    // {
-    //     if (!auth()->check()) {
-    //         return redirect()->route('home', [
-    //             'product' => $id
-    //         ]);
-    //     }
-        
-    //     // Fetch the current product with images and reviews
-    //     $product = Product::with(['images', 'reviews.user'])->findOrFail($id);
-    //     $product->display_price = $product->getDisplayPrice();
-
-    //     // Get approved reviews with user data
-    //     $reviews = $product->reviews()
-    //         ->with('user')
-    //         ->where('status', 'approved')
-    //         ->latest()
-    //         ->paginate(5, ['*'], 'reviews_page');
-
-    //     // Calculate average rating
-    //     $averageRating = $product->reviews()
-    //         ->where('status', 'approved')
-    //         ->avg('rating');
-
-    //     // Get total number of approved reviews
-    //     $totalReviews = $product->reviews()
-    //         ->where('status', 'approved')
-    //         ->count();
-
-    //     // Get rating distribution for the chart
-    //     $ratingDistribution = [];
-    //     for ($i = 5; $i >= 1; $i--) {
-    //         $ratingDistribution[$i] = $product->reviews()
-    //             ->where('status', 'approved')
-    //             ->where('rating', $i)
-    //             ->count();
-    //     }
-
-    //     // Fetch 3 related products based on matching type or country, excluding the current product
-    //     // $relatedProducts = Product::with('images')
-    //     //     ->where('id', '!=', $product->id)
-    //     //     ->where(function ($query) use ($product) {
-    //     //         $query->where('type', $product->type)
-    //     //             ->orWhere('country', $product->country);
-    //     //     })
-    //     //     ->inRandomOrder()
-    //     //     ->limit(3)
-    //     //     ->get();
-        
-    //     // Get the logged-in user's store
-    //     $store = Auth::user()->store;
-
-    //     // Get products available in this store
-    //     $storeProducts = DB::table('store_products')
-    //         ->where('store_id', $store->id)
-    //         ->where('status', 'active')
-    //         ->pluck('product_id');
-
-    //     // Current product price
-    //     $price = $product->display_price;
-
-    //     $price = $product->display_price;
-    //     $relatedProducts = Product::with('images')
-    //         ->where('id', '!=', $product->id)
-    //         ->whereBetween('retail_price', [
-    //             max(0, $price - 1500),
-    //             $price + 1500
-    //         ])
-    //         ->where('grape_variety', $product->grape_variety)
-    //         ->where('type', $product->type)
-    //         ->inRandomOrder()
-    //         ->limit(3)
-    //         ->get();
-
-    //     // If less than 3 related products, fetch random other products excluding current and already fetched
-    //     if ($relatedProducts->count() < 3) {
-    //         $excludeIds = $relatedProducts->pluck('id')->push($product->id)->toArray();
-
-    //         $additionalProducts = Product::with('images')
-    //             ->whereNotIn('id', $excludeIds)
-    //             ->inRandomOrder()
-    //             ->limit(3 - $relatedProducts->count())
-    //             ->get();
-
-    //         // Merge additional products with related products
-    //         $relatedProducts = $relatedProducts->merge($additionalProducts);
-    //     }
-
-    //     $relatedProducts->transform(function ($relatedProduct) {
-    //         $relatedProduct->display_price = $relatedProduct->getDisplayPrice();
-    //         return $relatedProduct;
-    //     });
-
-    //     $cart = session()->get('cart', []);
-
-    //     return view('user.product-detail', [
-    //         'product' => $product,
-    //         'relatedProducts' => $relatedProducts,
-    //         'reviews' => $reviews,
-    //         'averageRating' => $averageRating ?? 0,
-    //         'totalReviews' => $totalReviews,
-    //         'ratingDistribution' => $ratingDistribution,
-    //         'cart' => $cart,
-    //     ]);
-    // }
 
     public function productDetails($id)
     {   
@@ -476,18 +354,6 @@ class UserController extends Controller
         $price = $product->display_price;
 
         // Fetch 3 related products from the user's store only
-        // $relatedProducts = Product::with('images')
-        //     ->whereIn('id', $storeProducts)
-        //     ->where('id', '!=', $product->id)
-        //     ->whereBetween('retail_price', [
-        //         max(0, $price - 1500),
-        //         $price + 1500
-        //     ])
-        //     ->where('grape_variety', $product->grape_variety)
-        //     ->where('type', $product->type)
-        //     ->inRandomOrder()
-        //     ->limit(3)
-        //     ->get();
         $relatedProducts = collect();
 
         $baseQuery = Product::with('images')
@@ -616,33 +482,6 @@ class UserController extends Controller
                 ->count();
         }
 
-        // $relatedProducts = Product::with('images')
-        //     ->where('id', '!=', $product->id)
-        //     ->where(function ($query) use ($product) {
-
-        //         $query->where('type', $product->type)
-        //             ->orWhere('country', $product->country);
-        //     })
-        //     ->inRandomOrder()
-        //     ->limit(3)
-        //     ->get();
-
-        // if ($relatedProducts->count() < 3) {
-
-        //     $excludeIds = $relatedProducts->pluck('id')
-        //         ->push($product->id)
-        //         ->toArray();
-
-        //     $additionalProducts = Product::with('images')
-        //         ->whereNotIn('id', $excludeIds)
-        //         ->inRandomOrder()
-        //         ->limit(3 - $relatedProducts->count())
-        //         ->get();
-
-        //     $relatedProducts = $relatedProducts->merge(
-        //         $additionalProducts
-        //     );
-        // }
         /*
         |--------------------------------------------------------------------------
         | Related Products - Logged-in User's Store Only
@@ -1066,31 +905,6 @@ class UserController extends Controller
                 continue; // MOVE TO NEXT QUESTION
             }
             
-            // if ($matches->count() === 0) {
-
-            //     $priceQuestionKeys = [
-            //         'question11',
-            //         'question12',
-            //         'question16',
-            //         'question7',
-            //     ];
-            
-            //     if (in_array($key, $priceQuestionKeys, true)) {
-            //         Log::warning(
-            //             "No products match the selected price band for {$key}. Returning no recommendations."
-            //         );
-            
-            //         return collect();
-            //     }
-            
-            //     Log::warning(
-            //         "No matches for {$key} — skipping this filter and keeping previous pool."
-            //     );
-            
-            //     continue;
-            // }
-
-            // Update the pool for next iteration (progressive filtering)
             $currentProductIds = $matches->pluck('id')->toArray();
 
             Log::info("Pool after filtering by $key: " . count($currentProductIds));
@@ -1114,22 +928,6 @@ class UserController extends Controller
         Log::info("Featured candidates (from final products): " . $featured->count());
         Log::info("Normal candidates: " . $normal->count());
 
-        // if ($featured->isEmpty()) 
-        // {
-
-        //     Log::info("No featured products found in final products. Fetching fallback featured products.");
-        //     $featured = Product::where('admin_featured_product', true)
-        //         ->when($wineType, function ($q) use ($wineType) {
-        //             $q->where(function ($x) use ($wineType) {
-        //                 $x->where('type', 'like', "%{$wineType}%")
-        //                   ->orWhere('method', 'like', "%{$wineType}%");
-        //             });
-        //         })
-        
-        //         ->inRandomOrder()
-        //         ->limit(5)
-        //         ->get();
-        // }
         if ($featured->isEmpty()) {
             $featured = Product::where('admin_featured_product', true)
                 ->whereIn('id', $storeProductIds)

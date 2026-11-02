@@ -18,43 +18,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::where('status', 'active');
-
-        // Apply filters if provided
-        if ($request->has('type') && $request->type) {
-            $query->where('type', $request->type);
-        }
-
-        if ($request->has('country') && $request->country) {
-            $query->where('country', $request->country);
-        }
-
-        if ($request->has('price_min') && $request->price_min) {
-            $query->where('retail_price', '>=', $request->price_min);
-        }
-
-        if ($request->has('price_max') && $request->price_max) {
-            $query->where('retail_price', '<=', $request->price_max);
-        }
-
-        if ($request->has('search') && $request->search) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('wine_name', 'like', "%{$search}%")
-                    ->orWhere('winery', 'like', "%{$search}%")
-                    ->orWhere('grape_variety', 'like', "%{$search}%");
-            });
-        }
-
-        // Get filter options for the sidebar
-        $types = Product::select('type')->distinct()->pluck('type')->filter();
-        $countries = Product::select('country')->distinct()->pluck('country')->filter();
-
-        // Get products with pagination
-        $products = $query->orderBy('id', 'desc')->paginate(12);
-        
-
-        return view('user.products', compact('products', 'types', 'countries'));
+        // The kiosk Browse Wines page lives at /user/products (store prices and filters)
+        return redirect()->route('user.products', $request->only('search'));
     }
 
     /**
@@ -265,83 +230,6 @@ class ProductController extends Controller
         return $query;
     }
 
-    public function filter(Request $request)
-    {
-        try {
-            $query = Product::query();
-
-            // Apply filters from the request
-            if ($request->has('search') && !empty($request->search)) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->where('wine_name', 'like', "%{$search}%")
-                        ->orWhere('winery', 'like', "%{$search}%")
-                        ->orWhere('grape_variety', 'like', "%{$search}%");
-                });
-            }
-
-            // Apply type filter
-            if ($request->has('type') && !empty($request->type)) {
-                $types = is_array($request->type) ? $request->type : [$request->type];
-                $query->whereIn('type', $types);
-            }
-
-            // Apply country filter
-            if ($request->has('country') && !empty($request->country)) {
-                $countries = is_array($request->country) ? $request->country : [$request->country];
-                $query->whereIn('country', $countries);
-            }
-
-                        // Apply Method filtera
-            if ($request->has('Method') && !empty($request->Method)) {
-                $methods = is_array($request->Method) ? $request->Method : [$request->Method];
-                $query->whereIn('Method', $methods);
-            }
-
-
-            // Apply price range filter
-            if ($request->has('min_price') && is_numeric($request->min_price)) {
-                $query->where('retail_price', '>=', (float)$request->min_price);
-            }
-            if ($request->has('max_price') && is_numeric($request->max_price)) {
-                $query->where('retail_price', '<=', (float)$request->max_price);
-            }
-
-            // Apply featured filter
-            if ($request->has('featured') && $request->featured === 'true') {
-                $query->where('admin_featured_product', true);
-            }
-
-            // Get filtered products
-            $products = $query->where('status', 'active')
-                ->paginate(12);
-
-            $products->appends($request->query());
-
-            // Return JSON response for AJAX requests
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => true,
-                    'html' => view('partials.product-grid', ['products' => $products])->render(),
-                    'has_more_pages' => $products->hasMorePages()
-                ]);
-            }
-
-            // For non-AJAX requests, redirect to browse page with filters
-            return redirect()->route('homeBrowseWines', $request->query());
-        } catch (\Exception $e) {
-            Log::error('Product filter error: ' . $e->getMessage());
-
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'An error occurred while filtering products.'
-                ], 500);
-            }
-
-            return back()->with('error', 'An error occurred while filtering products.');
-        }
-    }
 
 
 }

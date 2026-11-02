@@ -239,47 +239,6 @@ class StoreDashboardController extends Controller
         return view('test.dashboard');
     }
 
-    // public function checkouts()
-    // {
-    //     // return view('store-manager.checkouts');
-
-    //     $managerId = Auth::id();
-    //     $orders = CartCheckout::where('store_manager_id', $managerId)
-    //                 ->latest()
-    //                 ->get();
-
-    //     return view('store-manager.checkouts', compact('orders'));
-
-
-    // }
-    // public function checkouts()
-    // {
-    //     // $managerId = Auth::id();
-    //     $storeId = Auth::user()->store_id;
-    //     $orders = CartCheckout::where('store_id', $storeId)
-    //                 ->latest()
-    //                 ->get()
-    //                 ->map(function ($order) {
-
-    //                     $products = json_decode($order->products, true);
-
-    //                     foreach ($products as &$p) {
-
-    //                         // Fetch product from DB
-    //                         $product = \App\Models\Product::find($p['id']);
-
-    //                         // Attach image
-    //                         $p['image'] = $product && $product->image1
-    //                             ? asset('storage/' . $product->image1)
-    //                             : asset('default.png');
-    //                     }
-
-    //                     $order->products = $products;
-    //                     return $order;
-    //                 });
-
-    //     return view('store-manager.checkouts', compact('orders'));
-    // }
 
     public function checkouts()
     {

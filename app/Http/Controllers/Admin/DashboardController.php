@@ -137,11 +137,6 @@ class DashboardController extends Controller
         // ----------------------
 
         // Count by wine type
-        // $typeCounts = Product::select('type', DB::raw('COUNT(*) as count'))
-        // ->whereNotNull('type')
-        // ->groupBy('type')
-        // ->pluck('count', 'type')
-        // ->toArray();
         $typeCounts = Product::select(
             DB::raw('LOWER(type) as type'),
             DB::raw('COUNT(*) as count')
@@ -436,14 +431,6 @@ class DashboardController extends Controller
     }
 
 
-    /**
-     * Display questionnaires.
-     */
-    public function questionnaires()
-    {
-        $questionnaires = QuestionnaireTemplate::orderBy('id', 'asc')->paginate(15);
-        return view('admin.questionnaires.index', compact('questionnaires'));
-    }
 
     public function questionnaireimages(Request $request)
     {
