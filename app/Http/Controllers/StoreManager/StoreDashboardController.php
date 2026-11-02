@@ -652,6 +652,9 @@ class StoreDashboardController extends Controller
             ->where('id', $userId)
             ->value('store_id');
 
+        // Store managers may only view responses from their own store
+        abort_unless($storeId && (int) $storeId === (int) auth()->user()->store_id, 404);
+
         // Fetch store details
         $store = DB::table('stores')
             ->where('id', $storeId)
