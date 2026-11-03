@@ -1439,6 +1439,9 @@ class UserController extends Controller
             }
         }
 
+        // Same 1-10 range as the cart page
+        $quantity = max(1, min(10, (int) ($request->quantity ?? 1)));
+
         if ($foundIndex === null) {
             // Add new product object
             $cart[] = [
@@ -1446,11 +1449,12 @@ class UserController extends Controller
                 'name' => $productName,
                 'retail_price' => $productPrice,
                 'image' => $product->image1,
-                'quantity' => $request->quantity ?? 1,
+                'quantity' => $quantity,
             ];
         } else {
-            // Optionally increase quantity or ignore duplicates
-            $cart[$foundIndex]['quantity'] += ($request->quantity ?? 1);
+            // "Add to cart" sets the quantity rather than adding to it, so a repeated
+            // click or a button left stale by the Back button cannot inflate the count
+            $cart[$foundIndex]['quantity'] = $quantity;
         }
 
         session(['cart' => $cart]);

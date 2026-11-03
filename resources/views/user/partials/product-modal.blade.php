@@ -125,7 +125,8 @@
                 @endif
                 {{-- BUY NOW BUTTON --}}
                 @php
-                    $isInCart = in_array($product->id, $cart ?? []);
+                    // The cart holds item arrays, so compare by their ids
+                    $isInCart = collect($cart ?? [])->pluck('id')->contains($product->id);
                 @endphp
                 <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
                     <button
@@ -154,10 +155,12 @@
                 </div>
                 <div class="mb-4">
                     <button
+                        type="button"
                         class="btn w-100 buy-now-btn {{ $isInCart ? 'btn-dark' : 'btn-light' }}"
                         data-product-id="{{ $product->id }}"
                         data-product-name="{{ $product->wine_name }}"
-                        data-product-price="{{ $product->retail_price }}"
+                        data-product-price="{{ $product->display_price ?? $product->retail_price }}"
+                        data-qty-input="modal-product-qty"
                     >
                         {{ $isInCart ? 'Remove from cart' : 'Add to cart' }}
                     </button>

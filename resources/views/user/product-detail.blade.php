@@ -414,11 +414,12 @@
 
                                     </div>
                                         <div class="mt-4">
-                                            <button
+                                            <button type="button"
                                                 class="btn border border-dark w-100 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                 data-product-id="{{ $product->id }}"
                                                 data-product-name="{{ $product->wine_name }}"
-                                                data-product-price="{{ $product->display_price }}">
+                                                data-product-price="{{ $product->display_price }}"
+                                                data-qty-input="detail-product-qty">
 
                                                 {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
 
@@ -970,79 +971,6 @@
 
         });
 
-
-        const buttons = document.querySelectorAll('.buy-now-btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', function () {
-
-            const productId = this.getAttribute('data-product-id');
-            const productName = this.getAttribute('data-product-name');
-            const productPrice = this.getAttribute('data-product-price');
-
-            const isInCart = this.classList.contains('btn-dark');
-            let quantity = 1;
-
-            const qtyInput =
-                document.getElementById('detail-product-qty');
-
-            if (qtyInput) {
-                quantity = parseInt(qtyInput.value) || 1;
-            }
-
-
-
-
-            const url = isInCart
-                ? '{{ route("user.cart.remove") }}'
-                : '{{ route("user.cart.add") }}';
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                
-                body: JSON.stringify({
-                    product_id: productId,
-                    product_name: productName,
-                    product_price: productPrice,
-                    quantity:quantity
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-
-                if (!data.success) return;
-                const cartCountElement = document.getElementById('cart-count');
-                    if (cartCountElement) {
-
-                        cartCountElement.textContent =
-                            data.cart_count ?? 0;
-
-                    }
-
-                    if (isInCart) {
-                        this.classList.remove('btn-dark');
-                        this.classList.add('btn-light');
-                        this.textContent = 'Add to cart';
-                        toastr.warning('Product removed from cart!', 'Removed', {
-                            closeButton: true,
-                            progressBar: true,
-                            positionClass: 'toast-top-right',
-                            timeOut: 3000
-                        });
-
-                        } else {
-
-                        this.classList.remove('btn-light');
-                        this.classList.add('btn-dark');
-                        this.textContent = 'Remove from cart';
-                        // No success pop-up for adding; the button text confirms it
-                    }
-            });
-            });
-        });
     });
 </script>
 <script>

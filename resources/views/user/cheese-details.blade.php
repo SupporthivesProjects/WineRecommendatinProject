@@ -285,5 +285,4 @@
 @push('scripts')
     {{-- Add to cart on the paired wine cards (the cart holds wines only; the cheese itself is not sold here) --}}
     <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
-    <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
 @endpush

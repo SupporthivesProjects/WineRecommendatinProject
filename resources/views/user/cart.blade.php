@@ -298,8 +298,16 @@
             });
         });
 
+        // Back / Forward can show this page as it was; reload the items so they match the cart
+        window.addEventListener('pageshow', function(event) {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (event.persisted || (navigation && navigation.type === 'back_forward')) {
+                loadCartItems();
+            }
+        });
+
         function loadCartItems() {
-            fetch('{{ route('user.cart.get') }}')
+            fetch('{{ route('user.cart.get') }}', { cache: 'no-store', headers: { 'Accept': 'application/json' } })
                 .then(response => response.json())
                 .then(data => {
                     displayCartItems(data.cart);
@@ -454,6 +462,10 @@
             });
 
             document.getElementById('total-items').textContent = totalItems;
+            // Keep the header "View Cart (n)" count in step with the list
+            if (window.WineCartToggle) {
+                window.WineCartToggle.updateCount(totalItems);
+            }
             document.getElementById('subtotal').textContent = '₹' + subtotal.toFixed(2);
             document.getElementById('total-amount').textContent = '₹' + subtotal.toFixed(2);
             document.getElementById('mobile-total-amount').textContent = '₹' + subtotal.toFixed(2);

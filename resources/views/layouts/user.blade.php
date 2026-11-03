@@ -589,6 +589,13 @@
                 data-endpoint="{{ route('analytics.click') }}"
                 data-route="{{ Route::currentRouteName() }}"></script>
     @endif
+    {{-- Add to cart / Remove from cart buttons and cart counts on every page (one shared script) --}}
+    @auth
+        <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"
+                data-add-url="{{ route('user.cart.add') }}"
+                data-remove-url="{{ route('user.cart.remove') }}"
+                data-cart-url="{{ route('user.cart.get') }}"></script>
+    @endauth
 
 
 
