@@ -104,7 +104,12 @@ class UserController extends Controller
             return asset('storage/' . $img);
         });
 
-        return view('user.dashboard', compact('questionnaires', 'recentRecommendations','cardImages'));
+        // Pictures for the questionnaire pop-up's left panel (same as the Questionnaires page)
+        $modalImages = ModalImage::where('is_active', 1)
+            ->inRandomOrder()
+            ->pluck('image');
+
+        return view('user.dashboard', compact('questionnaires', 'recentRecommendations','cardImages', 'modalImages'));
     }
 
 
