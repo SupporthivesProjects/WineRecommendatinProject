@@ -36,6 +36,8 @@
     <!-- Style Css -->
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/m_styles.css') }}" rel="stylesheet">
+    <!-- Gold wine-bottle Menu, slide-out panel and hero slider controls -->
+    <link href="{{ asset('assets/css/home-wine-nav.css') }}?v={{ filemtime(public_path('assets/css/home-wine-nav.css')) }}" rel="stylesheet">
     <!-- Icons Css -->
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
     <!-- Node Waves Css -->
@@ -288,12 +290,7 @@
             .hero-content-div {
                 width: calc(100% - 32px);
             }
-            /* The full-width hero text would sit under the slide arrows; the dots and
-               swiping still change slides */
-            #carouselExampleIndicators .carousel-control-prev,
-            #carouselExampleIndicators .carousel-control-next {
-                display: none;
-            }
+            /* The slide controls move below the hero text on phones (home-wine-nav.css) */
             .featured-wines-carousel .glide__arrows {
                 position: static;
                 display: flex;
@@ -610,22 +607,14 @@
                 </div>
                 <!-- End::header-content-left -->
 
-                <!-- Start::header-content-right -->
-                <div class="header-content-right">
-                   
-                    <!-- Start::header-element -->
-                    <div class="header-element">
-                        <!-- Start::header-link -->
-                        <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar">
-                            <span class="open-toggle">
-                                <i class="ri-menu-3-line fs-20"></i>
-                            </span>
-                        </a>
-                        <!-- End::header-link -->
-                    </div>
-                    <!-- End::header-element -->
+                {{-- The menu button is the gold bottle (#wine-menu-trigger) below, on every screen size.
+                     The theme's old toggles stay in the page, hidden: defaultmenu.min.js and
+                     custom-script.js attach to them while starting up, and without them they stop
+                     before hiding the theme sidebar on tablets and phones. --}}
+                <div class="d-none" aria-hidden="true">
+                    <a href="javascript:void(0);" class="sidemenu-toggle header-link" data-bs-toggle="sidebar" tabindex="-1"></a>
+                    <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar" tabindex="-1"></a>
                 </div>
-                <!-- End::header-content-right -->
 
             </div>
             <!-- End::main-header-container -->
@@ -640,17 +629,6 @@
 
                 <!-- Start::main-sidebar -->
                 <div class="main-sidebar pt-0">
-                    <div class="desktop_none">
-                        <div class="header-element p-3 d-flex justify-content-end">
-                            <!-- Start::header-link -->
-                            <a href="javascript:void(0);" class="sidemenu-toggle-close header-link" data-bs-toggle="sidebar">
-                                <span class="open-toggle">
-                                    <i class="ri-menu-3-line fs-20"></i>
-                                </span>
-                            </a>
-                            <!-- End::header-link -->
-                        </div>
-                    </div>
                     <!-- Start::nav -->
                     <nav class="main-menu-container nav nav-pills sub-open mobo-content-end">
                         <div class="landing-logo-container">
@@ -667,82 +645,12 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg"
-                                fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
-                            </svg></div>
-                        <ul class="main-menu justify-content-end" style="margin-left:auto!important;">
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a class="side-menu__item p-3 justify-content-end" href="#home">
-                                    <span class="fonthover">Home</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a href="#HIW" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">How It Works</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a href="#featuredwines" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">Browse Wines</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a href="#pairing" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">Pairing Wines</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a href="#testimonials" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">What our users say</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a href="#Moments" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">Moments</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-                            <!-- Start::slide -->
-                            <li class="slide">
-                                <a href="{{ route('contact') }}" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">Contact Us</span>
-                                </a>
-                            </li>
-                            <li class="slide desktop_none">
-                                <a href="{{ route('login') }}" class="side-menu__item p-3 justify-content-end">
-                                    <span class="fonthover">Login</span>
-                                </a>
-                            </li>
-                            <!-- End::slide -->
-
-                        </ul>
-                        <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg"
-                                fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z">
-                                </path>
-                            </svg></div>
-                        <div class="d-lg-flex d-none">
-                            <div class="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                <!-- <a href="#" class="btn btn-wave btn-secondary">
-                                    New User
-                                </a> -->
-                                <a href="{{ route('login') }}" class="btn btn-wave btn-info">
-                                    Login
-                                </a>
-                            </div>
-                        </div>
+                        {{-- The links and Login are in the slide-out menu (#wine-menu-panel). Empty,
+                             hidden stand-ins for the theme's menu list and its scroll arrows, which
+                             defaultmenu.min.js measures while starting up. --}}
+                        <div class="slide-left d-none" id="slide-left" aria-hidden="true"></div>
+                        <ul class="main-menu d-none" aria-hidden="true"></ul>
+                        <div class="slide-right d-none" id="slide-right" aria-hidden="true"></div>
                     </nav>
                     <!-- End::nav -->
                 </div>
@@ -750,6 +658,69 @@
             </div>
         </aside>
         <!-- End::app-sidebar -->
+
+        {{-- Gold wine bottle, drawn once and reused by the Menu trigger and the slider controls --}}
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="wine-gold-metal" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#8c6a1c" />
+                    <stop offset="0.38" stop-color="#d8b450" />
+                    <stop offset="0.55" stop-color="#f2dc8c" />
+                    <stop offset="1" stop-color="#a98128" />
+                </linearGradient>
+                <symbol id="wine-bottle" viewBox="0 0 24 56">
+                    <path fill="url(#wine-gold-metal)" stroke="#7a5a14" stroke-width="0.8"
+                        d="M9.4 1.5Q9.4 1 9.9 1h4.2q.5 0 .5.5V14.2c0 2.6 5.4 4.6 5.4 11.4V52.5a2.5 2.5 0 0 1-2.5 2.5H6.5A2.5 2.5 0 0 1 4 52.5V25.6c0-6.8 5.4-8.8 5.4-11.4z" />
+                    <rect x="9.4" y="1" width="5.2" height="6" fill="#7a5a14" opacity="0.45" />
+                    <rect x="6.3" y="31" width="11.4" height="13" rx="1" fill="none" stroke="#7a5a14" stroke-opacity="0.6" stroke-width="0.9" />
+                    <path d="M6.7 27.5V49" stroke="#fff8e1" stroke-opacity="0.6" stroke-width="1.1" stroke-linecap="round" />
+                </symbol>
+            </defs>
+        </svg>
+
+        {{-- Menu trigger: the whole bottle, ring and label is one button (script: assets/js/home-wine-menu.js) --}}
+        <button type="button" class="wine-menu-trigger" id="wine-menu-trigger"
+            aria-controls="wine-menu-panel" aria-expanded="false" aria-label="Open menu">
+            <svg class="wine-menu-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <defs>
+                    <path id="wine-menu-ring-path" d="M50 50m-41 0a41 41 0 1 1 82 0a41 41 0 1 1-82 0" />
+                </defs>
+                <text><textPath href="#wine-menu-ring-path" textLength="256" lengthAdjust="spacing">CLICK ME • CLICK ME •</textPath></text>
+            </svg>
+            <span class="wine-menu-core" aria-hidden="true">
+                <svg class="wine-menu-bottle" focusable="false"><use href="#wine-bottle" /></svg>
+                <span class="wine-menu-label">MENU</span>
+            </span>
+        </button>
+        <div class="wine-menu-backdrop" id="wine-menu-backdrop"></div>
+
+        {{-- Slide-out navigation: the homepage links and Login (same destinations as before) --}}
+        <nav class="wine-menu-panel" id="wine-menu-panel" aria-label="Main menu" aria-hidden="true" inert>
+            <div class="wine-menu-panel-inner">
+                <p class="wine-menu-eyebrow">TechSomm</p>
+                <ul class="wine-menu-list">
+                    @foreach ([
+                        ['#home', 'Home'],
+                        ['#HIW', 'How It Works'],
+                        ['#featuredwines', 'Browse Wines'],
+                        ['#pairing', 'Pairing Wines'],
+                        ['#testimonials', 'What Our Users Say'],
+                        ['#Moments', 'Moments'],
+                        [route('contact'), 'Contact Us'],
+                    ] as $index => [$href, $text])
+                        <li>
+                            <a href="{{ $href }}" class="side-menu__item wine-menu-link">
+                                <span class="wine-menu-num" aria-hidden="true">{{ sprintf('%02d', $index + 1) }}</span>
+                                <span>{{ $text }}</span>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+                <div class="wine-menu-footer">
+                    <a href="{{ route('login') }}" class="wine-menu-login">Login</a>
+                </div>
+            </div>
+        </nav>
 
         <!-- Start::app-content -->
         <div class="main-content landing-main" id="home">
@@ -809,13 +780,18 @@
 
 
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                    {{-- Previous / Next: gold bottles pointing the way (styles: assets/css/home-wine-nav.css) --}}
+                    <button class="carousel-control-prev wine-slide-control" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="wine-slide-control-inner">
+                            <span class="wine-slide-control-bottle" aria-hidden="true"><svg focusable="false"><use href="#wine-bottle" /></svg></span>
+                            <span class="wine-slide-control-text">PREVIOUS</span>
+                        </span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                    <button class="carousel-control-next wine-slide-control" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="wine-slide-control-inner">
+                            <span class="wine-slide-control-bottle" aria-hidden="true"><svg focusable="false"><use href="#wine-bottle" /></svg></span>
+                            <span class="wine-slide-control-text">NEXT</span>
+                        </span>
                     </button>
                 </div>
                 </div>
@@ -1942,6 +1918,8 @@
     <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
     <!-- Kiosk monitoring heartbeat (one shared script) -->
     <script src="{{ asset('assets/js/kiosk-heartbeat.js') }}?v={{ filemtime(public_path('assets/js/kiosk-heartbeat.js')) }}"></script>
+    <!-- Gold wine-bottle Menu and its slide-out panel -->
+    <script src="{{ asset('assets/js/home-wine-menu.js') }}?v={{ filemtime(public_path('assets/js/home-wine-menu.js')) }}"></script>
     <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
 

@@ -1,0 +1,447 @@
+/*
+ * Homepage (layouts/boothome.blade.php) navigation and hero controls:
+ * - the gold wine-bottle Menu trigger (top right) with "CLICK ME" turning around it
+ * - the slide-out navigation panel (opens from the right, script: assets/js/home-wine-menu.js)
+ * - the hero text block sitting a little lower
+ * - the wine-bottle Previous / Next slider controls
+ * The header's white -> wine scroll colours stay in boothome.blade.php and are not changed here.
+ */
+
+:root {
+    --wine-gold-deep: #9c7624;     /* readable on the white header */
+    --wine-gold-light: #e3c46e;    /* on the wine header, the panel and the photos */
+    --wine-panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --wine-panel-time: 0.7s;
+    --wine-menu-trigger-size: 66px;
+    --wine-menu-header-height: 86px;
+}
+
+/* ---------- Menu trigger ---------- */
+
+.wine-menu-trigger {
+    --wine-trigger-color: var(--wine-gold-deep);
+    position: fixed;
+    top: calc((var(--wine-menu-header-height) - var(--wine-menu-trigger-size)) / 2);
+    right: 24px;
+    z-index: 1100;
+    width: var(--wine-menu-trigger-size);
+    height: var(--wine-menu-trigger-size);
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--wine-trigger-color);
+    cursor: pointer;
+    transition: color 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease,
+        width 0.6s cubic-bezier(0.4, 0, 0.2, 1), height 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+/* Desktop: the bar shrinks from 86px to 61px after scrolling (logo 70px -> 45px); the trigger follows */
+@media (min-width: 992px) {
+    body.home-header-scrolled {
+        --wine-menu-header-height: 61px;
+        --wine-menu-trigger-size: 56px;
+    }
+}
+/* Wine header (after scrolling) and the open panel: the lighter gold */
+body.home-header-scrolled .wine-menu-trigger,
+.wine-menu-trigger.is-open {
+    --wine-trigger-color: var(--wine-gold-light);
+}
+.wine-menu-trigger:hover {
+    transform: scale(1.04);
+}
+.wine-menu-trigger:focus-visible {
+    outline: 2px solid var(--wine-gold-light);
+    outline-offset: 3px;
+}
+
+/* "CLICK ME • CLICK ME •" on a circle around the bottle, turning slowly */
+.wine-menu-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: currentColor;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    animation: wine-menu-ring-turn 14s linear infinite;
+    transition: opacity 0.5s ease;
+}
+.wine-menu-trigger.is-open .wine-menu-ring {
+    animation-play-state: paused;
+    opacity: 0;
+}
+@keyframes wine-menu-ring-turn {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Bottle with MENU / CLOSE underneath, inside the ring */
+.wine-menu-core {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
+}
+.wine-menu-bottle {
+    width: 12px;
+    height: 28px;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
+    transition: transform 0.6s var(--wine-panel-ease);
+}
+.wine-menu-trigger:hover .wine-menu-bottle {
+    transform: rotate(-8deg);
+}
+.wine-menu-trigger.is-open .wine-menu-bottle {
+    transform: rotate(-18deg);
+}
+.wine-menu-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1;
+    padding-left: 0.16em; /* balances the letter spacing after the last letter */
+}
+
+/* ---------- Slide-out panel ---------- */
+
+.wine-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1080;
+    background: rgba(20, 4, 9, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--wine-panel-time) var(--wine-panel-ease);
+}
+.wine-menu-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.wine-menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1090;
+    width: min(420px, 100%);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background:
+        radial-gradient(120% 60% at 100% 0%, rgba(224, 197, 139, 0.14) 0%, rgba(224, 197, 139, 0) 60%),
+        linear-gradient(165deg, #4d1325 0%, #3b0f1a 48%, #23070e 100%);
+    border-left: 1px solid rgba(224, 197, 139, 0.35);
+    box-shadow: -18px 0 48px rgba(0, 0, 0, 0.35);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform var(--wine-panel-time) var(--wine-panel-ease), visibility 0s linear var(--wine-panel-time);
+}
+.wine-menu-panel.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform var(--wine-panel-time) var(--wine-panel-ease), visibility 0s;
+}
+
+.wine-menu-panel-inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--wine-menu-header-height) + 24px) 44px 40px;
+}
+
+.wine-menu-eyebrow {
+    margin: 0 0 18px;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--wine-gold-light);
+    opacity: 0.85;
+}
+.wine-menu-eyebrow::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 1px;
+    margin-top: 14px;
+    background: linear-gradient(90deg, var(--wine-gold-light), rgba(227, 196, 110, 0));
+}
+
+.wine-menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.wine-menu-list li {
+    opacity: 0;
+    transform: translateX(28px);
+    transition: opacity 0.5s ease, transform 0.6s var(--wine-panel-ease);
+}
+.wine-menu-panel.is-open .wine-menu-list li {
+    opacity: 1;
+    transform: none;
+}
+/* Links arrive one after another once the panel is moving in */
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(1) { transition-delay: 0.14s; }
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(2) { transition-delay: 0.18s; }
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(3) { transition-delay: 0.22s; }
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(4) { transition-delay: 0.26s; }
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(5) { transition-delay: 0.30s; }
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(6) { transition-delay: 0.34s; }
+.wine-menu-panel.is-open .wine-menu-list li:nth-child(7) { transition-delay: 0.38s; }
+
+/* The links keep the theme's side-menu__item class so landing.js still smooth-scrolls
+   to the sections and marks the current one; the theme's own look is reset here */
+.wine-menu-panel .wine-menu-link {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 0;
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(224, 197, 139, 0.12);
+    background: none;
+    color: #f8f5f2;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: color 0.35s ease, padding-left 0.45s var(--wine-panel-ease);
+}
+.wine-menu-panel .wine-menu-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0;
+    height: 1px;
+    background: var(--wine-gold-light);
+    transition: width 0.5s var(--wine-panel-ease);
+}
+/* landing.js marks the section on screen with .active. #home wraps the whole page, so
+   Home is only highlighted while no other section is the current one. */
+.wine-menu-panel .wine-menu-link:hover,
+.wine-menu-panel .wine-menu-link:focus-visible,
+.wine-menu-panel .wine-menu-link.active:not([href="#home"]),
+.wine-menu-list:not(:has(.wine-menu-link.active:not([href="#home"]))) .wine-menu-link.active[href="#home"] {
+    color: var(--wine-gold-light);
+    padding-left: 8px;
+    outline: none;
+}
+.wine-menu-panel .wine-menu-link:hover::after,
+.wine-menu-panel .wine-menu-link:focus-visible::after,
+.wine-menu-panel .wine-menu-link.active:not([href="#home"])::after,
+.wine-menu-list:not(:has(.wine-menu-link.active:not([href="#home"]))) .wine-menu-link.active[href="#home"]::after {
+    width: 100%;
+}
+.wine-menu-num {
+    min-width: 22px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--wine-gold-light);
+    opacity: 0.7;
+}
+
+.wine-menu-footer {
+    margin-top: auto;
+    padding-top: 36px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.wine-menu-panel.is-open .wine-menu-footer {
+    opacity: 1;
+    transition-delay: 0.44s;
+}
+.wine-menu-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+    padding: 12px 28px;
+    border: 1px solid var(--wine-gold-light);
+    border-radius: 999px;
+    color: var(--wine-gold-light);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: background-color 0.35s ease, color 0.35s ease;
+}
+.wine-menu-login:hover,
+.wine-menu-login:focus-visible {
+    background: var(--wine-gold-light);
+    color: #3b0f1a;
+    outline: none;
+}
+
+/* Page behind the open panel does not scroll (set by home-wine-menu.js) */
+html.wine-menu-locked {
+    overflow: hidden;
+}
+
+/* ---------- Hero text: the whole block a little lower ---------- */
+
+.hero-main .hero-content-div {
+    margin-top: 50px;
+}
+
+/* ---------- Slider Previous / Next: wine bottles ---------- */
+
+#carouselExampleIndicators .wine-slide-control {
+    width: 120px;
+    opacity: 1;
+    z-index: 2;
+}
+.wine-slide-control-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--wine-gold-light);
+    opacity: 0.8;
+    transition: opacity 0.35s ease, transform 0.45s var(--wine-panel-ease);
+}
+.wine-slide-control-bottle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 23px;
+    overflow: visible;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+}
+/* The upright bottle lies down with its neck pointing the way the slides move */
+.wine-slide-control-bottle svg {
+    flex: none;
+    width: 23px;
+    height: 54px;
+}
+.carousel-control-prev .wine-slide-control-bottle svg {
+    transform: rotate(-90deg);
+}
+.carousel-control-next .wine-slide-control-bottle svg {
+    transform: rotate(90deg);
+}
+.wine-slide-control-text {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    padding-left: 0.22em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+#carouselExampleIndicators .wine-slide-control:hover .wine-slide-control-inner,
+#carouselExampleIndicators .wine-slide-control:focus-visible .wine-slide-control-inner {
+    opacity: 1;
+}
+#carouselExampleIndicators .carousel-control-prev:hover .wine-slide-control-inner,
+#carouselExampleIndicators .carousel-control-prev:focus-visible .wine-slide-control-inner {
+    transform: translateX(-5px);
+}
+#carouselExampleIndicators .carousel-control-next:hover .wine-slide-control-inner,
+#carouselExampleIndicators .carousel-control-next:focus-visible .wine-slide-control-inner {
+    transform: translateX(5px);
+}
+#carouselExampleIndicators .wine-slide-control:focus-visible {
+    outline: none;
+}
+#carouselExampleIndicators .wine-slide-control:focus-visible .wine-slide-control-text {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ---------- Tablet and phone ---------- */
+
+@media (max-width: 991.98px) {
+    :root {
+        --wine-menu-trigger-size: 54px;
+        --wine-menu-header-height: 64px;
+    }
+    .wine-menu-trigger {
+        right: 12px;
+    }
+    .wine-menu-ring {
+        font-size: 11px;
+    }
+    .wine-menu-bottle {
+        width: 10px;
+        height: 23px;
+    }
+    .wine-menu-label {
+        font-size: 7.5px;
+    }
+    .hero-main .hero-content-div {
+        margin-top: 36px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .wine-menu-panel-inner {
+        padding: calc(var(--wine-menu-header-height) + 20px) 28px 32px;
+    }
+    .wine-menu-panel .wine-menu-link {
+        padding: 14px 0;
+        font-size: 1.05rem;
+    }
+    .hero-main .hero-content-div {
+        margin-top: 16px;
+    }
+    /* Phones: the two controls sit as a centred pair below the hero text and above the
+       fold (the hero is 100vh under a 64px header), clear of the back-to-top button */
+    #carouselExampleIndicators .wine-slide-control {
+        top: auto;
+        bottom: 84px;
+        width: 92px;
+        height: auto;
+    }
+    #carouselExampleIndicators .carousel-control-prev {
+        left: calc(50% - 112px);
+    }
+    #carouselExampleIndicators .carousel-control-next {
+        right: calc(50% - 112px);
+    }
+    .wine-slide-control-inner {
+        gap: 6px;
+    }
+    .wine-slide-control-text {
+        font-size: 0.6rem;
+    }
+}
+
+/* Short phones (e.g. 375x667): the tall hero text needs the room, so it stays centred
+   and the slide controls sit a little lower, still above the fold and the slide dots */
+@media (max-width: 767.98px) and (max-height: 720px) {
+    .hero-main .hero-content-div {
+        margin-top: 0;
+    }
+    #carouselExampleIndicators .wine-slide-control {
+        bottom: 78px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wine-menu-ring {
+        animation: none;
+    }
+    .wine-menu-panel,
+    .wine-menu-panel.is-open,
+    .wine-menu-backdrop,
+    .wine-menu-list li,
+    .wine-slide-control-inner {
+        transition-duration: 0.01s;
+        transition-delay: 0s;
+    }
+}
