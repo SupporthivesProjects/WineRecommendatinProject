@@ -135,6 +135,15 @@
 
         /* Retail Price slider: assets/css/price-filter.css */
 
+        /* While the filters fetch new results */
+        #products-grid {
+            transition: opacity 0.2s ease;
+        }
+        #products-grid.is-loading {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
 
         /* Style the label like a button/tag */
         .filter-checkbox {
@@ -379,7 +388,12 @@
                                     </a>
                                     </div>
                                 </div>
-                                <div class="row row-sm product-card-grid">
+                                <div class="row row-sm product-card-grid" id="products-grid">
+                                    @if ($products->isEmpty())
+                                        <div class="col-12 text-center text-muted py-5 products-empty">
+                                            No wines match these filters.
+                                        </div>
+                                    @endif
                                     @foreach ($products as $product)
                                         <div class="col-md-6 col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
@@ -437,7 +451,8 @@
                      @include('partials.floating-cart')
 
                 
-                    <!-- Pagination Code -->
+                    <!-- Pagination Code (swapped in place by the filters, see below) -->
+                    <div id="products-pagination">
                     @if ($products->hasPages())
                         @php
                             $lastPage = $products->lastPage();
@@ -529,6 +544,7 @@
                             </nav>
                         </div>
                     @endif
+                    </div>
                      <!--new  code  -->
                 </div>
             </div>
@@ -540,6 +556,70 @@
     <script src="{{ asset('assets/js/listing-filters.js') }}?v={{ filemtime(public_path('assets/js/listing-filters.js')) }}"></script>
     <script src="{{ asset('assets/js/cart-animation.js') }}?v={{ filemtime(public_path('assets/js/cart-animation.js')) }}"></script>
     <script src="{{ asset('assets/js/cart-toggle.js') }}?v={{ filemtime(public_path('assets/js/cart-toggle.js')) }}"></script>
+    <script>
+        /*
+         * Filters and page links update the wine grid in place: fetch the filtered page,
+         * swap only the cards and the page numbers, keep the scroll position and update the
+         * address (so reload and sharing keep the filters). Falls back to a normal page load.
+         */
+        let listingRequest = null;
+
+        function loadListing(url, scrollToGrid) {
+            const grid = document.getElementById('products-grid');
+            const pagination = document.getElementById('products-pagination');
+            if (!grid || !pagination || !window.fetch || !window.DOMParser) {
+                window.location.href = url;
+                return;
+            }
+
+            if (listingRequest) {
+                listingRequest.abort();
+            }
+            listingRequest = new AbortController();
+
+            history.replaceState(null, '', url);
+            grid.classList.add('is-loading');
+
+            fetch(url, {
+                credentials: 'same-origin',
+                headers: { 'Accept': 'text/html' },
+                signal: listingRequest.signal
+            })
+                .then(response => response.ok ? response.text() : Promise.reject(new Error('HTTP ' + response.status)))
+                .then(html => {
+                    const page = new DOMParser().parseFromString(html, 'text/html');
+                    const newGrid = page.getElementById('products-grid');
+                    const newPagination = page.getElementById('products-pagination');
+                    if (!newGrid || !newPagination) {
+                        throw new Error('Unexpected response');
+                    }
+                    grid.innerHTML = newGrid.innerHTML;
+                    pagination.innerHTML = newPagination.innerHTML;
+                    grid.classList.remove('is-loading');
+
+                    if (scrollToGrid) {
+                        const top = grid.getBoundingClientRect().top + window.scrollY - (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--site-navbar-height'), 10) || 80) - 20;
+                        window.scrollTo({ top: top, behavior: 'smooth' });
+                    }
+                })
+                .catch(error => {
+                    if (error.name === 'AbortError') {
+                        return;
+                    }
+                    window.location.href = url;
+                });
+        }
+
+        // Page numbers: load the page in place and bring the first cards into view
+        document.addEventListener('click', function (event) {
+            const link = event.target.closest('#products-pagination a[href]');
+            if (!link || event.ctrlKey || event.metaKey || event.shiftKey) {
+                return;
+            }
+            event.preventDefault();
+            loadListing(link.href, true);
+        });
+    </script>
     <script>
         $(function () {
             const prices = @json($allPrices); // every wine of the store, not only this page
@@ -570,7 +650,7 @@
                     if (ui.values[1] < max) { next.set('max_price', ui.values[1]); } else { next.delete('max_price'); }
                     next.delete('page');
                     const query = next.toString();
-                    window.location.href = window.location.pathname + (query ? '?' + query : '');
+                    loadListing(window.location.pathname + (query ? '?' + query : ''));
                 }
             });
 
@@ -607,13 +687,10 @@
 
                     const params = new URLSearchParams(window.location.search);
 
-                    // Clear old filter selections
-                    [
-                        'types[]',
-                        'countries[]',
-                        'vintage_years[]',
-                        'grape_varieties[]'
-                    ].forEach(key => params.delete(key));
+                    // Clear old filter selections (both types[] and the types[0] form page links use)
+                    [...params.keys()]
+                        .filter(key => /^(types|countries|vintage_years|grape_varieties)\[\d*\]$/.test(key))
+                        .forEach(key => params.delete(key));
 
                     // Add selected types
                     document.querySelectorAll('.wine-type-filter:checked')
@@ -641,8 +718,7 @@
                     // Start from page 1 after changing filters
                     params.delete('page');
 
-                    window.location.href =
-                        window.location.pathname + '?' + params.toString();
+                    loadListing(window.location.pathname + '?' + params.toString());
                 });
             });
 
