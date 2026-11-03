@@ -16,7 +16,7 @@
             height: 100px !important;
             object-fit: cover;
             position: relative;
-            z-index: 100;
+            z-index: 10;
             transform: scale(1);
             transform-origin: left center;
             transition: transform 0.5s ease-in-out;
