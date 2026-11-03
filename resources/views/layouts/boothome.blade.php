@@ -1733,35 +1733,6 @@
         });
     </script>
 
-    <!-- change Landing background image -->
-    <script>
-        const images = [
-            'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-            'https://plus.unsplash.com/premium_photo-1682097091093-dd18b37764a5?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            'https://images.unsplash.com/photo-1700893417238-ce7c7f427996?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-        ];
-
-        let index = 0;
-        const bg = document.getElementById('landing-bg');
-
-        function changeBackground() {
-            bg.style.opacity = 0;
-
-            setTimeout(() => {
-                const nextImage =
-                    `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('${images[index]}')`;
-                bg.style.backgroundImage = nextImage;
-                bg.style.opacity = 1;
-                index = (index + 1) % images.length;
-            }, 1000); // match this delay to your CSS transition time
-        }
-
-        // Set initial image
-        bg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('${images[0]}')`;
-
-        setInterval(changeBackground, 5000);
-    </script>
-
         {{-- Rating stars (was inside @push('scripts'), which this layout never prints, so it never ran) --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
