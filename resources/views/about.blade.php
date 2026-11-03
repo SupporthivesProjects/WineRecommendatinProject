@@ -471,6 +471,8 @@
 
 
 
+    <!-- Click sound, image protection, broken-image fallback: one shared script -->
+    <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
 </body>
 
 </html>

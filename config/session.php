@@ -198,4 +198,26 @@ return [
 
     'same_site' => 'lax',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Session Blocking
+    |--------------------------------------------------------------------------
+    |
+    | Requests from the same browser take turns with the session instead of
+    | running side by side. Every request saves the whole session when it
+    | finishes, so overlapping requests (an "Add to cart" click, the click
+    | analytics beacon, the kiosk heartbeat, the in-place filters) used to
+    | overwrite each other and lose cart items. The lock lives in the cache
+    | store below (default cache store when empty).
+    |
+    */
+
+    'block' => env('SESSION_BLOCK', true),
+
+    'block_store' => env('SESSION_BLOCK_STORE'),
+
+    'block_lock_seconds' => 10,
+
+    'block_wait_seconds' => 15,
+
 ];

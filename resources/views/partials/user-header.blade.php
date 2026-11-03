@@ -62,7 +62,7 @@
                 <li class="nav-item">
                     <a href="{{ route('user.cart') }}"
                        class="nav-link {{ request()->routeIs('user.cart') ? 'active' : '' }}">
-                        View Cart (<span id="cart-count">{{ collect($cart ?? [])->sum('quantity') }}</span>)
+                        View Cart (<span id="cart-count">{{ collect(session('cart', []))->sum('quantity') }}</span>)
                     </a>
                 </li>
 

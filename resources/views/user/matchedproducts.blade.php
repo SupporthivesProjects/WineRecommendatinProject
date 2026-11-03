@@ -167,7 +167,9 @@
 
     @php
         $cartItems = session('cart', []);
-        $cartCount = is_array($cartItems) ? count($cartItems) : 0;
+        // Bottles in the cart, the same number every other page shows
+        $cartCount = collect($cartItems)->sum('quantity');
+        $cartProductIds = collect($cartItems)->pluck('id')->map(fn ($id) => (string) $id)->all();
     @endphp
 
     <a href="{{ route('user.cart') }}"
@@ -357,11 +359,11 @@
                                             >
                                                 View details
                                             </button>
-                                            <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array($product->id, $cart) ? 'btn-dark' : 'btn-light' }}"
+                                            <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array((string) $product->id, $cartProductIds) ? 'btn-dark' : 'btn-light' }}"
                                                     data-product-id="{{ $product->id }}"
                                                     data-product-name="{{ $product->wine_name }}"
                                                     data-product-price="{{ $product->display_price }}">
-                                                {{ in_array($product->id, $cart) ? 'Remove from cart' : 'Add to cart' }}
+                                                {{ in_array((string) $product->id, $cartProductIds) ? 'Remove from cart' : 'Add to cart' }}
                                             </button>
                                         </div>
                                     </div>

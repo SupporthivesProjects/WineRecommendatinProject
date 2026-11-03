@@ -9,6 +9,9 @@
  *    retrieved through developer tools or screenshots.
  * 3. Navbar height: exposes the fixed navbar's height as the CSS variable
  *    --site-navbar-height, so floating elements can sit just below it.
+ * 4. Broken images: any image that fails to load shows images/default.jpg instead
+ *    (once per image, so a missing fallback can never loop). Add data-no-fallback
+ *    to an image or its container to opt out.
  *
  * Needs no other library. Safe to include twice (the second copy does nothing).
  */
@@ -154,6 +157,51 @@
     } else {
         watchNavbar();
     }
+
+    // ---- 4. Broken images ---------------------------------------------------
+
+    // Same folder layout as this script: /assets/js/site-interactions.js -> /images/default.jpg
+    var currentScript = document.currentScript;
+    var FALLBACK_IMAGE = currentScript && currentScript.src
+        ? currentScript.src.replace(/\/assets\/js\/site-interactions\.js.*$/, '/images/default.jpg')
+        : '/images/default.jpg';
+
+    function useFallbackImage(img) {
+        if (!img || img.getAttribute('data-fallback-applied') || img.closest('[data-no-fallback]')) {
+            return;
+        }
+        img.setAttribute('data-fallback-applied', '1');
+        img.removeAttribute('srcset');
+        img.src = FALLBACK_IMAGE;
+    }
+
+    // Image errors do not bubble, so listen in the capture phase (covers images added later too)
+    document.addEventListener('error', function (event) {
+        var target = event.target;
+        if (target && target.tagName === 'IMG') {
+            useFallbackImage(target);
+        }
+    }, true);
+
+    // Images that already failed before this script ran. SVGs are skipped here because
+    // some report a natural width of 0 even when they display fine; their errors are caught above.
+    function replaceAlreadyBrokenImages() {
+        var images = document.querySelectorAll('img');
+        for (var i = 0; i < images.length; i++) {
+            var img = images[i];
+            var src = img.getAttribute('src') || '';
+            if (src && img.complete && img.naturalWidth === 0 && !/\.svg(\?|#|$)/i.test(src)) {
+                useFallbackImage(img);
+            }
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', replaceAlreadyBrokenImages);
+    } else {
+        replaceAlreadyBrokenImages();
+    }
+    window.addEventListener('load', replaceAlreadyBrokenImages);
 
     window.SiteInteractions = {
         playClickSound: playClickSound
