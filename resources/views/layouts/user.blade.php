@@ -583,6 +583,12 @@
     <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
     <!-- Kiosk monitoring heartbeat (one shared script) -->
     <script src="{{ asset('assets/js/kiosk-heartbeat.js') }}?v={{ filemtime(public_path('assets/js/kiosk-heartbeat.js')) }}"></script>
+    {{-- Click analytics for the admin Website Health page (kiosk users only) --}}
+    @if (auth()->check() && auth()->user()->role === 'user')
+        <script src="{{ asset('assets/js/site-analytics.js') }}?v={{ filemtime(public_path('assets/js/site-analytics.js')) }}"
+                data-endpoint="{{ route('analytics.click') }}"
+                data-route="{{ Route::currentRouteName() }}"></script>
+    @endif
 
 
 

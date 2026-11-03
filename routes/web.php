@@ -35,6 +35,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\KioskMonitoringController;
 use App\Http\Controllers\KioskRemoteLoginController;
+use App\Http\Controllers\SiteAnalyticsController;
+use App\Http\Controllers\Admin\WebsiteHealthController;
 
 
 use Illuminate\Support\Facades\Log;
@@ -355,6 +357,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/admin-kiosks/{kiosk}/remote-login', [KioskRemoteLoginController::class, 'show'])->name('kiosks.remote-login.show');
     Route::post('/admin-kiosks/{kiosk}/remote-login', [KioskRemoteLoginController::class, 'store'])->name('kiosks.remote-login.store');
     Route::get('/admin-kiosk-remote-logins/{remoteLogin}', [KioskRemoteLoginController::class, 'status'])->name('kiosks.remote-login.status');
+    // Website Health analytics (the controller also requires the main administrator)
+    Route::get('/website-health', [WebsiteHealthController::class, 'index'])->name('website-health');
 
 });
 
@@ -404,6 +408,11 @@ Route::middleware(['auth'])->group(function () {
         KioskRemoteLoginController::class,
         'complete',
     ])->middleware('throttle:kiosk-heartbeat')->name('kiosk.remote-login');
+
+    // Link / button clicks on logged-in kiosk pages, for the admin Website Health page
+    Route::post('/analytics/click', [SiteAnalyticsController::class, 'click'])
+        ->middleware(['auth', 'throttle:120,1'])
+        ->name('analytics.click');
 
 
 // Store Manager routes

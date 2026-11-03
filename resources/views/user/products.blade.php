@@ -582,7 +582,8 @@
 
             fetch(url, {
                 credentials: 'same-origin',
-                headers: { 'Accept': 'text/html' },
+                // Marked as a background request, so it is not counted as a page view
+                headers: { 'Accept': 'text/html', 'X-Requested-With': 'XMLHttpRequest' },
                 signal: listingRequest.signal
             })
                 .then(response => response.ok ? response.text() : Promise.reject(new Error('HTTP ' + response.status)))

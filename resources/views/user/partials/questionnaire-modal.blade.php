@@ -12,6 +12,107 @@
     <style>
         /* Questionnaire pop-up (light), the same on the dashboard and the Questionnaires page.
            Everything is scoped to #questionnaireModal so it never affects the rest of a page. */
+
+        /* Above the fixed header (z-index 1050): the theme lowers Bootstrap's modal layer to 105,
+           which let the header cover the close button */
+        #questionnaireModal {
+            z-index: 1065;
+        }
+        body.modal-open .modal-backdrop {
+            z-index: 1060;
+        }
+
+        /* Fixed size on every step: the picture keeps one healthy height, long questions scroll
+           inside the question area, Back / Next stay visible and the pop-up always fits the screen */
+        #questionnaireModal .modal-dialog {
+            max-width: min(1000px, calc(100vw - 2rem));
+        }
+        #questionnaireModal .modal-content {
+            height: min(620px, calc(100vh - 2rem));
+            height: min(620px, calc(100dvh - 2rem));
+        }
+        /* Tablets and phones (no picture panel): grow with the question, up to the screen height */
+        @media (max-width: 991.98px) {
+            #questionnaireModal .modal-content {
+                height: auto;
+                max-height: calc(100vh - 2rem);
+                max-height: calc(100dvh - 2rem);
+            }
+            #questionnaireModal .qm-body {
+                height: auto !important;
+                max-height: inherit;
+            }
+            #questionnaireModal .qm-main {
+                height: auto !important;
+                max-height: inherit;
+            }
+        }
+        #questionnaireModal .qm-body {
+            flex-wrap: nowrap !important;
+            height: 100%;
+            overflow: hidden;
+        }
+        #questionnaireModal .qm-image {
+            flex: 0 0 38%;
+            max-width: 38%;
+            height: 100%;
+            background-color: #f3ece4;
+            background-position: center;
+            background-size: cover;
+        }
+        #questionnaireModal .qm-main {
+            flex: 1 1 auto;
+            max-width: 100%;
+            min-width: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #questionnaireModal #question-container {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding: 0 4px 4px 0;
+            container-type: inline-size;
+        }
+        #questionnaireModal .qm-actions {
+            flex: 0 0 auto;
+        }
+        /* Room for the close button above the first question */
+        #questionnaireModal .qm-main {
+            padding-top: 2.75rem !important;
+        }
+
+        /* Options: as many as fit side by side (3 columns), 2 when narrow, 1 on very small screens */
+        #questionnaireModal .q-options {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        #questionnaireModal .q-option .option-box {
+            height: 100%;
+            padding: 12px 8px !important;
+        }
+        @container (max-width: 440px) {
+            #questionnaireModal .q-options {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @container (max-width: 240px) {
+            #questionnaireModal .q-options {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+        /* Browsers without container queries: decide by screen width */
+        @supports not (container-type: inline-size) {
+            @media (max-width: 575.98px) {
+                #questionnaireModal .q-options {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+        }
         #questionnaireModal .modal-content {
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -102,6 +203,8 @@
         }
         #questionnaireModal .sliderInputWrapper {
             position: relative;
+            /* Room for the first and last price labels inside the scrolling question area */
+            padding: 0 14px;
         }
         #questionnaireModal input#budgetSlider10 {
             position: relative;
@@ -135,20 +238,20 @@
 
         <div class="modal fade" id="questionnaireModal" tabindex="-1" aria-labelledby="questionnaireModalLabel" aria-hidden="true" style="background:rgba(0,0,0,0.7)!important;">
             <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content rounded-2" style="min-height: 500px;">
-                    <div class="modal-body p-0 position-relative d-flex flex-wrap">
+                <div class="modal-content rounded-2">
+                    <div class="modal-body p-0 position-relative d-flex flex-wrap qm-body">
                         <!-- Close Button -->
                         <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
 
                         <!-- Left Side: same design as login box -->
-                        <div class="col-lg-6 col-xl-5 d-none d-lg-block text-center details" id="leftModalImageContainer">
+                        <div class="col-lg-6 col-xl-5 d-none d-lg-block text-center details qm-image" id="leftModalImageContainer">
                             <div class="mt-5 pt-4 p-2 position-absolute text-center" >
                                 
                             </div>
                         </div>
 
                         <!-- Right Side: your original questionnaire content -->
-                        <div class="col-lg-6 col-xl-7 col-xs-12 col-sm-12 p-4 d-flex flex-column justify-content-start">
+                        <div class="col-lg-6 col-xl-7 col-xs-12 col-sm-12 p-4 d-flex flex-column justify-content-start qm-main">
                             <!-- Lottie Animation -->
                             <!-- <div class="lottie-container w-100 mb-3" id="lottieAnimation" style="height: 250px; width: auto;"></div> -->
 
@@ -157,8 +260,8 @@
                                 <!-- Question and options will load here -->
                             </div>
 
-                            <!-- Buttons Row -->
-                            <div class="d-flex mt-4 gap-2">
+                            <!-- Buttons Row (stays visible; long questions scroll above it) -->
+                            <div class="d-flex mt-4 gap-2 qm-actions">
                                 <button class="btn btn-danger btn-lg w-50" id="backBtn">Back</button>
                                 <button class="btn btn-success btn-lg w-50" id="nextBtn">Next</button>
                             </div>
@@ -185,12 +288,6 @@
             const surpriseMeConfig = @json(config('questionnaire_surprise_me'));
             let surpriseMeActive = {};
             let surpriseMeSelections = {};
-            const questionLayouts = {
-                country: 2,
-                sub_region:2,
-                region:2,
-                taste:2,
-            };
             const emojiMap = 
             {
                 "Red": "Red",
@@ -734,13 +831,6 @@
                     const inputType = q.type === 'single' ? 'radio' : 'checkbox';
                     let rowHtml = '';
                     let optionsHtml = '';
-                    const columns = questionLayouts[q.key] || 0;
-                    let bootstrapCol = "col-md-6";
-
-                    if (columns === 2) {
-                        bootstrapCol = "col-6";
-                    }
-                    
 
                     options.forEach((opt, idx) => {
                         const basePath = '/questionnaire';
@@ -757,7 +847,7 @@
                             : '';
 
                         rowHtml += `
-                            <div class="${bootstrapCol} mb-3">
+                            <div class="q-option">
                                 <input class="d-none" type="${inputType}" name="answer${qIndex}" id="option${qIndex}_${idx}" value="${opt}">
                                 <label 
                                     for="option${qIndex}_${idx}" 
@@ -772,11 +862,10 @@
                             </div>
                         `;
 
-                        if ((idx + 1) % 2 === 0 || idx === options.length - 1) {
-                            optionsHtml += `<div class="row">${rowHtml}</div>`;
-                            rowHtml = '';
-                        }
                     });
+
+                    // One grid for all options: 3 columns where there is room, 2 on phones (see the styles)
+                    optionsHtml = `<div class="q-options">${rowHtml}</div>`;
 
                     return optionsHtml;
                 }

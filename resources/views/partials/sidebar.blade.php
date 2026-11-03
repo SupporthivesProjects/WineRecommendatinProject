@@ -204,6 +204,12 @@
                                 <span class="side-menu__label">Kiosk Monitoring</span>
                             </a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.website-health') }}" class="side-menu__item">
+                                <i class="side-menu__icon fe fe-activity" style="color:var(--primary-color);"></i>
+                                <span class="side-menu__label">Website Health</span>
+                            </a>
+                        </li>
                         {{--
                         <li class="slide">
                             <a href="{{ route('admin.settings.index') }}" class="side-menu__item">
