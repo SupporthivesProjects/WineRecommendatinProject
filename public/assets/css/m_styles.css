@@ -22,7 +22,27 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+}
+.carousel-bg:nth-child(3) {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('../../images/homepage4.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 } 
+.carousel-bg:nth-child(3) {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('../../images/homepage5.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+} 
+.carousel-bg:nth-child(3) {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('../../images/homepage6.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+} 
+
+
 .hero-main {
   position: relative;
 }

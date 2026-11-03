@@ -778,20 +778,36 @@
 
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators carousel_indicators_div">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 4"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 5"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 6"></button>
+
                     </div>
                     <div class="carousel-inner">
-                    <div class="carousel-bg carousel-item active" data-bs-interval="5000">
+                        <div class="carousel-bg carousel-item active" data-bs-interval="5000">
 
-                    </div>
-                    <div class="carousel-bg carousel-item" data-bs-interval="5000">
+                        </div>
+                        <div class="carousel-bg carousel-item" data-bs-interval="5000">
 
-                    </div>
-                    <div class="carousel-bg carousel-item" data-bs-interval="5000">
+                        </div>
+                        <div class="carousel-bg carousel-item" data-bs-interval="5000">
 
-                    </div>
+                        </div>
+                        <div class="carousel-bg carousel-item" data-bs-interval="5000">
+
+                        </div>
+                        <div class="carousel-bg carousel-item" data-bs-interval="5000">
+
+                        </div>
+                        <div class="carousel-bg carousel-item" data-bs-interval="5000">
+
+                        </div>
+
+
+
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
