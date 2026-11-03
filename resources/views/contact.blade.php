@@ -302,7 +302,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="form-check mb-4">
+                                        <!-- <div class="form-check mb-4">
                                             <input class="form-check-input @error('terms') is-invalid @enderror"
                                                 type="checkbox" id="terms" name="terms"
                                                 {{ old('terms') ? 'checked' : '' }} required>
@@ -313,7 +313,7 @@
                                             @error('terms')
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
-                                        </div>
+                                        </div> -->
                                         <script src="https://hcaptcha.com/1/api.js" async defer></script>
                                         <div class="mb-4 text-center">
                                             <div class="h-captcha" data-sitekey="{{ config('services.hcaptcha.site_key') }}"></div>
