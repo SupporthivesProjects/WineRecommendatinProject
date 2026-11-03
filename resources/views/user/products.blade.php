@@ -546,24 +546,37 @@
             const min = Math.floor(Math.min(...prices));
             const max = Math.ceil(Math.max(...prices));
 
+            // Start from the range already applied (min_price / max_price in the address)
+            const clamp = value => Math.min(max, Math.max(min, value));
+            const params = new URLSearchParams(window.location.search);
+            const chosenMin = params.has('min_price') ? clamp(parseFloat(params.get('min_price')) || min) : min;
+            const chosenMax = params.has('max_price') ? clamp(parseFloat(params.get('max_price')) || max) : max;
+
             $("#price-slider").slider({
                 range: true,
                 min: min,
                 max: max,
                 step: 1,
-                values: [min, max],
+                values: [chosenMin, chosenMax],
                 slide: function (event, ui) {
                     $("#price-min").text(Number(ui.values[0]).toLocaleString('en-IN'));
                     $("#price-max").text(Number(ui.values[1]).toLocaleString('en-IN'));
-
-                    // Optional: trigger filter function here
-                    filterProductsByPrice(ui.values[0], ui.values[1]);
+                },
+                // On release, show the wines in this range from all pages (filtered on the server,
+                // like the Type / Country / Vintage boxes); keeps search and the other filters
+                stop: function (event, ui) {
+                    const next = new URLSearchParams(window.location.search);
+                    if (ui.values[0] > min) { next.set('min_price', ui.values[0]); } else { next.delete('min_price'); }
+                    if (ui.values[1] < max) { next.set('max_price', ui.values[1]); } else { next.delete('max_price'); }
+                    next.delete('page');
+                    const query = next.toString();
+                    window.location.href = window.location.pathname + (query ? '?' + query : '');
                 }
             });
 
             // Initialize labels
-            $("#price-min").text(Number(min).toLocaleString('en-IN'));
-            $("#price-max").text(Number(max).toLocaleString('en-IN'));
+            $("#price-min").text(Number(chosenMin).toLocaleString('en-IN'));
+            $("#price-max").text(Number(chosenMax).toLocaleString('en-IN'));
 
             // Tick marks and price labels under the slider
             const slider = $("#price-slider");
@@ -576,16 +589,6 @@
             }
         });
 
-        function filterProductsByPrice(min, max) {
-            $(".wine-card-container").each(function () {
-                const price = parseFloat($(this).data("retail-price"));
-                if (price >= min && price <= max) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
 
 
 

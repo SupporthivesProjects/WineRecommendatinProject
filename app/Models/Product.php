@@ -125,6 +125,22 @@ class Product extends Model
         )->withTimestamps();
     }
 
+    /**
+     * SQL for the same price getDisplayPrice() returns for the logged-in user's store,
+     * so a listing can filter by it across all pages in the database.
+     */
+    public static function displayPriceSql(): string
+    {
+        $store = auth()->check() ? auth()->user()->store : null;
+        $state = $store ? strtolower(trim((string) $store->state)) : null;
+
+        return match ($state) {
+            'maharashtra' => 'COALESCE(retail_price_maharashtra, retail_price)',
+            'west bengal' => 'COALESCE(retail_price_kolkata, retail_price)',
+            default => 'retail_price',
+        };
+    }
+
     public function getDisplayPrice()
     {
         $store = auth()->check() ? auth()->user()->store : null;

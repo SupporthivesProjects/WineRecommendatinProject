@@ -275,6 +275,17 @@ class UserController extends Controller
             );
         }
 
+        // Price range on the store's own price, across all pages (set by the price slider)
+        $priceSql = Product::displayPriceSql();
+
+        if (is_numeric($request->input('min_price'))) {
+            $productsQuery->whereRaw("{$priceSql} >= ?", [(float) $request->input('min_price')]);
+        }
+
+        if (is_numeric($request->input('max_price'))) {
+            $productsQuery->whereRaw("{$priceSql} <= ?", [(float) $request->input('max_price')]);
+        }
+
         $products = $productsQuery->paginate(9)
                         ->appends($request->all());
 
