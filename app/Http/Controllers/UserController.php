@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use App\Models\CheckoutItem;
 use App\Services\Questionnaire\QuestionnaireRuleService;
+use App\Services\SessionCart;
 
 
 class UserController extends Controller
@@ -1413,8 +1414,6 @@ class UserController extends Controller
 
     public function addToCart(Request $request)
     {
-        $cart = session()->get('cart', []);
-
         $productId = $request->input('product_id');
         $productName = $request->input('product_name');
         $productPrice = $request->input('product_price');
@@ -1430,19 +1429,22 @@ class UserController extends Controller
             ], 404);
         }
 
-        // Check if product already in cart by id
-        $foundIndex = null;
-        foreach ($cart as $index => $item) {
-            if ($item['id'] == $productId) {
-                $foundIndex = $index;
-                break;
-            }
-        }
-
         // Same 1-10 range as the cart page
         $quantity = max(1, min(10, (int) ($request->quantity ?? 1)));
 
-        if ($foundIndex === null) {
+        // Changed under a lock on the saved cart, so overlapping requests cannot lose items
+        $cart = SessionCart::update(function (array $cart) use ($productId, $productName, $productPrice, $product, $quantity) {
+            // Check if product already in cart by id
+            foreach ($cart as $index => $item) {
+                if ($item['id'] == $productId) {
+                    // "Add to cart" sets the quantity rather than adding to it, so a repeated
+                    // click or a button left stale by the Back button cannot inflate the count
+                    $cart[$index]['quantity'] = $quantity;
+
+                    return $cart;
+                }
+            }
+
             // Add new product object
             $cart[] = [
                 'id' => $productId,
@@ -1451,18 +1453,13 @@ class UserController extends Controller
                 'image' => $product->image1,
                 'quantity' => $quantity,
             ];
-        } else {
-            // "Add to cart" sets the quantity rather than adding to it, so a repeated
-            // click or a button left stale by the Back button cannot inflate the count
-            $cart[$foundIndex]['quantity'] = $quantity;
-        }
 
-        session(['cart' => $cart]);
-        $cartCount = collect($cart)->sum('quantity');
+            return $cart;
+        });
 
         return response()->json([
             'success' => true,
-            'cart_count' => $cartCount,
+            'cart_count' => SessionCart::count($cart),
         ]);
 
     }
@@ -1470,29 +1467,22 @@ class UserController extends Controller
 
     public function removeFromCart(Request $request)
     {
-        $cart = session()->get('cart', []);
         $productId = $request->input('product_id');
 
-        $cart = array_filter($cart, fn($item) => $item['id'] != $productId);
-
-        session(['cart' => array_values($cart)]);
-
-        $cartCount = collect($cart)->sum('quantity');
+        $cart = SessionCart::update(
+            fn (array $cart) => array_filter($cart, fn ($item) => $item['id'] != $productId)
+        );
 
         return response()->json([
             'success' => true,
-            'cart_count' => $cartCount,
+            'cart_count' => SessionCart::count($cart),
         ]);
     }
 
 
     public function getCart()
     {
-        $cart = session('cart', []);
-        // Optional: fetch product details here if needed, e.g.
-        // $products = Product::whereIn('id', $cart)->get();
-
-        return response()->json(['cart' => $cart]);
+        return response()->json(['cart' => SessionCart::items()]);
     }
 
     public function checkout(Request $request)
@@ -1512,7 +1502,7 @@ class UserController extends Controller
         Log::info('Checkout started for submission_id: ' . $submissionId);
         Log::info('Checkout started for user_id: ' . $userId);
 
-        $cart = Session::get('cart', []);
+        $cart = SessionCart::items();
         Log::info('Cart contents: ', $cart);
 
         if (empty($cart)) {
@@ -1587,7 +1577,7 @@ class UserController extends Controller
         }
 
         // Clear cart
-        Session::forget('cart');
+        SessionCart::clear();
         Log::info('Cart cleared from session.');
 
         return response()->json(['success' => true]);

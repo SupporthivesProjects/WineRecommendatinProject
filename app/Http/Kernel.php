@@ -38,6 +38,8 @@ class Kernel extends HttpKernel
             // Must stay before SubstituteBindings so it runs before the "auth" route middleware.
             \App\Http\Middleware\EnforceLoginExpiry::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // session('cart') always matches the saved cart (see App\Services\SessionCart)
+            \App\Http\Middleware\SyncSessionCart::class,
             // Page views of logged-in kiosk users, for the admin Website Health page
             \App\Http\Middleware\TrackPageView::class,
         ],

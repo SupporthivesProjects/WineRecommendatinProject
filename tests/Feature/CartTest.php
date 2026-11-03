@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
@@ -15,6 +16,8 @@ use Tests\TestCase;
 class CartTest extends TestCase
 {
     private User $user;
+
+    private string $sessionId;
 
     protected function setUp(): void
     {
@@ -52,6 +55,10 @@ class CartTest extends TestCase
             DB::table('products')->insert(['id' => $id, 'wine_name' => "Wine $id", 'image1' => "products/$id.jpg"]);
         }
 
+        (require database_path('migrations/2026_11_04_100000_create_session_carts_table.php'))->up();
+
+        $this->sessionId = Str::random(40);
+
         $this->user = User::create([
             'email' => 'kiosk@example.test',
             'password' => 'password',
@@ -61,9 +68,20 @@ class CartTest extends TestCase
         ]);
     }
 
+    /**
+     * Send a request the way a browser does: logged in and with the same session cookie each time.
+     */
+    private function send(string $method, string $uri, array $data = [])
+    {
+        return $this->actingAs($this->user)
+            ->withCredentials()
+            ->withCookie(config('session.cookie'), $this->sessionId)
+            ->json($method, $uri, $data);
+    }
+
     private function add(int $productId, array $extra = [])
     {
-        return $this->actingAs($this->user)->postJson('/user/cart/add', array_merge([
+        return $this->send('POST', '/user/cart/add', array_merge([
             'product_id' => $productId,
             'product_name' => "Wine $productId",
             'product_price' => 500,
@@ -102,13 +120,38 @@ class CartTest extends TestCase
             $this->add($id);
         }
 
-        $this->actingAs($this->user)->postJson('/user/cart/remove', ['product_id' => 3])
+        $this->send('POST', '/user/cart/remove', ['product_id' => 3])
             ->assertOk()->assertJson(['success' => true, 'cart_count' => 4]);
         $this->assertSame([1, 2, 4, 5], array_map('intval', array_column(session('cart'), 'id')));
 
         // Removing it again (a stale button) changes nothing
-        $this->actingAs($this->user)->postJson('/user/cart/remove', ['product_id' => 3])
+        $this->send('POST', '/user/cart/remove', ['product_id' => 3])
             ->assertJson(['cart_count' => 4]);
+    }
+
+    public function test_an_older_session_save_cannot_undo_cart_changes(): void
+    {
+        $this->add(1);
+        $this->add(2);
+
+        // Another request that started before these adds saves its old copy of the session
+        session(['cart' => []]);
+
+        // The next request still sees both wines, and adding a third keeps them
+        $this->send('GET', '/user/cart')->assertJsonCount(2, 'cart');
+        session(['cart' => []]);
+        $this->add(3)->assertJson(['cart_count' => 3]);
+
+        $this->assertSame(['1', '2', '3'], array_map('strval', array_column(session('cart'), 'id')));
+    }
+
+    public function test_cart_still_works_without_the_session_carts_table(): void
+    {
+        Schema::drop('session_carts');
+
+        $this->add(1)->assertOk()->assertJson(['cart_count' => 1]);
+        $this->add(2)->assertOk()->assertJson(['cart_count' => 2]);
+        $this->send('GET', '/user/cart')->assertJsonCount(2, 'cart');
     }
 
     public function test_unknown_wine_is_refused(): void
