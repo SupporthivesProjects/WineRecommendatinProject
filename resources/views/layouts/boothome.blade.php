@@ -59,6 +59,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+    <!-- Brand heading font, as on the logged-in pages -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Owl Carousel links -->
     <link rel="stylesheet"
@@ -130,6 +134,94 @@
         /* Login button in the header: wine instead of cyan */
         .btn-info {
             --info-rgb: 123, 30, 58;
+        }
+
+        /* Headings in the brand font, as on the logged-in pages */
+        body.landing-body h1,
+        body.landing-body h2 {
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+        /* Cinzel Decorative is wide: keep the hero heading on the screen on phones */
+        @media (max-width: 767.98px) {
+            body.landing-body .hero-title {
+                font-size: clamp(1.75rem, 8vw, 2.5rem);
+                line-height: 1.2;
+            }
+        }
+
+        /* Buttons and accents in wine instead of Tailwind red (body. beats the Tailwind CDN styles) */
+        body.landing-body .bg-red-700,
+        body.landing-body .bg-red-600 {
+            background-color: #7b1e3a !important;
+        }
+        body.landing-body .hover\:bg-red-800:hover {
+            background-color: #3b0f1a !important;
+        }
+        body.landing-body .text-red-700 {
+            color: #7b1e3a !important;
+        }
+        body.landing-body .hover\:text-red-800:hover {
+            color: #3b0f1a !important;
+        }
+        /* Soft gold behind the How It Works icons and review avatars (was pink) */
+        body.landing-body .bg-red-100 {
+            background-color: #f6ecd9 !important;
+        }
+        body.landing-body .bg-red-200 {
+            background-color: #ecdcbd !important;
+        }
+
+        /* Share Your Experience: light cream-gold panel above the wine footer */
+        .share-review-panel {
+            background: linear-gradient(135deg, #faf4e8 0%, #f2e6cf 100%);
+            border-top: 1px solid #eadcc2;
+        }
+        .share-review-panel .share-title {
+            color: #3b0f1a;
+        }
+        .share-review-panel .share-copy {
+            color: #5a4a42;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        .share-review-panel input,
+        .share-review-panel textarea {
+            border: 1px solid #e3d5bf;
+            background: #fff;
+            color: #2f2a2b;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .share-review-panel input:focus,
+        .share-review-panel textarea:focus {
+            border-color: #a8324a;
+            box-shadow: 0 0 0 3px rgba(123, 30, 58, 0.15);
+            outline: none;
+        }
+        .share-review-panel .rating-star {
+            color: #de9313;
+        }
+        .share-review-panel .rating-star.text-gray-300 {
+            color: #cdb894;
+        }
+        .share-review-panel .share-submit {
+            border-radius: 999px;
+            background: #7b1e3a;
+            color: #fff;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .share-review-panel .share-submit:hover,
+        .share-review-panel .share-submit:focus-visible {
+            background: #3b0f1a;
+            transform: translateY(-1px);
+        }
+        .share-review-panel .share-note {
+            color: #6b5a50;
+        }
+        .share-review-panel .share-note a {
+            color: #7b1e3a;
         }
 
         /* Header once it has shrunk on scroll (body.home-header-scrolled, set by the
@@ -807,7 +899,7 @@
             <!-- End:: Section-2 -->
 
             <!-- Start:: Section-3 Featured Wines Section-->
-            <div class="py-16" id="featuredwines" style="background: #ffe1e1;">
+            <div class="py-16" id="featuredwines" style="background: #faf4e8;">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">Featured Wines</h2>
                     <p class="text-gray-600 mb-12 text-center max-w-3xl mx-auto">
@@ -1055,12 +1147,12 @@
             <!-- Start:: Section-7 -->
             <section class="section highlights" id="share-review" style="padding:0px;">
                 <!-- Share Review Section -->
-                <div class="py-16 bg-red-700">
+                <div class="py-16 share-review-panel">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="lg:flex lg:items-center lg:justify-between">
                             <div class="lg:w-1/2">
-                                <h2 class="text-3xl font-bold text-white mb-2">Share Your Experience</h2>
-                                <p class="text-red-100 mb-6 lg:mb-0">
+                                <h2 class="text-3xl font-bold mb-3 share-title">Share Your Experience</h2>
+                                <p class="share-copy mb-6 lg:mb-0">
                                     We value your feedback! Share your wine experience with our community. 
                                     <br>Your review helps others discover great wines.
                                 </p>
@@ -1072,27 +1164,27 @@
                                         <div>
                                             <label for="name" class="sr-only">Your Name</label>
                                             <input id="name" name="name" type="text"
-                                                class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
+                                                class="w-full px-5 py-3 placeholder-gray-500 rounded-md"
                                                 placeholder="Your name (optional)">
                                         </div>
                                         <div>
                                             <label for="email" class="sr-only">Email address</label>
                                             <input id="email" name="email" type="email"
-                                                class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
+                                                class="w-full px-5 py-3 placeholder-gray-500 rounded-md"
                                                 placeholder="Your email (optional)">
                                         </div>
                                     </div>
                                     <div>
                                         <label for="review" class="sr-only">Your Review</label>
                                         <textarea id="review" name="testimonial" rows="3" required
-                                            class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white focus:outline-none rounded-md"
+                                            class="w-full px-5 py-3 placeholder-gray-500 rounded-md"
                                             placeholder="Share your thoughts about our wines..."></textarea>
-                                        <div id="review-error" class="text-red-200 text-sm mt-1 hidden">Please enter
+                                        <div id="review-error" class="text-red-700 text-sm mt-1 hidden">Please enter
                                             your review (at least 10 characters)</div>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
-                                            <div class="text-yellow-400 text-xl">
+                                            <div class="text-xl">
                                                 @for ($i = 1; $i <= 5; $i++)
                                                     <button type="button" class="rating-star"
                                                         data-rating="{{ $i }}">
@@ -1103,11 +1195,11 @@
                                             <input type="hidden" name="rating" id="rating" value="5">
                                         </div>
                                         <button type="submit" id="submit-review"
-                                            class="px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white">
+                                            class="px-6 py-3 border border-transparent text-base share-submit">
                                             <span class="inline-flex items-center">
                                                 <span id="submit-text">Submit Review</span>
                                                 <svg id="submit-spinner"
-                                                    class="hidden ml-2 h-5 w-5 animate-spin text-red-700"
+                                                    class="hidden ml-2 h-5 w-5 animate-spin text-white"
                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24">
                                                     <circle class="opacity-25" cx="12" cy="12" r="10"
@@ -1119,11 +1211,11 @@
                                             </span>
                                         </button>
                                     </div>
-                                    <div id="form-message" class="mt-2 text-sm text-red-200 hidden"></div>
+                                    <div id="form-message" class="mt-2 text-sm share-note hidden"></div>
                                 </form>
-                                <p class="mt-3 text-sm text-red-200">
+                                <p class="mt-3 text-sm share-note">
                                     Your email will not be published. Read our
-                                    <a href="#" class="text-white underline">Privacy Policy</a>.
+                                    <a href="#" class="underline">Privacy Policy</a>.
                                 </p>
                             </div>
                         </div>
@@ -1670,7 +1762,7 @@
         setInterval(changeBackground, 5000);
     </script>
 
-    @push('scripts')
+        {{-- Rating stars (was inside @push('scripts'), which this layout never prints, so it never ran) --}}
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Rating stars functionality
@@ -1703,7 +1795,6 @@
                 }
             });
         </script>
-    @endpush
 
     <script>
         const form = document.getElementById('testimonial-form');
