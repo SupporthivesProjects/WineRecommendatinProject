@@ -364,18 +364,43 @@
             .hero-main .hero-content-div {
                 margin-top: 28px;
             }
-            .featured-wines-carousel .glide__arrows {
-                position: static;
-                display: flex;
-                justify-content: center;
-                gap: 16px;
-                margin-top: 16px;
-            }
-            .featured-wines-carousel .glide__arrow {
-                position: static;
-                transform: none;
-                margin: 0;
-            }
+        }
+
+        /* Featured Wines arrows: wine-coloured buttons below the cards (not over them) on every screen */
+        .featured-wines-carousel .glide__arrows {
+            position: static;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .featured-wines-carousel .glide__arrow {
+            position: static;
+            transform: none;
+            margin: 0;
+            width: 44px;
+            height: 44px;
+            border: 0;
+            border-radius: 50%;
+            background-color: #7b1e3a;
+            color: #f6e7c1;
+            box-shadow: 0 4px 10px rgba(59, 15, 26, 0.25);
+            transition: background-color 0.25s ease, transform 0.25s ease;
+        }
+        .featured-wines-carousel .glide__arrow:hover,
+        .featured-wines-carousel .glide__arrow:focus-visible {
+            background-color: #3b0f1a;
+            transform: translateY(-2px);
+        }
+        .featured-wines-carousel .glide__arrow svg {
+            color: inherit;
+        }
+        /* Cards can be dragged sideways */
+        .featured-wines-carousel .glide__track {
+            cursor: grab;
+        }
+        .featured-wines-carousel .glide__track:active {
+            cursor: grabbing;
         }
     </style>
     <style>
@@ -1067,18 +1092,18 @@
                             </div>
                             <div class="glide__arrows flex justify-center mt-6 space-x-4" data-glide-el="controls">
                                 <button
-                                    class="glide__arrow glide__arrow--left bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center"
+                                    class="glide__arrow glide__arrow--left flex items-center justify-center" aria-label="Previous wines"
                                     data-glide-dir="<">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700"
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M15 19l-7-7 7-7" />
                                     </svg>
                                 </button>
                                 <button
-                                    class="glide__arrow glide__arrow--right bg-gray-200 hover:bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center"
+                                    class="glide__arrow glide__arrow--right flex items-center justify-center" aria-label="Next wines"
                                     data-glide-dir=">">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700"
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 5l7 7-7 7" />
@@ -1696,30 +1721,7 @@
     <!-- Glide.js JS -->
     <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.6.0/dist/glide.min.js"></script>
 
-    <script>
-        // Initialize Glide carousel if the element exists
-        document.addEventListener('DOMContentLoaded', function() {
-            const featuredCarousel = document.querySelector('.featured-wines-carousel');
-            if (featuredCarousel) {
-                new Glide(featuredCarousel, {
-                    type: 'carousel',
-                    perView: 3,
-                    gap: 24,
-                    autoplay: 5000,
-                    navigation:FALSE,
-                    hoverpause: true,
-                    breakpoints: {
-                        1024: {
-                            perView: 2
-                        },
-                        768: {
-                            perView: 1
-                        }
-                    }
-                }).mount();
-            }
-        });
-    </script>
+    {{-- The Featured Wines carousel is set up once, further down (after Glide 3.7.1) --}}
 
     <!-- jQuery (required for other functionality) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -1793,9 +1795,15 @@
     <!-- Glide JS -->
     <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide@3.7.1"></script>
     <script>
+        // Featured Wines: moves on by itself, pauses while the pointer is over it, and can be
+        // dragged (mouse) or swiped (touch) sideways to see other wines
         const glide = new Glide('.featured-wines-carousel', {
             type: 'carousel',
             perView: 3,
+            autoplay: 4000,
+            hoverpause: true,
+            dragThreshold: 60,
+            swipeThreshold: 50,
             breakpoints: {
                 1024: {
                     perView: 2
