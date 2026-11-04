@@ -666,10 +666,10 @@
                     <div class="header-element">
                         <div class="horizontal-logo">
                             <a href="#" class="header-logo">
-                                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                <img src="{{ asset('images/logofullwhite.png') }}" alt="logo"
                                     class="toggle-logo">
                                 <!-- <img src="{{ asset('assets/images/brand-logos/toggle-white.png') }}" alt="logo" class="toggle-logo"> -->
-                                <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                <img src="{{ asset('images/logofullwhite.png') }}" alt="logo"
                                     class="toggle-dark">
                             </a>
                         </div>
@@ -730,9 +730,9 @@
                                     autoplay>
                                 </lottie-player> -->
                                 <a href="#" class="header-logo">
-                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                    <img src="{{ asset('images/logofullwhite.png') }}" alt="logo"
                                         class="desktop-logo" id="header_logo_desktop">
-                                    <img src="{{ asset('images/logoredwhite.jpg') }}" alt="logo"
+                                    <img src="{{ asset('images/logofullwhite.png') }}" alt="logo"
                                         class="desktop-white">
                                 </a>
                             </div>
