@@ -298,11 +298,6 @@
         body.home-header-scrolled .app-header::before {
             opacity: 0;
         }
-        /* The red logo gets a thin white edge while it sits on the photo */
-        body:not(.home-header-scrolled) #sidebar .header-logo img,
-        body:not(.home-header-scrolled) .app-header .header-logo img {
-            filter: drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 0.6px #fff);
-        }
         @media (min-width: 992px) {
             /* The bar floats over the hero instead of pushing it down, so the whole photo shows */
             #sidebar {
