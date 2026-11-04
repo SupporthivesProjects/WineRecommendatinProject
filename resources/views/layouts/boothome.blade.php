@@ -391,16 +391,13 @@
 
         /* Featured Wines: the bottle is the hero of the card. Same card size as before. */
         /* (.wine-card is also given a white background and 20px padding further down; the
-           spotlight and name band reach the card edges instead. The card size is unchanged.) */
+           spotlight reaches the card edges instead. The card size is unchanged.) */
+        /* Warm champagne spotlight behind the bottle instead of plain white, across the whole card */
         .wine-card.featured-wine-card {
             border: 1px solid #e3cfa5;
-            background: #3b0f1a;
-            padding: 0;
-        }
-        /* Warm champagne spotlight behind the bottle instead of plain white */
-        .featured-wine-stage {
             background:
-                radial-gradient(ellipse 65% 55% at 50% 42%, #fffdf8 0%, #fbf3e3 38%, #efdcb6 75%, #e4c993 100%);
+                radial-gradient(ellipse 70% 52% at 50% 38%, #fffdf8 0%, #fbf3e3 38%, #efdcb6 75%, #e4c993 100%);
+            padding: 0;
         }
         /* Soft floor shadow the bottle stands on */
         .featured-wine-stage::after {
@@ -424,13 +421,9 @@
             padding: 18px 0 10px;
             filter: drop-shadow(0 12px 14px rgba(59, 15, 26, 0.28));
         }
-        /* Wine-coloured name band */
-        .featured-wine-name {
-            background: linear-gradient(180deg, #4a1222 0%, #3b0f1a 100%);
-            border-top: 1px solid rgba(224, 197, 139, 0.45);
-        }
+        /* Name in wine colour under the bottle, on the same background */
         .featured-wine-name h3 {
-            color: #f6e7c1;
+            color: #7b1e3a;
         }
 
         /* Ensure text truncation works */
@@ -1051,8 +1044,8 @@
                                             </div>
 
                                             <!-- NAME AT BOTTOM (fixed height) -->
-                                            <div class="featured-wine-name px-4 py-4 text-center">
-                                                <h3 class="text-xl font-bold line-clamp-2 min-h-[56px]">
+                                            <div class="featured-wine-name px-4 pt-1 pb-4 text-center">
+                                                <h3 class="text-lg font-semibold leading-snug line-clamp-2 min-h-[50px]">
                                                     {{ Str::title($product->wine_name) }}
                                                 </h3>
                                             </div>
