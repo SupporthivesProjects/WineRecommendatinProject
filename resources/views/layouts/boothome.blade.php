@@ -282,6 +282,73 @@
             color: #fff !important;
         }
 
+        /* Top of the homepage: the header is transparent over the hero photo instead of white,
+           with white links. A soft dark fade behind it keeps the links readable on any slide
+           and fades out as the wine bar (rules above, unchanged) fades in. */
+        .app-header::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 -30px 0;
+            z-index: -1;
+            pointer-events: none;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 60%, rgba(0, 0, 0, 0) 100%);
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body.home-header-scrolled #sidebar::before,
+        body.home-header-scrolled .app-header::before {
+            opacity: 0;
+        }
+        /* The red logo gets a thin white edge while it sits on the photo */
+        body:not(.home-header-scrolled) #sidebar .header-logo img,
+        body:not(.home-header-scrolled) .app-header .header-logo img {
+            filter: drop-shadow(0 0 0.6px #fff) drop-shadow(0 0 0.6px #fff);
+        }
+        @media (min-width: 992px) {
+            /* The bar floats over the hero instead of pushing it down, so the whole photo shows */
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
+            /* Same fade as the phone header; desktop only, as #sidebar is the slide-out menu on phones */
+            #sidebar::before {
+                content: '';
+                position: absolute;
+                inset: 0 0 -30px 0;
+                z-index: -1;
+                pointer-events: none;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 60%, rgba(0, 0, 0, 0) 100%);
+                transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            body:not(.home-header-scrolled) #sidebar {
+                background-color: transparent !important;
+                box-shadow: none;
+            }
+            body:not(.home-header-scrolled) #sidebar .side-menu__item .fonthover {
+                color: #fff;
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+            }
+            body:not(.home-header-scrolled) #sidebar .side-menu__item:hover .fonthover {
+                color: #e0c58b;
+            }
+        }
+        @media (max-width: 991.98px) {
+            /* Tablets and phones: the fixed header floats over the hero too */
+            .landing-body .main-content.landing-main {
+                padding-top: 0 !important;
+            }
+            body:not(.home-header-scrolled) .app-header {
+                background-color: transparent !important;
+                border-bottom-color: transparent !important;
+                box-shadow: none;
+            }
+            body:not(.home-header-scrolled) .app-header .open-toggle i {
+                color: #fff;
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+            }
+        }
+
         /* Phones: the centred hero text uses the full width instead of half of it,
            and the Featured Wines arrows sit below the cards instead of over the photos */
         @media (max-width: 767.98px) {
