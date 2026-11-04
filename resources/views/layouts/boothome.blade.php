@@ -344,17 +344,25 @@
             }
         }
 
+        /* Hero text a little below the centre, so more of the photo shows above it
+           (the photos themselves are unchanged) */
+        .hero-main .hero-content-div {
+            margin-top: 70px;
+        }
+        @media (max-width: 991.98px) {
+            .hero-main .hero-content-div {
+                margin-top: 48px;
+            }
+        }
+
         /* Phones: the centred hero text uses the full width instead of half of it,
            and the Featured Wines arrows sit below the cards instead of over the photos */
         @media (max-width: 767.98px) {
             .hero-content-div {
                 width: calc(100% - 32px);
             }
-            /* The full-width hero text would sit under the slide arrows; the dots and
-               swiping still change slides */
-            #carouselExampleIndicators .carousel-control-prev,
-            #carouselExampleIndicators .carousel-control-next {
-                display: none;
+            .hero-main .hero-content-div {
+                margin-top: 28px;
             }
             .featured-wines-carousel .glide__arrows {
                 position: static;
@@ -871,14 +879,7 @@
 
 
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                    </button>
+                    {{-- No Previous / Next arrows: the slider plays by itself, and the dots show and choose the slides --}}
                 </div>
                 </div>
             <!-- main hero new close -->
