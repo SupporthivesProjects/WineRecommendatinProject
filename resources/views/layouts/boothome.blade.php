@@ -389,6 +389,50 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
+        /* Featured Wines: the bottle is the hero of the card. Same card size as before. */
+        /* (.wine-card is also given a white background and 20px padding further down; the
+           spotlight and name band reach the card edges instead. The card size is unchanged.) */
+        .wine-card.featured-wine-card {
+            border: 1px solid #e3cfa5;
+            background: #3b0f1a;
+            padding: 0;
+        }
+        /* Warm champagne spotlight behind the bottle instead of plain white */
+        .featured-wine-stage {
+            background:
+                radial-gradient(ellipse 65% 55% at 50% 42%, #fffdf8 0%, #fbf3e3 38%, #efdcb6 75%, #e4c993 100%);
+        }
+        /* Soft floor shadow the bottle stands on */
+        .featured-wine-stage::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 6px;
+            width: 46%;
+            height: 22px;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse at center, rgba(59, 15, 26, 0.38) 0%, rgba(59, 15, 26, 0) 70%);
+            pointer-events: none;
+        }
+        /* The product photos have wide empty sides: fill the card's height instead of its width,
+           so the bottle is about a fifth taller (only empty transparent space is trimmed) */
+        .featured-wine-bottle {
+            position: relative;
+            z-index: 1;
+            object-fit: cover;
+            object-position: center bottom;
+            padding: 18px 0 10px;
+            filter: drop-shadow(0 12px 14px rgba(59, 15, 26, 0.28));
+        }
+        /* Wine-coloured name band */
+        .featured-wine-name {
+            background: linear-gradient(180deg, #4a1222 0%, #3b0f1a 100%);
+            border-top: 1px solid rgba(224, 197, 139, 0.45);
+        }
+        .featured-wine-name h3 {
+            color: #f6e7c1;
+        }
+
         /* Ensure text truncation works */
         .line-clamp-1 {
             display: -webkit-box;
@@ -991,12 +1035,12 @@
                                 <ul class="glide__slides">
                                     @foreach ($featuredProducts as $product)
                                     <li class="glide__slide">
-                                        <div class="wine-card bg-white rounded-lg overflow-hidden shadow-md relative group h-[500px] flex flex-col">
+                                        <div class="wine-card featured-wine-card rounded-lg overflow-hidden shadow-md relative group h-[500px] flex flex-col">
 
                                             <!-- IMAGE SECTION (Bigger + auto adjusts) -->
-                                            <div class="flex-grow overflow-hidden relative">
+                                            <div class="featured-wine-stage flex-grow overflow-hidden relative">
                                                 <img decoding="async" loading="lazy" src="{{ asset('storage/' . $product->image1) }}"
-                                                    class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                                                    class="featured-wine-bottle w-full h-full transition-transform duration-300 group-hover:scale-105"
                                                     alt="{{ $product->wine_name }}" onerror="this.src='{{ asset('images/default.jpg') }}'">
 
                                                 @if ($product->is_featured == 1)
@@ -1007,8 +1051,8 @@
                                             </div>
 
                                             <!-- NAME AT BOTTOM (fixed height) -->
-                                            <div class="px-4 pb-6 pt-2 text-center">
-                                                <h3 class="text-xl font-bold text-gray-900 line-clamp-2 min-h-[56px]">
+                                            <div class="featured-wine-name px-4 py-4 text-center">
+                                                <h3 class="text-xl font-bold line-clamp-2 min-h-[56px]">
                                                     {{ Str::title($product->wine_name) }}
                                                 </h3>
                                             </div>
