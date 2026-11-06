@@ -36,6 +36,8 @@
     <!-- Style Css -->
     <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/m_styles.css') }}" rel="stylesheet">
+    <!-- Smooth scrolling (Lenis; set up in assets/js/smooth-scroll.js) -->
+    <link href="https://unpkg.com/lenis@1.1.13/dist/lenis.css" rel="stylesheet">
     <!-- Icons Css -->
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet">
     <!-- Node Waves Css -->
@@ -2069,6 +2071,9 @@
     <script src="{{ asset('assets/js/site-interactions.js') }}?v={{ filemtime(public_path('assets/js/site-interactions.js')) }}"></script>
     <!-- Kiosk monitoring heartbeat (one shared script) -->
     <script src="{{ asset('assets/js/kiosk-heartbeat.js') }}?v={{ filemtime(public_path('assets/js/kiosk-heartbeat.js')) }}"></script>
+    <!-- Smooth scrolling: Lenis library, then the shared set-up -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="{{ asset('assets/js/smooth-scroll.js') }}?v={{ filemtime(public_path('assets/js/smooth-scroll.js')) }}"></script>
     <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
 
