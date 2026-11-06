@@ -541,6 +541,24 @@
         #Moments .owl-theme:before, #Moments .owl-theme:after {
             content: none;
         }
+        /* Wine Moments: larger photos (a little wider row, taller images), so the section
+           is about 8% taller and fills more of the screen */
+        #Moments .owl-carousel .owl-item img {
+            height: 260px;
+        }
+        @media (min-width: 768px) {
+            #Moments .owl-carousel .owl-item img {
+                height: 300px;
+            }
+        }
+        @media (min-width: 1024px) {
+            #Moments > .container {
+                max-width: 1280px;
+            }
+            #Moments .owl-carousel .owl-item img {
+                height: 340px;
+            }
+        }
 
         .disabled-page {
             pointer-events: none;
@@ -1835,10 +1853,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script>
         $(document).ready(function() {
-            $(".owl-carousel").owlCarousel({
+            // Wine Moments: plays by itself; the dots show and choose the slides (no arrows)
+            $("#Moments .owl-carousel").owlCarousel({
                 loop: true,
                 margin: 20,
-                nav: true,
+                nav: false,
                 dots: true,
                 autoplay: true,
                 autoplayTimeout: 5000,
