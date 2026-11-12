@@ -110,6 +110,10 @@ Route::get('/dashboard', function () {
 
 // Public routes
 Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
+// Homepage product pop-up "Enquire" form: open to guests (limited to 10 per minute per visitor)
+Route::post('/popup-enquiry', [PopupEnquiryController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('popup.enquiry.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');

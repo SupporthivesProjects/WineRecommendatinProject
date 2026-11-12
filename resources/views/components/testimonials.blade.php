@@ -1,47 +1,7 @@
 @props(['testimonials'])
 
-@push('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-    <style>
-        .testimonial-item {
-            padding: 0 15px;
-        }
-        .owl-nav {
-            position: absolute;
-            top: -60px;
-            right: 0;
-        }
-        .owl-prev, .owl-next {
-            background: #f3f4f6 !important;
-            width: 40px;
-            height: 40px;
-            border-radius: 50% !important;
-            margin: 0 5px;
-            display: inline-flex !important;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .owl-prev:hover, .owl-next:hover {
-            background: #e5e7eb !important;
-        }
-        .owl-dots {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .owl-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #d1d5db !important;
-            margin: 0 5px;
-        }
-        .owl-dot.active {
-            background: #ef4444 !important;
-        }
-    </style>
-@endpush
+{{-- More than 3 testimonials show as a carousel; it is started (and styled) by the homepage
+     layout, layouts/boothome.blade.php, which does not print @push stacks. --}}
 
 <section class="py-16 bg-white relative" id="testimonials">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,38 +97,3 @@
         @endif
     </div>
 </section>
-
-@push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            if ($('.testimonials-carousel').length) {
-                $('.testimonials-carousel').owlCarousel({
-                    loop: true,
-                    margin: 20,
-                    nav: true,
-                    dots: true,
-                    autoplay: true,
-                    autoplayTimeout: 5000,
-                    autoplayHoverPause: true,
-                    responsive: {
-                        0: {
-                            items: 1
-                        },
-                        768: {
-                            items: 2
-                        },
-                        1024: {
-                            items: 3
-                        }
-                    },
-                    navText: [
-                        '<i class="fas fa-chevron-left"></i>',
-                        '<i class="fas fa-chevron-right"></i>'
-                    ]
-                });
-            }
-        });
-    </script>
-@endpush

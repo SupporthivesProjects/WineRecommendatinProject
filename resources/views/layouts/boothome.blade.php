@@ -540,6 +540,23 @@
         #testimonials .owl-theme:before, #testimonials .owl-theme:after {
             content: none;
         }
+        /* Testimonials carousel (more than 3): cards the same height, shadows not cut off */
+        #testimonials .owl-stage-outer {
+            padding: 4px 0 12px;
+        }
+        #testimonials .owl-stage {
+            display: flex;
+        }
+        #testimonials .owl-item {
+            display: flex;
+        }
+        #testimonials .owl-item .testimonial-item {
+            width: 100%;
+        }
+        #testimonials .owl-dots .owl-dot.active span,
+        #testimonials .owl-dots .owl-dot:hover span {
+            background: #7b1e3a;
+        }
         #Moments .owl-theme:before, #Moments .owl-theme:after {
             content: none;
         }
@@ -1875,6 +1892,29 @@
                     }
                 }
             });
+
+            // What Our Users Say: up to 3 testimonials are plain cards; with more, the
+            // testimonials component renders .testimonials-carousel, which moves on by itself
+            $("#testimonials .testimonials-carousel").owlCarousel({
+                loop: true,
+                margin: 24,
+                nav: false,
+                dots: true,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    768: {
+                        items: 2
+                    },
+                    1024: {
+                        items: 3
+                    }
+                }
+            });
         });
     </script>
 
@@ -2488,7 +2528,7 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
 
                 const response = await fetch(
-                    "{{ route('admin.popup-enquiry.store') }}",
+                    "{{ route('popup.enquiry.store') }}",
                     {
                         method: 'POST',
                         headers: {
