@@ -104,5 +104,55 @@ class Store extends Model
         return $this->belongsTo(User::class, 'manager_id');
     }
 
+    /** States with their own wine prices (products.retail_price_maharashtra / retail_price_kolkata) */
+    public const PRICE_REGION_MAHARASHTRA = 'Maharashtra';
+    public const PRICE_REGION_WEST_BENGAL = 'West Bengal';
 
+    /**
+     * Ways the state is typed in the store form that mean one of those states.
+     * Compared in lower case with spaces, dots and dashes removed ("W.B." -> "wb").
+     */
+    private const STATE_ALIASES = [
+        'westbengal' => self::PRICE_REGION_WEST_BENGAL,
+        'wb' => self::PRICE_REGION_WEST_BENGAL,
+        'bengal' => self::PRICE_REGION_WEST_BENGAL,
+        'kolkata' => self::PRICE_REGION_WEST_BENGAL,
+        'calcutta' => self::PRICE_REGION_WEST_BENGAL,
+        'maharashtra' => self::PRICE_REGION_MAHARASHTRA,
+        'maharastra' => self::PRICE_REGION_MAHARASHTRA,
+        'mh' => self::PRICE_REGION_MAHARASHTRA,
+        'mumbai' => self::PRICE_REGION_MAHARASHTRA,
+        'bombay' => self::PRICE_REGION_MAHARASHTRA,
+        'pune' => self::PRICE_REGION_MAHARASHTRA,
+    ];
+
+    /**
+     * "Kolkata", "WB", " west bengal " -> "West Bengal" (and the same for Maharashtra);
+     * any other state is returned trimmed, as typed.
+     */
+    public static function canonicalState(?string $state): ?string
+    {
+        if ($state === null) {
+            return null;
+        }
+        $key = preg_replace('/[^a-z]/', '', strtolower($state));
+
+        return self::STATE_ALIASES[$key] ?? trim($state);
+    }
+
+    /**
+     * The state whose wine prices this store uses, or null for the standard retail price.
+     */
+    public function priceRegion(): ?string
+    {
+        $state = self::canonicalState($this->state);
+
+        return in_array($state, [self::PRICE_REGION_MAHARASHTRA, self::PRICE_REGION_WEST_BENGAL], true) ? $state : null;
+    }
+
+    /** Saved state names are tidied, so "Kolkata" is stored as "West Bengal" */
+    public function setStateAttribute($value): void
+    {
+        $this->attributes['state'] = self::canonicalState($value);
+    }
 }

@@ -449,7 +449,8 @@
                                     <th>Wine Name</th>
                                     <th>Type</th>
                                     <th>Vintage</th>
-                                    <th>Price</th>
+                                    {{-- The price customers of this store see (its state's price when the wine has one) --}}
+                                    <th>Price{{ $store->priceRegion() ? ' (' . $store->priceRegion() . ')' : '' }}</th>
                                     <th>Featured</th>
                                     <th>Status</th>
                                 </tr>
@@ -460,7 +461,7 @@
                                         <td>{{ $product->wine_name }}</td>
                                         <td>{{ ucfirst($product->type) }}</td>
                                         <td>{{ $product->vintage_year }}</td>
-                                        <td>{{ $product->retail_price }}</td>
+                                        <td>{{ $product->priceForStore($store) }}</td>
                                         
                                             @if ($product->pivot->is_featured)
                                                <td> <span class="text-success fw-bold">Featured</span></td>

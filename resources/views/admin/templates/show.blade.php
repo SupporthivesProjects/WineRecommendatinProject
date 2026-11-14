@@ -182,7 +182,10 @@
                                         <th>Wine Name</th>
                                         <th>Type</th>
                                         <th>Vintage</th>
-                                        <th>Price</th>
+                                        {{-- A store gets its state's price; without one (—) it uses the standard price --}}
+                                        <th>Standard Price</th>
+                                        <th>Maharashtra</th>
+                                        <th>West Bengal (Kolkata)</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -193,6 +196,8 @@
                                             <td>{{ ucfirst($product->type) }}</td>
                                             <td>{{ $product->vintage_year }}</td>
                                             <td>{{ $product->retail_price }}</td>
+                                            <td>{{ (float) $product->retail_price_maharashtra > 0 ? $product->retail_price_maharashtra : '—' }}</td>
+                                            <td>{{ (float) $product->retail_price_kolkata > 0 ? $product->retail_price_kolkata : '—' }}</td>
                                             <td>
                                                 <form method="POST" action="{{ route(
                                                         'admin.templates.product.remove',
@@ -208,7 +213,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">No products found.</td>
+                                            <td colspan="7" class="text-center">No products found.</td>
                                         </tr>
                                     @endforelse
                                     

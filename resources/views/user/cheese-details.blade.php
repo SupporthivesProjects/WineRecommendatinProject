@@ -263,7 +263,7 @@
                                             @endif
                                         </p>
                                         <p><strong>Vintage:</strong> {{ $wine->vintage_year ?: '—' }}</p>
-                                        <p><strong>MRP:</strong> {{ number_format($wine->retail_price, 2) }}</p>
+                                        <p><strong>MRP:</strong> {{ number_format($wine->getDisplayPrice(), 2) }}</p>
                                         <a href="{{ route('products.show', $wine->id) }}" class="btn btn-dark mt-2 rounded-0">
                                             View details
                                         </a>

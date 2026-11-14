@@ -318,7 +318,7 @@
                                         <div class="col-md-6 col-xl-4 wine-card-container" data-type="{{ strtolower($product->type) }}"
                                         data-vintage-year="{{ $product->vintage_year }}"
                                         data-winery="{{ $product->winery }}"
-                                        data-retail-price="{{ $product->retail_price }}"
+                                        data-retail-price="{{ $product->display_price }}"
                                         data-country="{{ $product->country }}">
                                             <div class="card custom-card wine-card">
                                                 <!-- Image at the top -->

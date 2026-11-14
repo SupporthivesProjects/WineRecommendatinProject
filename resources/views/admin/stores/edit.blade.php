@@ -105,7 +105,8 @@
                                     <!-- State -->
                                     <div class="col-12 col-md-6">
                                         <label for="state" class="form-label">{{ __('State') }}</label>
-                                        <input id="state" class="form-control" type="text" name="state" value="{{ old('state', $store->state) }}" />
+                                        <input id="state" class="form-control" type="text" name="state" value="{{ old('state', $store->state) }}" list="store-state-options" autocomplete="off" />
+                                        @include('admin.stores.partials.state-options')
                                         @error('state')
                                             <div class="text-danger mt-2">{{ $message }}</div>
                                         @enderror

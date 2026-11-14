@@ -169,13 +169,15 @@ class UserController extends Controller
 
         // Filter values and price range: every featured wine of this store, not only the current page
         $allFeatured = Product::whereIn('id', $featuredStoreProducts->pluck('product_id'))
-            ->get(['id', 'vintage_year', 'winery', 'type', 'country', 'retail_price']);
+            ->get(['id', 'vintage_year', 'winery', 'type', 'country', 'retail_price', 'retail_price_maharashtra', 'retail_price_kolkata']);
 
         $vintageYears = $allFeatured->pluck('vintage_year')->unique()->sort();
         $wineries = $allFeatured->pluck('winery')->unique()->sort();
         $types = $allFeatured->pluck('type')->unique()->sort();
         $countries = $allFeatured->pluck('country')->unique()->sort();
-        $allPrices = $allFeatured->pluck('retail_price')->filter(fn ($price) => $price !== null)->unique()->sort()->values();
+        // The store's own (state) prices, the same ones the cards show
+        $allPrices = $allFeatured->map(fn ($product) => $product->priceForStore($store))
+            ->filter(fn ($price) => $price !== null)->unique()->sort()->values();
 
         // Cart contents, so each card shows Add to cart or Remove from cart
         $cart = session()->get('cart', []);

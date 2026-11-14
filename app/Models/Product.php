@@ -125,46 +125,52 @@ class Product extends Model
         )->withTimestamps();
     }
 
+    /** Price column for each state that has its own prices (see Store::priceRegion()) */
+    private const STATE_PRICE_COLUMNS = [
+        Store::PRICE_REGION_MAHARASHTRA => 'retail_price_maharashtra',
+        Store::PRICE_REGION_WEST_BENGAL => 'retail_price_kolkata',
+    ];
+
+    /**
+     * Price of this wine in the given store: the store's state price when the wine has one
+     * (above 0), otherwise the standard retail price. No store (guests, admins): retail price.
+     */
+    public function priceForStore(?Store $store)
+    {
+        $column = $store ? (self::STATE_PRICE_COLUMNS[$store->priceRegion()] ?? null) : null;
+
+        if ($column && $this->{$column} !== null && (float) $this->{$column} > 0) {
+            return $this->{$column};
+        }
+
+        return $this->retail_price;
+    }
+
+    /**
+     * SQL for the same price priceForStore() returns, so a listing can filter by it in the database.
+     */
+    public static function priceSqlForStore(?Store $store): string
+    {
+        $column = $store ? (self::STATE_PRICE_COLUMNS[$store->priceRegion()] ?? null) : null;
+
+        return $column
+            ? "(CASE WHEN {$column} > 0 THEN {$column} ELSE retail_price END)"
+            : 'retail_price';
+    }
+
     /**
      * SQL for the same price getDisplayPrice() returns for the logged-in user's store,
      * so a listing can filter by it across all pages in the database.
      */
     public static function displayPriceSql(): string
     {
-        $store = auth()->check() ? auth()->user()->store : null;
-        $state = $store ? strtolower(trim((string) $store->state)) : null;
-
-        return match ($state) {
-            'maharashtra' => 'COALESCE(retail_price_maharashtra, retail_price)',
-            'west bengal' => 'COALESCE(retail_price_kolkata, retail_price)',
-            default => 'retail_price',
-        };
+        return self::priceSqlForStore(auth()->check() ? auth()->user()->store : null);
     }
 
+    /** Price in the logged-in user's store (kiosk pages) */
     public function getDisplayPrice()
     {
-        $store = auth()->check() ? auth()->user()->store : null;
-
-        if ($store) 
-        {
-            $state = strtolower(trim($store->state));
-
-            if (
-                $state === 'maharashtra' &&
-                $this->retail_price_maharashtra !== null
-            ) {
-                return $this->retail_price_maharashtra;
-            }
-
-            if (
-                $state === 'west bengal' &&
-                $this->retail_price_kolkata !== null
-            ) {
-                return $this->retail_price_kolkata;
-            }
-        }
-
-        return $this->retail_price;
+        return $this->priceForStore(auth()->check() ? auth()->user()->store : null);
     }
 
 

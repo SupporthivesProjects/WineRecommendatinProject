@@ -143,7 +143,8 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="state" class="form-label">State</label>
-                                        <input type="text" class="form-control" id="state" name="state" required>
+                                        <input type="text" class="form-control" id="state" name="state" list="store-state-options" autocomplete="off" required>
+                                        @include('admin.stores.partials.state-options')
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="form-label">Email ID</label>
