@@ -154,10 +154,13 @@ class StoreDashboardController extends Controller
         $priceLabels = array_keys($priceRanges);
         $priceData = [];
 
+        // Counted on the store's own prices (its state's price, e.g. Kolkata)
+        $priceSql = Product::priceSqlForStore($user->store);
+
         foreach ($priceRanges as $range => $limits) {
             $count = Product::whereIn('id', $storeProductIds)
-                ->where('retail_price', '>=', $limits[0])
-                ->where('retail_price', '<', $limits[1])
+                ->whereRaw("{$priceSql} >= ?", [$limits[0]])
+                ->whereRaw("{$priceSql} < ?", [$limits[1]])
                 ->count();
             $priceData[] = $count;
         }

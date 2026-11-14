@@ -101,15 +101,19 @@
 
                                     <h5 class="mb-2">
                                         Price:
+                                        {{-- The store's own price (its state's price, e.g. Kolkata) --}}
+                                        @php
+                                            $storePrice = $product->getDisplayPrice();
+                                        @endphp
                                         @if($product->discounts)
                                             @php
-                                                $discountAmount = $product->retail_price * ($product->discounts / 100);
-                                                $discountedPrice = $product->retail_price - $discountAmount;
+                                                $discountAmount = $storePrice * ($product->discounts / 100);
+                                                $discountedPrice = $storePrice - $discountAmount;
                                             @endphp
-                                            <span class="text-muted me-2"><del>₹{{ number_format($product->retail_price, 2) }} INR</del></span>
+                                            <span class="text-muted me-2"><del>₹{{ number_format($storePrice, 2) }} INR</del></span>
                                             <b>₹&nbsp;{{ number_format($discountedPrice, 2) }} INR</b>
                                         @else
-                                            <b>₹&nbsp;{{ number_format($product->retail_price, 2) }} INR</b>
+                                            <b>₹&nbsp;{{ number_format($storePrice, 2) }} INR</b>
                                         @endif
 
                                     </h5>

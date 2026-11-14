@@ -43,7 +43,7 @@
                                         <tr>
                                             <th class="text-start">SR No.</th>
                                             <th class="text-start">Product Name</th>
-                                            <th class="text-start">Product Pice</th>
+                                            <th class="text-start">Product Price{{ $store->priceRegion() ? ' (' . $store->priceRegion() . ')' : '' }}</th>
                                             <th class="text-start">Created On</th>
                                             <th class="text-start">Updated On</th>
                                             
@@ -54,7 +54,7 @@
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $product->product_name }}</td>
-                                                <td>{{ $product->retail_price }}</td>
+                                                <td>{{ $product->store_price }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($product->created_at)->format('Y-m-d H:i') }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($product->updated_at)->format('Y-m-d H:i') }}</td>
                                             </tr>

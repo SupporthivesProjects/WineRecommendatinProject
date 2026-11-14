@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\Product;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
@@ -271,6 +272,14 @@ class MainManagerController extends Controller
             ->where('store_products.is_featured', 1)
             ->select('products.*')
             ->get();
+
+        // The price this store's customers see (its state's price, e.g. Kolkata)
+        $withStorePrice = function ($row) use ($store) {
+            $row->store_price = (new Product())->forceFill((array) $row)->priceForStore($store);
+            return $row;
+        };
+        $products = $products->map($withStorePrice);
+        $featuredProducts = $featuredProducts->map($withStorePrice);
 
 
         $userIds = User::where('store_id', $storeId)
