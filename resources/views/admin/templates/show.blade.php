@@ -280,13 +280,23 @@
             <div class="modal fade" id="addProductModal" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form method="POST" action="{{ route('admin.templates.product.add',$template->id) }}">
+                        <form method="POST" action="{{ route('admin.templates.product.add',$template->id) }}"
+                            class="template-bulk-form" data-field="product_ids" data-noun="Products">
                             @csrf
+                            <input type="hidden" name="product_ids_list" value="">
                             <div class="modal-header">
                                 <h5 class="modal-title">Add Products</h5>
-                                <buttontype="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <input type="text" id="productSearch" class="form-control mb-3"placeholder="Search wine...">
+                            {{-- Bulk selection: tick every wine the search shows (or all of them with an empty search) --}}
+                            <div class="d-flex flex-wrap align-items-center gap-2 px-3">
+                                <button type="button" class="btn btn-sm btn-outline-primary bulk-select-shown">Select all shown</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary bulk-clear">Clear selection</button>
+                                <span class="ms-auto small text-muted">
+                                    <strong class="bulk-count">0</strong> selected &middot; <span class="bulk-shown">{{ $availableProducts->count() }}</span> shown
+                                </span>
+                            </div>
                             <div class="modal-body">
                                 <div style="max-height: 400px; overflow-y: auto;">
                                     @foreach($availableProducts as $product)
@@ -308,7 +318,7 @@
                                     Cancel
                                 </button>
 
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary bulk-submit" disabled>
                                     Add Products
                                 </button>
                             </div>
@@ -325,8 +335,10 @@
                             action="{{ route(
                                 'admin.templates.cheese.add',
                                 $template->id
-                            ) }}">
+                            ) }}"
+                            class="template-bulk-form" data-field="cheese_ids" data-noun="Cheese">
                             @csrf
+                            <input type="hidden" name="cheese_ids_list" value="">
                             <div class="modal-header">
                                 <h5 class="modal-title">
                                     Add Cheese Products
@@ -335,6 +347,13 @@
                                 </button>
                             </div>
                             <input type="text" id="cheeseSearch" class="form-control mb-3" placeholder="Search cheese...">
+                            <div class="d-flex flex-wrap align-items-center gap-2 px-3">
+                                <button type="button" class="btn btn-sm btn-outline-primary bulk-select-shown">Select all shown</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary bulk-clear">Clear selection</button>
+                                <span class="ms-auto small text-muted">
+                                    <strong class="bulk-count">0</strong> selected &middot; <span class="bulk-shown">{{ $availableCheeses->count() }}</span> shown
+                                </span>
+                            </div>
                             <div class="modal-body">
                                 <div style="max-height: 400px; overflow-y: auto;">
                                     @foreach($availableCheeses as $cheese)
@@ -352,7 +371,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                     Cancel
                                 </button>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary bulk-submit" disabled>
                                     Add Cheese
                                 </button>
                             </div>
@@ -395,25 +414,57 @@
         });
     </script>
      <script>
-        $('#productSearch').on('keyup', function () {
-            let value = $(this).val().toLowerCase();
+        /*
+         * Add Products / Add Cheese pop-ups: search, "Select all shown", "Clear selection"
+         * and a live count. On submit the ticked ids go as one comma-separated field
+         * (<field>_list), because one field per checkbox can exceed PHP's max_input_vars
+         * (1000) when hundreds of wines are selected.
+         */
+        $('.template-bulk-form').each(function () {
+            const form = $(this);
+            const field = form.data('field');
+            const noun = form.data('noun');
+            const items = form.find('.form-check');
+            const boxes = items.find('input[type=checkbox]');
+            const submit = form.find('.bulk-submit');
 
-            $('.product-item').filter(function () {
-                $(this).toggle(
-                    $(this).text().toLowerCase().indexOf(value) > -1
-                );
-            });
-        });
-    </script>
-     <script>
-        $('#cheeseSearch').on('keyup', function () {
-            let value = $(this).val().toLowerCase();
+            function refresh() {
+                const count = boxes.filter(':checked').length;
+                form.find('.bulk-count').text(count);
+                form.find('.bulk-shown').text(items.filter(':visible').length);
+                submit.prop('disabled', count === 0)
+                    .text(count ? 'Add ' + count + ' ' + noun : 'Add ' + noun);
+            }
 
-            $('.product-item').filter(function () {
-                $(this).toggle(
-                    $(this).text().toLowerCase().indexOf(value) > -1
-                );
+            form.find('input[type=text]').on('input', function () {
+                const value = $(this).val().toLowerCase();
+                items.each(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+                refresh();
             });
+
+            form.find('.bulk-select-shown').on('click', function () {
+                items.filter(':visible').find('input[type=checkbox]').prop('checked', true);
+                refresh();
+            });
+
+            form.find('.bulk-clear').on('click', function () {
+                boxes.prop('checked', false);
+                refresh();
+            });
+
+            boxes.on('change', refresh);
+
+            form.on('submit', function () {
+                const ids = boxes.filter(':checked').map(function () { return this.value; }).get();
+                form.find('input[name="' + field + '_list"]').val(ids.join(','));
+                boxes.prop('disabled', true);   // send the single list, not one field per box
+                submit.prop('disabled', true).text('Adding ' + ids.length + '...');
+            });
+
+            // Counts are right once the pop-up is open (hidden items are not :visible before)
+            form.closest('.modal').on('shown.bs.modal', refresh);
         });
     </script>
 

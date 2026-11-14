@@ -130,38 +130,56 @@ class TemplateController extends Controller
 
     public function addProducts(Request $request,Template $template)
     {
+        $this->mergeIdList($request, 'product_ids');
+
         $request->validate([
             'product_ids' => 'required|array',
-            'product_ids.*' => 'exists:products,id',
+            'product_ids.*' => 'integer',
         ]);
-    
-        $template->products()
-            ->syncWithoutDetaching(
-                $request->product_ids
-            );
-    
+
+        // Only wines that exist (checked in one query, so large selections stay fast)
+        $productIds = Product::whereIn('id', $request->product_ids)->pluck('id');
+
+        $added = $template->products()->syncWithoutDetaching($productIds)['attached'];
+
         return back()->with(
             'success',
-            'Products added successfully.'
+            count($added) . ' ' . (count($added) === 1 ? 'product' : 'products') . ' added successfully.'
         );
     }
 
     public function addCheeseProducts(Request $request,Template $template)
     {
+        $this->mergeIdList($request, 'cheese_ids');
+
         $request->validate([
             'cheese_ids' => 'required|array',
-            'cheese_ids.*' => 'exists:cheese_products,id',
+            'cheese_ids.*' => 'integer',
         ]);
-    
-        $template->cheeseProducts()
-            ->syncWithoutDetaching(
-                $request->cheese_ids
-            );
-    
+
+        $cheeseIds = CheeseProduct::whereIn('id', $request->cheese_ids)->pluck('id');
+
+        $added = $template->cheeseProducts()->syncWithoutDetaching($cheeseIds)['attached'];
+
         return back()->with(
             'success',
-            'Cheese products added successfully.'
+            count($added) . ' cheese ' . (count($added) === 1 ? 'product' : 'products') . ' added successfully.'
         );
+    }
+
+    /**
+     * The Add pop-ups send the ticked ids as one comma-separated field ("<field>_list"),
+     * because one field per checkbox can exceed PHP's max_input_vars (1000) when hundreds
+     * of wines are selected. Turn it back into the <field> array.
+     */
+    private function mergeIdList(Request $request, string $field): void
+    {
+        $list = $request->input($field . '_list');
+        if (is_string($list) && trim($list) !== '') {
+            $request->merge([
+                $field => array_values(array_filter(array_map('trim', explode(',', $list)), 'strlen')),
+            ]);
+        }
     }
 
     public function removeProduct(Template $template,Product $product)
