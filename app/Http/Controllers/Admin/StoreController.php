@@ -39,11 +39,12 @@ class StoreController extends Controller
     }
 
     /**
-     * Show the form for creating a new store.
+     * Stores are created from the pop-up on the stores list (there is no separate
+     * create page), so this address goes there instead of failing.
      */
     public function create()
     {
-        return view('admin.stores.create');
+        return redirect()->route('admin.stores.index');
     }
 
     /**
