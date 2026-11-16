@@ -405,7 +405,8 @@
                                             <a href="{{ route('admin.users.edit', $store->manager) }}" class="btn btn-info btn-sm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
+                                            {{-- Deletes the store's parent manager (this row), not a store user --}}
+                                            <form action="{{ route('admin.users.destroy', $store->manager) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
