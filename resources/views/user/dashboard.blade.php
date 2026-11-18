@@ -335,9 +335,12 @@
         /* ============================
         WINE HERO IMAGE CAROUSEL
         ============================ */
+        /* The section is exactly as tall as the slider inside it (which sets its own height),
+           so there is no empty band below it on phones and no overlap on short screens */
         #landing-section {
             position: relative;
-            min-height: 100vh;
+            height: auto;
+            min-height: 0;
         }
         .hero-carousel {
             position: relative;
