@@ -319,15 +319,14 @@
                         price = priceCell.dataset.kolkataPrice;
                     }
 
-                    // If state-specific price is empty/null, fall back to default price
-                    if (!price || price === 'null' || price === 'undefined') {
-                        price = priceCell.dataset.defaultPrice;
-                    }
-
-                    priceCell.innerHTML = '₹&nbsp;' + Number(price).toLocaleString('en-IN', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
+                    // No fallback: a price that is empty or 0 is not available (NA)
+                    const value = parseFloat(price);
+                    priceCell.innerHTML = value > 0
+                        ? '₹&nbsp;' + value.toLocaleString('en-IN', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })
+                        : 'NA';
 
                 });
 

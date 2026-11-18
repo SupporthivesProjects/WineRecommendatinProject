@@ -394,8 +394,8 @@ class UserController extends Controller
             ->distinct()
             ->pluck('product_id');
 
-        // Current product price
-        $price = $product->display_price;
+        // Current product price (0 when not available, for the similar-price search)
+        $price = (float) ($product->display_price ?? 0);
 
         // Fetch 3 related products from the user's store only
         $relatedProducts = collect();
@@ -543,8 +543,8 @@ class UserController extends Controller
             ->distinct()
             ->pluck('product_id');
 
-        // Current product price
-        $price = $product->display_price ?? $product->getDisplayPrice();
+        // Current product price (0 when not available, for the similar-price search)
+        $price = (float) ($product->display_price ?? $product->getDisplayPrice() ?? 0);
 
         $relatedProducts = collect();
 
@@ -1418,7 +1418,8 @@ class UserController extends Controller
     {
         $productId = $request->input('product_id');
         $productName = $request->input('product_name');
-        $productPrice = $request->input('product_price');
+        // A wine with no price in this store (shown as NA) goes into the cart at 0
+        $productPrice = is_numeric($request->input('product_price')) ? (float) $request->input('product_price') : 0;
 
         // ✅ Fetch product from DB
         $product = Product::find($productId);

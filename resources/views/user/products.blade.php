@@ -434,7 +434,7 @@
 
                                                     <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
 
-                                                    <p><strong>MRP:</strong> {{ $product->display_price }}</p>
+                                                    <p><strong>MRP:</strong> {{ \App\Models\Product::formatPrice($product->display_price) }}</p>
                                                     <a href="{{ route('user.productdetails', $product->id) }}" class="btn btn-dark mt-2 rounded-0">
                                                         View details
                                                     </a>

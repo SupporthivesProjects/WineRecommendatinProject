@@ -7,8 +7,9 @@ use App\Models\Store;
 use Tests\TestCase;
 
 /**
- * State prices: a store in Maharashtra or West Bengal shows that state's wine price
- * (when the wine has one above 0), however the state was typed.
+ * State prices: a Maharashtra or West Bengal store shows only that state's wine price,
+ * other stores only the retail price; a price that is empty or 0 is not available (NA).
+ * The state is matched in any case or spelling.
  */
 class StorePriceTest extends TestCase
 {
@@ -23,10 +24,10 @@ class StorePriceTest extends TestCase
 
     public function test_state_spellings_are_saved_as_the_state_name(): void
     {
-        foreach (['Kolkata', 'kolkata', 'WB', 'W.B.', ' west  bengal ', 'West Bengal', 'Calcutta'] as $typed) {
+        foreach (['Kolkata', 'kolkata', 'WB', 'W.B.', ' west  bengal ', 'West Bengal', 'WEST BENGAL', 'Calcutta'] as $typed) {
             $this->assertSame('West Bengal', (new Store(['state' => $typed]))->state, $typed);
         }
-        foreach (['Mumbai', 'MH', 'maharashtra', 'Pune'] as $typed) {
+        foreach (['Mumbai', 'MH', 'maharashtra', 'MAHARASHTRA', 'MaHaRaShTrA', 'Pune'] as $typed) {
             $this->assertSame('Maharashtra', (new Store(['state' => $typed]))->state, $typed);
         }
         $this->assertSame('Rajasthan', (new Store(['state' => ' Rajasthan ']))->state);
@@ -53,19 +54,38 @@ class StorePriceTest extends TestCase
         $this->assertEquals(1000, $wine->priceForStore(null));
     }
 
-    public function test_missing_or_zero_state_price_falls_back_to_the_standard_price(): void
+    public function test_missing_or_zero_price_is_not_available_with_no_fallback(): void
     {
         $kolkata = new Store(['state' => 'West Bengal']);
+        $mumbai = new Store(['state' => 'Maharashtra']);
+        $goa = new Store(['state' => 'Goa']);
 
-        $this->assertEquals(1000, $this->wine(null, null)->priceForStore($kolkata));
-        $this->assertEquals(1000, $this->wine(null, 0)->priceForStore($kolkata));
+        // State stores never fall back to the retail price
+        $this->assertNull($this->wine(1100, null)->priceForStore($kolkata));
+        $this->assertNull($this->wine(1100, 0)->priceForStore($kolkata));
+        $this->assertNull($this->wine(null, 1200)->priceForStore($mumbai));
+        $this->assertNull($this->wine(0, 1200)->priceForStore($mumbai));
+
+        // Other states use the retail price only, and also show NA without one
+        $noRetail = $this->wine(1100, 1200)->forceFill(['retail_price' => 0]);
+        $this->assertNull($noRetail->priceForStore($goa));
+        $this->assertNull($noRetail->priceForStore(null));
+    }
+
+    public function test_prices_are_shown_as_rupees_or_na(): void
+    {
+        $this->assertSame('₹1,234.50', Product::formatPrice(1234.5));
+        $this->assertSame('1,234.50', Product::formatPrice('1234.5', ''));
+        $this->assertSame('NA', Product::formatPrice(null));
+        $this->assertSame('NA', Product::formatPrice(0));
+        $this->assertSame('NA', Product::formatPrice('0.00'));
     }
 
     public function test_price_sql_matches(): void
     {
-        $this->assertSame('(CASE WHEN retail_price_kolkata > 0 THEN retail_price_kolkata ELSE retail_price END)',
-            Product::priceSqlForStore(new Store(['state' => 'WB'])));
-        $this->assertSame('retail_price', Product::priceSqlForStore(new Store(['state' => 'Goa'])));
-        $this->assertSame('retail_price', Product::priceSqlForStore(null));
+        $this->assertSame('NULLIF(retail_price_kolkata, 0)', Product::priceSqlForStore(new Store(['state' => 'WB'])));
+        $this->assertSame('NULLIF(retail_price_maharashtra, 0)', Product::priceSqlForStore(new Store(['state' => 'mumbai'])));
+        $this->assertSame('NULLIF(retail_price, 0)', Product::priceSqlForStore(new Store(['state' => 'Goa'])));
+        $this->assertSame('NULLIF(retail_price, 0)', Product::priceSqlForStore(null));
     }
 }

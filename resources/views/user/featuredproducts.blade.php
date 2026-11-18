@@ -453,7 +453,8 @@
         function filterProductsByPrice(min, max) {
             $(".wine-card-container").each(function () {
                 const price = parseFloat($(this).data("retail-price"));
-                if (price >= min && price <= max) {
+                // Wines without a price (NA) are never hidden by the price filter
+                if (isNaN(price) || (price >= min && price <= max)) {
                     $(this).show();
                 } else {
                     $(this).hide();

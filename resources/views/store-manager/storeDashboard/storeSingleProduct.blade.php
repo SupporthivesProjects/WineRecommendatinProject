@@ -105,7 +105,9 @@
                                         @php
                                             $storePrice = $product->getDisplayPrice();
                                         @endphp
-                                        @if($product->discounts)
+                                        @if($storePrice === null)
+                                            <b>NA</b>
+                                        @elseif($product->discounts)
                                             @php
                                                 $discountAmount = $storePrice * ($product->discounts / 100);
                                                 $discountedPrice = $storePrice - $discountAmount;

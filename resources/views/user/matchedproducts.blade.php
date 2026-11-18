@@ -351,7 +351,7 @@
 
                                             <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
 
-                                            <p><strong>MRP:</strong> {{ $product->display_price }}</p>
+                                            <p><strong>MRP:</strong> {{ \App\Models\Product::formatPrice($product->display_price) }}</p>
                                             <button
                                                 type="button"
                                                 class="btn btn-dark mt-2 rounded-0 open-product-modal"
@@ -362,7 +362,7 @@
                                             <button class="btn mt-2 rounded-0 buy-now-btn {{ in_array((string) $product->id, $cartProductIds) ? 'btn-dark' : 'btn-light' }}"
                                                     data-product-id="{{ $product->id }}"
                                                     data-product-name="{{ $product->wine_name }}"
-                                                    data-product-price="{{ $product->display_price }}">
+                                                    data-product-price="{{ $product->display_price ?? 0 }}">
                                                 {{ in_array((string) $product->id, $cartProductIds) ? 'Remove from cart' : 'Add to cart' }}
                                             </button>
                                         </div>

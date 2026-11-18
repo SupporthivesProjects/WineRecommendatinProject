@@ -54,7 +54,7 @@
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $product->product_name }}</td>
-                                                <td>{{ $product->store_price }}</td>
+                                                <td>{{ \App\Models\Product::formatPrice($product->store_price, '') }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($product->created_at)->format('Y-m-d H:i') }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($product->updated_at)->format('Y-m-d H:i') }}</td>
                                             </tr>

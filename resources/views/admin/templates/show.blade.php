@@ -182,7 +182,7 @@
                                         <th>Wine Name</th>
                                         <th>Type</th>
                                         <th>Vintage</th>
-                                        {{-- A store gets its state's price; without one (—) it uses the standard price --}}
+                                        {{-- A store shows only its own price: its state's column, or Standard Price for other states; NA = not available --}}
                                         <th>Standard Price</th>
                                         <th>Maharashtra</th>
                                         <th>West Bengal (Kolkata)</th>
@@ -195,9 +195,9 @@
                                             <td>{{ $product->wine_name }}</td>
                                             <td>{{ ucfirst($product->type) }}</td>
                                             <td>{{ $product->vintage_year }}</td>
-                                            <td>{{ $product->retail_price }}</td>
-                                            <td>{{ (float) $product->retail_price_maharashtra > 0 ? $product->retail_price_maharashtra : '—' }}</td>
-                                            <td>{{ (float) $product->retail_price_kolkata > 0 ? $product->retail_price_kolkata : '—' }}</td>
+                                            <td>{{ \App\Models\Product::formatPrice($product->retail_price, '') }}</td>
+                                            <td>{{ \App\Models\Product::formatPrice($product->retail_price_maharashtra, '') }}</td>
+                                            <td>{{ \App\Models\Product::formatPrice($product->retail_price_kolkata, '') }}</td>
                                             <td>
                                                 <form method="POST" action="{{ route(
                                                         'admin.templates.product.remove',

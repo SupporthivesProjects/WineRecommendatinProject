@@ -319,6 +319,12 @@
                 });
         }
 
+        // A wine with no price in this store shows NA; the totals count it as 0
+        function cartPriceText(price, quantity) {
+            const value = parseFloat(price);
+            return value > 0 ? (value * quantity).toFixed(2) : 'NA';
+        }
+
         function displayCartItems(cartItems) {
             console.log(cartItems);
             const container = document.getElementById('cart-items-container');
@@ -343,7 +349,7 @@
                         </div>
                         <div class="col-md-4">
                             <h5 class="mb-1">${item.name || 'Wine Product'}</h5>
-                            <p class="text-muted mb-0">Price:${parseFloat(item.retail_price || 0).toFixed(2)}</p>
+                            <p class="text-muted mb-0">Price:${cartPriceText(item.retail_price, 1)}</p>
                         </div>
                         <div class="col-md-3">
                             <div class="quantity-controls">
@@ -358,7 +364,7 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <p class="fw-bold mb-0">${(parseFloat(item.retail_price || 0) * (item.quantity || 1)).toFixed(2)}</p>
+                            <p class="fw-bold mb-0">${cartPriceText(item.retail_price, item.quantity || 1)}</p>
                         </div>
                         <div class="col-md-1">
                             <button class="remove-btn" onclick="removeFromCart(${item.id})">
@@ -456,7 +462,7 @@
 
             cartItems.forEach(item => {
                 const quantity = item.quantity || 1;
-                const price = parseFloat(item.retail_price || 0);
+                const price = parseFloat(item.retail_price) || 0;   // NA (no price) counts as 0
                 totalItems += quantity;
                 subtotal += price * quantity;
             });

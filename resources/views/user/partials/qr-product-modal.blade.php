@@ -435,7 +435,7 @@
 
                 <h4 class="fw-bold mb-4">
 
-                    ₹{{ number_format($product->retail_price, 2) }}
+                    {{ \App\Models\Product::formatPrice($product->retail_price) }}
 
                 </h4>--}}
 
@@ -651,7 +651,7 @@
 
 
                                         {{--<p class="fw-bold">
-                                            ₹{{ number_format($related->retail_price, 2) }}
+                                            {{ \App\Models\Product::formatPrice($related->retail_price) }}
                                         </p>--}}
 
 

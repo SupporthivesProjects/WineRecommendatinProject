@@ -68,7 +68,7 @@
                                                 <td class="align-middle">{{ ucfirst($product->type) }}</td>
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
-                                                <td class="align-middle">₹{{ number_format($product->store_price, 2) }}
+                                                <td class="align-middle">{{ \App\Models\Product::formatPrice($product->store_price) }}
                                                 </td>
                                                 <td class="align-middle">
                                                     <span
@@ -115,7 +115,7 @@
                                                 <td class="align-middle">{{ ucfirst($product->type) }}</td>
                                                 <td class="align-middle">{{ $product->winery }}</td>
                                                 <td class="align-middle">{{ $product->country }}</td>
-                                                <td class="align-middle">₹{{ number_format($product->store_price, 2) }}
+                                                <td class="align-middle">{{ \App\Models\Product::formatPrice($product->store_price) }}
                                                 </td>
                                                 <td class="align-middle">
                                                     <span

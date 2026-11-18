@@ -369,7 +369,10 @@
 
                                         <h5 class="mb-2">
                                             Price:
-                                            @if ($product->discounts)
+                                            {{-- NA when this store has no price for the wine --}}
+                                            @if ($product->display_price === null)
+                                                <b>NA</b>
+                                            @elseif ($product->discounts)
                                                 @php
                                                     $discountAmount =
                                                         $product->display_price * ($product->discounts / 100);
@@ -418,7 +421,7 @@
                                                 class="btn border border-dark w-100 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                 data-product-id="{{ $product->id }}"
                                                 data-product-name="{{ $product->wine_name }}"
-                                                data-product-price="{{ $product->display_price }}"
+                                                data-product-price="{{ $product->display_price ?? 0 }}"
                                                 data-qty-input="detail-product-qty">
 
                                                 {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
@@ -909,7 +912,7 @@
                                                 </p>
 
                                                 <p><strong>Vintage:</strong> {{ $product->vintage_year ?: '—' }}</p>
-                                                <p><strong>MRP:</strong> {{ $product->display_price }}</p>
+                                                <p><strong>MRP:</strong> {{ \App\Models\Product::formatPrice($product->display_price) }}</p>
 
                                                 
                                                 <a href="{{ route('user.productdetails', $product->id) }}"
@@ -920,7 +923,7 @@
                                                     class="btn mt-2 rounded-0 buy-now-btn {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'btn-dark' : 'btn-light' }}"
                                                     data-product-id="{{ $product->id }}"
                                                     data-product-name="{{ $product->wine_name }}"
-                                                    data-product-price="{{ $product->display_price }}">
+                                                    data-product-price="{{ $product->display_price ?? 0 }}">
 
                                                     {{ collect($cart ?? [])->pluck('id')->contains($product->id) ? 'Remove from cart' : 'Add to cart' }}
 

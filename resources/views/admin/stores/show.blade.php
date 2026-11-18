@@ -462,7 +462,7 @@
                                         <td>{{ $product->wine_name }}</td>
                                         <td>{{ ucfirst($product->type) }}</td>
                                         <td>{{ $product->vintage_year }}</td>
-                                        <td>{{ $product->priceForStore($store) }}</td>
+                                        <td>{{ \App\Models\Product::formatPrice($product->priceForStore($store), '') }}</td>
                                         
                                             @if ($product->pivot->is_featured)
                                                <td> <span class="text-success fw-bold">Featured</span></td>
@@ -1984,7 +1984,7 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $item['product_name'] }}</td>
-                                            <td>₹{{ $item['retail_price'] }}</td>
+                                            <td>{{ \App\Models\Product::formatPrice($item['retail_price'] ?? null) }}</td>
                                             <td>{{ $item['quantity'] }}</td>
                                             <td>{{ $item['created_at'] }}</td>
                                             <td>

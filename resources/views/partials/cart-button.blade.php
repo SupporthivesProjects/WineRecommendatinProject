@@ -6,6 +6,6 @@
     class="btn mt-2 rounded-0 buy-now-btn {{ $inCart ? 'btn-dark' : 'btn-light' }}"
     data-product-id="{{ $product->id }}"
     data-product-name="{{ $product->wine_name }}"
-    data-product-price="{{ $product->display_price ?? $product->getDisplayPrice() }}">
+    data-product-price="{{ $product->display_price ?? $product->getDisplayPrice() ?? 0 }}">
     <i class="fas fa-shopping-cart me-1" aria-hidden="true"></i>{{ $inCart ? 'Remove from cart' : 'Add to cart' }}
 </button>

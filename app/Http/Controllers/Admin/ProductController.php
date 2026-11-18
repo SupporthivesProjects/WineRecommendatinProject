@@ -91,7 +91,7 @@ class ProductController extends Controller
                 '<span class="product-price" data-default-price="'.e($product->retail_price).'"'
                     .' data-maharashtra-price="'.e($product->retail_price_maharashtra).'"'
                     .' data-kolkata-price="'.e($product->retail_price_kolkata).'">'
-                    .'₹&nbsp;'.number_format((float) $product->retail_price, 2).'</span>',
+                    .str_replace('₹', '₹&nbsp;', e(Product::formatPrice($product->retail_price))).'</span>',
                 '<div class="form-check form-switch d-inline-block">'
                     .'<input type="checkbox" class="form-check-input featured-toggle" data-product-id="'.$product->id.'" id="featured-'.$product->id.'"'.($product->admin_featured_product ? ' checked' : '').'>'
                     .'<label class="form-check-label" for="featured-'.$product->id.'"></label></div>',

@@ -103,7 +103,8 @@
                                                 $total = 0;
 
                                                 foreach($products as $p){
-                                                    $total += $p['retail_price'] * $p['quantity'];
+                                                    // A wine sold without a price (NA) counts as 0
+                                                    $total += (float) ($p['retail_price'] ?? 0) * (int) ($p['quantity'] ?? 0);
                                                 }
                                             @endphp
 
@@ -200,7 +201,8 @@
 
             products.forEach((p,index)=>{
 
-                let rowTotal = p.retail_price * p.quantity;
+                const unitPrice = parseFloat(p.retail_price) || 0;   // NA (no price) counts as 0
+                let rowTotal = unitPrice * (parseInt(p.quantity) || 0);
                 total += rowTotal;
 
                 let image = p.image 
@@ -223,8 +225,8 @@
                     <td>${p.name}</td>
                     <td>${p.country}</td>
                     <td>${p.quantity}</td>
-                    <td>₹${p.retail_price}</td>
-                    <td>₹&nbsp;${rowTotal}</td>
+                    <td>${unitPrice > 0 ? '₹' + unitPrice : 'NA'}</td>
+                    <td>${unitPrice > 0 ? '₹&nbsp;' + rowTotal : 'NA'}</td>
                 </tr>
                 `;
 

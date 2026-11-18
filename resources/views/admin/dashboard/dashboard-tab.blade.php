@@ -81,7 +81,7 @@
                         <td class="py-3 px-6 text-left">{{ $product->wine_name }}</td>
                         <td class="py-3 px-6 text-left">{{ ucfirst($product->type) }}</td>
                         <td class="py-3 px-6 text-left">{{ $product->winery }}</td>
-                        <td class="py-3 px-6 text-left">${{ number_format($product->retail_price, 2) }}</td>
+                        <td class="py-3 px-6 text-left">{{ \App\Models\Product::formatPrice($product->retail_price) }}</td>
                         <td class="py-3 px-6 text-left">
                             <span class="bg-{{ $product->status === 'active' ? 'green' : 'red' }}-200 text-{{ $product->status === 'active' ? 'green' : 'red' }}-800 py-1 px-3 rounded-full text-xs">
                                 {{ ucfirst($product->status) }}

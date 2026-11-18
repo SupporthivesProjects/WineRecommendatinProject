@@ -107,7 +107,7 @@
                     </p>
                 @endif
                 <h4 class="fw-bold mb-4">
-                    ₹{{ number_format($product->display_price , 2) }}
+                    {{ \App\Models\Product::formatPrice($product->display_price) }}
                 </h4>
                 {{-- TASTING NOTES --}}
                 @if(!empty($product->tasting_notes))
@@ -159,7 +159,7 @@
                         class="btn w-100 buy-now-btn {{ $isInCart ? 'btn-dark' : 'btn-light' }}"
                         data-product-id="{{ $product->id }}"
                         data-product-name="{{ $product->wine_name }}"
-                        data-product-price="{{ $product->display_price ?? $product->retail_price }}"
+                        data-product-price="{{ $product->display_price ?? 0 }}"
                         data-qty-input="modal-product-qty"
                     >
                         {{ $isInCart ? 'Remove from cart' : 'Add to cart' }}
@@ -258,7 +258,7 @@
                                             {{ ucfirst($related->type) }}
                                         </p>
                                         <p class="fw-bold">
-                                            ₹{{ number_format($related->display_price , 2) }}
+                                            {{ \App\Models\Product::formatPrice($related->display_price) }}
                                         </p>
                                         <button
                                             class="btn btn-outline-dark w-100 related-product-btn"

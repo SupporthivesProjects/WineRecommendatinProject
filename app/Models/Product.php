@@ -132,30 +132,52 @@ class Product extends Model
     ];
 
     /**
-     * Price of this wine in the given store: the store's state price when the wine has one
-     * (above 0), otherwise the standard retail price. No store (guests, admins): retail price.
+     * The price column a store uses: its state's column (Maharashtra, West Bengal),
+     * otherwise retail_price. No store (guests, admins): retail_price.
      */
-    public function priceForStore(?Store $store)
+    public static function priceColumnForStore(?Store $store): string
     {
-        $column = $store ? (self::STATE_PRICE_COLUMNS[$store->priceRegion()] ?? null) : null;
-
-        if ($column && $this->{$column} !== null && (float) $this->{$column} > 0) {
-            return $this->{$column};
-        }
-
-        return $this->retail_price;
+        return $store ? (self::STATE_PRICE_COLUMNS[$store->priceRegion()] ?? 'retail_price') : 'retail_price';
     }
 
     /**
-     * SQL for the same price priceForStore() returns, so a listing can filter by it in the database.
+     * A price that is not set or is 0 counts as not available (shown as NA). Returns the
+     * price, or null when not available. Nothing is changed in the database.
+     */
+    public static function availablePrice($price)
+    {
+        return ($price !== null && $price !== '' && is_numeric($price) && (float) $price > 0) ? $price : null;
+    }
+
+    /**
+     * Price of this wine in the given store: only the store's own price (its state's price
+     * for Maharashtra / West Bengal, the retail price elsewhere). There is no fallback to
+     * another price; null means not available (NA). Use (float) / ?? 0 for calculations.
+     */
+    public function priceForStore(?Store $store)
+    {
+        return self::availablePrice($this->{self::priceColumnForStore($store)});
+    }
+
+    /**
+     * SQL for the same price priceForStore() returns (NULL when not available), so a listing
+     * can filter by it in the database.
      */
     public static function priceSqlForStore(?Store $store): string
     {
-        $column = $store ? (self::STATE_PRICE_COLUMNS[$store->priceRegion()] ?? null) : null;
+        $column = self::priceColumnForStore($store);
 
-        return $column
-            ? "(CASE WHEN {$column} > 0 THEN {$column} ELSE retail_price END)"
-            : 'retail_price';
+        return "NULLIF({$column}, 0)";
+    }
+
+    /**
+     * Price for screens: "₹1,234.00", or "NA" when the price is not available.
+     */
+    public static function formatPrice($price, string $prefix = '₹'): string
+    {
+        $price = self::availablePrice($price);
+
+        return $price === null ? 'NA' : $prefix . number_format((float) $price, 2);
     }
 
     /**
